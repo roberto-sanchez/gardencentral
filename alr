@@ -1,0 +1,284 @@
+[33mcommit ace1eeec3d63941d4e59699415cfedb780d79cfa[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Fri Jan 15 15:00:55 2016 -0600
+
+    Agregar un nuevo pedido con ajax
+
+[33mcommit 5bee0984f29cf51d95c098fc9ff3635fe6fd3682[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Fri Jan 15 04:36:25 2016 -0600
+
+    Detalle de los domicilios existentes
+
+[33mcommit 5d1f1008098582c5f42b7150a200a45a1047fb11[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Thu Jan 14 12:44:44 2016 -0600
+
+    Seleccionar un pedido existente
+
+[33mcommit 1dd1cf0225552645640ced8b055d481b756129bc[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Thu Jan 14 12:18:09 2016 -0600
+
+    Seleccionar un domicilio existente
+
+[33mcommit 17cf11dd06ddb5c31bef8def8e8d40fbcf8ea2c3[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Thu Jan 14 02:40:47 2016 -0600
+
+    Domicilios del cliente
+
+[33mcommit 2eabf36547178c20ff35475cb4b5d5eb2901b123[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Wed Jan 13 13:44:06 2016 -0600
+
+    generar pedido
+
+[33mcommit da58484031fd0d79c9b998bc150194ac7eac0020[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Wed Jan 13 05:19:20 2016 -0600
+
+    Registrar pedido
+
+[33mcommit dcb642ef688b6297717e465351bd09bfd7b38f87[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Wed Jan 13 05:12:26 2016 -0600
+
+    Registrar pedido
+
+[33mcommit 640e58036644ec96cd93058bf8356e3e2d1732b1[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Tue Jan 12 15:19:37 2016 -0600
+
+    Agregar paquetes
+
+[33mcommit ec0fc511800b448d3c5ff0bc7bfda5501ba3d034[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Tue Jan 12 01:37:41 2016 -0600
+
+    Actualizar cantidad de paquetes
+
+[33mcommit b758176bfcead5176d50c732685a49d955236f2a[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Fri Jan 8 17:30:36 2016 -0600
+
+    pedido pdf
+
+[33mcommit 51974d21d7ba21a84234aad027c14c78bb15c535[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Fri Jan 8 16:39:25 2016 -0600
+
+    pdf pedido
+
+[33mcommit 6adf5673050843213de29b3b608db3c621091d3c[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Fri Jan 8 15:42:55 2016 -0600
+
+    pdf
+
+[33mcommit f6df24bb181f35cd4d1ea42d0567df60e3800908[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Fri Jan 8 14:24:22 2016 -0600
+
+    pdf pedido
+
+[33mcommit f4f9b944e6dd1b0ab0e0320ee1f44fa8f76aaebd[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Wed Jan 6 05:38:04 2016 -0600
+
+    Modificaciones
+
+[33mcommit 89976094fa7c3687b031aa75b62ea305509bc6fe[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Tue Jan 5 18:42:35 2016 -0600
+
+    Avance al detalle del pedido
+
+[33mcommit d9c26c8433696705cd0db8997e4e9751b2411e75[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Tue Jan 5 01:21:01 2016 -0600
+
+    Agregar la cantidad de paquetes en el pedido
+
+[33mcommit 67b44a8f8b4ab584d3d1c2d2f7ff7c717b3fea62[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Wed Dec 30 20:32:58 2015 -0600
+
+    Alerts personalizados
+
+[33mcommit a09f4d936cfe79b1b43b8b317add70f7504b056f[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Wed Dec 30 18:35:55 2015 -0600
+
+    Verificamos si el producto existe en la bd
+
+[33mcommit 303c06be1673fc7b84ead0987303d6dd09498fb8[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Wed Dec 30 13:08:20 2015 -0600
+
+    Validamos si no se ingresa la clave del producto
+
+[33mcommit af52786f2790f5736bed2f9e0e3c23a4df5e5be0[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Tue Dec 29 15:59:19 2015 -0600
+
+    Selects con ajax terminado
+
+[33mcommit 196426dd1f416bd13c640276af71c9221038cd9d[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Tue Dec 29 14:39:02 2015 -0600
+
+    Seleccionar un solo domicilio de entrega
+
+[33mcommit bd693b0ffb77008ea3559bc859931e0736e5669e[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Tue Dec 29 14:07:09 2015 -0600
+
+    Seleccionar solo un domicilio de entrega
+
+[33mcommit aad9ef4cdb145db745d26347a04e9368369c0d08[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Tue Dec 29 05:34:40 2015 -0600
+
+    Ajax en el select,pais, etado y municipio
+
+[33mcommit 61f4ac3010eb67f0957ea320c973e71b23d3498d[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Tue Dec 29 03:48:39 2015 -0600
+
+    select pais, estado, municipio, Ajax
+
+[33mcommit 4038816b12d8c3902b54c65d26c82c73fe49bc53[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Wed Dec 23 14:11:04 2015 -0600
+
+    rwd, ver fotos del pedido, datos del pedido
+
+[33mcommit dd53a1f02eed18e64591371fa94d14b9ca54487a[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Fri Dec 18 13:37:28 2015 -0600
+
+    Correcciones al JavaScript
+
+[33mcommit 6afd343cb3d71bf4aac60fced2b7110432d65232[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Wed Dec 16 19:40:28 2015 -0600
+
+    Verificar que no se pueda repetir el mismo usuario en la bd
+
+[33mcommit 0d0dff7f03a4578f6564f3760ca842bd73fb1043[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Tue Dec 15 22:57:49 2015 -0600
+
+    Actualizacion de la bd
+
+[33mcommit ddd55e6ed3040acdb8cc40c15fe9e4633705cde7[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Tue Dec 15 13:19:50 2015 -0600
+
+    Carrito laravel
+
+[33mcommit 220ac52a5b0ef2b1fe9518a703148885c5174165[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Tue Dec 15 13:16:01 2015 -0600
+
+    Carrito laravel
+
+[33mcommit 73f79302c877722fd98c058f8f8d361bfca595aa[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Thu Dec 10 05:33:26 2015 -0600
+
+    Buscador ajax
+
+[33mcommit 8d8d1b768d3898e61abefd80787d34ee58250d1d[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Tue Dec 8 04:44:17 2015 -0600
+
+    Buscador de productos terminado
+
+[33mcommit 05780dc180b9ad359b0a42d3e93c45fbc2fd8a88[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Tue Dec 8 04:41:41 2015 -0600
+
+    Buscador de productos terminado
+
+[33mcommit 660accccc213f67bf838d9834daf13970b7aea0d[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Fri Dec 4 06:42:36 2015 -0600
+
+    Recuperar contraseña mediante email y cambiar contraseña manualmente
+
+[33mcommit 4caaea984a22d2acf7cebca491ff45b63f38be4c[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Fri Dec 4 06:15:16 2015 -0600
+
+    Opcion de recuperar contraseña mediante email y cambiar contraseña manualmente
+
+[33mcommit 4cb4bcec1a0ffb48518171f41cb337d8c21a7709[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Wed Dec 2 23:22:18 2015 -0600
+
+    Seguridad en las vistas
+
+[33mcommit 8959f973c9f29daeb41fea527a2b91d48028754a[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Wed Dec 2 21:40:47 2015 -0600
+
+    Modificacion del formulario y control de permisos para las vistas agente,admin,user
+
+[33mcommit b4fb1723203ccf5debaae9d6a7c163a0df4b5d59[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Wed Dec 2 14:39:21 2015 -0600
+
+    Formulario de registros terminado
+
+[33mcommit f028e8a06379aa386b675298ede6e17e43cdf107[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Tue Dec 1 23:30:30 2015 -0600
+
+    Modificaciones al diseño
+
+[33mcommit 239aec3a883bb31688ee7510b4ae50b26ef23523[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Fri Nov 27 12:30:06 2015 -0600
+
+    Modificaciones en la bd
+
+[33mcommit a9aa7d2db10a3b61f819d1ec56c3c6fbd66547de[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Thu Nov 26 15:33:55 2015 -0600
+
+    Formulario de registros de usuarios y validaciones
+
+[33mcommit 4251970a6d8e1a93fbba6a2743f40810c069c565[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Wed Nov 25 19:11:55 2015 -0600
+
+    Modificacion de la base de datos y de los modelos
+
+[33mcommit 98278c74454904b0be6b6c6402de7597b40b6853[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Wed Nov 25 10:40:44 2015 -0600
+
+    Estructura html y login basico
+
+[33mcommit e6df08a3961e0ae77386a573e0fc12dab74e8c37[m
+Merge: 94ca07e be65823
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Wed Nov 25 09:47:36 2015 -0600
+
+    Merge branch 'models'
+
+[33mcommit be658232046f6b44a9d8c05b121953bff3ec20c0[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Mon Nov 23 12:38:37 2015 -0600
+
+    Agregue 2 modelos y modifique uno
+
+[33mcommit 168ffebcd31718a4fa83be3d78a3c0ccf72b4613[m
+Author: Luis Angel <luis_mh@outlook.es>
+Date:   Mon Nov 23 12:07:07 2015 -0600
+
+    Actualizacion de la bd
+
+[33mcommit 94ca07eb7ba0043bfdb7fb84c7b17cd7f2c5b877

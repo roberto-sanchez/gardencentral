@@ -1,0 +1,467 @@
+@charset "UTF-8";
+/* Variables para los colores */
+/* Estilos globales */
+html, body {
+  width: 100%;
+  height: 100%;
+  font-size: 16px;
+  font-family: Arial, Helvetica, 'Sans-serif', 'sans-serif'; }
+
+body {
+  background-color: #444444;
+  background-image: -webkit-gradient(linear, left 0%, left 100%, from(#555555), to(#111111));
+  background-image: -webkit-linear-gradient(top, #555555, 0%, #111111, 100%);
+  background-image: -webkit-linear-gradient(top, #555555 0%, #111111 100%);
+  background-image: linear-gradient(to bottom, #555555 0%, #111111 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff555555', endColorstr='#ff111111', GradientType=0);
+  background-attachment: fixed;
+  padding: 0;
+  margin: 0; }
+
+.panel-regis {
+  background: rgba(0, 0, 0, 0.2);
+  border: none;
+  height: 100px;
+  padding: 0 5em;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center; }
+  .panel-regis h2 {
+    line-height: 100px;
+    font-size: 2em;
+    color: #337AB7;
+    cursor: pointer; }
+    .panel-regis h2:hover {
+      color: blue;
+      text-decoration: none; }
+
+#container {
+  width: 100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center; }
+
+#loginbox {
+  width: 310px;
+  background: #ffffff;
+  box-shadow: 0 0 2px grey;
+  border-radius: 7px;
+  text-align: center; }
+  #loginbox form {
+    width: 100%;
+    height: 100%; }
+    #loginbox form .alinear {
+      background: rgba(250, 250, 250, 0.6);
+      border-top: 3px solid #F2F2F2;
+      border-bottom: 3px solid #F2F2F2;
+      padding: 1em;
+      margin: .5em; }
+      #loginbox form .alinear .inp1 {
+        padding-bottom: 1em; }
+    #loginbox form a {
+      color: #337AB7;
+      font-size: .8em; }
+      #loginbox form a:hover {
+        text-decoration: none;
+        color: red; }
+    #loginbox form .form-actions {
+      width: 80%;
+      margin: auto;
+      padding-top: 1em;
+      margin-bottom: 1.5em; }
+
+.spanRfcText, .spanNameText, .spanLastText, .spanMatText, .spanUserText, .spanEmailText, .spanPass1Text {
+  color: #A94442;
+  font-size: .8em;
+  margin: 0; }
+  .spanRfcText:before, .spanNameText:before, .spanLastText:before, .spanMatText:before, .spanUserText:before, .spanEmailText:before, .spanPass1Text:before {
+    content: "_";
+    visibility: hidden; }
+
+.spanPass2Text {
+  font-size: .8em;
+  display: inline-block; }
+
+.r_pass {
+  color: #A94442; }
+
+#msgUsuario, #msgEmail {
+  font-size: .8em; }
+
+#u-e {
+  display: none;
+  font-size: .9em;
+  margin: 0;
+  padding: 0; }
+
+/*Estilos para el modal*/
+.btnoculto {
+  display: none; }
+
+.modal .modal-dialog .modal-content .modal-body #formulario_registros {
+  padding: 0 1em; }
+  .modal .modal-dialog .modal-content .modal-body #formulario_registros .ap {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+        -ms-flex-pack: justify;
+            justify-content: space-between; }
+    .modal .modal-dialog .modal-content .modal-body #formulario_registros .ap .formLast, .modal .modal-dialog .modal-content .modal-body #formulario_registros .ap .formMat {
+      width: 100%; }
+  .modal .modal-dialog .modal-content .modal-body #formulario_registros .fo {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+        -ms-flex-pack: justify;
+            justify-content: space-between; }
+    .modal .modal-dialog .modal-content .modal-body #formulario_registros .fo .formPass1, .modal .modal-dialog .modal-content .modal-body #formulario_registros .fo .formPass2 {
+      width: 100%; }
+  .modal .modal-dialog .modal-content .modal-body #formulario_registros .radio .spancolor {
+    font-size: .9em; }
+    .modal .modal-dialog .modal-content .modal-body #formulario_registros .radio .spancolor span {
+      color: grey;
+      font-size: 0.8em; }
+  .modal .modal-dialog .modal-content .modal-body #formulario_registros .radio .oculto {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+    margin-bottom: 0; }
+    .modal .modal-dialog .modal-content .modal-body #formulario_registros .radio .oculto .radio1, .modal .modal-dialog .modal-content .modal-body #formulario_registros .radio .oculto .radio2 {
+      width: 100%; }
+  .modal .modal-dialog .modal-content .modal-body #formulario_registros .form-group {
+    height: 60px; }
+    .modal .modal-dialog .modal-content .modal-body #formulario_registros .form-group label {
+      font-size: .8em; }
+    .modal .modal-dialog .modal-content .modal-body #formulario_registros .form-group input {
+      height: 30px; }
+    .modal .modal-dialog .modal-content .modal-body #formulario_registros .form-group .glyphicon {
+      line-height: 18px;
+      font-size: .9em; }
+.modal .modal-dialog .modal-content .modal-footer {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-justify-content: space-around;
+      -ms-flex-pack: distribute;
+          justify-content: space-around; }
+  .modal .modal-dialog .modal-content .modal-footer .cancel, .modal .modal-dialog .modal-content .modal-footer #enviarregistro {
+    width: 200px; }
+
+/*-----Modal para restablecer la contrase├▒a--*/
+.modal-r {
+  padding-bottom: 0; }
+
+.title-rpass {
+  font-size: .9em; }
+
+.title-ingres {
+  font-size: .9em; }
+
+.spanREmail {
+  margin-top: 0; }
+
+#msgREmail {
+  margin: 0;
+  padding: 0;
+  font-size: .8em; }
+
+.modal-rest {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-justify-content: space-around;
+      -ms-flex-pack: distribute;
+          justify-content: space-around; }
+  .modal-rest button, .modal-rest #rest-p {
+    width: 200px; }
+
+/*RWD---Puntos de corte*/
+@media (min-width: 520px) {
+  #loginbox {
+    width: 400px; } }
+@media (min-width: 600px) {
+  #loginbox {
+    width: 460px; }
+
+  .panel-regis {
+    -webkit-box-pack: end;
+    -webkit-justify-content: flex-end;
+        -ms-flex-pack: end;
+            justify-content: flex-end; }
+
+  .title-rpass {
+    font-size: 1.5em; }
+
+  .title-ingres {
+    font-size: 1.2em; }
+
+  .modal-rest button, .modal-rest #rest-p {
+    width: 150px; }
+
+  .modal .modal-dialog .modal-content .modal-body #formulario_registros {
+    padding: 0 1em; }
+    .modal .modal-dialog .modal-content .modal-body #formulario_registros .ap {
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: normal;
+      -webkit-flex-direction: row;
+          -ms-flex-direction: row;
+              flex-direction: row; }
+      .modal .modal-dialog .modal-content .modal-body #formulario_registros .ap .formLast, .modal .modal-dialog .modal-content .modal-body #formulario_registros .ap .formMat {
+        width: 47%; }
+    .modal .modal-dialog .modal-content .modal-body #formulario_registros .radio .spancolor {
+      font-size: .9em; }
+      .modal .modal-dialog .modal-content .modal-body #formulario_registros .radio .spancolor span {
+        color: grey;
+        font-size: 0.8em; }
+    .modal .modal-dialog .modal-content .modal-body #formulario_registros .radio .oculto {
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: normal;
+      -webkit-flex-direction: row;
+          -ms-flex-direction: row;
+              flex-direction: row;
+      -webkit-box-pack: justify;
+      -webkit-justify-content: space-between;
+          -ms-flex-pack: justify;
+              justify-content: space-between; }
+      .modal .modal-dialog .modal-content .modal-body #formulario_registros .radio .oculto .radio1, .modal .modal-dialog .modal-content .modal-body #formulario_registros .radio .oculto .radio2 {
+        width: 47%; }
+    .modal .modal-dialog .modal-content .modal-body #formulario_registros .fo {
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: normal;
+      -webkit-flex-direction: row;
+          -ms-flex-direction: row;
+              flex-direction: row;
+      -webkit-box-pack: justify;
+      -webkit-justify-content: space-between;
+          -ms-flex-pack: justify;
+              justify-content: space-between; }
+      .modal .modal-dialog .modal-content .modal-body #formulario_registros .fo .formPass1, .modal .modal-dialog .modal-content .modal-body #formulario_registros .fo .formPass2 {
+        width: 47%; }
+  .modal .modal-dialog .modal-content .modal-footer {
+    -webkit-box-pack: end;
+    -webkit-justify-content: flex-end;
+        -ms-flex-pack: end;
+            justify-content: flex-end; }
+    .modal .modal-dialog .modal-content .modal-footer #enviarregistro {
+      width: 150px; }
+    .modal .modal-dialog .modal-content .modal-footer .cancel {
+      width: 120px;
+      margin-lef: .5em; } }
+@media (min-width: 890px) {
+  .panel-regis h2 {
+    margin-right: 2em; } }
+/*
+.modal{
+  .modal-dialog{
+
+    .modal-content{
+      .modal-header{
+        
+      }
+        .modal-body{
+          background:$gris_clarito;
+          #formulario_registros{
+            padding:0 1em;
+            .ap{
+              display:flex;
+              justify-content:space-between;
+                .formLast{
+                  width:47%;
+                }
+                .formMat{
+                   width:47%;
+
+                }
+
+            }
+
+              .fo{
+                display:flex;
+                justify-content:space-between;
+               .formPass1{
+                  width:47%;
+                }
+
+                .formPass2{
+                  width:47%;
+                }
+              }
+
+              
+
+              .radio{
+                margin:0;
+                padding:0;
+                cursor:pointer;
+                padding:1em;
+                label.spancolor{
+                  font-size:.8em;
+                  padding:0;
+                  &:hover{
+                    color:$azul_marino;
+                  }
+
+                  span{
+                    color:grey;
+                    font-size:.7em;
+                  }
+                }
+                .oculto{
+                display:flex;
+                justify-content:space-around;
+
+                .radio1{
+                  width:50%;
+                  margin-left:3%;
+                }
+                .radio2{
+                  width:50%;
+                  margin-left:1%;
+                }
+              }
+              }
+
+              .form-group{
+                height:60px;  
+
+                label{
+                  font-size:.8em;
+                }
+                input{
+                  height:30px;
+                }
+                .glyphicon{
+                  line-height:18px;
+                  font-size:.9em;
+                }
+              }
+          }
+        }
+        .modal-footer{
+          margin-top:.8em;
+        }
+    }
+  }
+}
+
+
+.hr{
+  visibility:hidden;
+  margin-bottom:0;
+}
+
+label.error{
+   color:red;
+   font-size:.8em;
+   float:left;
+   margin-top:.2em;
+   margin-bottom:0;
+}
+
+
+.none{
+  clear: both;
+}
+
+
+.spanRfcText, .spanNameText, .spanLastText, .spanMatText, .spanUserText, .spanEmailText, .spanPass1Text{
+   color:red;
+   font-size:.8em;
+   font-weight:bolder;
+   clear:left;
+   margin:0;
+   &:before{
+      content: "_";
+      visibility:hidden;
+   }
+}
+
+.spanPass2Text{
+  font-size:.8em;
+   font-weight:bolder;
+   display:inline-block;
+}
+
+.r_pass{
+  color:red;
+}
+
+/*Boton del modal*/
+/* Puntos de corte  */
+/*
+@media(min-width:320px) and (max-width:600px){
+
+
+  
+
+
+}
+
+
+@media(max-width:600px){
+    .panel-regis{
+      padding:0;
+  h2{
+    float:none;
+      text-align:center;
+      font-size:2.5em;
+      width:50%;
+      margin:0 auto;
+  }
+}
+
+  #loginbox{
+    width:350px;
+  }
+}
+*/
+
+/*# sourceMappingURL=login.css.map */

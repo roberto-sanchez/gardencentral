@@ -1,0 +1,514 @@
+/* Variables para los colores */
+
+$gris_clarito: rgba(#FAFAFA,.6);
+$azul_marino: #337AB7;
+
+/* Estilos globales */
+html, body {
+  width: 100%;
+  height: 100%;
+  font-size:16px;
+  font-family:Arial, Helvetica, 'Sans-serif', 'sans-serif';
+}
+
+
+body {
+  background-color: #444444;
+  background-image: -webkit-gradient(linear, left 0%, left 100%, from(#555555), to(#111111));
+  background-image: -webkit-linear-gradient(top, #555555, 0%, #111111, 100%);
+  background-image: -moz-linear-gradient(top, #555555 0%, #111111 100%);
+  background-image: linear-gradient(to bottom, #555555 0%, #111111 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff555555', endColorstr='#ff111111', GradientType=0);
+  background-attachment: fixed;
+  padding: 0;
+  margin: 0;
+}
+
+.panel-regis{
+  background:rgba(0,0,0,0.2);
+  border:none;
+  height:100px;
+  padding:0 5em;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  h2{
+    line-height:100px;
+    font-size:2em;
+    color:$azul_marino; 
+    cursor:pointer;
+    &:hover{
+    color:blue;
+    text-decoration:none;
+      
+    }
+  }
+}
+
+#container {
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+
+#loginbox {
+  width: 310px;
+  background: #ffffff;
+  box-shadow: 0 0 2px grey;
+  border-radius: 7px;
+  text-align: center;
+  form{
+    width: 100%;
+    height: 100%;
+    .alinear{
+      background:$gris_clarito;
+      border-top:3px solid #F2F2F2;
+      border-bottom:3px solid #F2F2F2;
+      padding:1em;
+      margin:.5em;
+      .inp1{
+        padding-bottom:1em;
+      }
+    }
+
+    a{
+      color:$azul_marino;
+      font-size:.8em;
+      &:hover{
+        text-decoration:none;
+        color:red;
+      }
+    }
+
+    .form-actions{
+      width:80%;
+      margin:auto;
+      padding-top:1em;
+      margin-bottom:1.5em;
+    }
+    
+  }
+  
+}
+
+.spanRfcText, .spanNameText, .spanLastText, .spanMatText, .spanUserText, .spanEmailText, .spanPass1Text{
+   color:#A94442;
+   font-size:.8em;
+   margin:0;
+   &:before{
+      content: "_";
+      visibility:hidden;
+   }
+}
+
+.spanPass2Text{
+  font-size:.8em;
+   display:inline-block;
+}
+
+.r_pass{
+  color:#A94442;
+}
+
+#msgUsuario, #msgEmail{
+  font-size:.8em;
+}
+
+#u-e{
+  display:none;
+  font-size:.9em;
+  margin:0;
+  padding:0;
+}
+
+/*Estilos para el modal*/
+.btnoculto{
+  display:none;
+}
+
+
+.modal{
+  .modal-dialog{
+
+    .modal-content{
+
+        .modal-body{
+          #formulario_registros{
+            padding:0 1em;
+            .ap{
+              display:flex;
+              flex-direction:column;
+              justify-content:space-between;
+                .formLast, .formMat{
+                  width:100%;
+                }
+
+            }
+
+              .fo{
+                display:flex;
+                flex-direction:column;
+                justify-content:space-between;
+               .formPass1, .formPass2{
+                  width:100%;
+                }
+
+              }
+
+              
+              .radio{
+              .spancolor{
+                font-size:.9em;
+                span{
+                  color:grey;
+                  font-size:.8em
+                }
+              }
+                .oculto{
+                display:flex;
+                flex-direction:column;
+                justify-content:space-between;
+                margin-bottom:0;
+
+                .radio1, .radio2{
+                  width:100%;
+              }
+
+                }
+              }
+
+              .form-group{
+                height:60px;  
+
+                label{
+                  font-size:.8em;
+                }
+                input{
+                  height:30px;
+                }
+                .glyphicon{
+                  line-height:18px;
+                  font-size:.9em;
+                }
+              }
+          }
+        }
+        .modal-footer{
+          display:flex;
+          justify-content:space-around;
+          .cancel, #enviarregistro{
+            width:200px;
+          }
+        }
+    }
+  }
+}
+
+/*-----Modal para restablecer la contraseña--*/
+.modal-r{
+  padding-bottom:0;
+}
+
+.title-rpass{
+  font-size:.9em;
+}
+
+.title-ingres{
+  font-size:.9em;
+}
+
+#restp{
+}
+  .spanREmail {
+    margin-top:0;
+  }
+
+#msgREmail{
+margin:0;
+  padding:0;
+  font-size:.8em;
+}
+
+.modal-rest{
+  display:flex;
+  justify-content:space-around;
+  button, #rest-p{
+    width:200px;
+  }
+}
+
+
+/*RWD---Puntos de corte*/
+@media(min-width:520px){
+  #loginbox {
+  width: 400px;
+  
+   }
+}
+
+@media(min-width:600px){
+   #loginbox {
+  width: 460px;
+  
+   }
+
+  .panel-regis{
+    justify-content:flex-end;
+  }
+  
+
+.title-rpass{
+  font-size:1.5em;
+}
+
+.title-ingres{
+  font-size:1.2em;
+}
+
+
+.modal-rest{
+  button, #rest-p{
+    width:150px;
+  }
+}
+
+.modal{
+  .modal-dialog{
+
+    .modal-content{
+
+        .modal-body{
+          #formulario_registros{
+            padding:0 1em;
+            .ap{
+              flex-direction:row;
+                .formLast, .formMat{
+                  width:47%;
+                }
+
+            }
+              .radio{
+              .spancolor{
+                font-size:.9em;
+                span{
+                  color:grey;
+                  font-size:.8em
+                }
+              }
+              .oculto{
+                flex-direction:row;
+                justify-content:space-between;
+                .radio1, .radio2{
+                  width:47%;
+              }
+
+                }
+              }
+
+              .fo{
+                flex-direction:row;
+                justify-content:space-between;
+               .formPass1, .formPass2{
+                  width:47%;
+                }
+
+              }
+
+          }
+        }
+        .modal-footer{
+          justify-content:flex-end;
+           #enviarregistro{
+            width:150px;
+          }
+          .cancel{
+            width:120px;
+            margin-lef:.5em;
+          }
+        }
+    }
+  }
+}
+
+}
+
+
+@media(min-width:890px){
+  .panel-regis{
+    h2{
+      margin-right:2em;
+    }
+  }
+}
+
+/*
+.modal{
+  .modal-dialog{
+
+    .modal-content{
+      .modal-header{
+        
+      }
+        .modal-body{
+          background:$gris_clarito;
+          #formulario_registros{
+            padding:0 1em;
+            .ap{
+              display:flex;
+              justify-content:space-between;
+                .formLast{
+                  width:47%;
+                }
+                .formMat{
+                   width:47%;
+
+                }
+
+            }
+
+              .fo{
+                display:flex;
+                justify-content:space-between;
+               .formPass1{
+                  width:47%;
+                }
+
+                .formPass2{
+                  width:47%;
+                }
+              }
+
+              
+
+              .radio{
+                margin:0;
+                padding:0;
+                cursor:pointer;
+                padding:1em;
+                label.spancolor{
+                  font-size:.8em;
+                  padding:0;
+                  &:hover{
+                    color:$azul_marino;
+                  }
+
+                  span{
+                    color:grey;
+                    font-size:.7em;
+                  }
+                }
+                .oculto{
+                display:flex;
+                justify-content:space-around;
+
+                .radio1{
+                  width:50%;
+                  margin-left:3%;
+                }
+                .radio2{
+                  width:50%;
+                  margin-left:1%;
+                }
+              }
+              }
+
+              .form-group{
+                height:60px;  
+
+                label{
+                  font-size:.8em;
+                }
+                input{
+                  height:30px;
+                }
+                .glyphicon{
+                  line-height:18px;
+                  font-size:.9em;
+                }
+              }
+          }
+        }
+        .modal-footer{
+          margin-top:.8em;
+        }
+    }
+  }
+}
+
+
+.hr{
+  visibility:hidden;
+  margin-bottom:0;
+}
+
+label.error{
+   color:red;
+   font-size:.8em;
+   float:left;
+   margin-top:.2em;
+   margin-bottom:0;
+}
+
+
+.none{
+  clear: both;
+}
+
+
+.spanRfcText, .spanNameText, .spanLastText, .spanMatText, .spanUserText, .spanEmailText, .spanPass1Text{
+   color:red;
+   font-size:.8em;
+   font-weight:bolder;
+   clear:left;
+   margin:0;
+   &:before{
+      content: "_";
+      visibility:hidden;
+   }
+}
+
+.spanPass2Text{
+  font-size:.8em;
+   font-weight:bolder;
+   display:inline-block;
+}
+
+.r_pass{
+  color:red;
+}
+
+/*Boton del modal*/
+
+
+
+/* Puntos de corte  */
+/*
+@media(min-width:320px) and (max-width:600px){
+
+
+  
+
+
+}
+
+
+@media(max-width:600px){
+    .panel-regis{
+      padding:0;
+  h2{
+    float:none;
+      text-align:center;
+      font-size:2.5em;
+      width:50%;
+      margin:0 auto;
+  }
+}
+
+  #loginbox{
+    width:350px;
+  }
+}
+*/
