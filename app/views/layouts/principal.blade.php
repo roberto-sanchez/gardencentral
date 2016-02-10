@@ -138,45 +138,78 @@
     </div>
     <!--____________________-->
 
-    <!--   ___________Aside que estara oculto en dispositivos moviles ______________-->
+   <!--   ___________Aside que estara oculto en dispositivos moviles ______________-->
     <div id="sidebar-nav" class="hidden-xs">
 
         <ul id="dashboard-menu" class="nav nav-list">
 
+            
             <li class="active "><a rel="tooltip" data-placement="right" data-original-title="Dashboard" href="index.html"><i class="glyphicon glyphicon-home"></i> <span class="caption">Administración</span></a></li>
 
 
-            <li class=" "><a rel="tooltip" data-placement="right" data-original-title="Reports" href="reports.html"><i class="glyphicon glyphicon-stats"></i> <span class="caption">Reportes</span></a></li>
+            <li class=" "><a rel="tooltip" data-placement="right" data-original-title="Reports" href="reports.html"><i class="glyphicon glyphicon-stats"></i> <span class="caption">Catalogos</span></a>
+              <ul>
+                <li>
+                  <a rel="tooltip" data-placement="right" data-original-title="Almacen" href="/catalogo/Almacen"> Almacen </a>
+                </li>
+                <li>
+                  <a rel="tooltip" data-placement="right" data-original-title="Cliente" href="/catalogo/Cliente"> Clientes </a>
+                </li>
+                <li>
+                  <a rel="tooltip" data-placement="right" data-original-title="Comercializador" href="/catalogo/Comercializador"> Comercializador </a>
+                </li>
+                <li>
+                  <a rel="tooltip" data-placement="right" data-original-title="Descuentos" href="/catalogo/Contacto"> Contactos </a>
+                </li>
+                <li>
+                  <a rel="tooltip" data-placement="right" data-original-title="Descuentos" href="/catalogo/Descuentos"> Descuentos </a>
+                </li>
+                <li>
+                  <a rel="tooltip" data-placement="right" data-original-title="Estados" href="/catalogo/Estados"> Estados </a>
+                </li>
+                <li>
+                  <a rel="tooltip" data-placement="right" data-original-title="Familias" href="/catalogo/Familias"> Familias </a>
+                </li>
+                <li>
+                  <a rel="tooltip" data-placement="right" data-original-title="Formas de pago" href="/catalogo/FormaPago"> Formas de pago </a>
+                </li>
+                <li>
+                  <a rel="tooltip" data-placement="right" data-original-title="Importador" href="/catalogo/Importador"> Importador </a>
+                </li>
+                <li>
+                  <a rel="tooltip" data-placement="right" data-original-title="Mensajeria" href="/catalogo/Mensajeria"> Mensajeria </a>
+                </li>
+                <li>
+                  <a rel="tooltip" data-placement="right" data-original-title="Municipio" href="/catalogo/Municipios">  Municipio</a>
+                </li>
+                <li>
+                  <a rel="tooltip" data-placement="right" data-original-title="Nivel de descuento" href="/catalogo/NivelDescuento"> Nivel de descuento </a>
+                </li>
+                <li>
+                  <a rel="tooltip" data-placement="right" data-original-title="Pais" href="/catalogo/Pais"> Pais </a>
+                </li>
+                <li>
+                  <a rel="tooltip" data-placement="right" data-original-title="Precio" href="/catalogo/Precio"> Precio </a>
+                </li>
+                <li>
+                  <a rel="tooltip" data-placement="right" data-original-title="Producto" href="/catalogo/Producto"> Producto </a>
+                </li>
+                <li>
+                  <a rel="tooltip" data-placement="right" data-original-title="Proveedor" href="/catalogo/Proveedor"> Proveedeor </a>
+                </li>
+                <li>
+                  <a rel="tooltip" data-placement="right" data-original-title="Rol" href="/catalogo/Rol"> Rol </a>
+                </li>
+                <li>
+                  <a rel="tooltip" data-placement="right" data-original-title="UnidadMedida" href="/catalogo/UnidadMedida"> Unidad medida </a>
+                </li>
+                <li>
+                  <a rel="tooltip" data-placement="right" data-original-title="Usuario" href="/catalogo/Usuario"> Usuario </a>
+                </li>
+                
+              </ul>
 
-
-            <li class=" "><a rel="tooltip" data-placement="right" data-original-title="UI Features" href="components.html"><i class="glyphicon glyphicon-briefcase"></i> <span class="caption">Paquetes</span></a></li>
-
-
-            <li class=" "><a rel="tooltip" data-placement="right" data-original-title="Pricing" href="pricing.html"><i class="glyphicon glyphicon-usd"></i> <span class="caption">Precios</span></a></li>
-
-
-            <li class=" "><a rel="tooltip" data-placement="right" data-original-title="Media" href=""><i class="glyphicon glyphicon-user"></i> <span class="caption">Usuarios</span></a></li>
-
-
-            <li class=" "><a rel="tooltip" data-placement="right" data-original-title="Blog" href="blog.html"><i class="glyphicon glyphicon-envelope"></i> <span class="caption">Mensajes</span></a></li>
-
-
-
-            <li class=" "><a rel="tooltip" data-placement="right" data-original-title="Help" href="help.html"><i class="glyphicon glyphicon-flag"></i> <span class="caption">Ayuda</span></a></li>
-
-
-            <li class=" "><a rel="tooltip" data-placement="right" data-original-title="Faq" href="faq.html"><i class="glyphicon glyphicon-ban-circle"></i> <span class="caption">Vacío</span></a></li>
-
-
-            <li class=" "><a rel="tooltip" data-placement="right" data-original-title="Calendar" href="calendar.html"><i class="glyphicon glyphicon-ban-circle"></i> <span class="caption">Vacío</span></a></li>
-
-
-            <li class=" "><a rel="tooltip" data-placement="right" data-original-title="Forms" href="forms.html"><i class="glyphicon glyphicon-ban-circle"></i> <span class="caption">Vacío</span></a></li>
-
-
-            <li class=" "><a rel="tooltip" data-placement="right" data-original-title="Tables" href="tables.html"><i class="glyphicon glyphicon-ban-circle"></i> <span class="caption">Vacío</span></a></li>
-
-
+            </li>
 
             <li class=" theme-mobile-hack"><a rel="tooltip" data-placement="right" data-original-title="Mobile" href="mobile.html"><i class="glyphicon glyphicon-ban-circle"></i> <span class="caption">Vacío</span></a></li>
 
