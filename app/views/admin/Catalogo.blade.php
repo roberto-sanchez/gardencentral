@@ -39,23 +39,21 @@
                                     <td><input type="checkbox" id="status_0" name="status" value=1 checked="true" class="checkbox"></td>
                                 <!--    <input type="hidden" id="catalogo_0" value="Almacen"  >
                                     <input type="hidden" id="tipoMov_0" value="Guardar" name=""> -->
-                                    <td><button type="button" id="btn_guardar" name="btn_guardar" value="Guardar" data-id="0" data-cat="Almacen" class="enviarG"> guardar </button></td>
+                                    <td><button type="button" id="btn_guardar" name="btn_guardar" value="Guardar" data-id="0" data-cat="Almacen" class="enviarG btn btn-success"> <span class="glyphicon glyphicon-">OK</span></button></td>
                                   </tr>
                                   </form>
                                 
                                   @foreach($almacenes as $almacen)
                                   {{Form::open() }}
                                     <tr id="tr_{{$almacen->id}}">
-                                      <td> <input type="text" name="clave_{{$almacen->id}}" value="{{$almacen->clave}}" id="clave_{{$almacen->id}}" disabled="disabled" required class="form-control">  </td>
-                                      <td> <input type="text" name="nombre_{{$almacen->id}}" value="{{$almacen->nombre}}" id="nombre_{{$almacen->id}}" disabled="disabled" required class="form-control"> </td>
+                                      <td> <input type="text" name="clave_{{$almacen->id}}" value="{{$almacen->clave}}" id="clave_{{$almacen->id}}" disabled="disabled" required class="form-control"> </td>
+                                      <td> <input type="text" name="nombre_{{$almacen->id}}" value="{{$almacen->nombre}}" id="nombre_{{$almacen->id}}" disabled="disabled" required class="form-control"></td>
                                       <td> <input type="checkbox" name="status_{{$almacen->id}}" value="{{$almacen->estatus}}"  id="status_{{$almacen->id}}" disabled="disabled" <<?php  if ($almacen->estatus==1) {?> checked <?php } ?> class="form-check"> </td>
                                       
                                       <td>
-                                        <button type="button" value="Modificar" id="btn_mod" data-id="{{$almacen->id}}" data-cat="Almacen" class="modificar">Mod</button>
-                                        <input type="hidden" id="catalogo_{{$almacen->id}}" value="Almacen"  >
-                                        <input type="hidden" id="tipoMov_{{$almacen->id}}" value="Actualizar" name="" >
-                                        <button type="button" value="Actualizar" id="btn_guardar_{{$almacen->id}}" disabled="disabled" data-id="{{$almacen->id}}" data-cat="Almacen"class="enviarG"> Act</button>
-                                        <button type="button" id="btn_Eliminar" value="Eliminar" data-id="{{$almacen->id}}" data-cat="Almacen"> Eliminar</button>
+                                        <button type="button" value="Modificar" id="btn_mod" data-id="{{$almacen->id}}" data-cat="Almacen" class="modificar btn btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
+                                        <button type="button" value="Actualizar" id="btn_guardar_{{$almacen->id}}" disabled="disabled" data-id="{{$almacen->id}}" data-cat="Almacen"class="enviarG btn btn-success"><span class="glyphicon glyphicon-">OK</span></button>
+                                        <button type="button" id="btn_Eliminar" value="Eliminar" data-id="{{$almacen->id}}" data-cat="Almacen" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
                                       </td>
 
                                     </tr>
@@ -70,7 +68,7 @@
 
                         case 'Cliente': ?>
                           <div>
-                            <button type="button" value="Nuevo" id="nuevo" class="editar form-action" data-info=''>Nuevo</button>
+                            <button type="button" value="Nuevo" id="nuevo" class="editar btn btn-primary" data-info=''><span class="glyphicon glyphicon-">NUEVO</span></button>
                           </div>
                           <div class="table-responsive">
                           <table class="table table-first-column-check data-table display full table-condensed" id="tablaResult">
@@ -88,15 +86,15 @@
                             
                             <form class="form-group"> 
                               <tr id="tr_{{$cliente->id}}">
-                                <td ><input type="text" id="rfc_{{$cliente->id}}"  value="{{$cliente->rfc}} " disabled="disabled"   class="form-control input-xlarge"></td>
+                                <td><input type="text" id="rfc_{{$cliente->id}}"  value="{{$cliente->rfc}} " disabled="disabled"   class="form-control input-xlarge"></td>
                                 <td><input type="text" id="usuario_id_{{$cliente->id}}"  value="{{$cliente->usuario}}" disabled="disabled" class="form-control"></td>
                                 <td><input type="text" id="agente_id_{{$cliente->id}}"  value="{{$cliente->agente}}" disabled="disabled" class="form-control"></td>
                                 <td><input type="text" id="numero_cliente_{{$cliente->id}}"  value="{{$cliente->numero_cliente}}" disabled="disabled" class="form-control"></td>
                                 <td style="width: 150px; height: 25px; ">
-                                  <button type="button" value="Modificar" id="editarCliente" data-id="{{$cliente->id}}" class="editar form-action" data-info='{{json_encode($cliente,JSON_HEX_APOS)}}'>Editar</button>
-                                  <input type="hidden" id="campo_id{{$cliente->id}}" value="{{$cliente->id}}" name="campo_id" >
-                                <!--  <button type="button" value="Actualizar" id="btn_actualizar_{{$cliente->id}}" disabled="disabled" data-id="{{$cliente->id}}" > Act</button> -->
-                                  <button type="button" id="btn_Eliminar" value="Eliminar" data-id="{{$cliente->id}}" data-cat="Cliente" data-info="{{$cliente->idUsuario}}" class="form-action"> Eliminar</button>
+                                  <button type="button" value="Modificar" id="editarCliente" data-id="{{$cliente->id}}" class="editar btn btn-primary" data-info='{{json_encode($cliente,JSON_HEX_APOS)}}'><span class="glyphicon glyphicon-edit"></span></button>
+                                <!--  <input type="hidden" id="campo_id{{$cliente->id}}" value="{{$cliente->id}}" name="campo_id" >
+                                  <button type="button" value="Actualizar" id="btn_actualizar_{{$cliente->id}}" disabled="disabled" data-id="{{$cliente->id}}" > Act</button> -->
+                                  <button type="button" id="btn_Eliminar" value="Eliminar" data-id="{{$cliente->id}}" data-cat="Cliente" data-info="{{$cliente->idUsuario}}" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
                                 </td>
                               </tr>
                             </form> 
@@ -112,31 +110,28 @@
                           <table class="table table-first-column-check" id="tablaResult">
                             <thead>
                               <tr>
-                                <th>Nombre</th>
+                                <th style="width: 200px;">Nombre</th>
                                 <th></th>
                               </tr>
                             </thead>
                             <tbody>
                                 <form>
                                   <tr>
-                                    <td><input type="text" id="nombre_0" name="nombre_0" value="" ></td>
-
+                                    <td><input type="text" id="nombre_0" name="nombre_0" value="" class="form-control"></td>
                                     <td>
                                         <input type="hidden" id="tipoMov_0" value="Guardar" name="">
-                                        <button type="button" id="btn_guardar" name="btn_guardar" value="Guardar" data-id="0" class="enviarG"> guardar </button>
+                                        <button type="button" id="btn_guardar" name="btn_guardar" value="Guardar" data-id="0" data-cat="Comercializador" class="enviarG btn btn-success"> <span class="glyphicon glyphicon-">OK</span> </button>
                                     </td>
                                   </tr>
                                 </form>
                                 @forelse($comercializadores as $comercializador)
                                 <form>
                                 <tr id="tr_{{$comercializador->id}}">
-                                  <td><input type="text" id="nombre_{{$comercializador->id}}" name="nombre_{{$comercializador->id}}" value="{{$comercializador->nombre}}" disabled="disabled"></td>
+                                  <td><input type="text" id="nombre_{{$comercializador->id}}" name="nombre_{{$comercializador->id}}" value="{{$comercializador->nombre}}" disabled="disabled" class="form-control"></td>
                                   <td>
-                                    <button type="button" value="Modificar" id="btn_mod" data-id="{{$comercializador->id}}" class="modificar">Mod</button>
-                                    <input type="hidden" id="campo_id{{$comercializador->id}}" value="{{$comercializador->id}}" name="" >
-                                    <input type="hidden" id="tipoMov_{{$comercializador->id}}" value="Actualizar" name="" >
-                                    <button type="button" value="Actualizar" id="btn_actualizar_{{$comercializador->id}}" disabled="disabled" data-id="{{$comercializador->id}}" class="enviarG"> Act</button>
-                                    <button type="button" id="btn_Eliminar" value="Eliminar" data-id="{{$comercializador->id}}"> Eliminar</button>
+                                    <button type="button" value="Modificar" id="btn_mod" data-id="{{$comercializador->id}}" data-cat="Comercializador" class="modificar btn btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
+                                    <button type="button" value="Actualizar" id="btn_guardar_{{$comercializador->id}}" disabled="disabled" data-id="{{$comercializador->id}}" data-cat="Comercializador" class="enviarG btn btn-success" ><span class="glyphicon glyphicon-">OK</span></button>
+                                    <button type="button" id="btn_Eliminar" value="Eliminar" data-id="{{$comercializador->id}}" data-cat="Comercializador" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
                                   </td>
                                 </tr>
                                 </form>
@@ -366,7 +361,48 @@
 
                           <?php
                           break;
+                        case 'Pais': ?>
+                          <table class="table table-first-column-check" id="tablaResult">
+                            <thead>
+                              <tr>
+                                <th style="width: 200px;">Pais</th>
+                                <th></th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                                <form>
+                                  <tr>
+                                    <td><input type="text" id="pais_0" name="pais_0" value="" class="form-control"></td>
+                                    <td>
+                                      <!--  <input type="hidden" id="tipoMov_0" value="Guardar" name=""> -->
+                                        <button type="button" id="btn_guardar" name="btn_guardar" value="Guardar" data-id="0" data-cat="Pais" class="enviarG btn btn-success"> <span class="glyphicon glyphicon-">OK</span> </button>
+                                    </td>
+                                  </tr>
+                                </form>
+                                @forelse($pais as $pais)
+                                <form>
+                                <tr id="tr_{{$pais->id}}">
+                                  <td><input type="text" id="pais_{{$pais->id}}" name="nombre_{{$pais->id}}" value="{{$pais->nombre}}" disabled="disabled" class="form-control"></td>
+                                  <td>
+                                    <button type="button" value="Modificar" id="btn_mod" data-id="{{$pais->id}}" data-cat="Pais" class="modificar btn btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
+                                    <button type="button" value="Actualizar" id="btn_guardar_{{$pais->id}}" disabled="disabled" data-id="{{$pais->id}}" data-cat="Pais" class="enviarG btn btn-success" ><span class="glyphicon glyphicon-">OK</span></button>
+                                    <button type="button" id="btn_Eliminar" value="Eliminar" data-id="{{$pais->id}}" data-cat="Pais" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+                                  </td>
+                                </tr>
+                                </form>
+                                @empty
+                                <tr>
+                                  <td>
+                                     <p>NO HAY DATOS PARA MOSTRAR</p>
+                                  </td>
+                               
+                                </tr>
+                                @endforelse
+                            </tbody>
+                          </table>
 
+                        <?php
+                          break;
                         default:
                           # code...
                           break;
@@ -426,7 +462,7 @@
           break*/
         case 'Comercializador':
             $('#nombre_'+$(this).data('id')).prop('disabled',false);
-            $('#btn_actualizar_'+$(this).data('id')).prop('disabled',false);
+            $('#btn_guardar_'+$(this).data('id')).prop('disabled',false);
           break;
 
         case 'NivelDescuento':
@@ -694,8 +730,9 @@
                   var datos = {
                       nombre  : $('#nombre_'+$(this).data('id')).val(),
                       catalogo: catalogo,
-                      tipoMov : $('#tipoMov_'+$(this).data('id')).val()
-                  }
+                      tipoMov : $(this).val(),
+                      id_upd  : $(this).data('id')
+                  };
                   break;
 
               case 'Descuentos':
@@ -853,13 +890,11 @@
 
                       case 'Comercializador':
                           var fila =  '<tr id="tr_'+respuesta.id+'">' +
-                                        '<td> <input type="text" name="nombre_'+respuesta.id+'" value="'+respuesta.nombre+'" id="nombre_'+respuesta.id+'" disabled="disabled" required>  </td>' +
+                                        '<td> <input type="text" name="nombre_'+respuesta.id+'" value="'+respuesta.nombre+'" id="nombre_'+respuesta.id+'" disabled="disabled" class="form-control" required>  </td>' +
                                       '<td>'+
-                                            '<button type="button" value="Modificar" id="btn_mod" data-id="'+respuesta.id+'" class="modificar">Mod</button>'+
-                                            '<input type="hidden" id="campo_id'+respuesta.id+'" value="'+respuesta.id+'" name="campo_id" >'+
-                                            '<input type="hidden" id="tipoMov_'+respuesta.id+'" value="Actualizar" name="tipoMov" >'+
-                                            '<button type="button" value="Actualizar" id="btn_actualizar_'+respuesta.id+'" disabled="disabled" data-id="'+respuesta.id+'" class="enviarG"> Act</button>'+
-                                            '<button type="button" id="btn_Eliminar" value="Eliminar" data-id="'+respuesta.id+'"> Eliminar</button>'+
+                                            '<button type="button" value="Modificar" id="btn_mod" data-id="'+respuesta.id+'" class="modificar btn btn-primary" data-cat="Comercializador"><span class="glyphicon glyphicon-edit" ></span></button>'+
+                                            '<button type="button" value="Actualizar" id="btn_guardar_'+respuesta.id+'" disabled="disabled" data-id="'+respuesta.id+'" class="enviarG btn btn-success" data-cat="Comercializador"><span class="glyphicon glyphicon-">OK</span></button>'+
+                                            '<button type="button" id="btn_Eliminar" value="Eliminar" data-id="'+respuesta.id+'" data-cat="Comercializador" class="btn btn-danger"> <span class="glyphicon glyphicon-remove"></span></button>'+
                                           '</td>'+
                                       '</tr>';
                           $('#tablaResult').append(fila);

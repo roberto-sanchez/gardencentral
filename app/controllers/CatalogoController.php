@@ -502,6 +502,13 @@ class CatalogoController extends \BaseController {
 					Response::json('success');
 				}
 				break;
+			case 'Comercializador':
+				$comercializador = Comercializador::find($id);
+				if ($comercializador->delete()) {
+					Response::json('success');
+				}
+				# code...
+				break;
 			default:
 				# code...
 				break;
@@ -650,7 +657,7 @@ class CatalogoController extends \BaseController {
 			   	    	'nombre' => Input::get('nombre')		          
 		        	],
 	    	    	[
-		        		'nombre' => 'required|unique:Comercializador'.$movimiento
+		        		'nombre' => 'required|unique:Comercializador'
 			        ]
 	    		);
 	    		if($validator->fails()) {
