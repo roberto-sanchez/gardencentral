@@ -104,6 +104,7 @@ Route::post('catalogo/create', 'CatalogoController@create');
 
 Route::delete('catalogo/destroy/{id}', 'CatalogoController@destroy');
 Route::put('catalogo/update/{id}', 'CatalogoController@update');
+Route::post('getElementos/{cat}', 'CatalogoController@_getElementos');
 
 
 
