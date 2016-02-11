@@ -2,6 +2,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {{ HTML::style('css/bootstrap.min.css') }}
     {{ HTML::style('css/estilosGlobales.css') }}
+
+
        <!--
     <script src="lib/jquery-1.7.2.min.js" type="text/javascript"></script>
     <script src="js/site.js" type="text/javascript"></script>

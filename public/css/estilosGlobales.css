@@ -1779,6 +1779,22 @@ label {
 /*.menu-sm{
   padding-right:2em;
 */
+.b-exists {
+  width: 20%;
+  margin: 0 auto;
+  float: left; }
+
+.alert-danger {
+  background: #f9f2f4;
+  border-radius: 4px;
+  border: 1px solid #ebccd1;
+  color: #a94442;
+  padding: .3em 1.5em;
+  font-size: 1.1em; }
+
+.ingresar-p {
+  width: 15%; }
+
 #main-menu {
   border: 0; }
 
@@ -1896,6 +1912,45 @@ div.users {
   .panel-datos .panelcarrito a {
     width: 80%;
     margin: 0 10% 0 10%; }
+
+/*---Modal ver foto del producto----*/
+/*--enlace---*/
+.verfotop {
+  cursor: pointer;
+  color: #337ab7; }
+  .verfotop:hover {
+    color: #58A2F6; }
+
+#verfoto-p {
+  background: rgba(0, 0, 0, 0.7); }
+  #verfoto-p .p-fotop {
+    margin: 0 auto;
+    margin-top: 6em;
+    padding: 0;
+    width: 300px; }
+    #verfoto-p .p-fotop .title-fp {
+      font-size: 1em; }
+    #verfoto-p .p-fotop .body-foto {
+      margin: 0;
+      padding: 0; }
+      #verfoto-p .p-fotop .body-foto .fp-foto {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: center;
+        -webkit-justify-content: center;
+            -ms-flex-pack: center;
+                justify-content: center;
+        width: 100%; }
+        #verfoto-p .p-fotop .body-foto .fp-foto .foto-p-p {
+          width: 100%; }
+    #verfoto-p .p-fotop .t-foto {
+      font-size: .9em; }
+
+/*--- end modal ----*/
+.content-f {
+  padding: 0 .5em; }
 
 .bodycarrito {
   padding: 0; }
@@ -2255,22 +2310,24 @@ footer p {
       padding: .2em 0 .2em 1em; }
       .d-detallep .content-navp .navegacion-p li a:hover {
         color: #58A2F6; }
-.d-detallep .table-pd .td-pedido {
-  width: 100%;
-  margin: 0;
-  padding: 0; }
-  .d-detallep .table-pd .td-pedido .c-pedidod {
-    font-size: .7em;
-    border-bottom: 1px solid #CFCFD6;
-    background: #F1F1F3; }
-    .d-detallep .table-pd .td-pedido .c-pedidod tr th {
-      font-weight: normal;
-      padding: .3em 1.3em;
-      text-align: center; }
-  .d-detallep .table-pd .td-pedido .b-pedidod {
-    font-size: .7em; }
-    .d-detallep .table-pd .td-pedido .b-pedidod tr td {
-      text-align: center; }
+.d-detallep .table-pd {
+  padding: 0 .3em 1em .3em; }
+  .d-detallep .table-pd .td-pedido {
+    width: 100%;
+    margin: 0;
+    padding: 0; }
+    .d-detallep .table-pd .td-pedido .c-pedidod {
+      font-size: .7em;
+      border-bottom: 1px solid #CFCFD6;
+      background: #F1F1F3; }
+      .d-detallep .table-pd .td-pedido .c-pedidod tr th {
+        font-weight: normal;
+        padding: .3em 1.3em;
+        text-align: center; }
+    .d-detallep .table-pd .td-pedido .b-pedidod {
+      font-size: .7em; }
+      .d-detallep .table-pd .td-pedido .b-pedidod tr td {
+        text-align: center; }
 
 .breadcrumb > li + li:before {
   content: "";
@@ -2347,22 +2404,8 @@ footer p {
       background: #3C93F5; }
 
 /*Tabla pa el total del pedido*/
-.es-t {
-  border: 0;
-  width: 100%; }
-  .es-t .content-est-t {
-    border-right: 0;
-    width: 200px;
-    margin: auto; }
-
-.table-t-p {
-  border: 0; }
-  .table-t-p tr {
-    border: 0; }
-    .table-t-p tr td {
-      font-size: .8em;
-      text-align: center;
-      border: 0; }
+.de-t tr td {
+  font-size: .7em; }
 
 .telclienteotro {
   font-size: 1.2em;
@@ -2398,17 +2441,36 @@ footer p {
   .table-cli .cliente-pedido {
     border-top: 0;
     width: 100%; }
-    .table-cli .cliente-pedido #cli-dpedido tr {
-      text-align: center; }
-      .table-cli .cliente-pedido #cli-dpedido tr td {
-        padding-top: .5em;
-        font-size: .7em; }
-        .table-cli .cliente-pedido #cli-dpedido tr td .cir {
-          padding: 0 .2em;
-          font-weight: bold;
-          color: #6b6252; }
-      .table-cli .cliente-pedido #cli-dpedido tr:nth-child(even) {
-        background: #FCFBFB; }
+    .table-cli .cliente-pedido #cli-dpedido {
+     /*   .onservaciones{
+          
+          td{
+            
+            .ob{
+              color:#6b6252;
+              padding:0;
+              margin:0;
+              font-size:.9em;
+            }
+    
+            .obs{
+              margin:0;
+              padding:0;
+              font-size:.8em;
+            }
+          }
+        } */ }
+      .table-cli .cliente-pedido #cli-dpedido tr {
+        text-align: center; }
+        .table-cli .cliente-pedido #cli-dpedido tr td {
+          padding-top: .5em;
+          font-size: .7em; }
+          .table-cli .cliente-pedido #cli-dpedido tr td .cir {
+            padding: 0 .2em;
+            font-weight: bold;
+            color: #6b6252; }
+        .table-cli .cliente-pedido #cli-dpedido tr:nth-child(even) {
+          background: #FCFBFB; }
 
 /*contenido de los comentarios*/
 .comen-t {
@@ -2651,37 +2713,26 @@ footer p {
     padding: 0; }
 
   d-dpedido
-  .es-t {
-    border: 0;
-    width: 100%; }
-    d-dpedido
-    .es-t .content-est-t {
-      border-right: 0;
-      width: 200px;
-      margin: auto; }
-
-  .table-t-p {
-    border: 0; }
-    .table-t-p tr {
-      border: 0; }
-      .table-t-p tr td {
-        border: 0; }
-
   .table-cli {
     border-top: 0;
     border-bottom: 0; }
+    d-dpedido
     .table-cli .cliente-pedido {
       width: 100%;
       border-bottom: 0; }
+      d-dpedido
       .table-cli .cliente-pedido #cli-dpedido tr {
         text-align: center; }
+        d-dpedido
         .table-cli .cliente-pedido #cli-dpedido tr td {
           padding-top: .5em;
           font-size: .7em; }
+          d-dpedido
           .table-cli .cliente-pedido #cli-dpedido tr td .cir {
             padding: 0 .2em;
             font-weight: bold;
             color: #6b6252; }
+        d-dpedido
         .table-cli .cliente-pedido #cli-dpedido tr:last-child {
           border-bottom: 0; }
 
@@ -2849,17 +2900,6 @@ footer p {
 
   .text-t-p {
     margin: 0;
-    text-align: center; }
-
-  .table-t-p {
-    width: 150px;
-    margin: 0;
-    border-right: 0;
-    border-top: 0;
-    border-left: 0; }
-
-  .table-t-p tr td {
-    font-size: .8em;
     text-align: center; }
 
   #con-pd, #confrim-e, .cancel-e, .cancel-r {
@@ -3082,4 +3122,5 @@ footer p {
 
   .table-cli .cliente-pedido #cli-dpedido tr {
     padding: 0; } }
+
 /*# sourceMappingURL=estilosGlobales.css.map */

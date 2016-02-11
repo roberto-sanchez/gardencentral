@@ -30,12 +30,17 @@ class AgentesController extends \BaseController {
 
    //Pedidos
    public function listarpedidos() {
-        $pedido = DB::table('cliente')
-        		->select('pedido.id', 'num_pedido','numero_cliente','pedido.created_at','estatus')
-                ->join('pedido','cliente.id', '=','pedido.cliente_id')
-                ->OrderBy('created_at', 'DESC')->get();
+   		$ida = Auth::user()->id;
 
-        return Response::json(array('pedido' => $pedido));
+   		$cliente = DB::table('cliente')
+   				->select('pedido.id', 'num_pedido','numero_cliente','pedido.created_at','estatus')
+   				->join('pedido','cliente.id', '=','pedido.cliente_id')
+   				->OrderBy('created_at', 'DESC')
+   				->where('cliente.agente_id', $ida)->get();
+   				
+
+        //return Response::json($cliente);
+        return Response::json(array('pedido' => $cliente));
   
     
     }

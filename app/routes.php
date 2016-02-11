@@ -63,6 +63,7 @@ Route::bind('producto', function($clave){
 });
 
 
+
 // Ruta para la busqueda de productos
 Route::post('productos/getProducto','ProductoController@getProducto'); 
 
@@ -73,9 +74,13 @@ Route::get('productos/add/{producto}/{quantity}','ProductoController@add');
 Route::get('productos/agregarproducto/{id}/{quantity}', 'ProductoController@agregarproducto'); 
 
 //Eliminar producto del carrito
-Route::get('productos/delete/{producto}', 'ProductoController@delete');
+Route::post('productos/delete/{producto}', 'ProductoController@delete');
+
+//Ver foto del pedido
+Route::post('productos/verfoto', 'ProductoController@verfoto');
 
 //Vaciar todo el contenido de el carrito
+Route::post('productos/vaciar', 'ProductoController@vaciar');
 Route::get('productos/trash', 'ProductoController@trash');
 
 //Rutas para verificar datos

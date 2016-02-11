@@ -1,5 +1,19 @@
 $(document).ready(function(){
 
+
+
+if($('.sesion-f').length == 0){
+    
+} else {
+    noexiste = [[ 'top', 'success',  "Tu sesión ha sido cerrada." ]];
+    message = noexiste[Math.floor(Math.random() * noexiste.length)];
+
+    $('.' + message[0]).notify({
+        message: { text: message[2] },
+        type: message[1]
+    }).show();
+}
+
 // ------------------ Inicio de Sesion  -------------------- 
 
 //Validamos el username y la contraseña del inicio de sesion

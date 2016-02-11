@@ -94,6 +94,21 @@ body {
   
 }
 
+.cont-sesion{
+  width:18%;
+  margin:0 auto;
+  position:relative;
+}
+
+.sess-f{
+  position:absolute;
+  top:50px;
+}
+
+.sesion-f{
+  visibility:hidden;
+}
+
 .spanRfcText, .spanNameText, .spanLastText, .spanMatText, .spanUserText, .spanEmailText, .spanPass1Text{
    color:#A94442;
    font-size:.8em;

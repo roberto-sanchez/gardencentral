@@ -6,8 +6,6 @@
 
 @section('scripts')
 @parent
-{{ HTML::script('js/slimbox2.js') }}
-{{ HTML::style('css/slimbox2.css') }}
 {{ HTML::style('css/select2.min.css') }}
 @stop
 
@@ -122,7 +120,7 @@
 
             
         <div class="imprimirpdf">
-          <a class="btn btn-default" href="{{ URL::to('productos/imprimirpedido', $iddom) }}" target="_blank" >Imprimir pedido en PDF</a>
+          <a class="btn btn-default" href="{{ URL::to('productos/imprimirpedido',$iddom) }}" target="_blank" >Imprimir pedido en PDF</a>
         </div>
         <div id="generarcompra">
           <a href="{{ URL::to('productos/trash') }}" class="btn btn-info">
@@ -138,6 +136,29 @@
 
 
 {{ HTML::script('js/principal.js') }}
+
+<script type="text/javascript">
+  $('.log-out').attr('id','cerrar');
+  $('.log-out').attr('href',"#");
+
+$('#cerrar').click(function(){
+  
+      $.ajax({
+            type: "POST", //metodo
+            url: "/productos/vaciar",
+            success: function (v) {
+                //Cerramos la sesion
+                window.location.href = "/logout";
+
+            },
+            error: function () {
+                alert('failure');
+            }
+        });
+  
+
+});
+</script>
 
 
 

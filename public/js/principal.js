@@ -23,8 +23,13 @@ $(document).ready(function () {
 
     $('#btn_search').click(function () {
         if ($('#clave').val() == '' || $('#clave').val() == 'Clave del producto') { 
-            $('.mialert').show();
-            $('.msjdanger').text("Escribe la clave del producto. ");
+            noexiste = [[ 'top', 'danger',  "Escribe la clave del producto." ]];
+            message = noexiste[Math.floor(Math.random() * noexiste.length)];
+
+            $('.' + message[0]).notify({
+                message: { text: message[2] },
+                type: message[1]
+            }).show();
         } else { 
             $.ajax({
                 type: "POST", 
@@ -34,7 +39,15 @@ $(document).ready(function () {
                     ver = prod.id;
                     if (ver === undefined) {
                         $('#productoPanel').hide(); 
-                        $('.mialert2').show();
+
+                        noexiste = [[ 'top', 'danger',  "El producto no existe." ]];
+                        message = noexiste[Math.floor(Math.random() * noexiste.length)];
+
+                        $('.' + message[0]).notify({
+                            message: { text: message[2] },
+                            type: message[1]
+                        }).show();
+
                         $('#noexiste').html(prod.indefinido);
                     } else { 
                         $('#productoPanel').slideDown(1000); 
@@ -63,6 +76,7 @@ $(document).ready(function () {
         }
 
     });
+
 
     /**
      * La function trim eliminar los espacios en blanco que esten al principio y al final del contenido del campo.
@@ -103,7 +117,13 @@ $(document).on('click', '.idProd2', function(){
 
         if ($('.idProd').val() == '') {
 
-            $('.mialert3').show();
+            noexiste = [[ 't', 'danger',  "Ingrese la cantidad de paquetes." ]];
+                message = noexiste[Math.floor(Math.random() * noexiste.length)];
+
+                $('.' + message[0]).notify({
+                    message: { text: message[2] },
+                    type: message[1]
+                }).show();
             return false;
 
         }
@@ -122,7 +142,7 @@ $(document).on('click', '.idProd2', function(){
 
     });
 
-
+//Sumar productos al pedido
 $(".btn-update-sum").click(function (e) {
     idt = $(this).attr('id');
     valor = $('.cant_'+idt).val();
@@ -154,8 +174,6 @@ $(".btn-update-sum").click(function (e) {
     });
 
 
-
-
     //actualizamos la cantidad del producto
     $(".btn-update-p").click(function (e) {
         e.preventDefault();
@@ -165,6 +183,68 @@ $(".btn-update-sum").click(function (e) {
         window.location.href = href + "/" + quantity;
     });
 
+
+    //Vaciar pedido ----------
+    $('#v-pedido').click(function(){
+  
+      $.ajax({
+            type: "POST", 
+            url: "/productos/vaciar",
+            success: function (v) {
+                $('.panel-datos').hide(); 
+
+            },
+            error: function () {
+                alert('failure');
+            }
+        });  
+
+  });
+
+//Eliminar producto del carrito
+    $(document).on('click', '.delete-p', function(){
+      id = $(this).attr('value');
+
+      clave = $(this).attr('data-id');
+  
+      $.ajax({
+            type: "POST", 
+            url: "/productos/delete/"+clave,
+            success: function (d) {
+                $("#t-pedidoc").load(location.href+" #t-pedidoc>*","");
+
+            },
+
+            error: function () {
+                alert('failure');
+            }
+        });  
+
+  });
+
+
+//Ver foto del producto del pedido
+$(document).on('click', '.verfotop', function(){
+    clave = $(this).attr('id');
+
+    $.ajax({
+        type: 'POST',
+        url: '/productos/verfoto',
+        data: {clave: clave},
+        success: function(f){
+            $('#fotopro').prop('src','img/productos/'+f.foto);
+            $('.t-foto').text(f.nombre);
+            $('#verfoto-p').modal({
+                show: 'false'
+             }); 
+
+        },
+        error: function(){
+            alert('failure');
+        }
+    });
+
+});
 
 
 
@@ -191,7 +271,6 @@ $(".btn-update-sum").click(function (e) {
             url: "productos/editar/"+uddom,  
             data: {uddom: uddom},
              success: function (dom) {  
-             console.log(dom); 
 
              /*Cargamos los datos correspondientes de cada input*/
                 $('#select-p').html(dom[0].pais);
@@ -276,7 +355,6 @@ $(".btn-update-sum").click(function (e) {
             $('#municipioedit').html('');
             $('#municipioedit').append($('<option></option>').text('Seleccione un municipio').val(''));
             $.each(muni, function (i) {
-                console.log(muni);
                 m = "";
 
              for(datos in muni.municipio){
@@ -480,7 +558,6 @@ $(".btn-update-sum").click(function (e) {
           type: "POST",
           data:{pais: pais, estado: estado, municipio: municipio, calle1: calle1, calle2: calle2, colonia: colonia, delegacion: delegacion, cp: cp, tel: tel, tipodom: tipodom, tipotel: tipotel, id: id},
           success: function (d){
-            console.log(d);
             //$('.direcc_'+id).remove(); 
 
            //Creamos la fila y remplazamos los datos con los registros actualizados
@@ -528,9 +605,9 @@ $(".btn-update-sum").click(function (e) {
 
     } else {
         $('.regis-exixts-t').removeClass('disabled');
-        $('.confirm-d').removeClass('disabled');
-        $('.text-pago').hide();
-        $('.text-exito').show();
+        //$('.confirm-d').removeClass('disabled');
+        //$('.text-pago').hide();
+        //$('.text-exito').show();
         $('.confirm-p').removeClass('disabled');
     }
 
@@ -539,22 +616,28 @@ $(".btn-update-sum").click(function (e) {
         forma = $('#text_'+id).text();
         $('.f-p').attr('value',id);
         $('.f-t').attr('value',forma);
-        if($('.formapago').val() != null){
-        $('.confirm-p').removeClass('disabled');
-        $('.confirm-d').removeClass('disabled');
-         $('.regis-exixts-t').removeClass('disabled');
-        $('.text-exito').show();
-        $('.text-pago').hide();
-        $('.text-selectdom').hide();
-        $('.c-no').show();
-        $('.c-pe').hide();
-    } 
+
+      /*  if($('.formapago').val() != null){
+            $('.confirm-p').removeClass('disabled');
+            $('.confirm-d').removeClass('disabled');
+             $('.regis-exixts-t').removeClass('disabled');
+            $('.text-exito').show();
+            $('.text-pago').hide();
+            $('.text-selectdom').hide();
+            $('.c-no').show();
+            $('.c-pe').hide();
+    } */
 
     });
-      /*  $('.formapago').click(function(){
-            
 
-        });*/
+        //comprobamos que se seleccione la forma de pago al generar el pedido
+        $('#conf-p1').click(function(){
+            if($('.formapago').val() != null){
+                $('.confirm-d').removeClass('disabled');
+                $('.text-exito').show();
+                $('.text-pago').hide();
+            } 
+        });
 
 
    
@@ -567,7 +650,6 @@ $(".btn-update-sum").click(function (e) {
               $('#msgUsuario').html('<img src="loader.gif"/> verificando');
             }, */
             success: function( respuesta ){
-                console.log(respuesta);
             /*  if(respuesta == '1')
                 $('#msgUsuario').html("Disponible");
               else
@@ -594,7 +676,6 @@ $(".btn-update-sum").click(function (e) {
         type: "DELETE",
         data: {idd: idd},
         success: function(di){
-            console.log(di);
 
           $('.direcc_'+id).remove();
         },
@@ -612,7 +693,14 @@ $(".btn-update-sum").click(function (e) {
   $('.btn-conf-1').hide();
 
   $('#gen-c').click(function(){
-    $('.mialert4').show();
+     noexiste = [[ 'bottom-right', 'danger',  "Elige un domicilio!" ]];
+    message = noexiste[Math.floor(Math.random() * noexiste.length)];
+
+    $('.' + message[0]).notify({
+        message: { text: message[2] },
+        type: message[1]
+    }).show();
+
   });
 
   $('.cerrar-divalert').click(function(){
@@ -816,7 +904,6 @@ $(".btn-update-sum").click(function (e) {
             $('#municipio').html('');
             $('#municipio').append($('<option></option>').text('Seleccione un municipio').val(''));
             $.each(municipio, function (i) {
-                console.log(municipio);
                 $('#municipio').append("<option value=\"" + municipio[i].id + "\">" + municipio[i].municipio + "<\/option>");
             });
             $('#municipio').select2();
@@ -1025,8 +1112,18 @@ $(".btn-update-sum").click(function (e) {
 
     //Validaciones para los campos del formularios
     $(".ge-p").click(function () {  
+
+           if($('.formapago').val() != null){
+                $('.confirm-p').removeClass('disabled');
+                $('.regis-exixts-t').removeClass('disabled');
+                $('.text-exito').show();
+                $('.text-pago').hide();
+            } 
+
+            
+
         $('.text-selectdom').hide();
-expr = /^([1-9]{2}|[0-9][1-9]|[1-9][0-9])[0-9]{3}$/;
+        expr = /^([1-9]{2}|[0-9][1-9]|[1-9][0-9])[0-9]{3}$/;
 
     if($("#pais").val() == 0)  {  
         $('.pais').addClass('has-error');  
@@ -1353,46 +1450,6 @@ $('.phone-o').focus(function(){
     $('.regis-exixts-t').hide();
 
 
-   $(document).on('click','#recorrer', function(){
-        var DATA = [];
-        var ID;
-        $('.tcarrito tbody tr').each(function(){
-            idp = $(this).attr('id');
-            cant  = $(this).find("input[class*='cant']").val();
-            alert(idp);
-            alert(cant);
-
-            item = {idp, cant};
-
-            DATA.push(item);
-        })
-
-        console.log(DATA);
-        //convertiremos el array en json para evitar cualquier incidente con compativilidades.
-        aInfo   = JSON.stringify(DATA);
-
-        $.ajax({
-            type: "POST", //metodo
-            url: "productos/ejemplopedido",
-            data: {aInfo: aInfo},
-            success: function (iddom) {
-
-                //recivimos el id de la direccion
-                console.log(iddom);
-                //redirigimosa¿ al detalle del pedido y le pasamos el id del domi
-                //window.location.href = 'productos/datosdelpedido/' + iddom;
-
-            },
-            error: function () {
-                alert('failure');
-
-            }
-        }); 
-
-    });
-
-
-
  
 
     
@@ -1427,8 +1484,6 @@ $('.phone-o').focus(function(){
             data: {aInfo: aInfo, formapago: formapago, msjeria: msjeria},
             success: function (iddom) {
 
-                //recivimos el id de la direccion
-                console.log(iddom);
                 //redirigimosa¿ al detalle del pedido y le pasamos el id del domi
                 window.location.href = 'productos/datosdelpedido/' + iddom;
 
@@ -1480,8 +1535,6 @@ $('.phone-o').focus(function(){
             data: {aInfo: aInfo, pais: pais, estado: estado, municipio: municipio, calle1: calle1, calle2: calle2, colonia: colonia, delegacion: delegacion, cp: cp, tipodom: tipodom, formapago: formapago, msjeria: msjeria, coment: coment},
             success: function (iddom) {
 
-                //recivimos el id de la direccion
-                console.log(iddom);
                 //redirigimosa¿ al detalle del pedido y le pasamos el id del domi
                 window.location.href = 'productos/datosdelpedido/' + iddom;
 
@@ -1539,8 +1592,6 @@ $('.phone-o').focus(function(){
             data: {aInfo: aInfo, pais: pais, estado: estado, municipio: municipio, calle1: calle1, calle2: calle2, colonia: colonia, delegacion: delegacion, cp: cp, tipodom: tipodom, tel: tel, tipotel: tipotel, formapago: formapago, msjeria: msjeria, coment: coment},
             success: function (iddom) {
 
-                //recivimos el id de la direccion
-                console.log(iddom);
                 //redirigimosa¿ al detalle del pedido y le pasamos el id del domi
                 window.location.href = 'productos/datosdelpedido/' + iddom;
 

@@ -6,9 +6,9 @@
 
 @section('scripts')
 @parent
-{{ HTML::script('js/slimbox2.js') }}
-{{ HTML::style('css/slimbox2.css') }}
 {{ HTML::style('css/select2.min.css') }}
+@include('layouts/inc/lib')    
+
 @stop
 
 @section('username')
@@ -30,6 +30,9 @@
      @include('layouts/inc/estatus')
      @include('layouts/inc/alerts')
          <div class="buscador">
+      <div class="b-exists">
+        <div class='notifications top'></div>
+      </div>
          {{ Form::open(['id'=>'searchForm','method' => 'POST', 'class' => 'buscador input-group has-feedback']) }}
 
         {{ Form::text('input','Clave del producto',array('class' => 'form-control', 'id' => 'clave')) }}
@@ -66,6 +69,9 @@
                 </div>
                  
           </div>
+          <div class="ingresar-p">
+            <div class='notifications t'></div>            
+          </div>
           <div class="panel-footer footer-producto">
             <div class="agregar-producto input-group has-feedback" title="Ingrese la cantidad de paquetes">
 
@@ -80,29 +86,20 @@
 
           </div>
 
-          <div class="alertai">
-            <div class="alert alert-error mialert3">
-                <button class="close">
-                    <span class="glyphicon glyphicon-remove cerrar-alert2"></span>
-                </button>
-                  <span id="noexiste">Ingrese la cantidad de paquetes</span>
-              </div>
-          </div>
-
         </div>
-        
+
 
       @if(count($cart))
-      <div class="panel panel-datos">
+      <div id="t-pedidoc" class="panel panel-datos">
           <div class="panel-heading panelcarrito">
               <h2>
                 <span class=" glyphicon glyphicon-shopping-cart"></span> 
                 Pedido 
               </h2>
-                <a href="{{ URL::to('productos/trash') }}" class="btn btn-danger">
+                <span id="v-pedido" class="btn btn-danger">
                   Vaciar pedido 
                   <span class="glyphicon glyphicon-trash"></span>
-                </a>
+                </span>
           </div>
           <div class="panel-body bodycarrito">
             
@@ -123,7 +120,7 @@
                 </thead>
                 <tbody id="c-carp">
                   @foreach($cart as $item)
-                    <tr class="tr-car" id="{{ $item->id }}"> 
+                    <tr class="tr-car filap_{{ $item->id }}" id="{{ $item->id }}"> 
                       <td>{{ $item->clave }}</td>
                       <td>{{ $item->nombre }}</td>
                       <td>{{ $item->color }}</td>
@@ -138,15 +135,15 @@
                         </div>
                       </td>
                       <td>
-                        <a href="img/productos/{{ $item->foto }}" rel="lightbox" alt="Foto del producto">
+                        <span class="verfotop" id="{{ $item->clave }}" alt="Foto del producto">
                           Ver Foto
-                        </a>
+                        </span>
                       </td>
                       <td>{{ number_format($item->precio_venta * $item->quantity, 2) }}</td>
                       <td>
-                        <a href="{{ URL::to('productos/delete', $item->clave) }}" class="btn btn-danger" title="Eliminar producto">
+                        <span class="btn btn-danger delete-p" title="Eliminar producto" data-id="{{ $item->clave }}" value="{{ $item->id }}">
                           <span class="glyphicon glyphicon-remove"></span>
-                        </a>
+                        </span>
                       </td>
                     </tr>
                 </tbody>
@@ -181,6 +178,31 @@
              
             </div>
           </div>
+
+                    <!--Modal para ver la foto del producto-->
+              <div id="verfoto-p" class="modal fade">
+                  <div class="modal-dialog p-fotop">
+                      <div class="modal-content content-f">
+                          <div class="modal-header">
+                              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                              <h2 class="modal-title text-primary text-center title-fp">
+                              <span class="glyphicon glyphicon-picture "></span>
+                                Foto del producto</h2>
+                          </div>
+                          <div class="modal-body body-foto">
+                             
+                              <div class="fp-foto">
+                                <img id="fotopro" class="foto-p-p" alt="Foto del producto">
+                              </div>
+
+                          </div>
+                          <div class="modal-footer modal-rest">
+                              <h4 class="text-center text-info t-foto"></h4>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
           
             <div class="panel-elegir">          
 
@@ -419,15 +441,8 @@
                       </div> -->
 
                    </div>
-                   <div class="div-alert">
-                      <div class="alert alert-error mialert4">
-                          <button class="close">
-                              <span class="glyphicon glyphicon-remove cerrar-divalert"></span>
-                          </button>
-                            <span id="noexiste">Elige un domicilio!</span>
-                        </div>
-                   </div>
 
+            <div class='notifications bottom-right'></div>
             <div class="panel-footer footer-formpago">
             <a id="conf-p1" href="#confirmarpedido" class="btn btn-primary btn-conf-1 disabled" data-toggle="modal"> <!--   -->
               Generar pedido
@@ -480,7 +495,7 @@
                   </div>
                   <div class="modal-footer modal-confirmar">
                  <!--    <a href="{{ URL::to('productos/datosdelpedido') }}" class="btn btn-primary confirm">Si</a> -->
-                  <button href="#" id="regispedido" class="btn btn-primary confirm confirm-p" data-dismiss="modal"> <!--   -->
+                  <button href="#" id="regispedido" class="btn btn-primary confirm confirm-p disabled" data-dismiss="modal"> <!--   -->
                     Si
                   </button>
                   <!--boton que se activa si el cliente elige un dom existente-->
@@ -515,7 +530,12 @@
               </div>
             </div>
 
+
               {{ Form::close() }}
+
+          
+
+
 
 
             <!--Modal editar direccion-->

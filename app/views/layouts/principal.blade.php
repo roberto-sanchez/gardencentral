@@ -38,7 +38,7 @@
                       <li class="divider"></li>
                         <li><a href="#cambiarpass" data-toggle="modal"><span class="glyphicon glyphicon-lock"></span> Cambiar Contraseña</a></li>
                       <li class="divider"></li>
-                        <li><a href="/logout"><span class="glyphicon glyphicon-off"></span> Cerrar Sesión</a></li>
+                        <li><a class="log-out" href="/logout"><span class="glyphicon glyphicon-off"></span> Cerrar Sesión</a></li>
                       <li class="divider"></li>
                   </ul>
               </li>

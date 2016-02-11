@@ -4,18 +4,27 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <title>Iniciar Sesión</title>
 	<meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     @include('layouts/inc/head_login')
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+    {{ HTML::style('css/bootstrap.min.css') }}
+    {{ HTML::style('css/login.css') }}
+    {{ HTML::style('lib/bootstrap-notify/bootstrap-notify.css') }}  
+    {{ HTML::script('js/jquery.js') }}
+    {{ HTML::script('js/bootstrap.min.js') }}
+    {{ HTML::script('lib/bootstrap-toggle-buttons/static/js/jquery.toggle.buttons.js') }}
+    {{ HTML::script('lib/bootstrap-notify/bootstrap-notify.js') }}
+    {{ HTML::script('js/login.js') }}
   </head>
 
   <body>
     <div class="panel panel-regis">
         <h2 data-toggle="modal" data-target="#ModalAgregar">Registrarse</h2>
     </div>
+        <div class="cont-sesion">
+            <div class='notifications top sess-f'></div>
+        </div>
         <div id="container">
         <!--       Alertas       -->
         @include('layouts/inc/estatus')  
-
             <div id="loginbox">
 
                  <!-- 1.- Rut del formulario, por el metodo post  -->
@@ -42,6 +51,13 @@
                     </div>
                 {{ Form::close() }}
                 </div>
+
+                 @if(Session::has('messageE'))
+                    <span>
+                        <span class="sesion-f"></span>
+                      {{ Session::get('messageE') }}
+                    </span>
+                @endif
 
             <!--      Modal para agregar un nuevo usuario    -->
 				   <div class="modal fade" id="ModalAgregar" tabindex="-1" role="dialog" aria-labelledby="ModalAgregar" aria-hidden="true">
@@ -177,6 +193,6 @@
 
         </div>
 
-        @include('layouts/inc/footer_login')
+       
 </body>
 </html>

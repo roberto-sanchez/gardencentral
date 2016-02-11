@@ -69,12 +69,12 @@ class LoginController extends \BaseController {
 
 
     //logout
-	public function logOut()
-	{
+	public function logOut() {
 		Auth::logout();
-		Session::flash('messageOK', ' Tu sesión ha sido cerrada ');
+		Session::flash('messageE', 'f');
 		return Redirect::to('login');
 	}
+
 
 
 }

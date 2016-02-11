@@ -14,7 +14,7 @@
     @if(Session::has('messageOKp'))
       <div class="alert alert-success mialertp">
         <button class="close" data-dismiss="alert">
-            <span class="glyphicon glyphicon-remove cerrar-alert"></span>
+            <span class="glyphicon glyphicon-remove cerrar-alert "></span>
         </button>
            {{ Session::get('messageOKp') }}
       </div> 
