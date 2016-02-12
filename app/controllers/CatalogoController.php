@@ -600,8 +600,8 @@ class CatalogoController extends \BaseController {
 						'nombre' => 			'required',
 						'paterno' =>			'required',
 						'materno' =>			'required',
-						'nombre_comercial' =>	'required',
-						'razon_social' => 		'required'							
+						'nombre_comercial' =>	'',
+						'razon_social' => 		''							
 					]
 
 				);

@@ -382,7 +382,7 @@
                                 @forelse($pais as $pais)
                                 <form>
                                 <tr id="tr_{{$pais->id}}">
-                                  <td><input type="text" id="pais_{{$pais->id}}" name="nombre_{{$pais->id}}" value="{{$pais->nombre}}" disabled="disabled" class="form-control"></td>
+                                  <td><input type="text" id="pais_{{$pais->id}}" name="nombre_{{$pais->id}}" value="{{$pais->pais}}" disabled="disabled" class="form-control"></td>
                                   <td>
                                     <button type="button" value="Modificar" id="btn_mod" data-id="{{$pais->id}}" data-cat="Pais" class="modificar btn btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
                                     <button type="button" value="Actualizar" id="btn_guardar_{{$pais->id}}" disabled="disabled" data-id="{{$pais->id}}" data-cat="Pais" class="enviarG btn btn-success" ><span class="glyphicon glyphicon-">OK</span></button>
@@ -429,13 +429,134 @@
        
           
       </div>
+      <div class='notifications top-right'></div>
     </div>
+    
+</div>
+<!--::::::::::::::::::::::::::::: MODAL PARA LAS DIRECCIONES  :::::::::::::::::::::::::::::-->
+<div id="myModal" class="modal fade" tabindex="-1"  data-backdrop="static" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+  <div class="modal-dialog" >
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3>DIRECCION</h3>
+      </div>
+      <form action="" method="" accept-charset="utf-8">
+        <div class="modal-body">
+          <div class="row form-inline " style="text-align: center;">
+            <div class="calle1 input-group col-sm-5"  style="padding: 5px;">
+              <span class="input-group-addon">
+                <span class="text-info">Calle 1</span>
+              </span>
+              <input class="form-control" placeholder="Calle 1" required="required" id="calle1" name="calle1" type="text">
+            </div>
+            <div class="calle2 input-group col-sm-5 " style="padding: 5px;">
+              <span class="input-group-addon">
+                <span class="text-info">Calle 2</span>
+              </span>
+              <input class="form-control" placeholder="Calle 2" required="required" id="calle2" name="calle2" type="text">
+            </div>
+          </div>
+          <div class="row form-inline" style="text-align: center;">
+            <div class="colonia input-group col-sm-5" style="padding: 5px;">
+              <span class="input-group-addon">
+                <span class="text-info">Colonia</span>
+              </span>
+              <input class="form-control" placeholder="Colonia" required="required" id="colonia" name="colonia" type="text">
+            </div>
+            <div class="delegacion input-group col-sm-5" style="padding: 5px;">
+              <span class="input-group-addon">
+                <span class="text-info">Delegación</span>
+              </span>
+              <input class="form-control" placeholder="Delegación" id="delegacion" name="delegacion" type="text">
+            </div>
+          </div>
+          <div class="row form-inline" style="text-align: center;">
+            <div class="pais input-group col-sm-5" style="padding: 5px;">
+              <span class="input-group-addon">
+                <span class="text-info">País</span>
+              </span>
+              <select class="form-control options pais" id="pais" data-option="" name="pais" required=""></select>
+            </div>
+            <div class="estado input-group col-sm-5" style="padding: 5px;">
+              <span class="input-group-addon">
+                <span class="text-info">Estado</span>
+              </span>
+              <select class="form-control options" id="estado" name="estado" required="">
+              </select>
+            </div>
+          </div>
+          <div class="row form-inline" style="text-align: center;">
+            <div class="municipio input-group col-sm-5" style="padding: 5px;">
+              <span class="input-group-addon">
+                <span class="text-info">Municipio</span>
+              </span>
+              <select class="form-control" id="municipio" name="municipio" required="">
+              </select>
+            </div>        
+            <div class="cp input-group col-sm-5" style="padding: 5px;">
+              <span class="input-group-addon">
+                <span class="text-info">Codigo Postal</span>
+              </span>
+              <input class="form-control" placeholder="Codigo postal" required="required" id="cp" name="cp" type="text">
+            </div>
+          </div>   
+          <div class="row form-inline" style="text-align: center;">
+            <div class="col-sm-5  input-group" style="padding: 5px;">
+              <span class="input-group-addon" >
+                <span class="text-info">Tipo</span>
+              </span>
+              <select class="form-control " id="tipoDir" name="" required="">
+                <option value="">Seleccione tipo de domicilio</option>
+                <option value="Fiscal">Domicilio Fiscal</option>
+                <option value="Otro">Otro</option>
+              </select>
+            </div>
+            <div class="input-group col-sm-5" style="text-align: left; padding: 5px;">
+              <div class=" input-group-addon col-sm-6" style="height: ">
+                <span class="input-group-addon" >
+                  <span class="text-info">Estatus:</span>
+                </span>
+              </div>
+              <div class=" input-group col-sm-2" >
+                <input type="checkbox" value="" id="estatusDirCliente" class="form-control" style="width: 22px;">
+              </div>
+            </div>
+          </div> 
+        </div>
+        <div class="modal-footer" id="modalFooterDir">
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!--::::::::::::: MODAL PARA LAS CONFIRMACIONES :::::::::::::::::::::::::::::::::::::::-->
+<div id="modalConfirmacion" class="modal fade" tabindex="-1"  data-backdrop="static" role="dialog" aria-labelledby="modalConfirmacionLabel" aria-hidden="true" >
+  <div class="modal-dialog" >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>CONFIRMACION</h3>
+      </div>
+      <form action="" method="" accept-charset="utf-8">
+        <div class="modal-body">
+          
+        </div>
+        <div class="modal-footer" id="modalFooterDir">
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 
 
 <script type="text/javascript">
   $(document).ready(function () {
     var catalogo= '{{$catalogo}}';
+
+    
+
+                
 
 //:::::::---- FUNCION PARA HABILITAR LOS CAMPOS A MODIFICAR ---::::::::::::::::::::::::::::::::::::://
     $(document).on('click', '.modificar', function(){
@@ -477,17 +598,22 @@
             $('#btn_actualizar_'+$(this).data('id')).prop('disabled',false);
           break;
 
-         case 'Rol':
+        case 'Rol':
             $('#nombre_'+$(this).data('id')).prop('disabled',false);
             $('#btn_actualizar_'+$(this).data('id')).prop('disabled',false);
           break;
 
-         case 'TelefonoCliente':
+        case 'TelefonoCliente':
             $('#telefono_'+$(this).data('id')).prop('disabled',false);
             $('#tipo_'+$(this).data('id')).prop('disabled',false);
             $('#estatusTel_'+$(this).data('id')).prop('disabled',false);
             $('#btn_guardar_'+$(this).data('id')).prop('disabled',false);
           break; 
+
+        case 'Pais':
+            $('#pais_'+$(this).data('id')).prop('disabled',false);
+            $('#btn_guardar_'+$(this).data('id')).prop('disabled',false);
+          break;
       }
     });
 
@@ -508,7 +634,6 @@
         //  alert(catalogo);
         var msg="";
         var validar = true;
-
         switch (catalogo) {   //------SWHITCH PARA VALIDAR QUE NO SE VAYA NINGUN CAMPO VACIO --------------------//
             case 'Almacen':
                 var estatus=null;
@@ -517,11 +642,9 @@
                 }else{
                   estatus=0;
                 }
-                
                 if ($('#clave_'+$(this).data('id')).val() === ""){
                   msg += 'Ingrese la clave. \n';
                   validar = false;
-               
                 }
                 if ($('#nombre_'+$(this).data('id')).val()==="") {
                   msg += 'Ingrese el nombre. \n';
@@ -529,7 +652,7 @@
                 };  
               break;
 
-              case 'Cliente':
+            case 'Cliente':
                   if ($('#nombre_'+$(this).data('id')).val() === ""){
                   msg += 'Ingrese el nombre. \n';
                   validar = false;
@@ -546,7 +669,7 @@
                     msg += 'Ingrese la el RFC. \n';
                     validar = false;
                   }
-                  if ($('#nombre_comercial_'+$(this).data('id')).val() === ""){
+                 /* if ($('#nombre_comercial_'+$(this).data('id')).val() === ""){
                     msg += 'Ingrese el nombre comercial. \n';
                     validar = false;
                   }
@@ -588,6 +711,13 @@
             case 'Comercializador':
                 if ($('#nombre_'+$(this).data('id')).val()==="") {
                   msg += 'Ingrese el nombre. \n';
+                  validar = false;
+                };  
+                break;
+
+            case 'Pais':
+                if ($('#pais_'+$(this).data('id')).val()==="") {
+                  msg += 'Ingrese el pais. \n';
                   validar = false;
                 };  
                 break;
@@ -684,7 +814,7 @@
         }
 
         if(!validar){//------- PREGUNTA SI LAS VALIDACIONES SON INCORRECTAS MUESTRA UNA ADVERTENCIA CON LOS ERRORES ------------------//
-          alert(msg);
+          alertas('danger',"Ingrese todos los datos");
           $(this).prop('disabled',false);
         }else {  //-- SI LAS VALIDACIONES SON CORRECTAS SE PROCEDE A RECOGER LOS DATOS A ENVIAR ---//
           if(confirmar()){
@@ -805,7 +935,6 @@
             }
             //alert($(this).val());
             if ($(this).val()==="Guardar") {
-               // alert($(this).val());
                 $.ajax({    //--- INICIA LA CONEXION MEDIANTE AJAX ---//  
                   url: "/catalogo/create",
                   type: "POST",
@@ -814,7 +943,6 @@
                     console.log(respuesta);
 
                     switch (catalogo){    //--- SWTICH PARA LAS DIFERENTES ACCIONES QUE REALIZARA CON LOS DATOS OBTENIDOS, DEPENDIENDO DEL CATALOGO  ----/
-                      
                       case 'Almacen':
                         if (respuesta.estatus==1) {var activar="checked"};
                         var fila = '<tr id="tr_'+respuesta.id+'">' +
@@ -822,12 +950,9 @@
                                       '<td> <input type="text" name="nombre_'+respuesta.id+'" value="'+respuesta.nombre+'" id="nombre_'+respuesta.id+'" disabled="disabled" required class="form-control">  </td>' +
                                       '<td><input type="checkbox" name="status_'+respuesta.id+'" value="'+respuesta.estatus+'"  id="status_'+respuesta.id+'" disabled="disabled" '+ activar+' class="checkbox"> </td>' +
                                       '<td>'+
-                                            '<button type="button" value="Modificar" id="btn_mod" data-id="'+respuesta.id+'" class="modificar">Mod</button>'+
-                                            '<input type="hidden" id="catalogo_'+respuesta.id+'" value="Almacen"  >'+
-                                            '<input type="hidden" id="campo_id'+respuesta.id+'" value="'+respuesta.id+'" name="campo_id" >'+
-                                            '<input type="hidden" id="tipoMov_'+respuesta.id+'" value="Actualizar" name="" >'+
-                                            '<button type="button" value="Actualizar" id="btn_actualizar_'+respuesta.id+'" disabled="disabled" data-id="'+respuesta.id+'" class="enviarG"> Act</button>'+
-                                            '<button type="button" id="btn_Eliminar" value="Eliminar" data-id="'+respuesta.id+'"> Eliminar</button>'+
+                                            '<button type="button" value="Modificar" id="btn_mod" data-id="'+respuesta.id+'" data-cat="Almacen" class="modificar btn btn-primary"><span class="glyphicon glyphicon-edit"></span></button>'+
+                                            '<button type="button" value="Actualizar" id="btn_guardar_'+respuesta.id+'" disabled="disabled" data-id="'+respuesta.id+'" data-cat="Almacen"class="enviarG btn btn-success"><span class="glyphicon glyphicon-">OK</span></button>'+
+                                            '<button type="button" id="btn_Eliminar" value="Eliminar" data-id="'+respuesta.id+'" data-cat="Almacen" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>'+
                                           '</td>'+
                                    '</tr>';
                         $('#tablaResult').append(fila);  //--- AGREGA LOS DATOS EN UN NUEVO <tr> AL FINAL DE LA TABLA  ---//
@@ -849,8 +974,6 @@
                                       '<td ><input type="checkbox" value="'+respuesta.estatus+'"  id="estatusTel_'+respuesta.id+'" disabled="disabled" '+(respuesta.estatus===1 ? 'checked':'') +' > </td>' +
                                       '<td class="col-md-1">'+
                                             '<button type="button" value="Modificar" id="btn_mod" data-cat="TelefonoCliente" data-id="'+respuesta.id+'" class="modificar">Mod</button>'+
-                                            //'<input type="hidden" id="campo_id'+respuesta.id+'" value="'+respuesta.id+'" name="campo_id" >'+
-                                            //'<input type="hidden" id="tipoMov_'+respuesta.id+'" value="Actualizar" name="" >'+
                                             '<button type="button" value="Actualizar" id="btn_guardar_'+respuesta.id+'" disabled="disabled" data-cat="TelefonoCliente" data-id="'+respuesta.id+'" class="enviarG"> Act</button>'+
                                             '<button type="button" id="btn_Eliminar" value="Eliminar" data-id="'+respuesta.id+'" data-cat="TelefonoCliente" > Eliminar</button>'+
                                           '</td>'+
@@ -863,7 +986,6 @@
 
                       case 'DireccionCliente':
                           var trDir = '<tr id="trDir_'+respuesta.idDir+'">'+
-                                            '<form class="form-group" >'+
                                              '<td >'+respuesta.pais+'</td>'+ 
                                              '<td >'+respuesta.estados+'</td>'+ 
                                              '<td >'+respuesta.municipio+'</td>'+ 
@@ -875,16 +997,9 @@
                                              '<td >'+respuesta.tipo+'</td>'+ 
                                              '<td id="tdDir_'+respuesta.idDir+'">'+respuesta.estatus+'</td>'+ 
                                              '<td >'+
-                                              //'<button type="button" value="Modificar" id="btn_mod" data-id="'+direccion.idDir+'" data-cat="TelefonoCliente" data-info="'+direccion+'" class="modificar btn btn-primary"><span class="glyphicon glyphicon-edit"></span></button>'+
                                               '<a href="#myModal" role="button" class="btn btn-primary" data-toggle="modal" value="Modificar" data-info=\''+JSON.stringify(respuesta)+'\' id="editDirCliente"><span class="glyphicon glyphicon-edit"></span></a>'+
-                                          //    '<input type="hidden" id="campo_id" value="" name="" >'+
-                                           //   '<input type="hidden" id="tipoMov_" value="Actualizar"  >'+
-                                           //   '<button type="button" value="Actualizar" id="btn_guardar_'+direccion.idDir+'" disabled="disabled" data-id="'+direccion.idDir+'" data-cat="TelefonoCliente" class="enviarG"> Act</button>'+
-                                            //  '<button type="button" id="btn_Eliminar" value="Eliminar" data-id="'+respuesta.idDir+'" data-cat="DireccionCliente" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>'+
-                                            '</td>'+
-                                           
-                                           '</form>'+
-                                           '</tr>';
+                                             '</td>'+
+                                        '</tr>';
                                   $('#tbodyClienteDir').append(trDir);
                         break;
 
@@ -952,7 +1067,7 @@
                         break;
 
                     }
-                    alert('Los datos se han almacenado correctamente...');
+                    alertas('success',"Datos almacenados correctamente");
                     $('#btn_guardar').prop('disabled',false);
                     
                   },
@@ -973,8 +1088,6 @@
                     data: datos,
                     success: function (respuesta){
                       console.log(respuesta);
-                      alert('Datos actualizados correctamente');
-
                       switch (catalogo){
                         case 'Almacen':
                          //   if (respuesta.estatus==1) {var activar="checked"};
@@ -1057,13 +1170,13 @@
                         break;
 
                       }
-
+                      alertas('success',"Datos almacenados correctamente");
                     },
                     error: function(error){
                       console.log(error);
                       alert(error.responseJSON);
                       $(this).prop('disabled',false);
-                      $('#btn_guardar_'+id_upd).prop('disabled',false);
+                      $('#btn_guardar').prop('disabled',false);
                     }
 
                   });
@@ -1074,10 +1187,10 @@
 
     });
 
+
 //::::::::::::::::::::::-----  ELIMINAR  ----::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::://   
     $(document).on('click','#btn_Eliminar', function(){ 
       catalogo = $(this).data('cat');
-
       var id_Elim= $(this).data('id');
     //  alert(id_Elim+ " " + catalogo);
       if(confirmarEliminar()){
@@ -1108,13 +1221,10 @@
 
 //::::::::::::::::::---     FUNCION PARA MOSTRAR LA FORMA EDITAR  ----::::::::::::::::::::::::::::::::::::::::::::::::::::://
     $(document).on('click', '#editarCliente', function () {
-           // $("#catalogo_principal").hide();
             $("#catalogo_principal").empty();
             var obj = $(this).data('info');
-
             vistaDetalles(obj,'Actualizar');
             $("#contenido_esp").show();
-            
         });
 
 //:::::::::::::::::::-----  FUNCION PARA MOSTRAR LA FORMA NUEVO   ----::::::::::::::::::::::::::::::::::::::::::::::::::::://
@@ -1130,73 +1240,67 @@
         switch (catalogo){
                 case 'Cliente':
                     var cont= '<div class="row">'+
-                                '<div class="form-group col-md-3">'+
+                                '<div class="col-sm-3">'+
                                   '<label> NOMBRE:  </label>'+
                                   '<input type="text" id="nombre_'+(obj === null ? '0' : obj.id)+'" value="'+(obj === null ? '' : obj.nombre_cliente)+'" class="form-control"></td>'+
                                 '</div>'+
-                                '<div class="form-group col-md-3">'+
+                                '<div class="col-sm-3">'+
                                   '<label> PATERNO:  </label>'+
                                   '<input type="text" id="paterno_'+(obj === null ? 0 : obj.id)+'" value="'+(obj === null ? '' : obj.paterno)+'" class="form-control"></td></p>'+
                                 '</div>'+
-                                '<div class="form-group col-md-3">'+
+                                '<div class="col-sm-3">'+
                                   '<label> MATERNO:  </label>'+
                                   '<p><input type="text" id="materno_'+(obj === null ? '0' : obj.id)+'" value="'+(obj === null ? '' : obj.materno)+'" class="form-control">'+
                                 '</div>'+
                                '</div>'+
                               '<div class="row">'+
-                                '<div class="form-group col-md-3">'+
+                                '<div class=" col-sm-3">'+
                                   '<label> RCF:  </label>'+
                                   '<input type="text" id="rfc_'+(obj === null ? '0' : obj.id)+'"  value="'+(obj === null ? '' : obj.rfc)+'" class="form-control">'+
                                 '</div>'+
-                                '<div class="form-group col-md-3" >'+
+                                '<div class=" col-sm-3" >'+
                                   '<label> NOMBRE COMERCIAL:  </label>'+
                                   '<input type="text" id="nombre_comercial_'+(obj === null ? '0' : obj.id)+'" value="'+(obj === null ? '' : obj.nombre_comercial)+'" class="form-control"></td>'+
                                 '</div>'+
-                                '<div class="form-group col-md-3">'+
+                                '<div class=" col-sm-3">'+
                                   '<label> RAZON SOCIAL:  </label>'+
                                   '<input type="text" id="razon_social_'+(obj === null ? '0' : obj.id)+'" value="'+(obj === null ? '' : obj.razon_social)+'" class="form-control"></td>  </p> '+
                                 '</div>'+
                               '</div>'+
                               '<div class="row">'+
-                                '<div class="form-group col-md-3">'+
+                                '<div class=" col-sm-3">'+
                                   '<label> NUMERO DE CLIENTE:  </label>'+
-                                  '<input type="text" id="numeroCliente_'+(obj === null ? '0' : obj.id)+'" value="'+(obj === null ? '' : obj.numero_cliente)+'" class="form-control" disabled></td>  </p> '+
+                                  '<input type="text" id="numeroCliente_'+(obj === null ? '0' : obj.id)+'" value="'+(obj === null ? '' : obj.numero_cliente)+'" class="form-control" readonly></td>  </p> '+
                                 '</div>'+
-                                '<div class="form-group col-md-3">'+
+                                '<div class="col-sm-3">'+
                                   '<label> AGENTE:  </label><br>'+
                                 '<select id="agenteCliente_'+(obj === null ? '0' : obj.id)+'" name="" class="form-control input-default" value="" required>' +
-                                // (obj === null ? '<option value="-1">--Selecione un agente--</option>'  : '<option value="0">'+obj.agente+'</option>')+
                                 '</select>' +
                                 '</div>'+
-                                '<div class="form-group col-md-3">'+
+                                '<div class=" col-sm-3">'+
                                   '<label> DESCUENTO:  </label><br>'+
                                   '<select id="descuento_'+(obj === null ? '0' : obj.id)+'" name="" class="form-control input-default" value="" required>' +
-                                //  (obj === null ? '<option value="-1">--Selecione descuento--</option>'  : '<option value="0">'+obj.descripcion+'</option>')+
                                   '</select>' +
                                 '</div>'+
                               '</div>'+  
                               '<div class="row">'+
-                                '<div class="form-group col-md-3">'+
+                                '<div class="col-sm-3">'+
                                   '<label> USUARIO:  </label>'+
                                   '<input type="text" id="usuario_'+(obj === null ? '0' : obj.id)+'" value="'+(obj === null ? '' : obj.usuario)+'" class="form-control" ></td>'+
                                   '<input type="hidden" id="usuario_id_'+(obj === null ? '0' : obj.id)+'" value="'+(obj === null ? '' : obj.idUsuario)+'" name="">'+  
                                 '</div>'+
-                                '<div class="form-group col-md-3">'+
-                                  //'<label> PASSWORD:  </label>'+
-                                  (obj===null ? '<label> PASSWORD:  </label>':'<button type="button" class="btn-link" id="nuevaPass" data-id="'+obj.id+'">NUEVA PASSWORD</button>')+   
-                                  '<input type="text" id="password_'+(obj === null ? '0' : obj.id)+'" value="" placeholder="Unicamente nueva contraseña" class="form-control" '+(obj===null ? '':'disabled')+'></td>'+
-                                  
+                                '<div class="col-sm-3">'+
+                                  (obj===null ? '<label> CONTRASEÑA:  </label>':'<button type="button" class="btn-link" id="nuevaPass" data-id="'+obj.id+'">NUEVA CONTRASEÑA</button>')+   
+                                  '<input type="password" id="password_'+(obj === null ? '0' : obj.id)+'" value="" placeholder="Unicamente nueva contraseña" class="form-control" '+(obj===null ? '':'disabled')+'></td>'+
                                 '</div>'+
-                                '<div class="form-group col-md-3">'+
+                                '<div class="col-sm-3">'+
                                   '<label> EMAIL:  </label>'+
-                                  '<input type="text" id="email_'+(obj === null ? '0' : obj.id)+'" value="'+(obj === null ? '' : obj.email)+'" class="form-control" ></td>'+
+                                  '<input type="email" id="email_'+(obj === null ? '0' : obj.id)+'" value="'+(obj === null ? '' : obj.email)+'" class="form-control" ></td>'+
                                 '</div>'+
                               '</div>'+
                               '<div class="row">'+
-                                '<div class="form-action col-sm-offset-10">'+     
-                                 // '<input type="hidden" id="tipoMov_'+(obj === null ? '0' : obj.id)+'" value="'+tipoMovimiento+'" name="">'+
-                                 // '<input type="hidden" id="catalogo_'+(obj === null ? '0' : obj.id)+'" value="Cliente"  >'+                               
-                                  '<button type="button" id="btn_guardar" name="btn_guardar" value="'+tipoMovimiento+'" data-id="'+(obj === null ? '0' : obj.id)+'" data-info="" data-cat="Cliente" class="enviarG"> guardar </button></td>'+
+                                '<div class="form-action col-sm-offset-9">'+     
+                                  '<button type="button" id="btn_guardar" name="btn_guardar" value="'+tipoMovimiento+'" data-id="'+(obj === null ? '0' : obj.id)+'" data-info="" data-cat="Cliente" class="enviarG btn btn-success"><span class="glyphicon glyphicon-">OK</span></button></td>'+
                                 '</div>'+
                               '</div>';
 
@@ -1234,39 +1338,32 @@
                                       '<table id="telCliente" class="table table-first-column-number ">'+
                                        ' <thead >'+
                                           '<tr>'+
-                                            '<th class="">Numero</th>'+
-                                            '<th class="">Tipo</th>'+
-                                            '<th class="">Status</th>'+
-                                            '<th class=""></th>'+
+                                            '<th class="col-xs-4">Numero</th>'+
+                                            '<th class="col-xs-3">Tipo</th>'+
+                                            '<th class="col-xs-2">Status</th>'+
+                                            '<th class="col-xs-3"></th>'+
                                           '</tr>'+
                                         '</thead>'+
                                         '<tbody id="tbodyCliente">'+
-                                           '<form class="form-group">' +
                                            '<tr id="tr_0">'+
-                                            '<td class="controls"><input type="text" id="telefono_0"  value="" class="input-xlarge form-control" '+(obj === null ? 'disabled' : '')+'> </td>'+
-                                            '<td class="">'+
+                                            '<td class="class="col-xs-4"><input type="text" id="telefono_0"  value="" class="form-control" '+(obj === null ? 'disabled' : '')+'> </td>'+
+                                            '<td class="class="col-xs-3">'+
                                               '<select id="tipo_0" name="" class="input-xlarge form-control   options " value="" required>' +
                                                 '<option value="-1">Seleccione el tipo</option>'+
                                                 '<option value="Celular">Celular</option>'+
                                                 '<option value="Fijo">Fijo</option>'+
                                                 '<option value="Otro">Otro</option>'+
                                               '</select>' +
-                                           // '<input type="text" id="tipo_0"  value="" class="form-control col-md-1" '+(obj === null ? 'disabled' : '')+'>
                                             '</td>'+
-                                            '<td><input type="checkbox" id="estatusTel_0"  value="1"   checked disabled></td>'+
-                                           
-                                            '<td class="">'+
+                                            '<td class="class="col-xs-2"><input type="checkbox" id="estatusTel_0"  value="1"   checked disabled></td>'+
+                                            '<td class="class="col-xs-3">'+
                                                 '<input type="hidden" id="id_Cliente" value="'+(obj === null ? '' : obj.id)+'" name="">'+
-                                               // '<input type="hidden" id="catalogo_t0" value="TelefonoCliente"  >'+
                                                 '<button type="button" id="btn_guardarTel" name="btn_guardar" value="Guardar" data-id="0" data-cat="TelefonoCliente" class="enviarG  btn btn-success" '+(obj === null ? 'disabled' : '')+'>OK</button>'+
                                              '</td>'+
                                            '</tr>'+
-                                            '</form>'+
-                                           
                                         '</tbody>'+
                                       '</table>'+
                                     '</div>'+
-
                                     '<div class="tab-pane fade table-responsive" id="direccion">'+
                                       '<table id="dirCliente" class="table table-first-column-check">'+
                                        ' <thead>'+
@@ -1289,139 +1386,41 @@
                                         '</tbody>'+
                                       '</table>'+
                                     '</div>'+
-                                    
-                                //   <!-- Modal para direciones-->
-                                        '<div id="myModal" class="modal fade" tabindex="-1"  data-backdrop="static" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >'+
-                                          '<div class="modal-dialog" >'+
-                                              '<div class="modal-content">'+
-                                                  '<div class="modal-header">'+
-                                                    '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>'+
-                                                     '<h3>DIRECCION</h3>'+
-                                                  '</div>'+
-                                                  '<form action="" method="" accept-charset="utf-8">'+
-                                                  '<div class="modal-body">'+                                                     
-                                                          '<div class="pais input-group">'+
-                                                            '<span class="input-group-addon">'+
-                                                              '<span class="text-info">País</span>'+
-                                                            '</span>'+
-                                                              '<select class="form-control options pais" id="pais" data-option="" name="pais" required=""></select>'+
-                                                          '</div><br>'+
-                                                          '<div class="estado input-group">'+
-                                                            '<span class="input-group-addon">'+
-                                                              '<span class="text-info">Estado</span>'+
-                                                            '</span>'+
-                                                              '<select class="form-control options" id="estado" name="estado" required="">'+
-                                                              '</select>'+
-                                                          '</div><br>'+
-                                                          '<div class="municipio input-group">'+
-                                                            '<span class="input-group-addon">'+
-                                                              '<span class="text-info">Municipio</span>'+
-                                                            '</span>'+
-                                                              '<select class="form-control" id="municipio" name="municipio" required="">'+
-                                                              '</select>'+
-                                                          '</div><br>'+                                                          
-                                                        '<div class="calle1 input-group">'+
-                                                          '<span class="input-group-addon">'+
-                                                            '<span class="text-info">Calle 1</span>'+
-                                                          '</span>'+
-                                                            '<input class="form-control" placeholder="Calle 1" required="required" id="calle1" name="calle1" type="text">'+
-                                                        '</div><br>'+
-                                                        '<div class="calle2 input-group">'+
-                                                          '<span class="input-group-addon">'+
-                                                            '<span class="text-info">Calle 2</span>'+
-                                                          '</span>'+
-                                                            '<input class="form-control" placeholder="Calle 2" required="required" id="calle2" name="calle2" type="text">'+
-                                                        '</div><br>'+
-                                                        '<div class="colonia input-group">'+
-                                                            '<span class="input-group-addon">'+
-                                                              '<span class="text-info">Colonia</span>'+
-                                                            '</span>'+
-                                                              '<input class="form-control" placeholder="Colonia" required="required" id="colonia" name="colonia" type="text">'+
-                                                         '</div><br>'+
-                                                         '<div class="delegacion input-group">'+
-                                                            '<span class="input-group-addon">'+
-                                                              '<span class="text-info">Delegación</span>'+
-                                                            '</span>'+
-                                                            '<input class="form-control" placeholder="Delegación" id="delegacion" name="delegacion" type="text">'+
-                                                         '</div><br>'+
-                                                         '<div class="cp input-group">'+
-                                                            '<span class="input-group-addon">'+
-                                                              '<span class="text-info">Codigo Postal</span>'+
-                                                            '</span>'+
-                                                            '<input class="form-control" placeholder="Codigo postal" required="required" id="cp" name="cp" type="text">'+
-                                                         '</div><br>'+
-                                                         '<div class="col-sm-12 form-group" style="display: block;">'+
-                                                            '<div class="col-sm-6  input-group">'+
-                                                                '<span class="input-group-addon" >'+
-                                                                  '<span class="text-info">Tipo</span>'+
-                                                                '</span>'+
-                                                                '<select class="form-control " id="tipoDir" name="" required="">'+
-                                                                  '<option value="">Seleccione tipo de domicilio</option>'+
-                                                                  '<option value="Fiscal">Domicilio Fiscal</option>'+
-                                                                  '<option value="Otro">Otro</option>'+
-                                                                '</select>'+
-                                                            '</div>'+
-                                                            '<div class=" input-group" >'+
-                                                              '<span class="input-group-addon" >'+
-                                                                '<span class="text-info">ESTATUS:  </span>'+
-                                                              '</span>'+
-                                                              '<input type="checkbox" value="" id="estatusDirCliente" class="form-control">'+
-                                                            '</div>'+
-                                                         '</div><br>'+                                             
-                                                  '</div>'+
-                                                  '<div class="modal-footer" id="modalFooterDir">'+
-                                                  '</div>'+
-                                                  '</form>'+
-                                              '</div>'+
-                                          '</div>'+
-
-                                        '</div>'+
-                                    
-                                   '</div>';
-                    
+                                  '</div>';
                     
                     $('#tab').html(widget);
                     if (obj) { //:::::--- EN CASO DE SER UN CLIENTE YA REGISTRADO PROCEDE A CONSULTAR TODOS LOS DATOS EXISTENTES ---:::::\\
                       datos=obtenerElementos('tabCliente',obj.id);
                       datos.done(function(respuesta){
-                                  console.log(respuesta);
+                                  //console.log(respuesta);
                                   var trTel="";
                                   $.each(respuesta['telefonoCliente'], function(index, telefono){
-                                      console.log(telefono);
-                                      trTel += '<tr id="tr_'+telefono.idTel+'">'+
-                                            '<form class="form-group" >'+
-                                             '<td class="">'+
-                                             '<input type="text" id="telefono_'+telefono.idTel+'"  value="'+telefono.numero+'" class="form-control col-md-1" disabled>'+
-                                             '</td>'+ 
-                                             '<td class="">'+
-                                               '<select id="tipo_'+telefono.idTel+'" name="" class="form-control options " value="" required disabled>' +
-                                                  '<option value="'+telefono.tipo+'">'+telefono.tipo+'</option>'+
-                                                  (telefono.tipo==="Celular" ? '' : '<option value="Celular">Celular</option>' )+
-                                                  (telefono.tipo==="Fijo" ? '' : '<option value="Fijo">Fijo</option>' )+
-                                                  (telefono.tipo==="Otro" ? '' : '<option value="Otro">Otro</option>' )+
-                                                  
-                                                '</select>' +
-                                             //'<input type="text" id="tipo_'+telefono.idTel+'"  value="'+telefono.tipo+'" class="form-control col-md-1" disabled>
-                                             '</td>'+ 
-                                             '<td class=""><input type="checkbox" id="estatusTel_'+telefono.idTel+'"  value="'+telefono.estatus+'" '+(telefono.estatus=== 1 ? 'checked':'')+ ' disabled></td>'+
-                                             '<td class="">'+
-                                              '<button type="button" value="Modificar" id="btn_mod" data-id="'+telefono.idTel+'" data-cat="TelefonoCliente" class="modificar btn btn-primary" ><span class="glyphicon glyphicon-edit"></span></button>'+
-                                            //  '<input type="hidden" id="campo_id" value="" name="" >'+
-                                            //  '<input type="hidden" id="tipoMov_" value="Actualizar"  >'+
-                                              '<button type="button" value="Actualizar" id="btn_guardar_'+telefono.idTel+'" disabled="disabled" data-id="'+telefono.idTel+'" data-cat="TelefonoCliente" class="enviarG btn btn-success" ><span class="glyphicon glyphicon-">OK</span></button>'+
-                                              '<button type="button" id="btn_Eliminar" value="Eliminar" data-id="'+telefono.idTel+'" data-cat="TelefonoCliente" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>'+
-                                            '</td>'+
-                                           
-                                           '</form>'+
-                                           '</tr>';
+                                      //console.log(telefono);
+                                      trTel +=  '<tr id="tr_'+telefono.idTel+'">'+
+                                                '<td class="col-xs-4">'+
+                                                  '<input type="text" id="telefono_'+telefono.idTel+'"  value="'+telefono.numero+'" class="form-control col-md-1" disabled>'+
+                                                 '</td>'+ 
+                                                 '<td class="col-xs-3">'+
+                                                   '<select id="tipo_'+telefono.idTel+'" name="" class="form-control options " value="" required disabled>' +
+                                                      '<option value="Celular">Celular</option>' +
+                                                      '<option value="Fijo">Fijo</option>' +
+                                                      '<option value="Otro">Otro</option>' +
+                                                    '</select>' +
+                                                 '</td>'+ 
+                                                 '<td class="col-xs-2"><input type="checkbox" id="estatusTel_'+telefono.idTel+'"  value="'+telefono.estatus+'" '+(telefono.estatus=== 1 ? 'checked':'')+ ' disabled></td>'+
+                                                 '<td class="col-xs-3">'+
+                                                  '<button type="button" value="Modificar" id="btn_mod" data-id="'+telefono.idTel+'" data-cat="TelefonoCliente" class="modificar btn btn-primary" ><span class="glyphicon glyphicon-edit"></span></button>'+
+                                                  '<button type="button" value="Actualizar" id="btn_guardar_'+telefono.idTel+'" disabled="disabled" data-id="'+telefono.idTel+'" data-cat="TelefonoCliente" class="enviarG btn btn-success" ><span class="glyphicon glyphicon-">OK</span></button>'+
+                                                  '<button type="button" id="btn_Eliminar" value="Eliminar" data-id="'+telefono.idTel+'" data-cat="TelefonoCliente" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>'+
+                                                '</td>'+
+                                              '</tr>';
+                                      $('#tbodyCliente').append(trTel);
+                                      $('#tipo_'+telefono.idTel).val(telefono.tipo);         
                                     });
-                                  $('#tbodyCliente').append(trTel);
                                   var trDir="";
                                   $.each(respuesta['dirCliente'], function(index, direccion){
-                                      console.log(direccion);
-                                     
+                                      //console.log(direccion);
                                       trDir += '<tr id="trDir_'+direccion.idDir+'">'+
-                                            '<form class="form-group" >'+
                                              '<td >'+direccion.pais+'</td>'+ 
                                              '<td >'+direccion.estados+'</td>'+ 
                                              '<td >'+direccion.municipio+'</td>'+ 
@@ -1433,15 +1432,8 @@
                                              '<td >'+direccion.tipo+'</td>'+ 
                                              '<td ><input type="checkbox" id="estatusDir_'+direccion.idDir+'" disabled value="'+direccion.estatus+'" '+(direccion.estatus=== 1 ? 'checked':'')+ ' ></td>'+ 
                                              '<td >'+
-                                              //'<button type="button" value="Modificar" id="btn_mod" data-id="'+direccion.idDir+'" data-cat="TelefonoCliente" data-info="'+direccion+'" class="modificar btn btn-primary"><span class="glyphicon glyphicon-edit"></span></button>'+
                                               '<a href="#myModal" role="button" class="btn btn-primary" data-toggle="modal" value="Modificar" data-info=\''+JSON.stringify(direccion)+'\' id="editDirCliente"><span class="glyphicon glyphicon-edit"></span></a>'+
-                                          //    '<input type="hidden" id="campo_id" value="" name="" >'+
-                                           //   '<input type="hidden" id="tipoMov_" value="Actualizar"  >'+
-                                           //   '<button type="button" value="Actualizar" id="btn_guardar_'+direccion.idDir+'" disabled="disabled" data-id="'+direccion.idDir+'" data-cat="TelefonoCliente" class="enviarG"> Act</button>'+
-                                           //   '<button type="button" id="btn_Eliminar" value="Eliminar" data-id="'+direccion.idDir+'" data-cat="DireccionCliente" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>'+
                                             '</td>'+
-                                           
-                                           '</form>'+
                                            '</tr>';
                                           
                                     });
@@ -1449,9 +1441,7 @@
                               });
                          
                     }
-                    
-
-                    console.log(obj);
+                    //console.log(obj);
                   break;
           }
 
@@ -1473,7 +1463,6 @@
                           options = '<option value="">Seleccione un país</option>'
                           $('#estado').html('<option value="">Seleccione primero un pais</option>');
                           $('#municipio').html('<option value="">Seleccione primero un estado</option>');
-
                         }else{
                           var estados = obtenerElementos('Estados',datos.idPais);
                           var opEstados="";
@@ -1506,8 +1495,6 @@
                         });
     }); 
     }
-
-    
 
     $(document).on('change','#pais', function(){ //::::--- FUNCION PARA CUANDO SE CAMBIE UN PAIS RECARGUE LOS ESTADOS ---:::://
                         var idPais = $(this).val();
@@ -1569,6 +1556,14 @@
 
   }); 
 
+//::::::::::::: FUNCION PARA LAS ALERTAS ::::::::::::::::::::::::::::::://
+
+  function alertas(tipo,mensaje){
+    $('.top-right').notify({
+      message: { text: mensaje },
+      type: tipo
+    }).show();
+  }
   function obtenerElementos(cat,id){
 
       var ajax=$.ajax({
