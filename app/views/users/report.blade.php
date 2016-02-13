@@ -14,11 +14,14 @@
       <img src="img/euro3plast.png" width="250px" alt="logo">
     </div>
     <div class="titulo">
-          @foreach($direc as $d)
+          @foreach($pedido as $ped)
             <h1>GARDENA IMPORTS S.A. DE C.V.</h1>
-            <h2>N° pedido: {{ $d->num_pedido }}</h2>
-            <h3>Fecha: {{  $d->created_at }}</h3>
+            <h2>N° pedido: {{ $ped->num_pedido }}</h2>
+            <h3>Fecha: {{  $ped->created_at }}</h3>
+          @endforeach
     </div>
+       @foreach($direc as $d)
+
          <div class="info">
           <h5><span class="euro3plast">euro3plast </span>spa <span>•</span> viale del lavoro, 45 <span>•</span> 36021 ponte di barbarano (vi)</h5>
       <h5>italy <span>•</span> t +39 0444 788200 <span>•</span> f +39 0444 788290</h5>

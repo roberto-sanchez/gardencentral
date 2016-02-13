@@ -7,7 +7,7 @@
 @section('scripts')
 @parent
 {{ HTML::style('css/select2.min.css') }}
-@include('layouts/inc/lib')    
+@include('layouts/inc/lib')
 
 @stop
 
@@ -28,23 +28,26 @@
 <div class="users">
   <section class="container">
      @include('layouts/inc/estatus')
-     @include('layouts/inc/alerts')
+
          <div class="buscador">
-      <div class="b-exists">
-        <div class='notifications top'></div>
-      </div>
          {{ Form::open(['id'=>'searchForm','method' => 'POST', 'class' => 'buscador input-group has-feedback']) }}
 
         {{ Form::text('input','Clave del producto',array('class' => 'form-control', 'id' => 'clave')) }}
 
              <button id="btn_search" type="submit" class="btn buscar input-group-addon">
-                  Buscar  
+                  Buscar
                   <span class="glyphicon glyphicon-search"></span>
             </button>
 
       {{ Form::close() }}
       </div>
 
+      <div class="b-exists">
+        <div class='notifications top top-xs'></div>
+      </div>
+      <div class="ingresar-p">
+            <div class='notifications t'></div>
+          </div>
 
 
      <!--   <div id="productoPanel" class="panel" style="display:none;"> -->
@@ -59,24 +62,22 @@
 
                 <div class="datos">
                    <h2 class="text-center text-primary txt-info">
-                     Color: <span id="colorProd" class="text-info"></span> 
+                     Color: <span id="colorProd" class="text-info"></span>
                      <hr class="separador">
                      Precio: <span id="precioProd" class="text-info"></span>
                      <hr class="separador">
                      Piezas por paquete: <span id="piezasProd" class="text-info"></span>
-                   </h2> 
+                   </h2>
                  <!--  <buttom id="idProd" value="" class="btn btn-primary add-car">Añadir al carrito.</buttom> -->
                 </div>
-                 
+
           </div>
-          <div class="ingresar-p">
-            <div class='notifications t'></div>            
-          </div>
+          
           <div class="panel-footer footer-producto">
             <div class="agregar-producto input-group has-feedback" title="Ingrese la cantidad de paquetes">
 
                {{ Form::number('agregarproducto',null,array('class' => 'form-control idProd', 'id' => 'agregarproducto', 'min' => '1', 'max' => '100', 'placeholder' => 'Nº de paquetes', 'title' => 'Ingrese la cantidad de paquetes', 'required')) }}
-              <span class="ingresar-p">          
+              <span class="ingresar-p">
                 <a href="" class="btn input-group-addon claveProd btn-update-sum idProd2 disabled" id="" title="Ingrese la cantidad de paquetes">
                   Agregar
                    <span class="glyphicon glyphicon-plus"></span>
@@ -93,74 +94,78 @@
       <div id="t-pedidoc" class="panel panel-datos">
           <div class="panel-heading panelcarrito">
               <h2>
-                <span class=" glyphicon glyphicon-shopping-cart"></span> 
-                Pedido 
+                <span class=" glyphicon glyphicon-shopping-cart"></span>
+                Pedido
               </h2>
                 <span id="v-pedido" class="btn btn-danger">
-                  Vaciar pedido 
+                  Vaciar pedido
                   <span class="glyphicon glyphicon-trash"></span>
                 </span>
           </div>
           <div class="panel-body bodycarrito">
-            
-            <div class="table-responsive table-carrito">
-              <table class="table table-hover tcarrito">
+
+              <!-- Tabla visible para dispositivos moviles -->
+              <table class=" tcarritoxs">
+              @foreach($cart as $item)
                 <thead>
-                  <tr class="cabecerapedido">
-                    <th>Clave</th>
-                    <th>Nombre</th>
-                    <th>Color</th>
-                    <th>Precio</th>
-                    <th>Piezas por paquete</th>
-                    <th>Cantidad de paquetes</th>
-                    <th>Foto</th>
-                    <th>Total producto</th>
-                    <th>Quitar</th>
-                  </tr>
-                </thead>
-                <tbody id="c-carp">
-                  @foreach($cart as $item)
-                    <tr class="tr-car filap_{{ $item->id }}" id="{{ $item->id }}"> 
-                      <td>{{ $item->clave }}</td>
-                      <td>{{ $item->nombre }}</td>
-                      <td>{{ $item->color }}</td>
-                      <td>{{ number_format($item->precio_venta, 2)}}</td>
-                      <td>{{ $item->piezas_paquete }}</td>
+                  <tr class="tr-car filap_{{ $item->id }}" id="{{ $item->id }}">
+                     <td>Clave: {{ $item->clave }}</td>
+                   </tr>
+                   <tr class="tr-car filap_{{ $item->id }}" id="{{ $item->id }}">
+                      <td>Nombre: <div class="pnombre">{{ $item->nombre }}</div></td>
+                   </tr>
+                   <tr class="tr-car filap_{{ $item->id }}" id="{{ $item->id }}">
+                      <td>Color: {{ $item->color }}</td>
+                   </tr>
+                   <tr class="tr-car filap_{{ $item->id }}" id="{{ $item->id }}">
+                      <td>Precio: ${{ number_format($item->precio_venta, 2)}}</td>
+                   </tr>
+                   <tr class="tr-car filap_{{ $item->id }}" id="{{ $item->id }}">
+                      <td>Piezas paquete: {{ $item->piezas_paquete }}</td>
+                   </tr>
+                   <tr class="tr-car filap_{{ $item->id }}" id="{{ $item->id }}">
                       <td class="td-cpa">
-                        <div class="c-pa">
+                        <div class="c-paxs">
                           <input type="number" data-id="p_{{ $item -> id }}" class="form-control cant_{{ $item -> id }}" min="1" max="100" value="{{ $totalp = $item->quantity }}" id="product_{{$item->id }}">
                           <a href="{{ URL::to('productos/update', $item->clave) }}" class="btn btn-info btn-update-p" id="{{ $item -> id }}" title="Actualizar la cantidad de paquetes">
                             <span class="glyphicon glyphicon-refresh"></span>
                           </a>
                         </div>
                       </td>
+                   </tr>
+                   <tr class="tr-car filap_{{ $item->id }}" id="{{ $item->id }}">
                       <td>
-                        <span class="verfotop" id="{{ $item->clave }}" alt="Foto del producto">
+                        <span class="verfotop" id="{{ $item->foto }}" data-id="{{ $item->nombre }}" alt="Foto del producto">
                           Ver Foto
                         </span>
                       </td>
-                      <td>{{ number_format($item->precio_venta * $item->quantity, 2) }}</td>
+                   </tr>
+                   <tr class="tr-car filap_{{ $item->id }}" id="{{ $item->id }}">
+                      <td>Total producto: ${{ number_format($item->precio_venta * $item->quantity, 2) }}</td>
+                   </tr>
+                   <tr class="tr-car filap_{{ $item->id }}" id="{{ $item->id }}">
                       <td>
                         <span class="btn btn-danger delete-p" title="Eliminar producto" data-id="{{ $item->clave }}" value="{{ $item->id }}">
                           <span class="glyphicon glyphicon-remove"></span>
                         </span>
                       </td>
-                    </tr>
-                </tbody>
+                   </tr>
+
+                </thead>
                   @endforeach
-              </table>
-              <table class=" table-striped table-condensed table-hover  total-pedido">
+              </table> <!--- Se cierra la tabla visible para dispositivos moviles -->
+              <table class=" table-striped table-condensed table-hover  total-pedidoxs">
                 <tr>
                   <td id="subtotalp">
-                    <span class="text-info">Subtotal:  </span> 
+                    <span class="text-info">Subtotal:  </span>
                   </td>
                   <td id="totalp">
                     ${{ number_format($total, 2) }}
                   </td>
                 </tr>
                 <tr>
-                  <td> 
-                    <span class="text-info">Iva: </span> 
+                  <td>
+                    <span class="text-info">Iva: </span>
                   </td>
                   <td>
                       ${{ $iva = number_format($total * 0.16, 2) }}
@@ -168,15 +173,92 @@
                 </tr>
                 <tr>
                   <td>
-                    <span class="text-info">Total:  </span> 
+                    <span class="text-info">Total:  </span>
                   </td>
                   <td>
                     ${{ number_format($total + $iva, 2) }}
                   </td>
                 </tr>
               </table>
-             
+              <!--Tabla oculta para dispositivos moviles-->
+              <div class="table-responsive table-carrito">
+                <table class="table table-hover tcarrito">
+                  <thead>
+                    <tr id="c-ped" class="cabecerapedido">
+                      <th>Clave</th>
+                      <th>Nombre</th>
+                      <th>Color</th>
+                      <th>Precio</th>
+                      <th>Piezas por paquete</th>
+                      <th>Cantidad de paquetes</th>
+                      <th>Foto</th>
+                      <th>Total producto</th>
+                      <th>Quitar</th>
+                    </tr>
+                  </thead>
+                  <tbody id="c-carp">
+                    @foreach($cart as $item)
+                      <tr class="tr-car filap_{{ $item->id }}" id="{{ $item->id }}">
+                        <td>{{ $item->clave }}</td>
+                        <td class="p-nom">{{ $item->nombre }}</td>
+                        <td>{{ $item->color }}</td>
+                        <td>${{ number_format($item->precio_venta, 2)}}</td>
+                        <td>{{ $item->piezas_paquete }}</td>
+                        <td class="td-cpa">
+                          <div class="c-pa">
+                            <input type="number" data-id="p_{{ $item -> id }}" class="form-control cant_{{ $item -> id }}" min="1" max="100" value="{{ $totalp = $item->quantity }}" id="product_{{$item->id }}">
+                            <a href="{{ URL::to('productos/update', $item->clave) }}" class="btn btn-info btn-update-p" id="{{ $item -> id }}" title="Actualizar la cantidad de paquetes">
+                              <span class="glyphicon glyphicon-refresh"></span>
+                            </a>
+                          </div>
+                        </td>
+                        <td>
+                          <span class="verfotop" id="{{ $item->foto }}" data-id="{{ $item->nombre }}" alt="Foto del producto">
+                            Ver Foto
+                          </span>
+                        </td>
+                        <td>${{ number_format($item->precio_venta * $item->quantity, 2) }}</td>
+                        <td>
+                          <span class="btn btn-danger delete-p" title="Eliminar producto" data-id="{{ $item->clave }}" value="{{ $item->id }}">
+                            <span class="glyphicon glyphicon-remove"></span>
+                          </span>
+                        </td>
+                      </tr>
+                  </tbody>
+                    @endforeach
+                </table>
+                <table class=" table-striped table-condensed table-hover  total-pedido">
+                  <tr>
+                    <td id="subtotalp">
+                      <span class="text-info">Subtotal:  </span>
+                    </td>
+                    <td id="totalp">
+                      ${{ number_format($total, 2) }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="text-info">Iva: </span>
+                    </td>
+                    <td>
+                        ${{ $iva = number_format($total * 0.16, 2) }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="text-info">Total:  </span>
+                    </td>
+                    <td>
+                      ${{ number_format($total + $iva, 2) }}
+                    </td>
+                  </tr>
+                </table>
+
+              </div>
             </div>
+
+
+
           </div>
 
                     <!--Modal para ver la foto del producto-->
@@ -190,7 +272,7 @@
                                 Foto del producto</h2>
                           </div>
                           <div class="modal-body body-foto">
-                             
+
                               <div class="fp-foto">
                                 <img id="fotopro" class="foto-p-p" alt="Foto del producto">
                               </div>
@@ -203,18 +285,18 @@
                   </div>
               </div>
 
-          
-            <div class="panel-elegir">          
+
+            <div class="panel-elegir">
 
             <div class="alert alert-info alert-pago">
               <strong>Elige un domiclio.!</strong>
-            </div> 
+            </div>
 
 
             <div class="input-group infopago">
                <select id="formapago" class="btn btn-info form-control formapago" name="formapago">
                    <option value="" disabled selected>Elige la forma de pago</option>
-                 @foreach($pago as $pagos)       
+                 @foreach($pago as $pagos)
                    <option id="text_{{ $pagos->id }}" value="{{ $pagos->id }}">{{ $pagos->descripcion }}</option>
                  @endforeach
                </select>
@@ -222,8 +304,8 @@
 
           </div>
 
-          <div class="panel-footer footer-total">             
-          
+          <div class="panel-footer footer-total">
+
             <div class="d-entrega">
               <label>
                 <div class="radio">
@@ -236,16 +318,31 @@
             </div>
          </div>
         </div>  <!--Panel productos-->
-    
-        
+
+
   <!--____Domicilio de entrega_____-->
   <div class="panel panel-entrega">
-  
+
       <h2 class="text-primary m-domicilios">Mis domicilios</h2>
 
+      <!---Domicilio para dispositivos pequeños-->
+     <div class="panel panel-default p-addressxs">
+        <div class="panel-body p-bxs">
+           <table class="table-addressxs table-condensed">
+            <tbody id="dom_cxs" class="c-addressxs">
+            </tbody>
+           </table>
+
+        </div>
+        <div class="panel-footer p-f">
+
+        </div>
+     </div> <!--Cerramos domicilio para dispositivos pequeños-->
+
+      <!---Domicilio para dispositivos grandes-->
      <div class="panel panel-default p-address">
         <div class="panel-body p-b">
-          <div class="table-responsive">
+          <div class="table-responsive div-p-table">
            <table class="table-address table-condensed">
             <thead class="c-address">
               <tr>
@@ -263,21 +360,21 @@
                 <th>Editar</th>
                 <th>Eliminar</th>
               </tr>
-            </thead> 
+            </thead>
               <tbody id="dom_c"></tbody>
-           </table>         
+           </table>
         </div>
 
         </div>
         <div class="panel-footer p-f">
-          
+
         </div>
-     </div>       
+     </div> <!--Cerramos domicilio para dispositivos grandes-->
     <h3 class="text-primary exist-dom">Aun no tienes ningún domicilio registrado</h3>
-  
+
             <div class="panel-body">
-              @if(count($direcfiscal)) 
-                 @else       
+              @if(count($direcfiscal))
+                 @else
                     <div class="checkbox">
                       <input type="checkbox" name="domfiscal" id="checkfiscal">
                         <label for="checkfiscal" id="iddomfiscal">
@@ -296,33 +393,6 @@
 
                  <form id="formulario_entrega" role="form" action="productos/registrarpedido" method="post">
                   <div id="domfiscal" class="domfiscal">
-                      <div class="group1">
-                          <div class="pais input-group">
-                          <label class="h-xs text-info text-center">País</label>
-                            <span class="input-group-addon">
-                              <span class="text-info">País</span>
-                            </span>
-                              <select class="form-control options pais" id="pais" name="pais" required></select>
-                          </div>
-                          <div class="estado input-group">
-                          <label class="h-xs text-info text-center">Estado</label>
-                            <span class="input-group-addon">
-                              <span class="text-info">Estado</span>
-                            </span>
-                              <select  class="form-control options" id="estado" name="estado" required>
-                                  <option value="">Debe seleccionar un país</option>
-                              </select>
-                          </div>
-                          <div class="municipio input-group">
-                          <label class="h-xs text-info text-center">Municipio</label>
-                            <span class="input-group-addon">
-                              <span class="text-info">Municipio</span>
-                            </span>
-                              <select  class="form-control" id="municipio"  name="municipio" required>
-                                <option value="">Debe seleccionar un estado</option>
-                              </select>
-                          </div>
-                      </div>
                       <div class="group2">
                         <div class="calle1 input-group">
                         <label class="h-xs text-info text-center">Calle 1</label>
@@ -368,10 +438,37 @@
                          </div>
                           {{ Form::text('domicilio',null, array('class' => 'd-domicilio hidden')) }}
                       </div>
+                      <div class="group1">
+                          <div class="pais input-group">
+                          <label class="h-xs text-info text-center">País</label>
+                            <span class="input-group-addon">
+                              <span class="text-info">País</span>
+                            </span>
+                              <select class="form-control options pais" id="pais" name="pais" required></select>
+                          </div>
+                          <div class="estado input-group">
+                          <label class="h-xs text-info text-center">Estado</label>
+                            <span class="input-group-addon">
+                              <span class="text-info">Estado</span>
+                            </span>
+                              <select  class="form-control options" id="estado" name="estado" required>
+                                  <option value="">Debe seleccionar un país</option>
+                              </select>
+                          </div>
+                          <div class="municipio input-group">
+                          <label class="h-xs text-info text-center">Municipio</label>
+                            <span class="input-group-addon">
+                              <span class="text-info">Municipio</span>
+                            </span>
+                              <select  class="form-control" id="municipio"  name="municipio" required>
+                                <option value="">Debe seleccionar un estado</option>
+                              </select>
+                          </div>
+                      </div>
 
                       <!--Tabla para mostrar los telefonos del cliente-->
                       <h2 class="text-primary text-oculto">Mis teléfonos disponibles</h2>
-                        <div class="table-responsive t-oculto">
+                        <div class="t-oculto">
                           <table class="table table-striped table-condensed table-hover table-tel">
                             <thead class="cb">
                               <th>Numero</th>
@@ -384,9 +481,9 @@
                           </table>
                         </div>
                           <label class=" text-info telclienteotro">Agregar otro teléfono</label>
-               
+
                       <label class=" text-info telcliente">Teléfono</label> <!--Este se oculta en caso de que aiga telefonos disponibles del cliente-->
-                   
+
 
                         <div class="group4 otrotel-c">
                           <div class="c-telcel">
@@ -413,7 +510,7 @@
 
                           <div class="c-otro">
                            <span id="add-tel">Otro ></span>
-                           
+
                            <div class="tel3 input-group t-otro">
                            <label class="h-xs text-info text-center">Otro</label>
                             <span class="input-group-addon">
@@ -425,7 +522,7 @@
                           </div>
                          </div>
 
-                       
+
                         <div class="text-coment">
                           <label class=" text-info">Comentarios</label>
                           <textarea name="comentarios" id="coment" class="form-control" rows="3"></textarea>
@@ -437,12 +534,12 @@
                        <div id="tel_2" >
                            <a class="bt_plus" id="1" >Otro teléfono ></a>
                         </div>
-                          
+
                       </div> -->
 
                    </div>
 
-            <div class='notifications bottom-right'></div>
+            <div class='notifications top-right'></div>
             <div class="panel-footer footer-formpago">
             <a id="conf-p1" href="#confirmarpedido" class="btn btn-primary btn-conf-1 disabled" data-toggle="modal"> <!--   -->
               Generar pedido
@@ -473,10 +570,10 @@
                     Si
                   </span>
                       <button type="button" class="btn btn-danger confirm" data-dismiss="modal">No</button>
-                  </div> 
+                  </div>
                 </div>
               </div>
-            </div>  
+            </div>
 
 
               <!-- Modal para confirmar el pedido -->
@@ -501,13 +598,13 @@
                   <!--boton que se activa si el cliente elige un dom existente-->
                  <a id="" class="btn btn-primary confirm confirm-d" data-dismiss="modal" >Si</a>
                  <!--boton que se activa si el cliente elige un tel existente-->
-                 <span id="" class="btn btn-primary confirm regis-exixts-t" data-dismiss="modal" >Si</span> 
+                 <span id="" class="btn btn-primary confirm regis-exixts-t" data-dismiss="modal" >Si</span>
                       <button type="button" class="btn btn-danger confirm c-no" data-dismiss="modal">No</button>
                       <button type="button" class="btn btn-danger confirm c-pe" data-dismiss="modal">Cancelar</button>
-                  </div> 
+                  </div>
                 </div>
               </div>
-            </div>  
+            </div>
 
             <div id="confirmartel" class="modal fade">
               <div class="modal-dialog">
@@ -525,7 +622,7 @@
                     Si
                   </button>
                   <button type="button" class="btn btn-danger confirm" data-dismiss="modal">No</button>
-                  </div> 
+                  </div>
                 </div>
               </div>
             </div>
@@ -533,7 +630,7 @@
 
               {{ Form::close() }}
 
-          
+
 
 
 
@@ -541,8 +638,8 @@
             <!--Modal editar direccion-->
             <div class="modal fade" id="updateadress" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
+              <div class="modal-content edit-direc">
+                <div class="modal-header cabecera-editar">
                   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                   <h4 class="modal-title text-info text-center">
                      Editar domicilio
@@ -550,14 +647,14 @@
                   </h4>
                 </div>
                 <div class="modal-body">
-                     
+
               <form action="productos/actualizar" method="post" id="formEdit">
               <div class=" input-group d-e">
                 <span class="input-group-addon">
                   <span class="text-info">País</span>
                 </span>
                   <select class="form-control pais" id="paisedit" name="paisedit" >
-                  <option id="select-p" value="" selected></option>  
+                  <option id="select-p" value="" selected></option>
                   <!--   <option id="p_edit" value=""></option> -->
                   </select>
               </div>
@@ -566,7 +663,7 @@
                   <span class="text-info">Estado</span>
                 </span>
                   <select  class="form-control" id="listestados" name="estadoedit">
-                  <option id="select-est" value="" selected></option>                      
+                  <option id="select-est" value="" selected></option>
 
                   </select>
               </div>
@@ -634,7 +731,7 @@
            <!--   <div class="input-group infopago">
                <select class="form-control" name="formapagoedit" id="formapago" required>
                    <option id="" value="" disabled selected>Forma de pago</option>
-                 @foreach($pago as $pagos)       
+                 @foreach($pago as $pagos)
                    <option value="{{ $pagos->id }}">{{ $pagos->descripcion }}</option>
                  @endforeach
                </select>
@@ -649,8 +746,8 @@
                   </select>
               </div> -->
               <input type="text" class="hidden" name="tipodom" id="t-dom" value="">
-              <input id="iddom" type="hidden" name="iddom" value="">       
-              
+              <input id="iddom" type="hidden" name="iddom" value="">
+
             </div>
             <div class="modal-footer">
               <button type="button" id="cancel-u" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
@@ -658,8 +755,8 @@
                 Actualizar
                 <span class="glyphicon glyphicon-refresh"></span>
              </span>
-             
-             </form> 
+
+             </form>
             </div>
           </div>
       <!-- End Modal -->
@@ -671,7 +768,7 @@
       </div>
     </div>
      @else
-          
+
     @endif
 
   </section>
@@ -682,7 +779,7 @@
 {{ HTML::script('js/principal.js') }}
 
 <script type="text/javascript">
-  
+
 $(document).ready(function(){
 
       //Listar domicilios
@@ -690,12 +787,12 @@ $(document).ready(function(){
 
             $.ajax({
                 type: "GET",
-                url: "productos/listardomicilios", 
+                url: "productos/listardomicilios",
                 success: function (domi) {
                     d = "";
         //comprobamos si existen domicilios
         if (domi.direc.length) {
-            
+
 
             for(datos in domi.direc){
 
@@ -720,7 +817,51 @@ $(document).ready(function(){
                 $('.p-address').hide();
                 $('.m-domicilios').hide();
             }
-          
+
+
+
+        },
+
+        error: function () {
+            alert("failure");
+        }
+    });
+
+         domxs = $('#dom_cxs');
+
+            $.ajax({
+                type: "GET",
+                url: "productos/listardomicilios",
+                success: function (domi) {
+                    d = "";
+        //comprobamos si existen domicilios
+        if (domi.direc.length) {
+
+
+            for(datos in domi.direc){
+
+                    d += '<tr class="direcc_'+domi.direc[datos].id+'"><td><div class="text-acc text-info">Acciones</div><span class="acc"><button title="Usar este domicilio" id="btn_Use" data-id="btn_E'+domi.direc[datos].id+'" value="'+domi.direc[datos].id+'" class="btn btn-default usar-d"><span class="cambiar-g glyphicon glyphicon-off" ></span></button>';
+                    d += '<button title="Editar domicilio" id="btn_Update" href="#updateadress" data-toggle="modal" data-id="'+domi.direc[datos].tipo+'" value="'+domi.direc[datos].id+'" class="update-ad btn btn-primary"><span class="glyphicon glyphicon-refresh" ></span></button>';
+                    d += '<button href="#confirm-delete" title="Eliminar domicilio" id="btn_Delete" data-toggle="modal" data-id="btn_E'+domi.direc[datos].id+'" value="'+domi.direc[datos].id+'" class="btn btn-danger"><span class="glyphicon glyphicon-remove" ></span></button></span></td></tr>';
+                    d += '<tr><td>País: '+domi.direc[datos].pais+'</td></tr>';
+                    d += '<tr><td>Estado: '+domi.direc[datos].estados+'</td></tr>';
+                    d += '<tr><td>Municipio: '+domi.direc[datos].municipio+'</td></tr>';
+                    d += '<tr><td>Calle 1: '+domi.direc[datos].calle1+'</td></tr>';
+                    d += '<tr><td>Calle 2: '+domi.direc[datos].calle2+'</td></tr>';
+                    d += '<tr><td>Colonia: '+domi.direc[datos].colonia+'</td></tr>';
+                    d += '<tr><td>Delegación: '+domi.direc[datos].delegacion+'</td></tr>';
+                    d += '<tr><td>CP: '+domi.direc[datos].codigo_postal+'</td></tr>';
+                    d += '<tr><td>Teléfono: '+domi.direc[datos].numero+'</td></tr>';
+                    d += '<tr><td>Domicilio: '+domi.direc[datos].tipo+'</td></tr>';
+                 }
+                domxs.append(d);
+                $('.exist-dom').hide();
+                //Si no existe ningun domiclio ocultamos el panel
+            } else {
+                $('.p-address').hide();
+                $('.m-domicilios').hide();
+            }
+
 
 
         },
@@ -736,18 +877,18 @@ $(document).ready(function(){
 
             $.ajax({
                 type: "GET",
-                url: "productos/listartelefonos", 
+                url: "productos/listartelefonos",
                 success: function (t) {
                     tel = "";
         //comprobamos si existen domicilios
         if (t.telefono.length) {
-            
+
 
             for(datos in t.telefono){
 
                     tel += '<tr class="telefono"><td>'+t.telefono[datos].numero+'</td>';
                     tel += '<td>'+t.telefono[datos].tipo_tel+'</td>';
-                    tel += '<td><span id="btn_Use" data-id="'+t.telefono[datos].id+'" value="'+t.telefono[datos].id+'" class="btn-add-id btn btn-default"><span class="cambiar-t glyphicon glyphicon-off" ></span></span></td></tr>'; 
+                    tel += '<td><span id="btn_Use" data-id="'+t.telefono[datos].id+'" value="'+t.telefono[datos].id+'" class="btn-add-id btn btn-default"><span class="cambiar-t glyphicon glyphicon-off" ></span></span></td></tr>';
                  }
                 tabalatel.append(tel);
                 $('.telcliente').hide();
@@ -761,7 +902,7 @@ $(document).ready(function(){
                 $('.t-oculto').hide();
                 $('.text-oculto').hide();
             }
-          
+
 
 
         },
@@ -784,4 +925,3 @@ $(document).ready(function(){
 
 
 @stop
-

@@ -6,8 +6,6 @@
 
 @section('scripts')
 @parent
-{{ HTML::script('js/slimbox2.js') }}
-{{ HTML::style('css/slimbox2.css') }}
 
 @stop
 
@@ -27,8 +25,6 @@
 @section('content')
 <div class="users">
   <section class="container">
-     @include('layouts/inc/estatus')
-     @include('layouts/inc/alerts')
     	<h1 class="text-center text-primary list-p"></h1>
       		<div class="content-ver">
 				<div class="btn-group">
@@ -44,7 +40,7 @@
 				    <li><a class="v-todo" href="#">Todos</a></li>
 				  </ul>
 				</div>
-      			
+
       		</div>
            <div class="table-responsive t-agentes">
            		<table class="table table-striped table-hover t-ag">
@@ -88,7 +84,8 @@
 				  <li><a id="estatusp" href="#">Estatus</a></li>
 			   </ol>
 			 </div>
-            <div class="table-responsive table-pd">
+            <div class="table-pd">
+            <!--Tabla oculta para dispositivos moviles-->
               <table class="table table-striped table-hover td-pedido">
                 <thead class="c-pedidod">
                   <tr>
@@ -103,37 +100,73 @@
                   </tr>
                 </thead>
                 <tbody id="d-dpedido" class="b-pedidod">
-                 	
+
               	</tbody>
              </table>
-             <table class=" table-striped table-condensed table-hover  total-pedido de-t">
-                <tr>
-                  <td id="subtotalp">
-                    <span class="text-info">Subtotal:  </span> 
-                  </td>
-                  <td id="totalp">
-                    <span class="sub-p"></span>
-                  </td>
-                </tr>
-                <tr>
-                  <td> 
-                    <span class="text-info">Iva: </span> 
-                  </td>
-                  <td>
-                     <span class="sub-iva"></span> 
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <span class="text-info">Total:  </span> 
-                  </td>
-                  <td>
-                    <span class="total-p">
-                  </td>
-                </tr>
-              </table>
+             <!--Tabla visible para dispositivos moviles-->
+             <table class="table table-striped table-hover td-pedidoxs">
+                <tbody id="d-dpedidoxs" class="b-pedidodxs">
+
+              	</tbody>
+             </table>
+             <div class="cont-dt">
+               <table class=" table-striped table-condensed table-hover  total-pedido de-t">
+                  <tr>
+                    <td id="subtotalp">
+                      <span class="text-info">Subtotal:  </span>
+                    </td>
+                    <td id="totalp">
+                      <span class="sub-p"></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="text-info">Iva: </span>
+                    </td>
+                    <td>
+                       <span class="sub-iva"></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="text-info">Total:  </span>
+                    </td>
+                    <td>
+                      <span class="total-p">
+                    </td>
+                  </tr>
+                </table>
+             </div>
+              <div class="cont-dtxs">
+                <table class=" table-striped table-condensed table-hover de-txs">
+                   <tr>
+                     <td id="subtotalp">
+                       <span class="text-info">Subtotal:  </span>
+                     </td>
+                     <td id="totalp">
+                       <span class="sub-p"></span>
+                     </td>
+                   </tr>
+                   <tr>
+                     <td>
+                       <span class="text-info">Iva: </span>
+                     </td>
+                     <td>
+                        <span class="sub-iva"></span>
+                     </td>
+                   </tr>
+                   <tr>
+                     <td>
+                       <span class="text-info">Total:  </span>
+                     </td>
+                     <td>
+                       <span class="total-p">
+                     </td>
+                   </tr>
+                 </table>
+              </div>
            </div>
-           <div class="table-responsive table-cli">
+           <div class="table-cli">
               <table class="table cliente-pedido">
                 <tbody id="cli-dpedido" class="cli-pedidod">
                  	<tr>
@@ -151,7 +184,7 @@
               	<tr class="onservaciones">
               		<td>
               			<div class="ob">Observaciones: <span class="c_observaciones"></span> </div>
-              			
+
               		</td>
               	</tr>
               	</tbody>
@@ -164,14 +197,14 @@
 					<div class="header-e">
 					<h3 class="estatus_a"></h3>
 					</div>
-		
+
 					<div class="select-e">
 						<a class="pendiente" data-id="0" href="#cambiarestatus" data-toggle="modal">Pendiente</a>
 						<a class="proceso" data-id="1" href="#cambiarestatus" data-toggle="modal">En proceso</a>
 						<a class="pagado" data-id="2" href="#cambiarestatus" data-toggle="modal">Pagado</a>
 						<a class="cancelado" data-id="3" href="#cambiarestatus" data-toggle="modal">Cancelado</a>
 					</div>
-					
+
 				</div>
             </div>
           </div>
@@ -180,11 +213,11 @@
               <span id="con-pd" class="sa-p btn btn-primary" data-dismiss="modal" >
                 <span class="glyphicon glyphicon-chevron-left"></span>
                  Cerrar
-              </span> 
-          </div> 
+              </span>
+          </div>
         </div>
       </div>
-    </div> 
+    </div>
 
     	<!--Modal para cambiar el estatus del pedido-->
     <div id="cambiarestatus" class="modal fade">
@@ -202,12 +235,12 @@
           </div>
           <div class="modal-footer modal-confirmar">
 
-              <span id="" class="conf-pd btn btn-primary confirm" data-dismiss="modal" >Si</span> 
+              <span id="" class="conf-pd btn btn-primary confirm" data-dismiss="modal" >Si</span>
               <button id="no-p" type="button" class="btn btn-danger confirm" data-dismiss="modal">No</button>
-          </div> 
+          </div>
         </div>
       </div>
-    </div> 
+    </div>
 
        	<!--Modal para ver la foto del pedido-->
     <div id="verfotop" class="modal fade">
@@ -217,7 +250,7 @@
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title title-f text-info text-center">
             <span class="glyphicon glyphicon-picture"></span>
-              
+
              </h4>
           </div>
           <div class="modal-body m-foto">
@@ -226,11 +259,11 @@
             </div>
           </div>
           <div class="modal-footer f-foto modal-confirmar">
-              
-          </div> 
+
+          </div>
         </div>
       </div>
-    </div> 
+    </div>
 
 
 
@@ -314,7 +347,7 @@
             tabla_a = $('#datos_a');
             $.ajax({
                 type: "GET",
-                url: "pedidos/listarpedidos", 
+                url: "pedidos/listarpedidos",
                 success: function (p) {
                 	if(p.pedido== 0){
                 		$('.list-p').text('No tienes ningún pedido asignado.');
@@ -325,7 +358,7 @@
 
 	             		pe = "";
 	             		for(datos in p.pedido){
-	             			
+
 	                    pe += '<tr class="fila_'+p.pedido[datos].estatus+'" id="tr_'+p.pedido[datos].id+'"><td><a id="c-estatus" class="'+p.pedido[datos].estatus+'" data-id="'+p.pedido[datos].id+'" value="'+p.pedido[datos].numero_cliente+'" href="#modalpedido" data-toggle="modal">'+p.pedido[datos].num_pedido+'</a></td>';
 	                    pe += '<td>'+p.pedido[datos].numero_cliente+'</td>';
 	                    pe += '<td>'+p.pedido[datos].created_at+'</td>';
@@ -335,7 +368,7 @@
 	                    }
 
 	                 	tabla_a.append(pe);
-	                 	
+
 	                 		$('.estatus_0').text('Pendiente');
 	                 		$('.estatus_0').addClass('text-warning');
 	                 		$('.estatus_1').text('En proceso');
@@ -346,7 +379,7 @@
 				            $('.estatus_3').addClass('text-danger');
              			}
 
-                  
+
                 },
                 error: function () {
                     alert("failure");
@@ -355,11 +388,12 @@
 
            $(document).on('click','#c-estatus', function(){
 	           	 id = $(this).attr('data-id');
+              // $(".d-detallep").show();
 	           	 //idfila = $('#tr_'+id).attr('id');
 	           	 //alert(idfila);
 	           	 num = $(this).attr('value');
 	           	 $('.conf-pd').attr('value',num);
-	           	
+
 	           	 tabla_d = $('#d-dpedido');
 		          $.ajax({
 		            type: "POST", //metodo
@@ -370,7 +404,7 @@
 		               $('.c_nombre').html(p.domi[0].nombre_cliente+" "+p.domi[0].paterno+" "+p.domi[0].materno);
 		               $('.c_correo').html(p.domi[0].email);
 		               $('.c_numero').html(p.domi[0].numero_cliente);
-		               
+
 		               $('.c_pais').html(p.domi[0].pais);
 		               $('.c_estado').html(p.domi[0].estados);
 		               $('.c_municipio').html(p.domi[0].municipio);
@@ -398,7 +432,7 @@
              		for(datos in p.pro){
              			e = accounting.formatMoney(p.pro[datos].precio_venta);
              			t = accounting.formatMoney(p.pro[datos].precio_venta);
-	                    
+
 	                    pro += '<tr><td>'+p.pro[datos].clave+'</td>';
 	                    pro += '<td>'+p.pro[datos].nombre+'</td>';
 	                    pro += '<td>'+p.pro[datos].color+'</td>';
@@ -410,7 +444,7 @@
                     }
 
                  	tabla_d.append(pro);
-                 	
+
 
                  	//Mostarr el subtotal, Iva y total
 					resultado=0;
@@ -430,7 +464,85 @@
 		            error: function () {
 		                alert('failure');
 		            }
-		        }); 
+		        });
+
+
+
+				 tabla_dxs = $('#d-dpedidoxs');
+		          $.ajax({
+		            type: "POST", //metodo
+		            url: "pedidos/infopedidos",
+		            data: {id: id},
+		            success: function (p) {
+		               $('.c_rfc').html(p.domi[0].rfc);
+		               $('.c_nombre').html(p.domi[0].nombre_cliente+" "+p.domi[0].paterno+" "+p.domi[0].materno);
+		               $('.c_correo').html(p.domi[0].email);
+		               $('.c_numero').html(p.domi[0].numero_cliente);
+
+		               $('.c_pais').html(p.domi[0].pais);
+		               $('.c_estado').html(p.domi[0].estados);
+		               $('.c_municipio').html(p.domi[0].municipio);
+
+		               $('.c_calle1').html(p.domi[0].calle1);
+		               $('.c_calle2').html(p.domi[0].calle2);
+		               $('.c_colonia').html(p.domi[0].colonia);
+
+		               $('.c_delegacion').html(p.domi[0].delegacion);
+		               $('.c_cp').html(p.domi[0].codigo_postal);
+		               $('.c_telefono').html(p.domi[0].numero);
+
+		               $('.d-pe').html('#'+p.ped[0].num_pedido);
+		               $('.d-fe').html('Fecha: '+p.ped[0].created_at);
+
+		               if(p.ped[0].observaciones == " "){
+		               		$('.c_observaciones').text('No ay observaciones.');
+		               } else {
+
+		                    $('.c_observaciones').text(p.ped[0].observaciones);
+		               }
+
+
+		                pro = "";
+             		for(datos in p.pro){
+             			e = accounting.formatMoney(p.pro[datos].precio_venta);
+             			t = accounting.formatMoney(p.pro[datos].precio_venta);
+
+	                    pro += '<tr><td>Clave: '+p.pro[datos].clave+'</td></tr>';
+	                    pro += '<tr><td>Nombre: '+p.pro[datos].nombre+'</td></tr>';
+	                    pro += '<tr><td>Color: '+p.pro[datos].color+'</td></tr>';
+	                    pro += '<tr><td>Precio: '+e+'</td></tr>';
+	                    pro += '<tr><td>Piezas por paquete: '+p.pro[datos].piezas_paquete+'</td></tr>';
+	                    pro += '<tr><td>Cantidad de paquetes: '+p.pro[datos].cantidad+'</td></tr>';
+	                    pro += '<tr><td><span class="img-p" id="'+p.pro[datos].nombre+'" data-id="'+p.pro[datos].foto+'" href="#verfotop" data-toggle="modal" alt="Foto del producto" title="Ver Foto del prodcto">Ver foto</span></td></tr>';
+	                    pro += '<tr><td class="t-pro" value="'+p.pro[datos].precio_venta * p.pro[datos].cantidad+'">'+accounting.formatMoney(p.pro[datos].precio_venta * p.pro[datos].cantidad)+'</td></tr>';
+                    }
+
+                 	tabla_dxs.append(pro);
+
+
+                 	//Mostarr el subtotal, Iva y total
+					resultado=0;
+					$('.td-pedido tbody tr').each(function(){
+			            cant  = $(this).find("[class*='t-pro']").attr('value');
+
+			            resultado += parseInt(cant);
+
+		            });
+
+					$('.sub-p').html(accounting.formatMoney(resultado));
+					$('.sub-iva').html(accounting.formatMoney(iva = resultado * 0.16));
+					$('.total-p').html(accounting.formatMoney(resultado += iva));
+
+		            },
+
+		            error: function () {
+		                alert('failure');
+		            }
+		        });
+
+
+
+
 
            });
 
@@ -442,7 +554,7 @@
 			$('.title-f').html(nf);
 		});
 
-		
+
 
 		//Actualizaciones de contenidos de la pagina
 		$(document).on('click', '#con-pd', function(){
@@ -452,6 +564,8 @@
 
 				//Actualizamos la tabla detalle del pedido
 			   $("#d-dpedido").load(location.href+" #d-dpedido>*","");
+          // $("#d-dpedidoxs").load(location.href+" #d-dpedidoxs>*","");
+        // $(".d-detallep").hide();
 			   //10000  milisegundos
 		});
 
@@ -460,10 +574,11 @@
 			$('.table-cli').hide();
 
 			$("#d-dpedido").load(location.href+" #d-dpedido>*","");
+    //  $("#d-dpedidoxs").load(location.href+" #d-dpedidoxs>*","");
 		});
 
 
-		    		
+
 			$('#det-p').click(function(){
 				$('#det-p').css('text-decoration', 'none');
 				$('.table-pd').fadeIn(500);
@@ -484,7 +599,7 @@
 				$('.comen-t').hide();
 				$('.es-t').hide();
 			});
-        
+
     /*     	console.log($('#estado').attr('data-id'));
 
            if($('.estatus').text() == 0){
@@ -533,7 +648,7 @@
      $('#no-p').click(function(){
      	$('.select-e').slideUp(500);
      });
-        
+
      $(document).on('click','#est-p', function(){
 		estado = $(this).val();
 	});
@@ -585,7 +700,7 @@
 		num = $(this).attr('value');
 		//$('#tr_'+id).fadeOut(1000);
 		//$("#tr_"+id).load(location.href+" #tr_>*"+id,"");
-		
+
 
 		$.ajax({
      		type:'GET',
@@ -601,7 +716,7 @@
      			$('.estatus_a').text('Pagado');
      		} else if(ed.estatus == 3){
      			$('.estatus_a').text('Cancelado');
-     		} 
+     		}
      		//Bolvemos a construir la fila
      		$('#tr_'+id).replaceWith('<tr class="fila_'+ed.estatus+'" id="tr_'+ed.id+'">'+
                 '<td><a id="c-estatus" class="'+ed.estatus+'" data-id="'+ed.id+'" href="#modalpedido" data-toggle="modal">'+ed.num_pedido+'</a></td>'
@@ -619,7 +734,7 @@
 		            $('.estatus_2').addClass('text-success');
 		            $('.estatus_3').text('Cancelado');
 		            $('.estatus_3').addClass('text-danger');
-     		
+
      		},
      		error: function(){
      			alert('failure');
@@ -655,4 +770,3 @@
 
 
 @stop
-

@@ -225,24 +225,14 @@ $(".btn-update-sum").click(function (e) {
 
 //Ver foto del producto del pedido
 $(document).on('click', '.verfotop', function(){
-    clave = $(this).attr('id');
+    foto = $(this).attr('id');
+    nombre = $(this).attr('data-id');
+    $('#fotopro').prop('src','img/productos/'+foto);
+    $('.t-foto').text(nombre);
+    $('#verfoto-p').modal({
+            show: 'false'
+     }); 
 
-    $.ajax({
-        type: 'POST',
-        url: '/productos/verfoto',
-        data: {clave: clave},
-        success: function(f){
-            $('#fotopro').prop('src','img/productos/'+f.foto);
-            $('.t-foto').text(f.nombre);
-            $('#verfoto-p').modal({
-                show: 'false'
-             }); 
-
-        },
-        error: function(){
-            alert('failure');
-        }
-    });
 
 });
 
@@ -693,7 +683,7 @@ $(document).on('click', '.verfotop', function(){
   $('.btn-conf-1').hide();
 
   $('#gen-c').click(function(){
-     noexiste = [[ 'bottom-right', 'danger',  "Elige un domicilio!" ]];
+     noexiste = [[ 'top-right', 'danger',  "Elige un domicilio!" ]];
     message = noexiste[Math.floor(Math.random() * noexiste.length)];
 
     $('.' + message[0]).notify({
@@ -1426,6 +1416,7 @@ $('.phone-o').focus(function(){
   
     //Agregar otro telefono
     $('.telclienteotro').click(function(){
+
         //$('#regispedido').removeClass('disabled');
         $('#conf-p').attr('href','#confirmarpedido');
         $('.phone-c').addClass('tel-celular');

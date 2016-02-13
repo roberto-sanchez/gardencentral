@@ -76,9 +76,6 @@ Route::get('productos/agregarproducto/{id}/{quantity}', 'ProductoController@agre
 //Eliminar producto del carrito
 Route::post('productos/delete/{producto}', 'ProductoController@delete');
 
-//Ver foto del pedido
-Route::post('productos/verfoto', 'ProductoController@verfoto');
-
 //Vaciar todo el contenido de el carrito
 Route::post('productos/vaciar', 'ProductoController@vaciar');
 Route::get('productos/trash', 'ProductoController@trash');
