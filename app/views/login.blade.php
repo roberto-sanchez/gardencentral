@@ -4,10 +4,10 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <title>Iniciar Sesión</title>
 	<meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {{ HTML::style('css/bootstrap.min.css') }}
     {{ HTML::style('css/login.css') }}
-    {{ HTML::style('lib/bootstrap-notify/bootstrap-notify.css') }}  
+    {{ HTML::style('lib/bootstrap-notify/bootstrap-notify.css') }}
     {{ HTML::script('js/jquery.js') }}
     {{ HTML::script('js/bootstrap.min.js') }}
     {{ HTML::script('lib/bootstrap-toggle-buttons/static/js/jquery.toggle.buttons.js') }}
@@ -22,9 +22,12 @@
         <div class="cont-sesion">
             <div class='notifications top sess-f'></div>
         </div>
+        <div class="cont-sesion">
+            <div class='notifications top-lef sess-f'></div>
+        </div>
         <div id="container">
         <!--       Alertas       -->
-        @include('layouts/inc/estatus')  
+        @include('layouts/inc/estatus')
             <div id="loginbox">
 
                  <!-- 1.- Rut del formulario, por el metodo post  -->
@@ -34,7 +37,7 @@
                     <div class=" formUserName input-group inp1 has-feedback">
                         <span class="input-group-addon">
                           <span class="glyphicon glyphicon-user"></span>
-                        </span>                        
+                        </span>
                           <input type="text" name="username" value="{{ $username or '' }}" class="form-control" id="username" placeholder="Usuario", 'required'>
                         <span class="spanUserName"></span>
                     </div>
@@ -43,7 +46,7 @@
                       {{ Form::password('password',array('class' => 'form-control', 'id' => 'password', 'data-id' => '' ,'placeholder' => 'Contraseña', 'required')) }}
                       <span class="spanPassword"></span>
                  </div>
-                 <span id="u-e" class="text-danger">El usuario no existe.</span>
+                 <span id="u-e" class="exists-user-e text-danger">El usuario no existe.</span>
                 </div>
                     <a href="#" data-toggle="modal" data-target="#restpass">¿Olvidaste tu contraseña?</a>
                     <div class="form-actions">
@@ -193,6 +196,6 @@
 
         </div>
 
-       
+
 </body>
 </html>

@@ -72,7 +72,7 @@
                 </div>
 
           </div>
-          
+
           <div class="panel-footer footer-producto">
             <div class="agregar-producto input-group has-feedback" title="Ingrese la cantidad de paquetes">
 
@@ -91,7 +91,8 @@
 
 
       @if(count($cart))
-      <div id="t-pedidoc" class="panel panel-datos">
+    <div id="t-pedidoc">
+      <div class="panel panel-datos">
           <div class="panel-heading panelcarrito">
               <h2>
                 <span class=" glyphicon glyphicon-shopping-cart"></span>
@@ -126,8 +127,8 @@
                    <tr class="tr-car filap_{{ $item->id }}" id="{{ $item->id }}">
                       <td class="td-cpa">
                         <div class="c-paxs">
-                          <input type="number" data-id="p_{{ $item -> id }}" class="form-control cant_{{ $item -> id }}" min="1" max="100" value="{{ $totalp = $item->quantity }}" id="product_{{$item->id }}">
-                          <a href="{{ URL::to('productos/update', $item->clave) }}" class="btn btn-info btn-update-p" id="{{ $item -> id }}" title="Actualizar la cantidad de paquetes">
+                          <input type="number" data-id="p_{{ $item -> id }}" class="form-control cant_{{ $item -> id }}" min="1" max="100" value="{{ $totalp = $item->quantity }}" id="productxs_{{$item->id }}">
+                          <a href="{{ URL::to('productos/update', $item->clave) }}" class="btn btn-info btn-update-pxs" id="{{ $item -> id }}" title="Actualizar la cantidad de paquetes">
                             <span class="glyphicon glyphicon-refresh"></span>
                           </a>
                         </div>
@@ -202,7 +203,7 @@
                         <td>{{ $item->clave }}</td>
                         <td class="p-nom">{{ $item->nombre }}</td>
                         <td>{{ $item->color }}</td>
-                        <td>${{ number_format($item->precio_venta, 2)}}</td>
+                        <td><?php $des = $item->precio_venta * $item->factor_descuento ?>${{ number_format($tpro = $item->precio_venta - $des, 2) }}</td>
                         <td>{{ $item->piezas_paquete }}</td>
                         <td class="td-cpa">
                           <div class="c-pa">
@@ -217,7 +218,7 @@
                             Ver Foto
                           </span>
                         </td>
-                        <td>${{ number_format($item->precio_venta * $item->quantity, 2) }}</td>
+                        <td>${{ number_format($sub = $tpro * $item->quantity, 2) }}</td>
                         <td>
                           <span class="btn btn-danger delete-p" title="Eliminar producto" data-id="{{ $item->clave }}" value="{{ $item->id }}">
                             <span class="glyphicon glyphicon-remove"></span>
@@ -253,7 +254,9 @@
                     </td>
                   </tr>
                 </table>
-
+                <div class="alert alert-desc">
+                  <strong>Descuento incluido.</strong>
+                </div>
               </div>
             </div>
 
@@ -261,29 +264,6 @@
 
           </div>
 
-                    <!--Modal para ver la foto del producto-->
-              <div id="verfoto-p" class="modal fade">
-                  <div class="modal-dialog p-fotop">
-                      <div class="modal-content content-f">
-                          <div class="modal-header">
-                              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                              <h2 class="modal-title text-primary text-center title-fp">
-                              <span class="glyphicon glyphicon-picture "></span>
-                                Foto del producto</h2>
-                          </div>
-                          <div class="modal-body body-foto">
-
-                              <div class="fp-foto">
-                                <img id="fotopro" class="foto-p-p" alt="Foto del producto">
-                              </div>
-
-                          </div>
-                          <div class="modal-footer modal-rest">
-                              <h4 class="text-center text-info t-foto"></h4>
-                          </div>
-                      </div>
-                  </div>
-              </div>
 
 
             <div class="panel-elegir">
@@ -318,6 +298,67 @@
             </div>
          </div>
         </div>  <!--Panel productos-->
+      </div>
+
+        <!--Modal para ver la foto del producto-->
+  <div id="verfoto-p" class="modal fade">
+      <div class="modal-dialog p-fotop">
+          <div class="modal-content content-f">
+              <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <h2 class="modal-title text-primary text-center title-fp">
+                  <span class="glyphicon glyphicon-picture "></span>
+                    Foto del producto</h2>
+              </div>
+              <div class="modal-body body-foto">
+
+                  <div class="fp-foto">
+                    <img id="fotopro" class="foto-p-p" alt="Foto del producto">
+                  </div>
+
+              </div>
+              <div class="modal-footer modal-rest">
+                  <h4 class="text-center text-info t-foto"></h4>
+              </div>
+          </div>
+      </div>
+  </div>
+
+
+<!-- Modal para cambiar la contraseña -->
+<div id="cambiarpass" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h2 class="modal-title text-danger"><span class="glyphicon glyphicon-lock"></span> Cambia tu contraseña</h2>
+            </div>
+            <div class="modal-body modal-c-pass">
+                {{ Form::open(array('url' => 'users/cambiarpass')) }}
+               <h4 class="text-info">Contraseña Actual</h4>
+               <div class=" form-group">
+                  {{ Form::password('password0', array('class' => 'form-control', 'placeholder' => 'Contraseña actual', 'required')) }}
+                </div>
+                <h4 class="text-info">Nueva Contraseña</h4>
+                <div class=" form-group">
+                  {{ Form::password('password1', array('class' => 'form-control', 'placeholder' => 'Nueva contraseña', 'required')) }}
+                </div>
+                <div class=" form-group">
+                  {{ Form::password('password2', array('class' => 'form-control', 'placeholder' => 'Repetir la nueva contraseña', 'required')) }}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                {{ Form::submit('Guardar', array('class' => 'btn btn-primary', 'id' => 'registrar')) }}
+
+              {{ Form::close() }}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 
 
   <!--____Domicilio de entrega_____-->
@@ -561,15 +602,16 @@
                     <h4 class="modal-title text-danger text-center">Eliminar domicilio</h4>
                   </div>
                   <div class="modal-body">
-                    <h2 class="text-primary text-center">¿Está seguro que desea eliminar este domicilio?</h2>
+                    <h2 class="text-primary text-center text-elim">¿Está seguro que desea eliminar este domicilio?</h2>
                   <span class="label label-danger esta center"></span>
                   </div>
                   <div class="modal-footer modal-confirmar">
+                    <button type="button" class="btn btn-danger confirm" data-dismiss="modal">No</button>
                  <!--    <a href="{{ URL::to('productos/datosdelpedido') }}" class="btn btn-primary confirm">Si</a> -->
                   <span id="eliminar-address" data-id="" data-dismiss="modal" class="btn btn-primary confirm" > <!--   -->
                     Si
                   </span>
-                      <button type="button" class="btn btn-danger confirm" data-dismiss="modal">No</button>
+
                   </div>
                 </div>
               </div>
@@ -592,15 +634,15 @@
                   </div>
                   <div class="modal-footer modal-confirmar">
                  <!--    <a href="{{ URL::to('productos/datosdelpedido') }}" class="btn btn-primary confirm">Si</a> -->
-                  <button href="#" id="regispedido" class="btn btn-primary confirm confirm-p disabled" data-dismiss="modal"> <!--   -->
-                    Si
-                  </button>
-                  <!--boton que se activa si el cliente elige un dom existente-->
-                 <a id="" class="btn btn-primary confirm confirm-d" data-dismiss="modal" >Si</a>
-                 <!--boton que se activa si el cliente elige un tel existente-->
-                 <span id="" class="btn btn-primary confirm regis-exixts-t" data-dismiss="modal" >Si</span>
                       <button type="button" class="btn btn-danger confirm c-no" data-dismiss="modal">No</button>
                       <button type="button" class="btn btn-danger confirm c-pe" data-dismiss="modal">Cancelar</button>
+                      <button href="#" id="regispedido" class="btn btn-primary confirm confirm-p disabled" data-dismiss="modal"> <!--   -->
+                        Si
+                      </button>
+                      <!--boton que se activa si el cliente elige un dom existente-->
+                     <a id="" class="btn btn-primary confirm confirm-d" data-dismiss="modal" >Si</a>
+                     <!--boton que se activa si el cliente elige un tel existente-->
+                     <span id="" class="btn btn-primary confirm regis-exixts-t" data-dismiss="modal" >Si</span>
                   </div>
                 </div>
               </div>
@@ -629,9 +671,6 @@
 
 
               {{ Form::close() }}
-
-
-
 
 
 
@@ -843,16 +882,16 @@ $(document).ready(function(){
                     d += '<tr class="direcc_'+domi.direc[datos].id+'"><td><div class="text-acc text-info">Acciones</div><span class="acc"><button title="Usar este domicilio" id="btn_Use" data-id="btn_E'+domi.direc[datos].id+'" value="'+domi.direc[datos].id+'" class="btn btn-default usar-d"><span class="cambiar-g glyphicon glyphicon-off" ></span></button>';
                     d += '<button title="Editar domicilio" id="btn_Update" href="#updateadress" data-toggle="modal" data-id="'+domi.direc[datos].tipo+'" value="'+domi.direc[datos].id+'" class="update-ad btn btn-primary"><span class="glyphicon glyphicon-refresh" ></span></button>';
                     d += '<button href="#confirm-delete" title="Eliminar domicilio" id="btn_Delete" data-toggle="modal" data-id="btn_E'+domi.direc[datos].id+'" value="'+domi.direc[datos].id+'" class="btn btn-danger"><span class="glyphicon glyphicon-remove" ></span></button></span></td></tr>';
-                    d += '<tr><td>País: '+domi.direc[datos].pais+'</td></tr>';
-                    d += '<tr><td>Estado: '+domi.direc[datos].estados+'</td></tr>';
-                    d += '<tr><td>Municipio: '+domi.direc[datos].municipio+'</td></tr>';
-                    d += '<tr><td>Calle 1: '+domi.direc[datos].calle1+'</td></tr>';
-                    d += '<tr><td>Calle 2: '+domi.direc[datos].calle2+'</td></tr>';
-                    d += '<tr><td>Colonia: '+domi.direc[datos].colonia+'</td></tr>';
-                    d += '<tr><td>Delegación: '+domi.direc[datos].delegacion+'</td></tr>';
-                    d += '<tr><td>CP: '+domi.direc[datos].codigo_postal+'</td></tr>';
-                    d += '<tr><td>Teléfono: '+domi.direc[datos].numero+'</td></tr>';
-                    d += '<tr><td>Domicilio: '+domi.direc[datos].tipo+'</td></tr>';
+                    d += '<tr class="direcc_'+domi.direc[datos].id+'"><td>País: '+domi.direc[datos].pais+'</td></tr>';
+                    d += '<tr class="direcc_'+domi.direc[datos].id+'"><td>Estado: '+domi.direc[datos].estados+'</td></tr>';
+                    d += '<tr class="direcc_'+domi.direc[datos].id+'"><td>Municipio: '+domi.direc[datos].municipio+'</td></tr>';
+                    d += '<tr class="direcc_'+domi.direc[datos].id+'"><td>Calle 1: '+domi.direc[datos].calle1+'</td></tr>';
+                    d += '<tr class="direcc_'+domi.direc[datos].id+'"><td>Calle 2: '+domi.direc[datos].calle2+'</td></tr>';
+                    d += '<tr class="direcc_'+domi.direc[datos].id+'"><td>Colonia: '+domi.direc[datos].colonia+'</td></tr>';
+                    d += '<tr class="direcc_'+domi.direc[datos].id+'"><td>Delegación: '+domi.direc[datos].delegacion+'</td></tr>';
+                    d += '<tr class="direcc_'+domi.direc[datos].id+'"><td>CP: '+domi.direc[datos].codigo_postal+'</td></tr>';
+                    d += '<tr class="direcc_'+domi.direc[datos].id+'"><td>Teléfono: '+domi.direc[datos].numero+'</td></tr>';
+                    d += '<tr class="direcc_'+domi.direc[datos].id+'"><td>Domicilio: '+domi.direc[datos].tipo+'</td></tr>';
                  }
                 domxs.append(d);
                 $('.exist-dom').hide();

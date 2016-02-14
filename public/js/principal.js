@@ -17,12 +17,12 @@ $(document).ready(function () {
         $('#clave').attr('value', 'Clave del producto');
     });
 
-    $('#searchForm').on('submit', function () { 
+    $('#searchForm').on('submit', function () {
         return false;
     });
 
     $('#btn_search').click(function () {
-        if ($('#clave').val() == '' || $('#clave').val() == 'Clave del producto') { 
+        if ($('#clave').val() == '' || $('#clave').val() == 'Clave del producto') {
             noexiste = [[ 'top', 'danger',  "Escribe la clave del producto." ]];
             message = noexiste[Math.floor(Math.random() * noexiste.length)];
 
@@ -30,15 +30,15 @@ $(document).ready(function () {
                 message: { text: message[2] },
                 type: message[1]
             }).show();
-        } else { 
+        } else {
             $.ajax({
-                type: "POST", 
-                url: "productos/getProducto", 
-                data: {clave: $('#clave').val()}, 
+                type: "POST",
+                url: "productos/getProducto",
+                data: {clave: $('#clave').val()},
                 success: function (prod) {
                     ver = prod.id;
                     if (ver === undefined) {
-                        $('#productoPanel').hide(); 
+                        $('#productoPanel').hide();
 
                         noexiste = [[ 'top', 'danger',  "El producto no existe." ]];
                         message = noexiste[Math.floor(Math.random() * noexiste.length)];
@@ -49,8 +49,8 @@ $(document).ready(function () {
                         }).show();
 
                         $('#noexiste').html(prod.indefinido);
-                    } else { 
-                        $('#productoPanel').slideDown(1000); 
+                    } else {
+                        $('#productoPanel').slideDown(1000);
                         //$('#idProd').attr('value', prod.id );
                         //$('#idProd').attr('href', 'productos/datosdelpedido/' +prod.id );
                         $('.idProd').attr('id', 'product_' + prod.id);
@@ -62,7 +62,7 @@ $(document).ready(function () {
                         $('#imagenProd').prop('src', 'img/productos/' + prod.foto); //la imagen
                         $('#colorProd').html(prod.color); //el color
                         $('#piezasProd').html(prod.piezas_paquete);
-                        $('#precioProd').html(accounting.formatMoney(prod.precio_venta)); 
+                        $('#precioProd').html(accounting.formatMoney(prod.precio_venta));
                         $('.mialert').hide();
                         $('.mialert2').hide();
                         $('#noexiste').text('');
@@ -81,7 +81,7 @@ $(document).ready(function () {
     /**
      * La function trim eliminar los espacios en blanco que esten al principio y al final del contenido del campo.
      * La funcion indexOf() verifica que el campo no solo este conformado por espacios
-     */  
+     */
 
 
 /*
@@ -112,7 +112,7 @@ $(document).on('click', '.idProd2', function(){
     $('#agregarproducto').keypress(function (e) {
         $('.idProd2').removeClass('disabled');
     });
-    
+
     $('.ingresar-p').click(function () {
 
         if ($('.idProd').val() == '') {
@@ -183,32 +183,41 @@ $(".btn-update-sum").click(function (e) {
         window.location.href = href + "/" + quantity;
     });
 
+    //actualizamos la cantidad del producto en movil
+    $(".btn-update-pxs").click(function (e) {
+        e.preventDefault();
+        id = $(this).attr('id');
+        href = $(this).attr('href');
+        quantity = $('#productxs_' + id).val();
+        window.location.href = href + "/" + quantity;
+    });
+
 
     //Vaciar pedido ----------
     $('#v-pedido').click(function(){
-  
+
       $.ajax({
-            type: "POST", 
+            type: "POST",
             url: "/productos/vaciar",
             success: function (v) {
-                $('.panel-datos').hide(); 
+                //$('.panel-datos').hide();
+                $("#t-pedidoc").load(location.href+" #t-pedidoc>*","");
 
             },
             error: function () {
                 alert('failure');
             }
-        });  
+        });
 
   });
 
 //Eliminar producto del carrito
     $(document).on('click', '.delete-p', function(){
       id = $(this).attr('value');
-
       clave = $(this).attr('data-id');
-  
+
       $.ajax({
-            type: "POST", 
+            type: "POST",
             url: "/productos/delete/"+clave,
             success: function (d) {
                 $("#t-pedidoc").load(location.href+" #t-pedidoc>*","");
@@ -218,7 +227,7 @@ $(".btn-update-sum").click(function (e) {
             error: function () {
                 alert('failure');
             }
-        });  
+        });
 
   });
 
@@ -231,7 +240,7 @@ $(document).on('click', '.verfotop', function(){
     $('.t-foto').text(nombre);
     $('#verfoto-p').modal({
             show: 'false'
-     }); 
+     });
 
 
 });
@@ -258,9 +267,9 @@ $(document).on('click', '.verfotop', function(){
 
         $.ajax({
             type: "GET", //metodo
-            url: "productos/editar/"+uddom,  
+            url: "productos/editar/"+uddom,
             data: {uddom: uddom},
-             success: function (dom) {  
+             success: function (dom) {
 
              /*Cargamos los datos correspondientes de cada input*/
                 $('#select-p').html(dom[0].pais);
@@ -325,11 +334,11 @@ $(document).on('click', '.verfotop', function(){
 
             error: function () {
                 alert("failure");
-            } 
-          }); 
+            }
+          });
 
-      
-        }); 
+
+        });
 
 
     //Cargar municipios de el estado a editar
@@ -338,8 +347,8 @@ $(document).on('click', '.verfotop', function(){
         id = $("#listestados").val();
         mu = $('#municipioedit');
         $.ajax({
-            type: "GET", 
-            url: "productos/estado/"+id,  
+            type: "GET",
+            url: "productos/estado/"+id,
 
           }).done(function (muni) {
             $('#municipioedit').html('');
@@ -354,72 +363,72 @@ $(document).on('click', '.verfotop', function(){
              mu.append(m);
             });
 
-        }); 
+        });
 
     });
 
 
 //Validaciones para el formulario de editar domicilio
-  $("#acttualizar-dom").click(function () {  
+  $("#acttualizar-dom").click(function () {
 
 
    expr = /^([1-9]{2}|[0-9][1-9]|[1-9][0-9])[0-9]{3}$/;
 
    if($("#calle1edit").val().length <= 3){
-            $('.calle1edit').addClass('has-error');  
+            $('.calle1edit').addClass('has-error');
             return false;
-      
-    } else if($("#calle2edit").val().length <= 3){
-            $('.calle2edit').addClass('has-error');  
-            return false;
-      
-    } else if($("#coloniadit").val().length <= 3){
-            $('.coloniadit').addClass('has-error');  
-            return false;
-      
-    } else if($("#delegacionedit").val().length <= 3){
-            $('.delegacionedit').addClass('has-error');  
-            return false;
-      
-    } else if(!expr.test($("#cpedit").val())){
-            $('.cpedit').addClass('has-error');  
-            return false;
-      
-    }  else if($("#teledit").val().length <= 8){
-            $('.teledit').addClass('has-error');  
-            return false;
-      
-    } /* else if($(".requerido").val().length <= 8){
-            $('.tel1').addClass('has-error');  
-            return false;
-      
-    }*/ else {
-        return true; 
-    }
-}); 
 
- //validamos el elefono+
+    } else if($("#calle2edit").val().length <= 3){
+            $('.calle2edit').addClass('has-error');
+            return false;
+
+    } else if($("#coloniadit").val().length <= 3){
+            $('.coloniadit').addClass('has-error');
+            return false;
+
+    } else if($("#delegacionedit").val().length <= 3){
+            $('.delegacionedit').addClass('has-error');
+            return false;
+
+    } else if(!expr.test($("#cpedit").val())){
+            $('.cpedit').addClass('has-error');
+            return false;
+
+    }  else if($("#teledit").val().length <= 8){
+            $('.teledit').addClass('has-error');
+            return false;
+
+    } /* else if($(".requerido").val().length <= 8){
+            $('.tel1').addClass('has-error');
+            return false;
+
+    }*/ else {
+        return true;
+    }
+});
+
+ //validamos el telefono
        $('#teledit').keyup(function(){
         valor = $('#teledit').val();
         if(valor.length  <= 8 || /^\s+$/.test(valor)){
-            $('.teledit').addClass('has-error');  
+            $('.teledit').addClass('has-error');
 
          } else {
-            $('.teledit').removeClass('has-error'); 
-        
+            $('.teledit').removeClass('has-error');
+
          }
-    }); 
+    });
 
 
     //validamos la calle 1
     $('#calle1edit').keyup(function(){
         valor = $('#calle1edit').val();
         if(valor.length <= 3 || /^\s+$/.test(valor) ){
-            $('.calle1edit').addClass('has-error'); 
+            $('.calle1edit').addClass('has-error');
 
          } else {
-            $('.calle1edit').removeClass('has-error'); 
-         
+            $('.calle1edit').removeClass('has-error');
+
          }
     });
 
@@ -427,37 +436,37 @@ $(document).on('click', '.verfotop', function(){
     $('#calle2edit').keyup(function(){
         valor = $('#calle2edit').val();
         if(valor.length <= 3 || /^\s+$/.test(valor) ){
-            $('.calle2edit').addClass('has-error');  
+            $('.calle2edit').addClass('has-error');
 
          } else {
-            $('.calle2edit').removeClass('has-error'); 
-          
+            $('.calle2edit').removeClass('has-error');
+
          }
-    });   
+    });
 
     //validamos la colonia
     $('#coloniadit').keyup(function(){
         valor = $('#coloniadit').val();
         if(valor.length <= 3 || /^\s+$/.test(valor) ){
-            $('.coloniadit').addClass('has-error');  
+            $('.coloniadit').addClass('has-error');
 
          } else {
-            $('.coloniadit').removeClass('has-error');          
+            $('.coloniadit').removeClass('has-error');
 
          }
-    });  
+    });
 
         //validamos la delegacion
     $('#delegacionedit').keyup(function(){
         valor = $('#delegacionedit').val();
         if(valor.length <= 3 || /^\s+$/.test(valor) ){
-            $('.delegacionedit').addClass('has-error');  
+            $('.delegacionedit').addClass('has-error');
 
          } else {
-            $('.delegacionedit').removeClass('has-error');           
+            $('.delegacionedit').removeClass('has-error');
 
          }
-    }); 
+    });
 
     //Validamos el codigo postal
     $('#cpedit').keyup(function(){
@@ -477,7 +486,7 @@ $(document).on('click', '.verfotop', function(){
 
 /*Verificar disponibilidaddeñ telefono*/
  /*$('#teledit').keyup( function(){
-    if($('#teledit').val() != ""){   
+    if($('#teledit').val() != ""){
 
          tel = $('#teledit').val().trim();
          //alert(pass);
@@ -502,10 +511,10 @@ $(document).on('click', '.verfotop', function(){
                          $('.msgTeledit').html("El teléfono ya existe, elige otro.");
                          $('#conf-p').addClass('disabled');
                 }
-                
-              
+
+
             }
-        });                          
+        });
      }
 });
 */
@@ -513,10 +522,10 @@ $(document).on('click', '.verfotop', function(){
 
 
     //Actualizar domicilio
-    
+
   $(document).on('click','#acttualizar-dom', function(){
 
-        
+
      pais = $('#paisedit').val();
    //  alert(pais);
      estado = $('#listestados').val();
@@ -542,17 +551,17 @@ $(document).on('click', '.verfotop', function(){
      id = $('#iddom').val();
    //  alert(id );
 
-
        $.ajax({
           url:  "productos/actualizar",
           type: "POST",
           data:{pais: pais, estado: estado, municipio: municipio, calle1: calle1, calle2: calle2, colonia: colonia, delegacion: delegacion, cp: cp, tel: tel, tipodom: tipodom, tipotel: tipotel, id: id},
           success: function (d){
-            //$('.direcc_'+id).remove(); 
+            //$('.direcc_'+id).remove();
 
            //Creamos la fila y remplazamos los datos con los registros actualizados
             $('.direcc_'+id).replaceWith('<tr>'+
-                '<td>'+d.pais+'</td>'
+               '<td><button id="btn_Use" data-id="btn_E'+d.id+'" value="'+d.id+'" class="btn btn-default usar-d"><span class="cambiar-g glyphicon glyphicon-off" ></span></button></td>'
+                +'<td>'+d.pais+'</td>'
                 +'<td>'+d.estados+'</td>'
                 +'<td>'+d.municipio+'</td>'
                 +'<td>'+d.calle1+'</td>'
@@ -562,19 +571,20 @@ $(document).on('click', '.verfotop', function(){
                 +'<td>'+d.codigo_postal+'</td>'
                 +'<td>'+d.numero+'</td>'
                 +'<td>'+d.tipo+'</td>'
-                +'<td><button id="btn_Use" data-id="btn_E'+d.id+'" value="'+d.id+'" class="btn btn-default usar-d"><span class="cambiar-g glyphicon glyphicon-off" ></span></button></td>'
                 +'<td><button id="btn_Update" href="#updateadress" data-toggle="modal" data-id="'+d.tipo+'" value="'+d.id+'" class="update-ad btn btn-primary"><span class="glyphicon glyphicon-refresh" ></span></button></td>'
                 +'<td><button href="#confirm-delete" title="Eliminar domicilio" id="btn_Delete" data-toggle="modal" data-id="btn_E'+d.id+'" value="'+d.id+'" class="btn btn-danger"><span class="glyphicon glyphicon-remove" ></span></button></td>'
 
 
                 +'<tr/>');
 
+
+
           },
           error: function(){
             alert('failure');
           }
 
-        }); 
+        });
 
 
 
@@ -626,11 +636,11 @@ $(document).on('click', '.verfotop', function(){
                 $('.confirm-d').removeClass('disabled');
                 $('.text-exito').show();
                 $('.text-pago').hide();
-            } 
+            }
         });
 
 
-   
+
         $('#veri').click(function(){
         $.ajax({
             type: "POST",
@@ -652,7 +662,7 @@ $(document).on('click', '.verfotop', function(){
 
 
     //Eliminar domicilio
-  $(document).on('click','#btn_Delete', function(){ 
+  $(document).on('click','#btn_Delete', function(){
 
 
     idd = $(this).val();
@@ -665,8 +675,7 @@ $(document).on('click', '.verfotop', function(){
         url: "productos/eliminardomicilio",
         type: "DELETE",
         data: {idd: idd},
-        success: function(di){
-
+        success: function(di){ dom_c
           $('.direcc_'+id).remove();
         },
 
@@ -698,7 +707,7 @@ $(document).on('click', '.verfotop', function(){
   });
 
    //Usar un domicilio existente
-  $(document).on('click','.usar-d', function(){ 
+  $(document).on('click','.usar-d', function(){
         $('#gen-c').hide();
         $('.btn-conf-1').removeClass('disabled');
         $('.text-selectdom').hide();
@@ -715,11 +724,11 @@ $(document).on('click', '.verfotop', function(){
         $('.c-no').hide();
         $('.c-pe').show();
 
-        //eliminamos las clases en los botones que no hacemos clic 
+        //eliminamos las clases en los botones que no hacemos clic
         $('.usar-d').removeClass('btn-default');
         $('.usar-d').removeClass('btn-success');
 
-        //eliminamos las clases en los span que no hacemos clic 
+        //eliminamos las clases en los span que no hacemos clic
         $('.cambiar-g').removeClass('glyphicon-ok');
         $('.cambiar-g').addClass('glyphicon-off');
 
@@ -824,7 +833,7 @@ $(document).on('click', '.verfotop', function(){
         //$('#formapago').prop('selectedIndex',0);
         $('.c-no').hide();
         $('.c-pe').show();
-    
+
 
         $('.usar-d').removeClass('btn-success');
         $('.cambiar-g').removeClass('glyphicon-ok');
@@ -901,8 +910,8 @@ $(document).on('click', '.verfotop', function(){
     });
 
 
-   
-  
+
+
      //Usar un telefono existente
      $(document).on('click','.btn-add-id', function(){
         $('#conf-p').attr('href','#confirmarpedido');
@@ -938,7 +947,7 @@ $(document).on('click', '.verfotop', function(){
         $('.regis-exixts-t').show();
         $('.regis-exixts-t').attr('id',id);
 
-        //eliminamos las clases en los botones que no hacemos clic 
+        //eliminamos las clases en los botones que no hacemos clic
         $('.btn-add-id').removeClass('btn-default');
         $('.btn-add-id').removeClass('btn-success');
 
@@ -1077,7 +1086,7 @@ $(document).on('click', '.verfotop', function(){
         $('.tel-otro').removeClass('tel-d');
         $('.t-tipo').val('Otro');
     });
-    
+
 
     //$('.t-otro').hide();
     $('#add-tel').hide();
@@ -1101,86 +1110,86 @@ $(document).on('click', '.verfotop', function(){
 
 
     //Validaciones para los campos del formularios
-    $(".ge-p").click(function () {  
+    $(".ge-p").click(function () {
 
            if($('.formapago').val() != null){
                 $('.confirm-p').removeClass('disabled');
                 $('.regis-exixts-t').removeClass('disabled');
                 $('.text-exito').show();
                 $('.text-pago').hide();
-            } 
+            }
 
-            
+
 
         $('.text-selectdom').hide();
         expr = /^([1-9]{2}|[0-9][1-9]|[1-9][0-9])[0-9]{3}$/;
 
-    if($("#pais").val() == 0)  {  
-        $('.pais').addClass('has-error');  
-        return false;  
+    if($("#pais").val() == 0)  {
+        $('.pais').addClass('has-error');
+        return false;
 
     } else if($("#estado").val() == 0){
-            $('.estado').addClass('has-error');  
+            $('.estado').addClass('has-error');
             return false;
-      
+
     }  else if($("#municipio").val() == 0){
-            $('.municipio').addClass('has-error');  
+            $('.municipio').addClass('has-error');
             return false;
-      
+
     } else if($("#calle1").val().length <= 3){
-            $('.calle1').addClass('has-error');  
+            $('.calle1').addClass('has-error');
             return false;
-      
+
     } else if($("#calle2").val().length <= 3){
-            $('.calle2').addClass('has-error');  
+            $('.calle2').addClass('has-error');
             return false;
-      
+
     } else if($("#colonia").val().length <= 3){
-            $('.colonia').addClass('has-error');  
+            $('.colonia').addClass('has-error');
             return false;
-      
+
     } else if($("#delegacion").val().length <= 3){
-            $('.delegacion').addClass('has-error');  
+            $('.delegacion').addClass('has-error');
             return false;
-      
+
     } else if(!expr.test($("#cp").val())){
-            $('.cp').addClass('has-error');  
+            $('.cp').addClass('has-error');
             return false;
-      
+
     } else if($(".tel-celular").val() <= 8){
-            $('.tel1').addClass('has-error');  
+            $('.tel1').addClass('has-error');
             return false;
-      
+
     } else if($(".tel-fijo").val() <= 8){
-            $('.tel1').addClass('has-error');  
+            $('.tel1').addClass('has-error');
             return false;
     } else if($(".tel-otro").val() <= 8){
-            $('.tel1').addClass('has-error');  
+            $('.tel1').addClass('has-error');
             return false;
 
     } else {
-        return true; 
+        return true;
     }
-}); 
+});
 
 
 /**
  *
  * Funcion trim() elimina los espacios en blanco del input
- * 
+ *
  */
 /*
-$(".ge-p").click(function () {  
+$(".ge-p").click(function () {
 
    else if($(".tel-celular").val().length <= 8){
-            $('.tel1').addClass('has-error');  
+            $('.tel1').addClass('has-error');
             return false;
-      
+
     } else if($(".tel-fijo").val().length <= 8){
-            $('.tel1').addClass('has-error');  
+            $('.tel1').addClass('has-error');
             return false;
     } else if($(".tel-otro").val().length <= 8){
-            $('.tel1').addClass('has-error');  
+            $('.tel1').addClass('has-error');
             return false;
 
     }
@@ -1208,7 +1217,7 @@ $('.phone-o').focus(function(){
 
 /*Verificar disponibilidad de los telefonos del cliente*/
  $('.tel-celular').keyup( function(){
-    if($('.tel-celular').val() != ""){   
+    if($('.tel-celular').val() != ""){
 
          tel = $('.phone-c').val().trim();
          //alert(pass);
@@ -1233,15 +1242,15 @@ $('.phone-o').focus(function(){
                          $('.msgTelcel').html("El teléfono ya existe, elige otro.");
                          $('#conf-p').addClass('disabled');
                 }
-                
-              
+
+
             }
-        });                          
+        });
      }
 });
 
  $('.tel-fijo').keyup( function(){
-    if($('.tel-fijo').val()!= ""){   
+    if($('.tel-fijo').val()!= ""){
 
          tel = $('.phone-f').val().trim();
          //alert(pass);
@@ -1266,15 +1275,15 @@ $('.phone-o').focus(function(){
                          $('.msgTelfijo').html("El teléfono ya existe, elige otro.");
                         $('#conf-p').addClass('disabled');
                 }
-                
-              
+
+
             }
         });
      }
 });
 
  $('.tel-otro').keyup( function(){
-    if($('.tel-otro').val()!= ""){   
+    if($('.tel-otro').val()!= ""){
 
          tel = $('.phone-o').val().trim();
          //alert(pass);
@@ -1299,8 +1308,8 @@ $('.phone-o').focus(function(){
                          $('.msgTelotro').html("El teléfono ya existe, elige otro.");
                          $('#conf-p').addClass('disabled');
                 }
-                
-              
+
+
             }
         });
      }
@@ -1314,23 +1323,23 @@ $('.phone-o').focus(function(){
        $('.tel1').keyup(function(){
         valor = $('.requerido').val();
         if(valor  <= 8 || /^\s+$/.test(valor)){
-            $('.tel1').addClass('has-error');  
+            $('.tel1').addClass('has-error');
 
          } else {
-            $('.tel1').removeClass('has-error'); 
-            $('.tel1').addClass('has-success');          
+            $('.tel1').removeClass('has-error');
+            $('.tel1').addClass('has-success');
 
          }
-    }); 
+    });
 
         $('.tel2').keyup(function(){
         valor = $('.requerido').val();
         if(valor <= 8 || /^\s+$/.test(valor)){
-            $('.tel2').addClass('has-error');  
+            $('.tel2').addClass('has-error');
 
          } else {
-            $('.tel2').removeClass('has-error'); 
-            $('.tel2').addClass('has-success');          
+            $('.tel2').removeClass('has-error');
+            $('.tel2').addClass('has-success');
 
          }
     });
@@ -1339,11 +1348,11 @@ $('.phone-o').focus(function(){
     $('.tel3').keyup(function(){
         valor = $('.requerido').val();
         if(valor <= 8 || /^\s+$/.test(valor)){
-            $('.tel3').addClass('has-error');  
+            $('.tel3').addClass('has-error');
 
          } else {
-            $('.tel3').removeClass('has-error'); 
-            $('.tel3').addClass('has-success');          
+            $('.tel3').removeClass('has-error');
+            $('.tel3').addClass('has-success');
 
          }
     });
@@ -1353,11 +1362,11 @@ $('.phone-o').focus(function(){
     $('.calle1').keyup(function(){
         valor = $('#calle1').val();
         if(valor.length <= 3 || /^\s+$/.test(valor) ){
-            $('.calle1').addClass('has-error'); 
+            $('.calle1').addClass('has-error');
 
          } else {
-            $('.calle1').removeClass('has-error'); 
-            $('.calle1').addClass('has-success');          
+            $('.calle1').removeClass('has-error');
+            $('.calle1').addClass('has-success');
 
          }
     });
@@ -1366,40 +1375,40 @@ $('.phone-o').focus(function(){
     $('.calle2').keyup(function(){
         valor = $('#calle2').val();
         if(valor.length <= 3 || /^\s+$/.test(valor) ){
-            $('.calle2').addClass('has-error');  
+            $('.calle2').addClass('has-error');
 
          } else {
-            $('.calle2').removeClass('has-error'); 
-            $('.calle2').addClass('has-success');          
+            $('.calle2').removeClass('has-error');
+            $('.calle2').addClass('has-success');
 
          }
-    });   
+    });
 
     //validamos la colonia
     $('.colonia').keyup(function(){
         valor = $('#colonia').val();
         if(valor.length <= 3 || /^\s+$/.test(valor) ){
-            $('.colonia').addClass('has-error');  
+            $('.colonia').addClass('has-error');
 
          } else {
-            $('.colonia').removeClass('has-error'); 
-            $('.colonia').addClass('has-success');          
+            $('.colonia').removeClass('has-error');
+            $('.colonia').addClass('has-success');
 
          }
-    });  
+    });
 
         //validamos la delegacion
     $('.delegacion').keyup(function(){
         valor = $('#delegacion').val();
         if(valor.length <= 3 || /^\s+$/.test(valor) ){
-            $('.delegacion').addClass('has-error');  
+            $('.delegacion').addClass('has-error');
 
          } else {
-            $('.delegacion').removeClass('has-error'); 
-            $('.delegacion').addClass('has-success');          
+            $('.delegacion').removeClass('has-error');
+            $('.delegacion').addClass('has-success');
 
          }
-    }); 
+    });
 
     //Validamos el codigo postal
     $('.cp').keyup(function(){
@@ -1413,7 +1422,7 @@ $('.phone-o').focus(function(){
          }
     });
 
-  
+
     //Agregar otro telefono
     $('.telclienteotro').click(function(){
 
@@ -1441,9 +1450,9 @@ $('.phone-o').focus(function(){
     $('.regis-exixts-t').hide();
 
 
- 
 
-    
+
+
 //Registrar un pedido co un domicilio existente
     $('.confirm-d').click(function(){
         //Array principal donde estarán los datos de los productos
@@ -1456,7 +1465,7 @@ $('.phone-o').focus(function(){
 
             //declaramos un array para guardar estos datos
             item = {idp, cant};
-            
+
             // hacemos un .push() para agregarlos a nuestro array principal "DATA".
             DATA.push(item);
         })
@@ -1465,7 +1474,7 @@ $('.phone-o').focus(function(){
         aInfo   = JSON.stringify(DATA);
 
         id = $(this).attr('id');
-        
+
         formapago = $('#formapago').val();
         msjeria = $('#pago').val();
 
@@ -1483,7 +1492,7 @@ $('.phone-o').focus(function(){
                 alert('failure');
 
             }
-        }); 
+        });
     });
 
 //Registrar un pedido co un telefono existente
@@ -1498,7 +1507,7 @@ $('.phone-o').focus(function(){
 
             //declaramos un array para guardar estos datos
             item = {idp, cant};
-            
+
             // hacemos un .push() para agregarlos a nuestro array principal "DATA".
             DATA.push(item);
         })
@@ -1533,7 +1542,7 @@ $('.phone-o').focus(function(){
             error: function () {
                 alert('failure');
             }
-        }); 
+        });
     });
 
 
@@ -1598,20 +1607,19 @@ $('.phone-o').focus(function(){
 
 //Imprimir pedido
     /*     $('#im-p').click(function(){
-     
+
      iddom = $('#im-p').val();
-     
+
      alert(iddom);
-     
+
      window.location.href='productos/imprimirpedido/'+iddom;
-     
-     
+
+
      });
-     
-     
+
+
      */
 
 
 
 }); //cerramos la funcion jquery principal
-

@@ -29,10 +29,10 @@
 
         <h1 class="text-primary text-center conf-pedido">Confirmación del pedido</h1>
          @foreach($pedido as $pedi)
-        <h2 class="text-info text-center conf-num">       
+        <h2 class="text-info text-center conf-num">
             N° pedido: {{ $pedi ->num_pedido }}
         </h2>
-        <h3 class="text-info text-center conf-date">       
+        <h3 class="text-info text-center conf-date">
             Fecha: {{ $pedi ->created_at }}
         </h3>
        @endforeach
@@ -60,7 +60,7 @@
                 <td>Delegación: {{ $d->delegacion }} <span>• </span>CP: {{ $d->codigo_postal }} <span>• </span>Teléfono: {{ $d->numero }}</td>
               </tr>
               @endforeach
- 
+
             </tbody>
           </table>
 
@@ -79,7 +79,7 @@
                    <td>Color: {{ $item->color }}</td>
                 </tr>
                 <tr>
-                   <td>Precio: ${{ number_format($item->precio_venta, 2)}}</td>
+                   <td><?php $des = $item->precio_venta * $item->factor_descuento ?>${{ number_format($tpro = $item->precio_venta - $des, 2) }}</td>
                 </tr>
                 <tr>
                    <td>Piezas por paquete: {{ $item->piezas_paquete }}</td>
@@ -90,22 +90,22 @@
                 <tr>
                    <td>Total producto: ${{ number_format($item->precio_venta * $item->quantity, 2) }}</td>
                 </tr>
-                 
+
               </tbody>
                 @endforeach
             </table>
             <table class=" table-striped table-condensed table-hover  total-pedidoxs">
                 <tr>
                   <td id="subtotalp">
-                    <span class="text-info">Subtotal:  </span> 
+                    <span class="text-info">Subtotal:  </span>
                   </td>
                   <td id="totalp">
                     ${{ number_format($total, 2) }}
                   </td>
                 </tr>
                 <tr>
-                  <td> 
-                    <span class="text-info">Iva: </span> 
+                  <td>
+                    <span class="text-info">Iva: </span>
                   </td>
                   <td>
                       ${{ $iva = number_format($total * 0.16, 2) }}
@@ -113,7 +113,7 @@
                 </tr>
                 <tr>
                   <td>
-                    <span class="text-info">Total:  </span> 
+                    <span class="text-info">Total:  </span>
                   </td>
                   <td>
                     ${{ number_format($total + $iva, 2) }}
@@ -147,18 +147,18 @@
                </tr>
               @endforeach
             </table>
-             <table class=" table-striped table-condensed table-hover  total-pedido">
+             <table class=" table-striped table-condensed table-hover  total-pedidod">
                 <tr>
                   <td id="subtotalp">
-                    <span class="text-info">Subtotal:  </span> 
+                    <span class="text-info">Subtotal:  </span>
                   </td>
                   <td id="totalp">
                     ${{ number_format($total, 2) }}
                   </td>
                 </tr>
                 <tr>
-                  <td> 
-                    <span class="text-info">Iva: </span> 
+                  <td>
+                    <span class="text-info">Iva: </span>
                   </td>
                   <td>
                       ${{ $iva = number_format($total * 0.16, 2) }}
@@ -166,7 +166,7 @@
                 </tr>
                 <tr>
                   <td>
-                    <span class="text-info">Total:  </span> 
+                    <span class="text-info">Total:  </span>
                   </td>
                   <td>
                     ${{ number_format($total + $iva, 2) }}
@@ -176,7 +176,7 @@
           </div>
         </div>
 
-            
+
         <div class="imprimirpdf">
           <a class="btn btn-default" href="{{ URL::to('productos/imprimirpedido',$iddom) }}" target="_blank" >Imprimir pedido en PDF</a>
         </div>
@@ -200,7 +200,7 @@
   $('.log-out').attr('href',"#");
 
 $('#cerrar').click(function(){
-  
+
       $.ajax({
             type: "POST", //metodo
             url: "/productos/vaciar",
@@ -213,7 +213,7 @@ $('#cerrar').click(function(){
                 alert('failure');
             }
         });
-  
+
 
 });
 </script>

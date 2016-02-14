@@ -558,7 +558,7 @@
 
 		//Actualizaciones de contenidos de la pagina
 		$(document).on('click', '#con-pd', function(){
-
+       $('.select-e').slideUp(300);
 				$('.estatus-pe').hide();
 				$('.table-cli').hide();
 
@@ -572,7 +572,7 @@
 		$(document).on('click', '.close-mp', function(){
 			$('.estatus-pe').hide();
 			$('.table-cli').hide();
-
+      $('.select-e').slideUp(300);
 			$("#d-dpedido").load(location.href+" #d-dpedido>*","");
     //  $("#d-dpedidoxs").load(location.href+" #d-dpedidoxs>*","");
 		});

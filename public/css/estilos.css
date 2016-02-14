@@ -894,8 +894,6 @@ input[type="password"]:focus {
   box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.1);
 }
 .alert.alert-info {
-  border: 1px solid #1b7a9f;
-  border-bottom: 1px solid #186d8e;
   background: #229ccb;
   background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #229ccb), color-stop(1, #6dc4e6));
   background: -ms-linear-gradient(bottom, #229ccb, #6dc4e6);
@@ -904,8 +902,32 @@ input[type="password"]:focus {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#229ccb', EndColorStr='#6dc4e6');
   -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#6dc4e6',EndColorStr='#229ccb')";
   color: #0c3748;
-  box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.3);
+  box-shadow: 0px 0px 5px rgba(grey,.5);
 }
+.alert-desc {
+  border:1px solid white;
+  width:160px;
+  border-radius:3px;
+  height:30px;
+  background: #229ccb;
+  background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #229ccb), color-stop(1, #6dc4e6));
+  background: -ms-linear-gradient(bottom, #229ccb, #6dc4e6);
+  background: -moz-linear-gradient(center bottom, #229ccb 0%, #6dc4e6 100%);
+  background: -o-linear-gradient(bottom, #229ccb, #6dc4e6);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#229ccb', EndColorStr='#6dc4e6');
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#6dc4e6',EndColorStr='#229ccb')";
+  color: #0c3748;
+  box-shadow: 0px 0px 5px rgba(grey,.5);
+}
+.alert-desc strong{
+  font-size:.9em;
+  line-height:15px;
+  margon:0;
+  padding:0;
+  color:white;
+  text-shadow:0px 0px 3px grey;
+}
+
 .alert.alert-success {
   border: 1px solid #77ad3a;
   border-bottom: 1px solid #6c9e35;
@@ -1311,7 +1333,6 @@ ul.nav.nav-tabs.fancy > li.active > a:hover {
   border-right: 1px solid #c4c4cd;
   color: #707083;
   text-shadow: 1px 1px 0px #ffffff;
-  font-size: 1em;
   -webkit-box-shadow: inset 1px 0px 0px #f6f6f7;
   -moz-box-shadow: inset 1px 0px 0px #f6f6f7;
   box-shadow: inset 1px 0px 0px #f6f6f7;
@@ -2462,7 +2483,7 @@ div.users{
 /*----Tabla de los telefonos------*/
 
 /*--Tabla telefonos del cliente--*/
-.text-oculto, .text-pago, .text-add-tel, .text-exito, .text-selectdom{
+.text-oculto, .text-pago, .text-add-tel, .text-exito, .text-selectdom, .text-elim{
   font-size:1.2em;
   text-align:center;
   padding:1em 0;
@@ -2505,6 +2526,12 @@ footer hr {
 
 footer p{
   color:grey;
+}
+
+.exist-dom{
+  font-size:.9em;
+  text-align:left;
+
 }
 
 
@@ -2885,7 +2912,8 @@ margin-bottom:.5em;
   display: none; }
 
 .c-status {
-  font-size: .9em; }
+  font-size: .9em;
+  padding:1em 0; }
 
 .sa-p, .cancel-e, .cancel-r {
   width: 120px; }
@@ -2990,10 +3018,18 @@ margin-bottom:.5em;
   .img-p:hover {
     color: #58A2F6; }
 
+/*----Modal para cambiar la contraseña del cliente----*/
+.modal-c-pass form{
+  padding:0 1em;
+}
+
+.modal-c-pass form input{
+  border-radius:3px;
+}
 
 
-
-
+/*--------*****------ADMIN------******--------*/
+/*--- Index Admin ----*/
 
 
 
@@ -3037,6 +3073,11 @@ margin-bottom:.5em;
   width:85%;
   margin:auto;
 
+}
+
+.c-status{
+  font-size:1em;
+  padding:1em 0;
 }
 
   #searchForm{
@@ -3202,12 +3243,12 @@ margin-bottom:.5em;
   margin:0;
 }
 
-.domentrega2{
+.domentrega2, .domentrega1{
   padding:1em 0;
   line-height:30px;
 }
 
-#checkpersonal{
+#checkfiscal, #checkpersonal{
   margin:0;
   padding:0;
   position: static;
@@ -3277,6 +3318,11 @@ margin-bottom:.5em;
 
 #productoPanel h2{
     font-size:1.2em;
+  }
+
+  .panelcarrito{
+    width:80%;
+    margin:0 auto;
   }
 
 /*--Estilos para el dimicilio pequeño*/
@@ -3658,14 +3704,13 @@ margin-bottom:.5em;
 
 
 @media(min-width:820px){
+  .panelcarrito{
+    width:100%;
+  }
   /*---Tabla del pedido visible para
     dispositivos moviles   ---*/
   /*Ocultamos la tabla*/
   .tcarritoxs{
-    display:none;
-  }
-
-  .total-pedidoxs{
     display:none;
   }
 
@@ -3767,7 +3812,8 @@ margin-bottom:.5em;
 
 .exist-dom{
   font-size:.9em;
-  text-align:center;
+  text-align:left;
+  font-weight:bold;
 }
 
 
@@ -3846,6 +3892,66 @@ margin-bottom:.5em;
 /*--Modal del detalle de los agentes--*/
 
 /*Ocultamos la tabla chica*/
+
+ /*Estilos para la tabla oculta para moviles*/
+.table-detallexs{
+  display:none;
+}
+.total-pedidoxs{
+  display:none;
+}
+
+ .table-o-xs{
+   display:block;
+ }
+
+ .table-detalle{
+   margin-bottom:0;
+ }
+
+ .table-detalle thead tr th{
+   font-size:.8em;
+   text-align:center;
+ }
+
+  .table-detalle tbody tr td{
+    text-align:center;
+    font-size:.8em;
+  }
+
+
+  .total-pedidod{
+    float:right;
+    border-bottom:1px solid #cfcfd6;
+    border-right:1px solid #cfcfd6;
+    border-left:1px solid #cfcfd6;
+  }
+
+  .total-pedidod tr{
+    font-size:.8em;
+        border-bottom: 1px solid #cfcfd6;
+  }
+
+  .total-pedidod tr td{
+         border-left: 1px solid #cfcfd6;
+          text-align:right;
+
+  }
+
+
+.c-pedido{
+  font-size:.9em;
+}
+
+
+.total-pedido tr{
+  font-size:.8em;
+}
+
+.total-pedido tr td{
+    font-size:.8em;
+}
+
 .td-pedidoxs{
   display:none;
 }
@@ -3880,6 +3986,9 @@ display:block;
 margin-bottom:.5em;
 }
 
+.group1{
+  margin-bottom:1em;
+}
 
 
 
@@ -3996,24 +4105,12 @@ margin-bottom:.5em;
 
 
   /*Estilos para la tabla oculta para moviles*/
+  /*Tablas detalle del cliente*/
+   .table-d-xs tbody tr td{
+         font-size:1em;
 
-.table-detalle thead tr{
-  font-size:.9em;
-}
+     }
 
-
-.c-pedido{
-  font-size:.9em;
-}
-
-
-.total-pedido tr{
-  font-size:.8em;
-}
-
-.total-pedido tr td{
-    font-size:.8em;
-}
 
 /*---Vista para los agentes-----*/
 .list-p{
@@ -4195,26 +4292,6 @@ margin-bottom:.5em;
     width: 25%; }
 
 
- /*Tablas detalle del cliente*/
-  .table-d-xs tbody tr td{
-        font-size:1em;
-
-    }
-
-/*Estilos para la tabla oculta para moviles*/
-.table-o-xs{
-  display:block;
-}
-
-.table-detalle{
-  margin-bottom:0;
-}
-
-.table-detalle thead tr{
-  font-size:.9em;
-  text-align:center;
-}
-
 #pro-d{
   width:300px;
 }
@@ -4231,6 +4308,19 @@ margin-bottom:.5em;
 .total-pedido tr td{
         font-size:1em;
 }
+
+.table-detalle thead tr th{
+  font-size:.9em;
+}
+
+ .table-detalle tbody tr td{
+   font-size:.9em;
+ }
+
+
+ .total-pedidod tr{
+   font-size:.9em;
+ }
 
 /*---Vista para los agentes-----*/
 .list-p{

@@ -14,27 +14,27 @@ public function __construct() {
 
 
         if (Auth::check()) {
-            $iduser = Auth::user()->id; 
+            $iduser = Auth::user()->id;
 
-            $idcliente = DB::table('cliente')   
+            $idcliente = DB::table('cliente')
                    ->where("usuario_id", $iduser)->pluck('id');
 
-            $direcfiscal = DB::table('direccion_cliente')  
-                                ->where("tipo", "Fiscal") 
+            $direcfiscal = DB::table('direccion_cliente')
+                                ->where("tipo", "Fiscal")
                                 ->where("cliente_id", $idcliente)->get();
-     
+
             $pago = FormaDePago::all();
 
            $cart = \Session::get('cart');
 
-           $total = $this->total();        
-                   return View::make('users/index', 
+           $total = $this->total();
+                   return View::make('users/index',
                         compact('cart', 'total','pago','direccion', 'estado', 'telcliente','direcfiscal'));
         } else {
 
             return Redirect::to('login');
         }
-                         
+
 
     }
 
@@ -45,10 +45,10 @@ public function __construct() {
         $iduser = Auth::user()->id; //id del usuario
 
     //lo usamos para obtener el id del cliente
-    $idcliente = DB::table('cliente')   
+    $idcliente = DB::table('cliente')
             ->where("usuario_id", $iduser)->pluck('id');
 
-        $direc = DB::table('direccion_cliente')   
+        $direc = DB::table('direccion_cliente')
             ->join('telefono_cliente', 'direccion_cliente.telefono_cliente_id', '=', 'telefono_cliente.id')
             ->join('pais', 'direccion_cliente.pais_id', '=', 'pais.id')
             ->join('estado', 'direccion_cliente.estado_id', '=', 'estado.id')
@@ -72,9 +72,9 @@ public function __construct() {
 
         $domi = DireccionCliente::find($id); //consulta
         $domi->pedidos()->delete(); // Borramos todos los pedidos asociados
-        $domi->delete(); // Borramos 
+        $domi->delete(); // Borramos
 
-         //$tel = TelefonoCliente::find(145); //consulta 
+         //$tel = TelefonoCliente::find(145); //consulta
         // $tel->direccionClientes()->delete();
          //$tel->delete();
         return Response::json($domi);
@@ -88,13 +88,13 @@ public function __construct() {
 
     //Listar telefonos
     public function listartelefonos(){
-         $iduser = Auth::user()->id; 
+         $iduser = Auth::user()->id;
 
-    $idcliente = DB::table('cliente')   
+    $idcliente = DB::table('cliente')
             ->where("usuario_id", $iduser)->pluck('id');
 
         $telefono = DB::table('telefono_cliente')
-                        ->where('cliente_id', $idcliente)->get(); 
+                        ->where('cliente_id', $idcliente)->get();
 
         return Response::json(array('telefono' =>$telefono));
 
@@ -105,9 +105,9 @@ public function __construct() {
   public function getLoginUser(){
    $user = Input::get('usuario');
 
-    $resp = DB::table('usuario') 
+    $resp = DB::table('usuario')
             ->select('id','usuario')
-            ->where('usuario', $user)->first(); 
+            ->where('usuario', $user)->first();
 
     if(count($resp)==0){
         return Response::json($resp);
@@ -117,7 +117,7 @@ public function __construct() {
         return Response::json($resp);
     }
 
-  } 
+  }
 
   public function getLoginPass(){
     $pass = Input::get('pass');
@@ -140,28 +140,28 @@ public function __construct() {
     /*$resp = DB::table('usuario')
                 ->where('id', $pass)->pluck('id');*/
 
-  //  $resp = DB::table('usuario') 
-       //     ->where('password', $pass)->first(); 
-            //->where('id', $idpass)->first(); 
+  //  $resp = DB::table('usuario')
+       //     ->where('password', $pass)->first();
+            //->where('id', $idpass)->first();
          //   ->whereIn('password', $pass)
             //$resp = DB::select('SELECT * FROM usuario WHERE usuario = ?', array('Leo99'), 'AND email = ?', array('leo@outlook.es') );
 
          //$comments = Post::find(1)->comments()->where('title', '=', 'foo')->first();
-         
+
 /*
-        $resp = DB::table('telefono_cliente') 
+        $resp = DB::table('telefono_cliente')
            // ->select('numero')
             ->where('numero', $tel)
-            ->where('telefono_cliente.cliente_id', $idcliente)->first(); 
+            ->where('telefono_cliente.cliente_id', $idcliente)->first();
 
 
 */
 
 
       //  return Response::json($resp);
-    
 
-  } 
+
+  }
 
 
 
@@ -170,9 +170,9 @@ public function __construct() {
   public function getVerificarUser(){
    $user = Input::get('user');
 
-    $resp = DB::table('usuario') 
+    $resp = DB::table('usuario')
             ->select('usuario')
-            ->where('usuario', $user)->first(); 
+            ->where('usuario', $user)->first();
 
     if(count($resp)==0){
 
@@ -184,15 +184,15 @@ public function __construct() {
     }
 
 
-  }   
+  }
 
 
 public function getVerificaremail(){
     $mail = Input::get('email');
 
-    $resp = DB::table('usuario') 
+    $resp = DB::table('usuario')
             ->select('email')
-            ->where('email', $mail)->first(); 
+            ->where('email', $mail)->first();
 
     if(count($resp)==0){
         return Response::json($resp);
@@ -203,15 +203,16 @@ public function getVerificaremail(){
     }
 
 
-  } 
+  }
 
 
 
 //busqueda de las fotos de los productos
 public function getProducto(){
     $clave = Input::get('clave');
-    $resp = DB::table('producto') 
+    $resp = DB::table('producto')
             ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
+            ->select('producto.id','nombre','color','foto','piezas_paquete','clave','precio_venta')
             ->where('clave', $clave)->first();
     if(count($resp)==0){
         $resp = array('indefinido' => 'El producto no existe. ');
@@ -220,7 +221,7 @@ public function getProducto(){
     } else {
         return Response::json($resp);
     }
-    
+
 
  }
 
@@ -232,13 +233,13 @@ public function getProducto(){
         $idusuario = Auth::user()->id;
 
     //consulta para obtener el id del cliente del usuario que incio sesion
-        $idcliente = DB::table('cliente')   
+        $idcliente = DB::table('cliente')
             ->where('usuario_id', $idusuario)->pluck('id');
 
-    $resp = DB::table('telefono_cliente') 
+    $resp = DB::table('telefono_cliente')
             ->select('numero')
             ->where('numero', $tel)
-            ->where('telefono_cliente.cliente_id', $idcliente)->first(); 
+            ->where('telefono_cliente.cliente_id', $idcliente)->first();
 
     if(count($resp)==0){
         return Response::json($resp);
@@ -249,16 +250,16 @@ public function getProducto(){
     }
 
 
-  } 
+  }
 
 
  public function nuevopedido($id){
-    
+
      //obtenemos el id del usuario que inicio sesion
         $idusuario = Auth::user()->id;
 
-        $resp = DB::table('cliente')   
-            ->where('usuario_id', $idusuario)->pluck('id'); 
+        $resp = DB::table('cliente')
+            ->where('usuario_id', $idusuario)->pluck('id');
 
         //Recibimos el Array y lo decodificamos desde json, para poder utilizarlo como objeto
         $idpro = json_decode(Input::get('aInfo'));
@@ -323,8 +324,9 @@ public function getProducto(){
             $pedido->forma_pago_id = $formapago;
             //$pedido->fecha_registro = "fecha";
             $pedido->num_pedido = date('Y').date('m').date("d").$mensajeria['id'].$resp;
+            $pedido->fecha_registro = date('Y-m-d');
             $pedido->observaciones =  $coment;
-            $pedido->save(); 
+            $pedido->save();
 
             //por cada uo de estos arrays vamos a crear una query para poder hacer un insert en la base de datos. y para eso necesitamos recorrer el array por cada uno de sus posiciones
             for ($i=0; $i < count($idpro); $i++) {
@@ -373,8 +375,9 @@ public function getProducto(){
             $pedido->forma_pago_id = $formapago;
             //$pedido->fecha_registro = "fecha";
             $pedido->num_pedido = date('Y').date('m').date("d").$mensajeria['id'].$resp;
+            $pedido->fecha_registro = date('Y-m-d');
             $pedido->observaciones =  $coment;
-            $pedido->save(); 
+            $pedido->save();
 
             //por cada uo de estos arrays vamos a crear una query para poder hacer un insert en la base de datos. y para eso necesitamos recorrer el array por cada uno de sus posiciones
             for ($i=0; $i < count($idpro); $i++) {
@@ -386,9 +389,9 @@ public function getProducto(){
                 $p_detalle->save();
           }
         }
-       
 
-    return Response::json($pedido['id']);  
+
+    return Response::json($pedido['id']);
   }
  }
 
@@ -396,13 +399,13 @@ public function getProducto(){
 
 
  public function pedidoexistente($id){
-            
+
                 //Recibimos el Array y lo decodificamos desde json, para poder utilizarlo como objeto
                 $idpro = json_decode(Input::get('aInfo'));
 
                 $idusuario = Auth::user()->id;
 
-                $resp = DB::table('cliente')   
+                $resp = DB::table('cliente')
                     ->where('usuario_id', $idusuario)->pluck('id');
 
                 $formapago = Input::get('formapago');
@@ -426,8 +429,9 @@ public function getProducto(){
                 $pedido->forma_pago_id = $formapago;
                 //$pedido->fecha_registro = "fecha";
                 $pedido->num_pedido = date('Y').date('m').date("d").$mensajeria['id'].$resp;
+                $pedido->fecha_registro = date('Y-m-d');
                 $pedido->observaciones =  " ";
-                $pedido->save(); 
+                $pedido->save();
 
                 //por cada uo de estos arrays vamos a crear una query para poder hacer un insert en la base de datos. y para eso necesitamos recorrer el array por cada uno de sus posiciones
                     for ($i=0; $i < count($idpro); $i++) {
@@ -438,7 +442,7 @@ public function getProducto(){
                         $p_detalle->cantidad = $idpro[$i]->cant;
                         $p_detalle->save();
                   }
-                
+
 
         //Vaciamos el pedido
       //  $vaciar = \Session::forget('cart');
@@ -463,9 +467,9 @@ public function getProducto(){
             $p_detalle->save();
 }
     return Response::json($id);
-   
 
-    
+
+
  }*/
 
 
@@ -477,9 +481,9 @@ public function getProducto(){
        $cart = \Session::get('cart');
        $producto->quantity = 1;
        $cart[$producto->clave] = $producto;
-       $cart[$producto->clave]->quantity = $quantity;  
+       $cart[$producto->clave]->quantity = $quantity;
        \Session::put('cart', $cart);
-       return Redirect::back(); 
+       return Redirect::back();
 
     }
 
@@ -487,10 +491,11 @@ public function getProducto(){
     // Delete producto
     public function delete(Producto $producto)
     {
-        $cart = \Session::get('cart');
+       $cart = \Session::get('cart');
         unset($cart[$producto->clave]);
         \Session::put('cart', $cart);
         //return Redirect::back();
+        return Response::json('correcto');
 
     }
 
@@ -525,7 +530,8 @@ public function getProducto(){
         $cart = \Session::get('cart');
         $total = 0;
         foreach($cart as $item){
-            $total += $item->precio_venta * $item -> quantity;
+            $m = $item->precio_venta * $item->factor_descuento;
+            $total += ($item->precio_venta - $m) * $item -> quantity;
         }
 
         return $total;
@@ -534,33 +540,33 @@ public function getProducto(){
 
      //Editar domicilio
     public function editar($uddom){
-       // return Response::json($iddom);   
-       // 
+       // return Response::json($iddom);
+       //
        $estado = DB::table('estado')
               ->select('id','estados')->get();
 
-        $idmuni = DB::table('direccion_cliente') 
-            ->where("id", $uddom)->pluck('municipio_id'); 
+        $idmuni = DB::table('direccion_cliente')
+            ->where("id", $uddom)->pluck('municipio_id');
 
-        $muni = DB::table('municipio') 
+        $muni = DB::table('municipio')
             ->select('id')
-            ->where("id", $idmuni)->get(); 
-    
-        $domi = DB::table('direccion_cliente') 
-            ->join('pedido', 'direccion_cliente.id', '=', 'pedido.direccion_cliente_id') 
-            ->join('cliente', 'direccion_cliente.cliente_id', '=', 'cliente.id')  
+            ->where("id", $idmuni)->get();
+
+        $domi = DB::table('direccion_cliente')
+            ->join('pedido', 'direccion_cliente.id', '=', 'pedido.direccion_cliente_id')
+            ->join('cliente', 'direccion_cliente.cliente_id', '=', 'cliente.id')
             ->join('pais', 'direccion_cliente.pais_id', '=', 'pais.id')
             ->join('estado', 'direccion_cliente.estado_id', '=', 'estado.id')
             ->join('municipio', 'direccion_cliente.municipio_id', '=', 'municipio.id')
             ->join('telefono_cliente', 'direccion_cliente.telefono_cliente_id', '=', 'telefono_cliente.id')
             ->select('estado.id', 'pais', 'estados', 'municipio', 'calle1', 'calle2', 'colonia', 'delegacion', 'codigo_postal', 'numero', 'tipo_tel')
-            ->where("direccion_cliente.id", $uddom)->first(); 
+            ->where("direccion_cliente.id", $uddom)->first();
 
 
 
         return Response::json(array('estado' => $estado, $domi, 'muni' => $muni));
 
-         
+
     }
 
 
@@ -601,7 +607,7 @@ public function getProducto(){
 
          $idusuario = Auth::user()->id;
 
-        $resp = DB::table('cliente')   
+        $resp = DB::table('cliente')
             ->where('usuario_id', $idusuario)->pluck('id');
 
             //Actualizamos el telefono
@@ -611,7 +617,7 @@ public function getProducto(){
             $telefono->tipo_tel = $tipotel;
             $telefono->estatus = "1";
             $telefono->save();
-            
+
             //Actualizamos la direccion
             $direccion = DireccionCliente::find($id);
             $direccion->cliente_id = $resp;
@@ -629,38 +635,38 @@ public function getProducto(){
             $direccion->save();
 
             //Mandamos los datos actualizados
-            $domi = DB::table('direccion_cliente') 
+            $domi = DB::table('direccion_cliente')
             ->join('pais', 'direccion_cliente.pais_id', '=', 'pais.id')
             ->join('estado', 'direccion_cliente.estado_id', '=', 'estado.id')
             ->join('municipio', 'direccion_cliente.municipio_id', '=', 'municipio.id')
             ->join('telefono_cliente', 'direccion_cliente.telefono_cliente_id', '=', 'telefono_cliente.id')
             ->select('direccion_cliente.id', 'pais', 'estados', 'municipio', 'calle1', 'calle2', 'colonia', 'delegacion', 'codigo_postal','tipo' ,'numero')
-            ->where("direccion_cliente.id", $id)->first(); 
+            ->where("direccion_cliente.id", $id)->first();
 
            return Response::json($domi);
 
-    
-    }
-   
 
-    
+    }
+
+
+
 
     //detalle del producto
-    public function datosdelpedido($iddom){ 
-   
+    public function datosdelpedido($iddom){
+
         if (Auth::check()) {
 
        $userid = Auth::user()->id;
 
-       $idcliente = DB::table('cliente')   
+       $idcliente = DB::table('cliente')
             ->where("usuario_id", $userid)->pluck('id');
 
-       $pedido = DB::table('pedido') 
+       $pedido = DB::table('pedido')
              ->join('direccion_cliente', 'pedido.direccion_cliente_id', '=', 'direccion_cliente.id')
              ->select('pedido.created_at','num_pedido')
             ->where('pedido.id', $iddom)->take(1)->get();
 
-        $iddi = DB::table('pedido') 
+        $iddi = DB::table('pedido')
              ->join('direccion_cliente', 'pedido.direccion_cliente_id', '=', 'direccion_cliente.id')
              ->select('direccion_cliente.id')
             ->where('pedido.id', $iddom)->pluck('direccion_cliente.id');
@@ -669,28 +675,28 @@ public function getProducto(){
                     ->where('direccion_cliente_id', $iddi)->pluck('cliente_id');
 
         if($idp == $idcliente){
-            $direc = DB::table('direccion_cliente') 
-                ->join('pedido', 'direccion_cliente.id', '=', 'pedido.direccion_cliente_id') 
-                ->join('cliente', 'direccion_cliente.cliente_id', '=', 'cliente.id')  
+            $direc = DB::table('direccion_cliente')
+                ->join('pedido', 'direccion_cliente.id', '=', 'pedido.direccion_cliente_id')
+                ->join('cliente', 'direccion_cliente.cliente_id', '=', 'cliente.id')
                 ->join('pais', 'direccion_cliente.pais_id', '=', 'pais.id')
                 ->join('estado', 'direccion_cliente.estado_id', '=', 'estado.id')
                 ->join('municipio', 'direccion_cliente.municipio_id', '=', 'municipio.id')
                 ->join('telefono_cliente', 'direccion_cliente.telefono_cliente_id', '=', 'telefono_cliente.id')
                 ->where("direccion_cliente.id", $iddi)->take(1)->get();
 
-        
+
             if(count(\Session::get('cart')) <= 0) return Redirect::to('users');
             $producto = \Session::get('cart');
             $total = $this->total();
             //Retornamos la vista y vaciamos el pedido actual
-            return View::make('users/detalle', 
+            return View::make('users/detalle',
                       compact('producto', 'total', 'direc','tel', 'iddom','pedido'));
 
             } else {
                 echo "Error, la página solicitada no existe.";
             }
 
-            
+
         } else {
             return Redirect::to('login');
         }
@@ -705,28 +711,28 @@ public function getProducto(){
         if (Auth::check()) {
         $iduser = Auth::user()->id;
 
-        $idcliente = DB::table('cliente')   
+        $idcliente = DB::table('cliente')
                 ->where("usuario_id", $iduser)->pluck('id');
 
 
-        $pedido = DB::table('pedido') 
+        $pedido = DB::table('pedido')
              ->join('direccion_cliente', 'pedido.direccion_cliente_id', '=', 'direccion_cliente.id')
              ->select('pedido.created_at','num_pedido')
             ->where('pedido.id', $iddom)->take(1)->get();
 
-        $iddi = DB::table('pedido') 
+        $iddi = DB::table('pedido')
              ->join('direccion_cliente', 'pedido.direccion_cliente_id', '=', 'direccion_cliente.id')
              ->select('direccion_cliente.id')
             ->where('pedido.id', $iddom)->pluck('direccion_cliente.id');
 
         $idp = DB::table('pedido')
                     ->where('direccion_cliente_id', $iddi)->pluck('cliente_id');
-   
+
 
         if($idp == $idcliente){
-        $direc = DB::table('direccion_cliente') 
-            ->join('pedido', 'direccion_cliente.id', '=', 'pedido.direccion_cliente_id') 
-            ->join('cliente', 'direccion_cliente.cliente_id', '=', 'cliente.id')  
+        $direc = DB::table('direccion_cliente')
+            ->join('pedido', 'direccion_cliente.id', '=', 'pedido.direccion_cliente_id')
+            ->join('cliente', 'direccion_cliente.cliente_id', '=', 'cliente.id')
             ->join('pais', 'direccion_cliente.pais_id', '=', 'pais.id')
             ->join('estado', 'direccion_cliente.estado_id', '=', 'estado.id')
             ->join('municipio', 'direccion_cliente.municipio_id', '=', 'municipio.id')
@@ -749,7 +755,7 @@ public function getProducto(){
         }
 
 
-        
+
     }
 
 

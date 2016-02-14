@@ -74,7 +74,7 @@ body {
       background: rgba(250, 250, 250, 0.6);
       border-top: 3px solid #F2F2F2;
       border-bottom: 3px solid #F2F2F2;
-      padding: 1em;
+      padding: 1em 1em .1em 1em;
       margin: .5em; }
       #loginbox form .alinear .inp1 {
         padding-bottom: 1em; }
@@ -91,7 +91,7 @@ body {
       margin-bottom: 1.5em; }
 
 .cont-sesion {
-  width: 18%;
+  width: 230px;
   margin: 0 auto;
   position: relative; }
 
@@ -121,10 +121,18 @@ body {
   font-size: .8em; }
 
 #u-e {
-  display: none;
   font-size: .9em;
   margin: 0;
   padding: 0; }
+
+.exists-user-e {
+  visibility: hidden; }
+
+#acceder {
+  opacity: 1; }
+
+#rest-p {
+  opacity: 1; }
 
 /*Estilos para el modal*/
 .btnoculto {
@@ -233,7 +241,7 @@ body {
       -ms-flex-pack: distribute;
           justify-content: space-around; }
   .modal-rest button, .modal-rest #rest-p {
-    width: 200px; }
+    width: 150px; }
 
 /*RWD---Puntos de corte*/
 @media (min-width: 520px) {
@@ -309,14 +317,25 @@ body {
       margin-lef: .5em; } }
 @media (min-width: 890px) {
   .panel-regis h2 {
-    margin-right: 2em; } }
+    margin-right: 2em; }
+
+  .modal-rest {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-justify-content: space-around;
+        -ms-flex-pack: distribute;
+            justify-content: space-around; }
+    .modal-rest button, .modal-rest #rest-p {
+      width: 100px; } }
 /*
 .modal{
   .modal-dialog{
 
     .modal-content{
       .modal-header{
-        
+
       }
         .modal-body{
           background:$gris_clarito;
@@ -347,7 +366,7 @@ body {
                 }
               }
 
-              
+
 
               .radio{
                 margin:0;
@@ -382,7 +401,7 @@ body {
               }
 
               .form-group{
-                height:60px;  
+                height:60px;
 
                 label{
                   font-size:.8em;
@@ -452,7 +471,7 @@ label.error{
 @media(min-width:320px) and (max-width:600px){
 
 
-  
+
 
 
 }

@@ -3,7 +3,7 @@ $(document).ready(function(){
 
 
 if($('.sesion-f').length == 0){
-    
+
 } else {
     noexiste = [[ 'top', 'success',  "Tu sesión ha sido cerrada." ]];
     message = noexiste[Math.floor(Math.random() * noexiste.length)];
@@ -14,28 +14,28 @@ if($('.sesion-f').length == 0){
     }).show();
 }
 
-// ------------------ Inicio de Sesion  -------------------- 
+// ------------------ Inicio de Sesion  --------------------
 
 //Validamos el username y la contraseña del inicio de sesion
-    $("#acceder").click(function () {  
-     
-    if( $("#username").val() == 0  )  {  
-        $('.formUserName').addClass('has-error');  
-        return false;  
+    $("#acceder").click(function () {
+
+    if( $("#username").val() == 0  )  {
+        $('.formUserName').addClass('has-error');
+        return false;
 
     } else if($("#password").val() == 0){
-            $('.formPassword').addClass('has-error');  
+            $('.formPassword').addClass('has-error');
             return false;
-      
+
     }  else {
-        return true; 
+        return true;
     }
-}); 
+});
 
 
 /*Verificar si el usuario existe */
   $('#username').keyup( function(){
-    if($('#username').val()!= ""){   
+    if($('#username').val()!= ""){
          usuario = $('#username').val().trim();
 
         $.ajax({
@@ -50,21 +50,23 @@ if($('.sesion-f').length == 0){
                      $('.spanUserName').addClass('glyphicon glyphicon-remove form-control-feedback');
                      $('.formUserName ').addClass('has-error');
                      $('#acceder').addClass('disabled');
-                      $('#u-e').fadeIn(300);
+                      $('#u-e').removeClass('exists-user-e');
+
                     } else {
                       $('.formUserName ').removeClass('has-error');
                       $('.spanUserName').removeClass('glyphicon-remove');
                       $('.formUserName ').addClass('has-success');
                       $('.spanUserName').addClass('glyphicon glyphicon-ok form-control-feedback');
-                      $('#acceder').removeClass('disabled'); 
-                      $('#u-e').fadeOut(300);
+                      $('#acceder').removeClass('disabled');
+                      $('#u-e').addClass('exists-user-e');
                 }
-                
-              
+
+
             }
         });
      }
 });
+
 
     //validamos la password
     $('.formPassword').keyup(function(){
@@ -77,7 +79,7 @@ if($('.sesion-f').length == 0){
           else if(valor.length <= 5 ){
             $('.spanPassword').show();
             $('.formPassword').addClass('has-error');
-            $('.spanPassword').addClass('glyphicon glyphicon-remove form-control-feedback');    
+            $('.spanPassword').addClass('glyphicon glyphicon-remove form-control-feedback');
          }
          else {
             $('.formPassword').removeClass('has-error');
@@ -90,7 +92,7 @@ if($('.sesion-f').length == 0){
 
 /*Verificar si la contraseña existe */
  /* $('#password').keyup( function(){
-    if($('#password').val()!= ""){   
+    if($('#password').val()!= ""){
          idpass = $('#password').attr('data-id');
         pass = $('#password').val();
          console.log(idpass);
@@ -104,8 +106,8 @@ if($('.sesion-f').length == 0){
                 vp = p.password;
                 console.log(vp);
                 //console.log(pass);
-                                                
-              
+
+
             }
         });
      }
@@ -130,16 +132,16 @@ if($('.sesion-f').length == 0){
 }
 
 $('#password').focus(function(){
- 
+
     $('.formPassword').removeClass('has-error', 'has-feedback');
     $('.spanPassword').removeClass('glyphicon glyphicon-remove form-control-feedback');
-   
+
 });
 
 /*-----Validamos el campo para restablecer la contraseña*/
 /*Verificar disponibilidad de email y validamos el campo*/
   $('#restp').keyup( function(){
-    if($('#restp').val()!= ""){   
+    if($('#restp').val()!= ""){
          email = $('#restp').val();
 
         $.ajax({
@@ -174,10 +176,10 @@ $('#password').focus(function(){
                           $('email-r').hide();
                           $('#rest-p').removeClass('disabled');
                           $('#msgREmail').hide();
-                   
+
                 }
-                
-              
+
+
             }
         });
      }
@@ -193,40 +195,40 @@ $('#password').focus(function(){
 
 
 //Validaciones para los campos del formularios
-    $("#enviarregistro").click(function () {  
-     
-    if( $("#formRfc").val() <= 12  )  {  
-        $('.formRfc').addClass('has-error');  
-        return false;  
+    $("#enviarregistro").click(function () {
+
+    if( $("#formRfc").val() <= 12  )  {
+        $('.formRfc').addClass('has-error');
+        return false;
 
     } else if($("#formName").val() <= 3){
-            $('.formName').addClass('has-error');  
+            $('.formName').addClass('has-error');
             return false;
-      
+
     }  else if($("#formLast").val() <= 3){
-            $('.formLast').addClass('has-error');  
+            $('.formLast').addClass('has-error');
             return false;
-      
+
     } else if($("#formUser").val().length <= 3){
-            $('.formUser').addClass('has-error');  
+            $('.formUser').addClass('has-error');
             return false;
 
     } else if( $("#formEmail").val().length == 0 ){
-            $('.formEmail').addClass('has-error');  
+            $('.formEmail').addClass('has-error');
             return false;
-      
+
     } else if($("#formPass1").val().length <= 5){
-            $('.formPass1').addClass('has-error');  
+            $('.formPass1').addClass('has-error');
             return false;
-      
+
     } else if($("#formPass2").val().length <= 5){
-            $('.formPass2').addClass('has-error');  
+            $('.formPass2').addClass('has-error');
             return false;
-      
+
     } else {
-        return true; 
+        return true;
     }
-}); 
+});
 
 
 
@@ -246,7 +248,7 @@ $('#password').focus(function(){
       //expresion para validar el rfc
       exprfc = /^([A-ZÑ\x26]{3,4}([0-9]{2})(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1])[A-Z|\d]{3})$/;
       valor = $('#formRfc').val().trim();
-      /* test es propio de js, lo que hace es validar con lo que le pongamos en los parentesis y con ! le indicamos que si no se cumple la condicion ejecute lo que este dentro del if y en caso de que si manda al else  */     
+      /* test es propio de js, lo que hace es validar con lo que le pongamos en los parentesis y con ! le indicamos que si no se cumple la condicion ejecute lo que este dentro del if y en caso de que si manda al else  */
         if(!exprfc.test(valor.toUpperCase())){ //convertimos el rfc en mayusculas
             $('.formRfc').addClass('has-error');
             $('.spanRfc').addClass('glyphicon glyphicon-remove form-control-feedback');
@@ -259,15 +261,15 @@ $('#password').focus(function(){
             $('.spanRfcText').text('');
          }
    });
-    
+
 
    //validaciones el nombre
    $('.formName').keyup(function(){
-        valor = $('#formName').val(); 
+        valor = $('#formName').val();
 		if(valor.length <= 2 || /^\s+$/.test(valor)){
          	$('.spanName').addClass('glyphicon glyphicon-remove form-control-feedback');
          	$('.formName').addClass('has-error');
-			
+
          } else {
          	$('.formName').removeClass('has-error');
          	$('.formName').addClass('has-success');
@@ -275,7 +277,7 @@ $('#password').focus(function(){
          	$('.spanName').addClass('glyphicon glyphicon-ok form-control-feedback');
          }
    });
-    
+
 
     //validamos el apellido paterno
     $('.formLast').keyup(function(){
@@ -291,7 +293,7 @@ $('#password').focus(function(){
          }
     });
 
-      
+
     //validamos el apellido materno, este campo es opcional
     $('.formMat').keyup(function(){
         valor = $('#formMat').val();
@@ -320,7 +322,7 @@ $('#password').focus(function(){
 
 /*Verificar disponibilidad de usuario y validamos el campo*/
   $('#formUser').keyup( function(){
-    if($('#formUser').val()!= ""){   
+    if($('#formUser').val()!= ""){
          user = $('#formUser').val();
 
         $.ajax({
@@ -339,9 +341,9 @@ $('#password').focus(function(){
                     $('.formUser').removeClass('has-success');
                     $('.spanUser').removeClass('glyphicon-ok');
                     $('.spanUser').addClass('glyphicon glyphicon-remove form-control-feedback');
-                    $('.formUser').addClass('has-error');     
-                    $('.spanUserText').text('No puedes dejar espacios en blanco'); 
-                    $('.spanUserText').show(); 
+                    $('.formUser').addClass('has-error');
+                    $('.spanUserText').text('No puedes dejar espacios en blanco');
+                    $('.spanUserText').show();
                     $('.user-v').hide();
                     $('#enviarregistro').addClass('disabled');
                  } else if(valor.length <= 3 ){
@@ -369,10 +371,10 @@ $('#password').focus(function(){
                      $('.user-v').addClass('text-danger');
                      $('#msgUsuario').html("El nombre de usuario ya existe, elige otro.");
                      $('#enviarregistro').addClass('disabled');
-                   
+
                 }
-                
-              
+
+
             }
         });
      }
@@ -381,7 +383,7 @@ $('#password').focus(function(){
 
 /*Verificar disponibilidad de email y validamos el campo*/
   $('#formEmail').keyup( function(){
-    if($('#formEmail').val()!= ""){   
+    if($('#formEmail').val()!= ""){
          email = $('#formEmail').val().trim();
 
         $.ajax({
@@ -433,10 +435,10 @@ $('#password').focus(function(){
                          $('.email-v').show();
                          $('#msgEmail').html("El email ya existe, elige otro.");
                          $('#enviarregistro').addClass('disabled');
-                   
+
                 }
-                
-              
+
+
             }
         });
      }
@@ -444,7 +446,7 @@ $('#password').focus(function(){
 
 
 
-   //Validamos el nombre comercial, este campo es opcional 
+   //Validamos el nombre comercial, este campo es opcional
    $('.formComercial').keyup(function(){
         valor = $('#formComercial').val();
         if(valor.length == 0 || /^\s+$/.test(valor) ){
@@ -466,8 +468,8 @@ $('#password').focus(function(){
          }
     });
 
-    
-    //Validamos la razon social, este campo es opcional 
+
+    //Validamos la razon social, este campo es opcional
     $('.formSocial').keyup(function(){
         valor = $('#formSocial').val();
         if(valor.length == 0 || /^\s+$/.test(valor) ){
@@ -490,12 +492,12 @@ $('#password').focus(function(){
     });
 
 
-    //validamos la primer contraseña	 
+    //validamos la primer contraseña
     $('.formPass1').keyup(function(){
         valor1 = $('#formPass1').val();
         valor2 = $('#formPass2').val();
 		if(valor1 != valor2 ){
-			$('#enviarregistro').addClass('disabled');       
+			$('#enviarregistro').addClass('disabled');
          }
 
 		if(valor1.indexOf(' ') >= 0){
@@ -506,8 +508,8 @@ $('#password').focus(function(){
 		  else if(valor1.length <= 5 ){
          	$('.formPass1').addClass('has-error');
          	$('.spanPass1').addClass('glyphicon glyphicon-remove form-control-feedback');
-			$('.spanPass1Text').text('Debe tener mas de 5 caracteres');	
-         } 
+			$('.spanPass1Text').text('Debe tener mas de 5 caracteres');
+         }
 
 		 else {
 		 	$('.formPass1').removeClass('has-error');
@@ -515,7 +517,7 @@ $('#password').focus(function(){
 		 	$('.spanPass1').addClass('glyphicon glyphicon-ok form-control-feedback');
          	$('.formPass1').addClass('has-success');
          	$('.spanPass1Text').text('');
-         } 
+         }
     });
 
 	//validamos la segunda contraseña
@@ -536,10 +538,10 @@ $('#password').focus(function(){
          	$('.formPass2').addClass('has-success');
          	$('.spanPass2Text').text('');
          	$('#enviarregistro').removeClass('disabled');
-     
+
          }
     });
-   
+
 
 
 

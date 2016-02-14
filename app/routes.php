@@ -31,17 +31,17 @@ Route::controller('admin', 'AdminController');
 
 
 //Ruta para los agentes
-Route::controller('agentes','AgentesController');  
+Route::controller('agentes','AgentesController');
 
 //listar pedidos
-Route::get('pedidos/listarpedidos', 'AgentesController@listarpedidos'); 
+Route::get('pedidos/listarpedidos', 'AgentesController@listarpedidos');
 
-Route::delete('pedidos/eliminarpedido/{id}', 'AgentesController@destroy'); 
+Route::delete('pedidos/eliminarpedido/{id}', 'AgentesController@destroy');
 
 Route::get('pedidos/detallepedido/{id}', 'AgentesController@detallepedido');
-Route::get('pedidos/verestatus', 'AgentesController@verestatus');    
-Route::get('pedidos/cambiarestatus', 'AgentesController@cambiarestatus'); 
-Route::POST('pedidos/infopedidos', 'AgentesController@infopedidos');    
+Route::get('pedidos/verestatus', 'AgentesController@verestatus');
+Route::get('pedidos/cambiarestatus', 'AgentesController@cambiarestatus');
+Route::POST('pedidos/infopedidos', 'AgentesController@infopedidos');
 
 
 
@@ -56,22 +56,24 @@ Route::controller('users','ProductoController');
 //ruta para obtener la clave del producto
 Route::bind('producto', function($clave){
 	return Producto::join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
+					->join('familia', 'producto.familia_id', '=', 'familia.id')
+					->select('producto.id','nombre','color','foto','piezas_paquete','clave','precio_venta','factor_descuento')
 					->where('clave', $clave)->first();
 
-
-					
 });
 
+//Admin
+Route::post('productos/verpedidos','AdminController@verpedidos');
 
 
 // Ruta para la busqueda de productos
-Route::post('productos/getProducto','ProductoController@getProducto'); 
+Route::post('productos/getProducto','ProductoController@getProducto');
 
-//Agregar producto al carrito con sus paquetes 
+//Agregar producto al carrito con sus paquetes
 Route::get('productos/add/{producto}/{quantity}','ProductoController@add');
 
 //Agregar productos al carrito con sus respectivos paquetes
-Route::get('productos/agregarproducto/{id}/{quantity}', 'ProductoController@agregarproducto'); 
+Route::get('productos/agregarproducto/{id}/{quantity}', 'ProductoController@agregarproducto');
 
 //Eliminar producto del carrito
 Route::post('productos/delete/{producto}', 'ProductoController@delete');
@@ -86,18 +88,18 @@ Route::post('productos/getLoginPass','ProductoController@getLoginPass');
 Route::post('productos/getVerificarUser','ProductoController@getVerificarUser');
 Route::post('productos/getVerificaremail','ProductoController@getVerificaremail');
 
-//Actualizar la cantidad de productos 
+//Actualizar la cantidad de productos
 Route::get('productos/update/{producto}/{quantity}','ProductoController@update');
 
 
-//Listar domcilios 
-Route::get('productos/listardomicilios', 'ProductoController@listardomicilios'); 
+//Listar domcilios
+Route::get('productos/listardomicilios', 'ProductoController@listardomicilios');
 
-//Eliminar domicilios   
-Route::delete('productos/eliminardomicilio', 'ProductoController@eliminardomicilio'); 
+//Eliminar domicilios
+Route::delete('productos/eliminardomicilio', 'ProductoController@eliminardomicilio');
 
 //Listar telefonos
-Route::get('productos/listartelefonos', 'ProductoController@listartelefonos'); 
+Route::get('productos/listartelefonos', 'ProductoController@listartelefonos');
 
 //Rutas de los catalogos
 Route::get('catalogo/{cat}', 'CatalogoController@getCatalogo');
@@ -126,7 +128,7 @@ Route::POST('municipios', function(){
 
 Route::get('productos/estado/{id}', 'ProductoController@estado');
 
-//Ruta para registrar pedido  
+//Ruta para registrar pedido
 Route::POST('productos/nuevopedido/{id}', 'ProductoController@nuevopedido');
 
 
@@ -141,7 +143,7 @@ Route::post('productos/actualizar', 'ProductoController@actualizar');
 //Verificar teléfonos
 Route::post('productos/getVerificarTel','ProductoController@getVerificarTel');
 
-//Detalle del pedido  
+//Detalle del pedido
 Route::get('productos/datosdelpedido/{iddom}', 'ProductoController@datosdelpedido');
 
 //Detalle del pedido  con domicilio existente

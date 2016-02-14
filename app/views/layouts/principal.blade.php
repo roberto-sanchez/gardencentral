@@ -33,7 +33,7 @@
                       @yield('username')
                       <i class="icon-caret-down"></i>
                   </a>
-                    
+
                   <ul class="dropdown-menu">
                       <li class="divider"></li>
                         <li><a href="#cambiarpass" data-toggle="modal"><span class="glyphicon glyphicon-lock"></span> Cambiar Contraseña</a></li>
@@ -199,37 +199,7 @@
    </footer>
 
 
-<!-- Modal para cambiar la contraseña -->
-    <div id="cambiarpass" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h2 class="modal-title text-danger"><span class="glyphicon glyphicon-lock"></span> Cambia tu contraseña</h2>
-                </div>
-                <div class="modal-body">
-                    {{ Form::open(array('url' => 'users/cambiarpass')) }}
-                   <h4 class="text-info">Contraseña Actual</h4>
-                   <div class=" form-group">
-                      {{ Form::password('password0', array('class' => 'form-control', 'placeholder' => 'Contraseña actual', 'required')) }}
-                    </div>
-                    <h4 class="text-info">Nueva Contraseña</h4>
-                    <div class=" form-group">
-                      {{ Form::password('password1', array('class' => 'form-control', 'placeholder' => 'Nueva contraseña', 'required')) }}
-                    </div>
-                    <div class=" form-group">
-                      {{ Form::password('password2', array('class' => 'form-control', 'placeholder' => 'Repetir la nueva contraseña', 'required')) }}
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                    {{ Form::submit('Guardar', array('class' => 'btn btn-primary', 'id' => 'registrar')) }}
-                        
-                  {{ Form::close() }}
-                </div>
-            </div>
-        </div>
-    </div>
+
 
 
   <!-- Modal II  para confirmar cambio de contraseña -->
@@ -264,7 +234,7 @@
         });
     </script>
 
-  
+
 
   </body>
 </html>
