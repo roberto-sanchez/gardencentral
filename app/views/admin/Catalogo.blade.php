@@ -627,6 +627,7 @@
       return respuesta;
     }
     
+
 //::::::::---- FUNCION PARA ENVIAR LOS DATOS PARA ALMACENARLOS  ----:::::::::::::::::::::::::::\\
     $(document).on('click','.enviarG', function(){
         catalogo = $(this).data('cat');
@@ -653,21 +654,29 @@
               break;
 
             case 'Cliente':
-                  if ($('#nombre_'+$(this).data('id')).val() === ""){
-                  msg += 'Ingrese el nombre. \n';
+                  if ($('#nombre_'+$(this).data('id')).val().trim() === ""){
+                    $('.nombre_'+$(this).data('id')).addClass('has-error');
                   validar = false;
+                  }else{
+                    $('.nombre_'+$(this).data('id')).removeClass('has-error');
                   }
-                  if ($('#paterno_'+$(this).data('id')).val() === ""){
-                    msg += 'Ingrese el apellido paterno. \n';
+                  if ($('#paterno_'+$(this).data('id')).val().trim() === ""){
+                    $('.paterno_'+$(this).data('id')).addClass('has-error');
                     validar = false;
+                  }else{
+                    $('.paterno_'+$(this).data('id')).removeClass('has-error');
                   }
-                  if ($('#materno_'+$(this).data('id')).val() === ""){
-                    msg += 'Ingrese el apellido materno. \n';
+                  if ($('#materno_'+$(this).data('id')).val().trim() === ""){
+                    $('.materno_'+$(this).data('id')).addClass('has-error');
                     validar = false;
+                  }else{
+                    $('.materno_'+$(this).data('id')).removeClass('has-error');
                   }
-                  if ($('#rfc_'+$(this).data('id')).val() === ""){
-                    msg += 'Ingrese la el RFC. \n';
+                  if ($('#rfc_'+$(this).data('id')).val().trim() === ""){
+                    $('.rfc_'+$(this).data('id')).addClass('has-error');
                     validar = false;
+                  }else{
+                    $('.rfc_'+$(this).data('id')).removeClass('has-error');
                   }
                  /* if ($('#nombre_comercial_'+$(this).data('id')).val() === ""){
                     msg += 'Ingrese el nombre comercial. \n';
@@ -684,27 +693,38 @@
                     }
                   }*/
 
-                  if ($('#agenteCliente_'+$(this).data('id')).val() === "-1"){
-                    msg += 'Seleccione un agente. \n';
+                  if ($('#agenteCliente_'+$(this).data('id')).val().trim() === "-1"){
+                    $('.agenteCliente_'+$(this).data('id')).addClass('has-error');
                     validar = false;
+                  }else{
+                    $('.agenteCliente_'+$(this).data('id')).removeClass('has-error');
                   }
-                  if ($('#descuento_'+$(this).data('id')).val() === "-1"){
-                    msg += 'Seleccione un descuento. \n';
+                  if ($('#descuento_'+$(this).data('id')).val().trim() === "-1"){
+                    $('.descuento_'+$(this).data('id')).addClass('has-error');
                     validar = false;
+                  }else{
+                    $('.descuento_'+$(this).data('id')).removeClass('has-error');
                   }
-                  if ($('#usuario_'+$(this).data('id')).val() === ""){
-                    msg += 'Ingrese el usuario. \n';
+                  if ($('#usuario_'+$(this).data('id')).val().trim() === ""){
+                    $('.usuario_'+$(this).data('id')).addClass('has-error');
                     validar = false;
+                  }else{
+                    $('.usuario_'+$(this).data('id')).removeClass('has-error');
                   }
-                  if ($(this).data('info')==="Guardar"){
-                    if ($('#password_'+$(this).data('id')).val() === ""){
-                      msg += 'Ingrese la contraseña. \n';
-                      validar = false;
-                    }
+                  if ($(this).val()==="Guardar"){
+                    if ($('#password_'+$(this).data('id')).val().trim() === ""){
+                        $('.password_'+$(this).data('id')).addClass('has-error');
+                        validar = false;
+                    }else{
+                        $('.password_'+$(this).data('id')).removeClass('has-error');
                   }
-                  if ($('#email_'+$(this).data('id')).val() === ""){
-                    msg += 'Ingrese el email. \n';
+                  }
+                  var regex = /[\w-\.]{2,}@([\w-]{2,}\.)*([\w-]{2,}\.)[\w-]{2,4}/;
+                  if (!regex.test( $('#email_'+$(this).data('id')).val().trim())) {
+                    $('.email_'+$(this).data('id')).addClass('has-error');
                     validar = false;
+                  }else{
+                    $('.email_'+$(this).data('id')).removeClass('has-error');
                   }
                 
               break;
@@ -814,7 +834,8 @@
         }
 
         if(!validar){//------- PREGUNTA SI LAS VALIDACIONES SON INCORRECTAS MUESTRA UNA ADVERTENCIA CON LOS ERRORES ------------------//
-          alertas('danger',"Ingrese todos los datos");
+         // alert(msg);
+          alertas('danger',"Ingrese todos los datos correctamente");
           $(this).prop('disabled',false);
         }else {  //-- SI LAS VALIDACIONES SON CORRECTAS SE PROCEDE A RECOGER LOS DATOS A ENVIAR ---//
           if(confirmar()){
@@ -1073,7 +1094,8 @@
                   },
                   error: function(msgError){
                     console.log(msgError.responseJSON);
-                    alert(msgError.responseJSON);
+                    
+                    alertas('danger',msgError.responseJSON);
                     $('#btn_guardar').prop('disabled',false);
                   }
 
@@ -1199,7 +1221,7 @@
             type: "DELETE",
             data: {catalogo: catalogo},
             success: function(respuesta){
-              alert('Datos eliminados');
+              alertas('success',"Registro eliminado");
               
               switch (catalogo){
                   case 'DireccionCliente':
@@ -1213,7 +1235,8 @@
             },
             error: function(respuesta){
               console.log(respuesta);
-              alert('no eliminado \n ' + respuesta.responseText);
+              alertas('success',"Registro no eliminado");
+              //alert('no eliminado \n ' + respuesta.responseText);
             }
           });
         }
@@ -1240,29 +1263,29 @@
         switch (catalogo){
                 case 'Cliente':
                     var cont= '<div class="row">'+
-                                '<div class="col-sm-3">'+
+                                '<div class="col-sm-3 nomCl'+(obj === null ? '0' : obj.id)+' " for="">'+
                                   '<label> NOMBRE:  </label>'+
-                                  '<input type="text" id="nombre_'+(obj === null ? '0' : obj.id)+'" value="'+(obj === null ? '' : obj.nombre_cliente)+'" class="form-control"></td>'+
+                                  '<input type="text" id="nombre_'+(obj === null ? '0' : obj.id)+'" value="'+(obj === null ? '' : obj.nombre_cliente)+'" class="form-control nomCl"></td>'+
                                 '</div>'+
-                                '<div class="col-sm-3">'+
+                                '<div class="col-sm-3 paterno_'+(obj === null ? 0 : obj.id)+'">'+
                                   '<label> PATERNO:  </label>'+
                                   '<input type="text" id="paterno_'+(obj === null ? 0 : obj.id)+'" value="'+(obj === null ? '' : obj.paterno)+'" class="form-control"></td></p>'+
                                 '</div>'+
-                                '<div class="col-sm-3">'+
+                                '<div class="col-sm-3 materno_'+(obj === null ? '0' : obj.id)+'">'+
                                   '<label> MATERNO:  </label>'+
                                   '<p><input type="text" id="materno_'+(obj === null ? '0' : obj.id)+'" value="'+(obj === null ? '' : obj.materno)+'" class="form-control">'+
                                 '</div>'+
                                '</div>'+
                               '<div class="row">'+
-                                '<div class=" col-sm-3">'+
+                                '<div class=" col-sm-3 rfc_'+(obj === null ? '0' : obj.id)+'">'+
                                   '<label> RCF:  </label>'+
                                   '<input type="text" id="rfc_'+(obj === null ? '0' : obj.id)+'"  value="'+(obj === null ? '' : obj.rfc)+'" class="form-control">'+
                                 '</div>'+
-                                '<div class=" col-sm-3" >'+
+                                '<div class=" col-sm-3 nombre_comercial_'+(obj === null ? '0' : obj.id)+'" >'+
                                   '<label> NOMBRE COMERCIAL:  </label>'+
                                   '<input type="text" id="nombre_comercial_'+(obj === null ? '0' : obj.id)+'" value="'+(obj === null ? '' : obj.nombre_comercial)+'" class="form-control"></td>'+
                                 '</div>'+
-                                '<div class=" col-sm-3">'+
+                                '<div class=" col-sm-3 razon_social_'+(obj === null ? '0' : obj.id)+'">'+
                                   '<label> RAZON SOCIAL:  </label>'+
                                   '<input type="text" id="razon_social_'+(obj === null ? '0' : obj.id)+'" value="'+(obj === null ? '' : obj.razon_social)+'" class="form-control"></td>  </p> '+
                                 '</div>'+
@@ -1272,28 +1295,28 @@
                                   '<label> NUMERO DE CLIENTE:  </label>'+
                                   '<input type="text" id="numeroCliente_'+(obj === null ? '0' : obj.id)+'" value="'+(obj === null ? '' : obj.numero_cliente)+'" class="form-control" readonly></td>  </p> '+
                                 '</div>'+
-                                '<div class="col-sm-3">'+
+                                '<div class="col-sm-3 agenteCliente_'+(obj === null ? '0' : obj.id)+'">'+
                                   '<label> AGENTE:  </label><br>'+
                                 '<select id="agenteCliente_'+(obj === null ? '0' : obj.id)+'" name="" class="form-control input-default" value="" required>' +
                                 '</select>' +
                                 '</div>'+
-                                '<div class=" col-sm-3">'+
+                                '<div class=" col-sm-3 descuento_'+(obj === null ? '0' : obj.id)+'">'+
                                   '<label> DESCUENTO:  </label><br>'+
                                   '<select id="descuento_'+(obj === null ? '0' : obj.id)+'" name="" class="form-control input-default" value="" required>' +
                                   '</select>' +
                                 '</div>'+
                               '</div>'+  
                               '<div class="row">'+
-                                '<div class="col-sm-3">'+
+                                '<div class="col-sm-3 usuario_'+(obj === null ? '0' : obj.id)+'">'+
                                   '<label> USUARIO:  </label>'+
                                   '<input type="text" id="usuario_'+(obj === null ? '0' : obj.id)+'" value="'+(obj === null ? '' : obj.usuario)+'" class="form-control" ></td>'+
                                   '<input type="hidden" id="usuario_id_'+(obj === null ? '0' : obj.id)+'" value="'+(obj === null ? '' : obj.idUsuario)+'" name="">'+  
                                 '</div>'+
-                                '<div class="col-sm-3">'+
+                                '<div class="col-sm-3 password_'+(obj === null ? '0' : obj.id)+'">'+
                                   (obj===null ? '<label> CONTRASEÑA:  </label>':'<button type="button" class="btn-link" id="nuevaPass" data-id="'+obj.id+'">NUEVA CONTRASEÑA</button>')+   
                                   '<input type="password" id="password_'+(obj === null ? '0' : obj.id)+'" value="" placeholder="Unicamente nueva contraseña" class="form-control" '+(obj===null ? '':'disabled')+'></td>'+
                                 '</div>'+
-                                '<div class="col-sm-3">'+
+                                '<div class="col-sm-3 email_'+(obj === null ? '0' : obj.id)+'">'+
                                   '<label> EMAIL:  </label>'+
                                   '<input type="email" id="email_'+(obj === null ? '0' : obj.id)+'" value="'+(obj === null ? '' : obj.email)+'" class="form-control" ></td>'+
                                 '</div>'+
