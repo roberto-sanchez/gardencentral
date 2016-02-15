@@ -3049,6 +3049,7 @@ margin-bottom:.5em;
 #acordeon h3 {
   border-bottom:1px solid white;
 	font-size: 12px;
+  font-weight:normal;
 	line-height: 34px;
 	padding: 0 10px;
   margin:0px;
@@ -3097,6 +3098,91 @@ margin-bottom:.5em;
 	display: block;
 }
 
+/*-----Totales de los pedidos-------*/
+.cont-sidebar{
+  width:62%;
+  margin-bottom: 1em;
+  padding:0 0 0 1.5em;;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient:horizontal;
+  -webkit-box-direction:normal;
+  -webkit-flex-direction:row;
+      -ms-flex-direction:row;
+          flex-direction:row;
+          -webkit-box-pack:justify;
+-webkit-justify-content:space-between;
+    -ms-flex-pack:justify;
+        justify-content:space-between;
+
+}
+
+.caja-s{
+  width:330px;
+}
+
+#i-total, #i-mas, #i-menos{
+  cursor:pointer;
+}
+
+/*-----Totales inventario--------*/
+.totales-inv, .inv-mas, .inv-menos{
+  width:100%;
+  padding:1em;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient:horizontal;
+  -webkit-box-direction:normal;
+  -webkit-flex-direction:row;
+      -ms-flex-direction:row;
+          flex-direction:row;
+          -webkit-flex-wrap:wrap;
+     -ms-flex-wrap:wrap;
+         flex-wrap:wrap;
+}
+.caja{
+  border-radius:3px;
+  border: 1px solid #cfcfd6;
+  box-shadow: 0px 2px 3px #999;
+  margin:.5em;
+  width:210px;
+  height:80px;
+  text-align:center;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align:center;
+  -webkit-align-items:center;
+      -ms-flex-align:center;
+          align-items:center;
+          -webkit-box-pack:center;
+  -webkit-justify-content:center;
+      -ms-flex-pack:center;
+          justify-content:center;
+}
+
+.total-inv{
+  margin-bottom:0;
+}
+
+.clave-inv{
+  margin-top:.5em;
+}
+
+.cont-text-i{
+  margin:0;
+  padding:0 0 0 1em;
+  width:100%;
+}
+
+.cont-text-i h2{
+  font-size:2em;
+}
 
 /*------ Mis puntos de corte ------*/
 @media(min-width:420px){

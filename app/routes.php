@@ -63,8 +63,7 @@ Route::bind('producto', function($clave){
 });
 
 //Admin
-Route::post('productos/verpedidos','AdminController@verpedidos');
-
+Route::post('pedidos/verpedidos','AdminController@verpedidos');
 
 // Ruta para la busqueda de productos
 Route::post('productos/getProducto','ProductoController@getProducto');

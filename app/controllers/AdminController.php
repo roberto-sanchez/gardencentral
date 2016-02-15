@@ -88,16 +88,7 @@ class AdminController extends \BaseController {
 	   ));
 	}
 
-	/**
-	 * Display a listing of the resource.
-	 * GET /admins
-	 *
-	 * @return Response
-	 */
-	public function index()
-	{
-		//
-	}
+
 
 	/**
 	 * Show the form for creating a new resource.

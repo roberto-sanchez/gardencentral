@@ -660,10 +660,10 @@
                   <span class="label label-danger esta center"></span>
                   </div>
                   <div class="modal-footer modal-confirmar">
+                    <button type="button" class="btn btn-danger confirm" data-dismiss="modal">No</button>
                   <button class="btn btn-primary confirm" data-dismiss="modal"> <!--   -->
                     Si
                   </button>
-                  <button type="button" class="btn btn-danger confirm" data-dismiss="modal">No</button>
                   </div>
                 </div>
               </div>

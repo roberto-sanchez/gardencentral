@@ -3,11 +3,11 @@
 class ProductoController extends \BaseController {
 
     //usamos el contructor para crear una variable de sesion solo si no existe
-public function __construct() {
-        //si no exixte la variable de sesion cart, entonses la creamos y lo guardamos es un array vacio
-        if(!\Session::has('cart')) \Session::put('cart', array());
+    public function __construct() {
+            //si no exixte la variable de sesion cart, entonses la creamos y lo guardamos es un array vacio
+            if(!\Session::has('cart')) \Session::put('cart', array());
 
-    }
+        }
 
     //Mostramos el contenido del carrito
     public function getIndex(){

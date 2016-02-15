@@ -175,7 +175,7 @@
         <li>
             <h3><span class="glyphicon glyphicon-stats"></span>Reportes</h3>
             <ul>
-                <li><a href="#">Enlace 1</a></li>
+                <li><a href="{{ URL::to('pedidos/consultas') }}">Consultas</a></li>
                 <li><a href="#">Enlace 2</a></li>
                 <li><a href="#">Enlace 3</a></li>
                 <li><a href="#">Enlace 4</a></li>

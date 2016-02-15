@@ -1111,7 +1111,6 @@ $(document).on('click', '.verfotop', function(){
 
     //Validaciones para los campos del formularios
     $(".ge-p").click(function () {
-
            if($('.formapago').val() != null){
                 $('.confirm-p').removeClass('disabled');
                 $('.regis-exixts-t').removeClass('disabled');
@@ -1124,19 +1123,7 @@ $(document).on('click', '.verfotop', function(){
         $('.text-selectdom').hide();
         expr = /^([1-9]{2}|[0-9][1-9]|[1-9][0-9])[0-9]{3}$/;
 
-    if($("#pais").val() == 0)  {
-        $('.pais').addClass('has-error');
-        return false;
-
-    } else if($("#estado").val() == 0){
-            $('.estado').addClass('has-error');
-            return false;
-
-    }  else if($("#municipio").val() == 0){
-            $('.municipio').addClass('has-error');
-            return false;
-
-    } else if($("#calle1").val().length <= 3){
+    if($("#calle1").val().length <= 3){
             $('.calle1').addClass('has-error');
             return false;
 
@@ -1154,6 +1141,18 @@ $(document).on('click', '.verfotop', function(){
 
     } else if(!expr.test($("#cp").val())){
             $('.cp').addClass('has-error');
+            return false;
+
+    } if($("#pais").val() == 0)  {
+        $('.pais').addClass('has-error');
+        return false;
+
+    } else if($("#estado").val() == 0){
+            $('.estado').addClass('has-error');
+            return false;
+
+    }  else if($("#municipio").val() == 0){
+            $('.municipio').addClass('has-error');
             return false;
 
     } else if($(".tel-celular").val() <= 8){
