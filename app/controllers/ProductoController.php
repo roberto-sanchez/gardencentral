@@ -54,6 +54,7 @@ public function __construct() {
             ->join('estado', 'direccion_cliente.estado_id', '=', 'estado.id')
             ->join('municipio', 'direccion_cliente.municipio_id', '=', 'municipio.id')
             ->select('direccion_cliente.id','pais','estados','municipio', 'calle1', 'calle2', 'colonia','delegacion','codigo_postal','numero','tipo')
+            ->where('direccion_cliente.estatus',1)
             ->where("direccion_cliente.cliente_id", $idcliente)->get();
 
 
@@ -65,25 +66,14 @@ public function __construct() {
 
         public function eliminardomicilio(){
         $id = Input::get('idd');
-        //obtenemos el id del telefono para poder eliminarlo
+        $estatus = 0;
 
+        //Actualizamos la direccion
+        $direccion = DireccionCliente::find($id);
+        $direccion->estatus = $estatus;
+        $direccion->save();
 
-
-
-        $domi = DireccionCliente::find($id); //consulta
-        $domi->pedidos()->delete(); // Borramos todos los pedidos asociados
-        $domi->delete(); // Borramos
-
-         //$tel = TelefonoCliente::find(145); //consulta
-        // $tel->direccionClientes()->delete();
-         //$tel->delete();
-        return Response::json($domi);
-         //Eliminamos el telefono
-        // $tel = TelefonoCliente::find($iddom); //consulta
-        // $tel->delete();
-      //  $todos = DireccionCliente::all(); //Opcional, obtenemos el contenido eliminado
-      //  return Response::json(array('todos'=>$todos)); //retornamos en un array el contenido eliminado
-
+        return Response::json('eliminado');
     }
 
     //Listar telefonos

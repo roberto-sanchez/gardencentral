@@ -8,6 +8,16 @@
        @include('layouts/inc/head_common')
        @include('layouts/inc/footer_common')
     @show
+    <script>
+        $(document).ready(function(){
+          $("#acordeon h3").click(function(){
+          $("#acordeon ul ul").slideUp();
+                if(!$(this).next().is(":visible")){
+                  $(this).next().slideDown();
+                }
+          })
+      });
+    </script>
   </head>
 
   <!--[if lt IE 7 ]> <body class="ie ie6"> <![endif]-->
@@ -141,49 +151,59 @@
     <!--   ___________Aside que estara oculto en dispositivos moviles ______________-->
     <div id="sidebar-nav" class="hidden-xs">
 
-        <ul id="dashboard-menu" class="nav nav-list">
-
-            <li class="active "><a rel="tooltip" data-placement="right" data-original-title="Dashboard" href="index.html"><i class="glyphicon glyphicon-home"></i> <span class="caption">Administración</span></a></li>
-
-
-            <li class=" "><a rel="tooltip" data-placement="right" data-original-title="Reports" href="reports.html"><i class="glyphicon glyphicon-stats"></i> <span class="caption">Reportes</span></a></li>
-
-
-            <li class=" "><a rel="tooltip" data-placement="right" data-original-title="UI Features" href="components.html"><i class="glyphicon glyphicon-briefcase"></i> <span class="caption">Paquetes</span></a></li>
-
-
-            <li class=" "><a rel="tooltip" data-placement="right" data-original-title="Pricing" href="pricing.html"><i class="glyphicon glyphicon-usd"></i> <span class="caption">Precios</span></a></li>
-
-
-            <li class=" "><a rel="tooltip" data-placement="right" data-original-title="Media" href=""><i class="glyphicon glyphicon-user"></i> <span class="caption">Usuarios</span></a></li>
-
-
-            <li class=" "><a rel="tooltip" data-placement="right" data-original-title="Blog" href="blog.html"><i class="glyphicon glyphicon-envelope"></i> <span class="caption">Mensajes</span></a></li>
-
-
-
-            <li class=" "><a rel="tooltip" data-placement="right" data-original-title="Help" href="help.html"><i class="glyphicon glyphicon-flag"></i> <span class="caption">Ayuda</span></a></li>
-
-
-            <li class=" "><a rel="tooltip" data-placement="right" data-original-title="Faq" href="faq.html"><i class="glyphicon glyphicon-ban-circle"></i> <span class="caption">Vacío</span></a></li>
-
-
-            <li class=" "><a rel="tooltip" data-placement="right" data-original-title="Calendar" href="calendar.html"><i class="glyphicon glyphicon-ban-circle"></i> <span class="caption">Vacío</span></a></li>
-
-
-            <li class=" "><a rel="tooltip" data-placement="right" data-original-title="Forms" href="forms.html"><i class="glyphicon glyphicon-ban-circle"></i> <span class="caption">Vacío</span></a></li>
-
-
-            <li class=" "><a rel="tooltip" data-placement="right" data-original-title="Tables" href="tables.html"><i class="glyphicon glyphicon-ban-circle"></i> <span class="caption">Vacío</span></a></li>
-
-
-
-            <li class=" theme-mobile-hack"><a rel="tooltip" data-placement="right" data-original-title="Mobile" href="mobile.html"><i class="glyphicon glyphicon-ban-circle"></i> <span class="caption">Vacío</span></a></li>
-
-            <li class=" "><a rel="tooltip" data-placement="right" data-original-title="Icons" href="icons.html"><i class="glyphicon glyphicon-ban-circle"></i> <span class="caption">Vacío</span></a></li>
-
-
-        </ul>
+      <div id="acordeon">
+    <ul>
+        <li>
+            <h3><span class="glyphicon glyphicon-home"></span>Administración</h3>
+            <ul>
+                <li><a href="#">Enlace 1</a></li>
+                <li><a href="#">Enlace 2</a></li>
+                <li><a href="#">Enlace 3</a></li>
+            </ul>
+        </li>
+        <!-- we will keep this LI open by default -->
+        <li class="active">
+            <h3><span class="glyphicon glyphicon-folder-open"></span>Catalogos</h3>
+            <ul>
+                <li><a href="#">Enlace 1</a></li>
+                <li><a href="#">Enlace 2</a></li>
+                <li><a href="#">Enlace 3</a></li>
+                <li><a href="#">Enlace 4</a></li>
+                <li><a href="#">Enlace 5</a></li>
+            </ul>
+        </li>
+        <li>
+            <h3><span class="glyphicon glyphicon-stats"></span>Reportes</h3>
+            <ul>
+                <li><a href="#">Enlace 1</a></li>
+                <li><a href="#">Enlace 2</a></li>
+                <li><a href="#">Enlace 3</a></li>
+                <li><a href="#">Enlace 4</a></li>
+                <li><a href="#">Enlace 5</a></li>
+                <li><a href="#">Enlace 6</a></li>
+                <li><a href="#">Enlace 7</a></li>
+            </ul>
+        </li>
+        <li>
+            <h3><span class="glyphicon glyphicon-folder-close"></span>Entradas</h3>
+            <ul>
+                <li><a href="#">Enlace 1</a></li>
+                <li><a href="#">Enlace 2</a></li>
+                <li><a href="#">Enlace 3</a></li>
+                <li><a href="#">Enlace 4</a></li>
+            </ul>
+        </li>
+         <li>
+            <h3><span class="glyphicon glyphicon-level-up"></span>Salidas</h3>
+            <ul>
+                <li><a href="#">Enlace 1</a></li>
+                <li><a href="#">Enlace 2</a></li>
+                <li><a href="#">Enlace 3</a></li>
+                <li><a href="#">Enlace 4</a></li>
+            </ul>
+        </li>
+    </ul>
+  </div>
     </div>
     <!--_________________________-->
 @show
