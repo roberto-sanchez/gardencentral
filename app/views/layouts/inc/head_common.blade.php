@@ -3,6 +3,7 @@
     {{ HTML::style('css/bootstrap.min.css') }}
     {{ HTML::style('css/estilosGlobales.css') }}
     {{ HTML::style('css/bootstrap-notify.css') }}
+    {{ HTML::style('css/alert-blackgloss.css') }}
        <!--
     <script src="lib/jquery-1.7.2.min.js" type="text/javascript"></script>
     <script src="js/site.js" type="text/javascript"></script>

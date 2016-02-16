@@ -175,15 +175,7 @@ class CatalogoController extends \BaseController {
 				 			 ->leftJoin('Nivel_Descuento','Nivel_Descuento.id', '=', 'cliente.nivel_descuento_id')
 				 			 ->select('cliente.id','cliente.rfc','cliente.nombre_cliente','cliente.paterno','cliente.materno','cliente.nombre_comercial','cliente.razon_social','cliente.numero_cliente','cliente.agente_id as idAgente','cliente.nivel_descuento_id as idDescuento','usuario.usuario','usuario.email','usuario.id as idUsuario','usuarioAg.usuario as agente','nivel_descuento.descripcion as descripcion')
 				 			 ->first();
-			/*		$resp['cliente'] = DB::table('cliente')   		// Recuperamos los valores previamente guardados
-	            			->where("id", $idCliente)->first();
-
-					$resp['usuario'] = DB::table('usuario')   		
-	            			->where("id" ,$idUsuario)->pluck('usuario');
-
-	            	$resp['descuento'] = DB::table('nivel_Descuento')
-	            			->where("id", $cliente->nivel_descuento_id)->pluck('descripcion');
-						*/
+			
        			return Response::json($resp);
        			}
 				break;
@@ -192,7 +184,7 @@ class CatalogoController extends \BaseController {
 				$telefono = new telefonoCliente;
 				$telefono -> cliente_id = Input::get('cliente_id');
 				$telefono -> numero = Input::get('numero');
-				$telefono -> tipo = Input::get('tipo');
+				$telefono -> tipo_tel = Input::get('tipo');
 				$telefono -> estatus = Input::get('estatus');
 				$telefono -> save();
 				$resp = DB::table('telefono_cliente')
@@ -212,13 +204,14 @@ class CatalogoController extends \BaseController {
 				$dirCliente -> cliente_id = Input::get('cliente_id');
 				$dirCliente -> tipo = Input::get('tipoDir');
 				$dirCliente -> estatus = "1";
+				$dirCliente -> telefono_cliente_id = Input::get('telefonoDir');
 				$dirCliente ->save();
 				$resp = DB::table('direccion_cliente as direccion')
 						-> where ('direccion.id','=', $dirCliente->id)
 						->leftJoin('pais','pais.id','=','direccion.pais_id')
 	 					->leftJoin('estado','estado.id','=','direccion.estado_id')
 	 					->leftJoin('municipio','municipio.id','=','direccion.municipio_id')
-	 					->select('direccion.id as idDir','direccion.cliente_id as idCliente','direccion.pais_id as idPais','direccion.estado_id as idEstado','direccion.municipio_id as idMunicipio','direccion.calle1','direccion.calle2','direccion.colonia','direccion.delegacion','direccion.codigo_postal','direccion.tipo','direccion.estatus','pais.pais','estado.estados','municipio.municipio' )
+	 					->select('direccion.id as idDir','direccion.cliente_id as idCliente','direccion.pais_id as idPais','direccion.estado_id as idEstado','direccion.municipio_id as idMunicipio','direccion.calle1','direccion.calle2','direccion.colonia','direccion.delegacion','direccion.codigo_postal','direccion.tipo','direccion.estatus','direccion.telefono_cliente_id as idTelDir','pais.pais','estado.estados','municipio.municipio' )
 	 					->first();
 				# code...
 				break;
@@ -379,7 +372,7 @@ class CatalogoController extends \BaseController {
 			case 'TelefonoCliente':
 					$telCliente = TelefonoCliente::find($id);
 					$telCliente -> numero = Input::get('numero');
-					$telCliente -> tipo = Input::get('tipo');
+					$telCliente -> tipo_tel = Input::get('tipo');
 					$telCliente -> cliente_id = Input::get('cliente_id');
 					$telCliente -> estatus = Input::get('estatus');
 					if($telCliente->save()){
@@ -401,13 +394,14 @@ class CatalogoController extends \BaseController {
 				//$dirCliente -> cliente_id = Input::get('cliente_id');
 				$dirCliente -> tipo = Input::get('tipoDir');
 				$dirCliente -> estatus = Input::get('estatus');
+				$dirCliente -> telefono_cliente_id = Input::get('telefonoDir');
 				$dirCliente ->save();
 				$resp = DB::table('direccion_cliente as direccion')
 						-> where ('direccion.id','=', $dirCliente->id)
 						->leftJoin('pais','pais.id','=','direccion.pais_id')
 	 					->leftJoin('estado','estado.id','=','direccion.estado_id')
 	 					->leftJoin('municipio','municipio.id','=','direccion.municipio_id')
-	 					->select('direccion.id as idDir','direccion.cliente_id as idCliente','direccion.pais_id as idPais','direccion.estado_id as idEstado','direccion.municipio_id as idMunicipio','direccion.calle1','direccion.calle2','direccion.colonia','direccion.delegacion','direccion.codigo_postal','direccion.tipo','direccion.estatus','pais.pais','estado.estados','municipio.municipio' )
+	 					->select('direccion.id as idDir','direccion.cliente_id as idCliente','direccion.pais_id as idPais','direccion.estado_id as idEstado','direccion.municipio_id as idMunicipio','direccion.calle1','direccion.calle2','direccion.colonia','direccion.delegacion','direccion.codigo_postal','direccion.tipo','direccion.estatus','direccion.telefono_cliente_id as idTelDir','pais.pais','estado.estados','municipio.municipio' )
 	 					->first();
 				# code...
 				break;
@@ -551,11 +545,11 @@ class CatalogoController extends \BaseController {
 			    if($validator->fails()) {
 			    //	return  $validator->messages();
 	        //verificamos que los campos requeridos no esten vacios, en caso de q si manda el msj de error
-		        	if($validator->messages()!='') { $mensajeError.="Completa correctamente los campos que se te piden. \n "; }
+		        	//if($validator->messages()!='') { $mensajeError.=""; }
 	          //Verificamos que la clave sea unica
-	          		if($validator->messages()->first('clave')) {	$mensajeError.="La clave ya existe. \n ";	}
+	          		if($validator->messages()->first('clave')) {	$mensajeError=';La clave ya existe. ;';	}
 	          //Verificamos que el nombre sea unico
-		        	if($validator->messages()->first('nombre')) {	$mensajeError.="El nombre ya existe. \n ";	}
+		        	if($validator->messages()->first('nombre')) {	$mensajeError.=';El nombre ya existe. ;';	}
 	      		}
 	      		break;
 				
@@ -592,7 +586,7 @@ class CatalogoController extends \BaseController {
 					[
 						'usuario' =>			'required|unique:Usuario,usuario'.$idUsuario,
 						$contraseña,
-						'email' =>				'required|email|unique:Usuario,usuario'.$idUsuario,
+						'email' =>				'required|email|unique:Usuario,email'.$idUsuario,
 						'rfc' =>				'required',
 						$usuario_id,
 						'agente_id' =>			'required',
@@ -606,19 +600,19 @@ class CatalogoController extends \BaseController {
 
 				);
 				if($validator->fails()) {
-	    		   	if($validator->messages()!='') { $mensajeError.="Completa correctamente los campos que se te piden. \n"; }
-		        	if($validator->messages()->first('rfc')) {	$mensajeError.="El rfc ya existe. \n";	}
-		        	if($validator->messages()->first('usuario_id')) {	$mensajeError.="usuario_id. \n";	}
-			       	if($validator->messages()->first('agente_id')) {	$mensajeError.="agente_id. \n";	}
-			       	if($validator->messages()->first('nivel_descuento_id')) {	$mensajeError.="nivel_descuento_id. \n";	}
-			       	if($validator->messages()->first('nombre')) {	$mensajeError.="nombre. \n";	}
-			       	if($validator->messages()->first('paterno')) {	$mensajeError.="paterno. \n";	}
-			      	if($validator->messages()->first('materno')) {	$mensajeError.="materno. \n";	}
-			       	if($validator->messages()->first('nombre_comercial')) {	$mensajeError.="nombre_comercial. \n";	}
-			       	if($validator->messages()->first('razon_social')) {	$mensajeError.="razon_social. \n";	}
-			       	if($validator->messages()->first('usuario')) {	$mensajeError.="usuario. \n";	}
-			       	if($validator->messages()->first('password')) {	$mensajeError.="password. \n";	}
-			       	if($validator->messages()->first('email')) {	$mensajeError.="email. \n";	}
+	    		   //	if($validator->messages()!='') { $mensajeError.="Completa correctamente los campos que se te piden. \n"; }
+		        	if($validator->messages()->first('rfc')) {	$mensajeError.=";El rfc ya existe. ;";	}
+		        	if($validator->messages()->first('usuario_id')) {	$mensajeError.=";usuario_id. ;";	}
+			       	if($validator->messages()->first('agente_id')) {	$mensajeError.=";agente_id.;";	}
+			       	if($validator->messages()->first('nivel_descuento_id')) {	$mensajeError.=";nivel_descuento_id. ;";	}
+			       	if($validator->messages()->first('nombre')) {	$mensajeError.=";nombre. ;";	}
+			       	if($validator->messages()->first('paterno')) {	$mensajeError.=";paterno. ;";	}
+			      	if($validator->messages()->first('materno')) {	$mensajeError.=";materno. ;";	}
+			       	if($validator->messages()->first('nombre_comercial')) {	$mensajeError.=";nombre_comercial. ;";	}
+			       	if($validator->messages()->first('razon_social')) {	$mensajeError.=";razon_social. ;";	}
+			       	if($validator->messages()->first('usuario')) {	$mensajeError.=";El usuario ya existe. ;";	}
+			       	if($validator->messages()->first('password')) {	$mensajeError.=";password. ;";	}
+			       	if($validator->messages()->first('email')) {	$mensajeError.=";El E-mail ya existe. ;";	}
 
 	      		}
 	      		break;
@@ -628,19 +622,19 @@ class CatalogoController extends \BaseController {
 		      		(
 		        		[
 			          		'numero' => Input::get('numero'),
-				   	    	'tipo' => Input::get('tipo'),	          
+				   	    	'tipo_tel' => Input::get('tipo'),	          
 				   	    	'cliente_id' => Input::get('cliente_id')
 			        	],
 		    	    	[
 			    	      'numero' => 'required',
-			        	  'tipo' => 'required',
+			        	  'tipo_tel' => 'required',
 			        	  'cliente_id' => 'required'
 				        ]
 		    		);
 		    	if($validator->fails()) {
 	    		   	if($validator->messages()!='') { $mensajeError.="Completa correctamente los campos que se te piden. \n"; }
 		        	if($validator->messages()->first('numero')) {	$mensajeError.="Se requiere el numero. \n";	}
-		        	if($validator->messages()->first('tipo')) {	$mensajeError.="Ingrese el tipo . \n";	}
+		        	if($validator->messages()->first('tipo_tel')) {	$mensajeError.="Ingrese el tipo . \n";	}
 			       	if($validator->messages()->first('cliente')) {	$mensajeError.="cliente. \n";	}
 			    }	
 					# code...
@@ -737,21 +731,34 @@ class CatalogoController extends \BaseController {
 	public function _getElementos($cat){
 		$resp[]=null;
 	 	
+	try {
+			
+			
 	 	switch ($cat) {
 	 		case 'tabCliente':		//:::::::::::::::::------  CATALOGO PARA LOS TABS DEL CLIENTE -------:::::::://
 	 			$idCliente = Input::get('id');
 	 			$resp['telefonoCliente'] = DB::table('telefono_cliente as telefono')
 	 								->where('cliente_id', '=', $idCliente)
-	 								->select('telefono.id as idTel','telefono.cliente_id as idCliente','telefono.numero','telefono.tipo','telefono.estatus')
+	 								->select('telefono.id as idTel','telefono.cliente_id as idCliente','telefono.numero','telefono.tipo_tel','telefono.estatus')
 	 								->get();
 	 			$resp['dirCliente'] = DB::table('direccion_cliente as direccion')
 	 								->where('cliente_id', '=', $idCliente)
 	 								->leftJoin('pais','pais.id','=','direccion.pais_id')
 	 								->leftJoin('estado','estado.id','=','direccion.estado_id')
 	 								->leftJoin('municipio','municipio.id','=','direccion.municipio_id')
-	 								->select('direccion.id as idDir','direccion.cliente_id as idCliente','direccion.pais_id as idPais','direccion.estado_id as idEstado','direccion.municipio_id as idMunicipio','direccion.calle1','direccion.calle2','direccion.colonia','direccion.delegacion','direccion.codigo_postal','direccion.tipo','direccion.estatus','pais.pais','estado.estados','municipio.municipio' )
+	 								//->leftJoin('telefono_cliente','telefono_cliente.id','=','direccion.telefono_cliente_id')
+	 								->select('direccion.id as idDir','direccion.cliente_id as idCliente','direccion.pais_id as idPais','direccion.estado_id as idEstado','direccion.municipio_id as idMunicipio','direccion.calle1','direccion.calle2','direccion.colonia','direccion.delegacion','direccion.codigo_postal','direccion.tipo','direccion.estatus','direccion.telefono_cliente_id as idTelDir','pais.pais','estado.estados','municipio.municipio')
 	 								->get();
 	 			
+	 			return Response::json($resp);
+	 			break;
+
+	 		case 'TelefonoDir':
+	 			$idCliente = Input::get('id');
+	 			$resp = DB::table('telefono_cliente as telefono')
+	 						->where('cliente_id','=',$idCliente)
+	 						->select('telefono.id','telefono.numero')
+	 						->get();
 	 			return Response::json($resp);
 	 			break;
 
@@ -801,7 +808,9 @@ class CatalogoController extends \BaseController {
 	 			# code...
 	 			break;
 	 	}
-		
+	} catch (Exception $e) {
+				return Response::json(array("error" => $e->getCode()), 500);
+		}	
 
 	}
 

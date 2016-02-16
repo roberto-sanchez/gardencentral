@@ -429,10 +429,11 @@
        
           
       </div>
-      <div class='notifications top-right'></div>
+     
     </div>
     
 </div>
+<div class='notifications top-right' data-html="true"></div>
 <!--::::::::::::::::::::::::::::: MODAL PARA LAS DIRECCIONES  :::::::::::::::::::::::::::::-->
 <div id="myModal" class="modal fade" tabindex="-1"  data-backdrop="static" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
   <div class="modal-dialog" >
@@ -523,6 +524,17 @@
               </div>
             </div>
           </div> 
+          <div class="row form-inline" style="text-align: center;">
+            <div class="col-sm-5  input-group" style="padding: 5px;">
+              <span class="input-group-addon" >
+                <span class="text-info">Teléfono</span>
+              </span>
+              <select class="form-control " id="telefonoDir" name="" required="required">
+              </select>
+            </div>
+            <div class="col-sm-5  input-group" style="padding: 5px;">
+            </div>
+          </div>
         </div>
         <div class="modal-footer" id="modalFooterDir">
         </div>
@@ -644,11 +656,11 @@
                   estatus=0;
                 }
                 if ($('#clave_'+$(this).data('id')).val() === ""){
-                  msg += 'Ingrese la clave. \n';
+                  msg += ';Ingrese la clave. ';
                   validar = false;
                 }
                 if ($('#nombre_'+$(this).data('id')).val()==="") {
-                  msg += 'Ingrese el nombre. \n';
+                  msg += ';Ingrese el nombre. ';
                   validar = false;
                 };  
               break;
@@ -781,48 +793,57 @@
                   estatus=0;
                 }
                 if ($('#telefono_'+$(this).data('id')).val() === ""){
-                  msg += 'Ingrese el telefono. \n';
+                  msg += ';Ingrese el telefono.';
                   validar = false;
                
                 }
                 if ($('#tipo_'+$(this).data('id')).val()==="-1") {
-                  msg += 'Seleccione el tipo de telefono. \n';
+                  msg += ';Seleccione el tipo de telefono.';
                   validar = false;
                 };  
 
               break;
 
             case 'DireccionCliente':
-                if ($('#pais').val() === ""){
-                    msg += 'Seleccione un pais. \n';
-                    validar = false;
-                  }
-                if ($('#estado').val() === ""){
-                    msg += 'Seleccione un estado. \n';
-                    validar = false;
-                  }
-                if ($('#municipio').val() === ""){
-                    msg += 'Seleccione un municipio. \n';
-                    validar = false;
-                  }
+                
                 if ($('#calle1').val() === ""){
-                    msg += 'Ingrese el nombre de la calle. \n';
+                    msg += ';Ingrese calle1.';
+                    validar = false;
+                  }
+                if ($('#calle2').val() === ""){
+                    msg += ';Ingrese calle2.';
                     validar = false;
                   }
                 if ($('#colonia').val() === ""){
-                    msg += 'Ingrese la colonia. \n';
+                    msg += ';Ingrese la colonia.';
                     validar = false;
                   }
                 if ($('#delegacion').val() === ""){
-                    msg += 'Ingrese la delegación. \n';
+                    msg += ';Ingrese la delegación.';
+                    validar = false;
+                  }
+                if ($('#pais').val() === ""){
+                    msg += ';Seleccione un pais.';
+                    validar = false;
+                  }
+                if ($('#estado').val() === ""){
+                    msg += ';Seleccione un estado.';
+                    validar = false;
+                  }
+                if ($('#municipio').val() === ""){
+                    msg += ';Seleccione un municipio.';
                     validar = false;
                   }
                 if ($('#cp').val() === ""){
-                    msg += 'Ingrese el Código Postal. \n';
+                    msg += ';Ingrese el Código Postal.';
                     validar = false;
                   }
                 if ($('#tipoDir').val() === ""){
-                    msg += 'Seleccione el tipo de domicilio. \n';
+                    msg += ';Seleccione el tipo de domicilio.';
+                    validar = false;
+                  }
+                if ($('#telefonoDir').val() === "-1"){
+                    msg += ';Seleccione un telefono.';
                     validar = false;
                   }
               break;
@@ -835,7 +856,12 @@
 
         if(!validar){//------- PREGUNTA SI LAS VALIDACIONES SON INCORRECTAS MUESTRA UNA ADVERTENCIA CON LOS ERRORES ------------------//
          // alert(msg);
-          alertas('danger',"Ingrese todos los datos correctamente");
+          var arreglo=msg.split(';');
+          for (var i=0; i<arreglo.length;i++){
+            if(arreglo[i]!==""){
+              alertas('error',arreglo[i]);
+            }
+          }
           $(this).prop('disabled',false);
         }else {  //-- SI LAS VALIDACIONES SON CORRECTAS SE PROCEDE A RECOGER LOS DATOS A ENVIAR ---//
           if(confirmar()){
@@ -941,6 +967,7 @@
                     cp      : $('#cp').val(),
                     tipoDir :  $('#tipoDir').val(),
                     estatus : (($('#estatusDirCliente').is(':checked')) ? '1' : '0'),
+                    telefonoDir : $('#telefonoDir').val(),
                   //tipo      : $('#tipo').val(),
                     cliente_id: $('#id_Cliente').val(),
                   //  estatus   : estatus,
@@ -991,13 +1018,13 @@
                       case 'TelefonoCliente':
                           var fila = '<tr id="tr_'+respuesta.id+'">' +
                                       '<td class="col-md-1"> <input type="text" value="'+respuesta.numero + '" id="telefono_'+respuesta.id+'" disabled="disabled" required class="form-control col-md-1">  </td>' +
-                                      '<td class="col-md-1"> <input type="text" value="'+respuesta.tipo + '" id="tipo_'+respuesta.id+'" disabled="disabled" required class="form-control col-md-1">  </td>' +
+                                      '<td class="col-md-1"> <input type="text" value="'+respuesta.tipo_tel + '" id="tipo_'+respuesta.id+'" disabled="disabled" required class="form-control col-md-1">  </td>' +
                                       '<td ><input type="checkbox" value="'+respuesta.estatus+'"  id="estatusTel_'+respuesta.id+'" disabled="disabled" '+(respuesta.estatus===1 ? 'checked':'') +' > </td>' +
                                       '<td class="col-md-1">'+
-                                            '<button type="button" value="Modificar" id="btn_mod" data-cat="TelefonoCliente" data-id="'+respuesta.id+'" class="modificar">Mod</button>'+
-                                            '<button type="button" value="Actualizar" id="btn_guardar_'+respuesta.id+'" disabled="disabled" data-cat="TelefonoCliente" data-id="'+respuesta.id+'" class="enviarG"> Act</button>'+
-                                            '<button type="button" id="btn_Eliminar" value="Eliminar" data-id="'+respuesta.id+'" data-cat="TelefonoCliente" > Eliminar</button>'+
-                                          '</td>'+
+                                          '<button type="button" value="Modificar" id="btn_mod" data-id="'+respuesta.id+'" data-cat="TelefonoCliente" class="modificar btn btn-primary" ><span class="glyphicon glyphicon-edit"></span></button>'+
+                                          '<button type="button" value="Actualizar" id="btn_guardar_'+respuesta.id+'" disabled="disabled" data-id="'+respuesta.id+'" data-cat="TelefonoCliente" class="enviarG btn btn-success" ><span class="glyphicon glyphicon-">OK</span></button>'+
+                                          '<button type="button" id="btn_Eliminar" value="Eliminar" data-id="'+respuesta.id+'" data-cat="TelefonoCliente" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>'+
+                                        '</td>'+
                                    '</tr>';
                           $('#tbodyCliente').append(fila);  //--- AGREGA LOS DATOS EN UN NUEVO <tr> AL FINAL DE LA TABLA  ---//
                           $('#telefono_0').val('');
@@ -1016,12 +1043,13 @@
                                              '<td >'+respuesta.calle2+'</td>'+ 
                                              '<td >'+respuesta.codigo_postal+'</td>'+ 
                                              '<td >'+respuesta.tipo+'</td>'+ 
-                                             '<td id="tdDir_'+respuesta.idDir+'">'+respuesta.estatus+'</td>'+ 
+                                             '<td id="tdDir_'+respuesta.idDir+'"><input type="checkbox" id="estatusDir_'+respuesta.idDir+'" disabled value="'+respuesta.estatus+'" '+(respuesta.estatus=== 1 ? 'checked':'')+' ></td>'+ 
                                              '<td >'+
-                                              '<a href="#myModal" role="button" class="btn btn-primary" data-toggle="modal" value="Modificar" data-info=\''+JSON.stringify(respuesta)+'\' id="editDirCliente"><span class="glyphicon glyphicon-edit"></span></a>'+
+                                              '<button type="button" class="btn btn-primary" data-accion="Modificar" data-toggle="modal" data-id="'+respuesta.idCliente+'" value="true" data-info=\''+JSON.stringify(respuesta)+'\' id="editDirCliente"><span class="glyphicon glyphicon-edit"></span></button>'+
                                              '</td>'+
                                         '</tr>';
                                   $('#tbodyClienteDir').append(trDir);
+                                  $('#myModal').modal('hide');
                         break;
 
                       case 'Comercializador':
@@ -1093,9 +1121,14 @@
                     
                   },
                   error: function(msgError){
-                    console.log(msgError.responseJSON);
-                    
-                    alertas('danger',msgError.responseJSON);
+                    console.log(msgError.responseText);
+
+                    var arreglo=msgError.responseText.split(';');
+                    for (var i=0; i<arreglo.length;i++){
+                      if(arreglo[i]!=='' && arreglo[i]!=="\""){
+                        alertas('error',arreglo[i]);
+                      }
+                    }
                     $('#btn_guardar').prop('disabled',false);
                   }
 
@@ -1177,7 +1210,7 @@
                                              '<td ><input type="checkbox" id="estatusDir_'+respuesta.idDir+'" disabled value="'+respuesta.estatus+'" '+(respuesta.estatus=== 1 ? 'checked':'')+ ' ></td>'+ 
                                              '<td >'+
                                               //'<button type="button" value="Modificar" id="btn_mod" data-id="'+direccion.idDir+'" data-cat="TelefonoCliente" data-info="'+direccion+'" class="modificar btn btn-primary"><span class="glyphicon glyphicon-edit"></span></button>'+
-                                              '<a href="#myModal" role="button" class="btn btn-primary" data-toggle="modal" value="Modificar" data-info=\''+JSON.stringify(respuesta)+'\' id="editDirCliente"><span class="glyphicon glyphicon-edit"></span></a>'+
+                                              '<button type="button" class="btn btn-primary" data-accion="Modificar" data-toggle="modal" data-id="'+respuesta.idCliente+'" value="true" data-info=\''+JSON.stringify(respuesta)+'\' id="editDirCliente"><span class="glyphicon glyphicon-edit"></span></button>'+
                                           //    '<input type="hidden" id="campo_id" value="" name="" >'+
                                            //   '<input type="hidden" id="tipoMov_" value="Actualizar"  >'+
                                            //   '<button type="button" value="Actualizar" id="btn_guardar_'+direccion.idDir+'" disabled="disabled" data-id="'+direccion.idDir+'" data-cat="TelefonoCliente" class="enviarG"> Act</button>'+
@@ -1192,11 +1225,17 @@
                         break;
 
                       }
-                      alertas('success',"Datos almacenados correctamente");
+                      alertas('success',"Datos actualizados correctamente");
                     },
-                    error: function(error){
-                      console.log(error);
-                      alert(error.responseJSON);
+                    error: function(msgError){
+                      console.log(msgError);
+                     
+                       var arreglo=msgError.responseText.split(';');
+                      for (var i=0; i<arreglo.length;i++){
+                        if(arreglo[i]!=='' && arreglo[i]!=="\""){
+                          alertas('error',arreglo[i]);
+                        }
+                      }
                       $(this).prop('disabled',false);
                       $('#btn_guardar').prop('disabled',false);
                     }
@@ -1235,7 +1274,7 @@
             },
             error: function(respuesta){
               console.log(respuesta);
-              alertas('success',"Registro no eliminado");
+              alertas('error',"Registro no eliminado");
               //alert('no eliminado \n ' + respuesta.responseText);
             }
           });
@@ -1263,7 +1302,7 @@
         switch (catalogo){
                 case 'Cliente':
                     var cont= '<div class="row">'+
-                                '<div class="col-sm-3 nomCl'+(obj === null ? '0' : obj.id)+' " for="">'+
+                                '<div class="col-sm-3 nombre_'+(obj === null ? '0' : obj.id)+' " for="">'+
                                   '<label> NOMBRE:  </label>'+
                                   '<input type="text" id="nombre_'+(obj === null ? '0' : obj.id)+'" value="'+(obj === null ? '' : obj.nombre_cliente)+'" class="form-control nomCl"></td>'+
                                 '</div>'+
@@ -1318,7 +1357,7 @@
                                 '</div>'+
                                 '<div class="col-sm-3 email_'+(obj === null ? '0' : obj.id)+'">'+
                                   '<label> EMAIL:  </label>'+
-                                  '<input type="email" id="email_'+(obj === null ? '0' : obj.id)+'" value="'+(obj === null ? '' : obj.email)+'" class="form-control" ></td>'+
+                                  '<input type="email" name="email"  id="email_'+(obj === null ? '0' : obj.id)+'" value="'+(obj === null ? '' : obj.email)+'" class="form-control" ></td>'+
                                 '</div>'+
                               '</div>'+
                               '<div class="row">'+
@@ -1369,9 +1408,9 @@
                                         '</thead>'+
                                         '<tbody id="tbodyCliente">'+
                                            '<tr id="tr_0">'+
-                                            '<td class="class="col-xs-4"><input type="text" id="telefono_0"  value="" class="form-control" '+(obj === null ? 'disabled' : '')+'> </td>'+
+                                            '<td class="class="col-xs-4"><input type="tel"  pattern="[0-9]{10}" onkeyup="" id="telefono_0"  value="" class="form-control" '+(obj === null ? 'disabled' : '')+'> </td>'+
                                             '<td class="class="col-xs-3">'+
-                                              '<select id="tipo_0" name="" class="input-xlarge form-control   options " value="" required>' +
+                                              '<select id="tipo_0" name="" class="input-xlarge form-control   options " value="" required '+(obj === null ? 'disabled' : '')+'>' +
                                                 '<option value="-1">Seleccione el tipo</option>'+
                                                 '<option value="Celular">Celular</option>'+
                                                 '<option value="Fijo">Fijo</option>'+
@@ -1401,7 +1440,7 @@
                                           '<th><h3>Tipo</h3></th>'+
                                           '<th><h3>estatus</h3></th>'+
                                           '<th>'+
-                                            '<a href="#myModal" role="button" class="btn btn-warning" data-toggle="modal" value="Guardar" id="editDirCliente"><span class="glyphicon glyphicon-open"></span></a>'+
+                                            '<button type="button" class="btn btn-warning" data-accion="Guardar" data-toggle="modal" data-id="'+(obj === null ? '' : obj.id)+'"value="Guardar" id="editDirCliente" '+(obj === null ? 'disabled' : '')+'><span class="glyphicon glyphicon-open"></span></button>'+
                                           '</th>'+
                                         '</thead>'+
                                         '<tbody id="tbodyClienteDir">'+
@@ -1415,11 +1454,11 @@
                     if (obj) { //:::::--- EN CASO DE SER UN CLIENTE YA REGISTRADO PROCEDE A CONSULTAR TODOS LOS DATOS EXISTENTES ---:::::\\
                       datos=obtenerElementos('tabCliente',obj.id);
                       datos.done(function(respuesta){
-                                  //console.log(respuesta);
-                                  var trTel="";
+                                  console.log(respuesta);
+                                  //var trTel="";
                                   $.each(respuesta['telefonoCliente'], function(index, telefono){
                                       //console.log(telefono);
-                                      trTel +=  '<tr id="tr_'+telefono.idTel+'">'+
+                                      var trTel =  '<tr id="tr_'+telefono.idTel+'">'+
                                                 '<td class="col-xs-4">'+
                                                   '<input type="text" id="telefono_'+telefono.idTel+'"  value="'+telefono.numero+'" class="form-control col-md-1" disabled>'+
                                                  '</td>'+ 
@@ -1438,8 +1477,12 @@
                                                 '</td>'+
                                               '</tr>';
                                       $('#tbodyCliente').append(trTel);
-                                      $('#tipo_'+telefono.idTel).val(telefono.tipo);         
+                                      $('#tipo_'+telefono.idTel).val(telefono.tipo_tel);         
                                     });
+                                  if (respuesta['telefonoCliente'].length===0){ //::-- VERIFICA QUE HAYA TELEFONOS PARA QUE SE PUEDA ABRIR EL MODAL
+                                    var abrirModal=false;                       //::-- DE LAS DIRECCIONES
+                                  }else{abrirModal=true;}
+                                  $('#editDirCliente').val(abrirModal);
                                   var trDir="";
                                   $.each(respuesta['dirCliente'], function(index, direccion){
                                       //console.log(direccion);
@@ -1455,24 +1498,31 @@
                                              '<td >'+direccion.tipo+'</td>'+ 
                                              '<td ><input type="checkbox" id="estatusDir_'+direccion.idDir+'" disabled value="'+direccion.estatus+'" '+(direccion.estatus=== 1 ? 'checked':'')+ ' ></td>'+ 
                                              '<td >'+
-                                              '<a href="#myModal" role="button" class="btn btn-primary" data-toggle="modal" value="Modificar" data-info=\''+JSON.stringify(direccion)+'\' id="editDirCliente"><span class="glyphicon glyphicon-edit"></span></a>'+
+                                              '<button type="button" class="btn btn-primary" data-accion="Modificar" data-id="'+(obj === null ? '' : obj.id)+'" data-toggle="modal" value="'+abrirModal+'" data-info=\''+JSON.stringify(direccion)+'\' id="editDirCliente"><span class="glyphicon glyphicon-edit"></span></button>'+
                                             '</td>'+
                                            '</tr>';
                                           
                                     });
-                                  $('#tbodyClienteDir').append(trDir);
+                                  $('#tbodyClienteDir').html(trDir);
                               });
                          
+                      
                     }
+
                     //console.log(obj);
                   break;
           }
 
-        $(document).on('click','#editDirCliente', function(){ //:::::-- FUNCION PARA ABRIR EL MODAL PARA UN INGRESAR O EDITAR UNA NUEVA DIRECCION DE CLIENTE
+        
+    }
+
+    $(document).on('click','#editDirCliente', function(){ //:::::-- FUNCION PARA ABRIR EL MODAL PARA UN INGRESAR O EDITAR UNA NUEVA DIRECCION DE CLIENTE
+                      if ($(this).val()==="true"){
+                        $('#myModal').modal('show');
                         var datos = $(this).data('info');
                         var options = "";
-                        var accion= $(this).val();
-                        var footerDir = '<input type="hidden" id="id_Cliente" value="'+((!datos) ? '0' : datos.idCliente)+'" name="">'+
+                        var idCliente= $(this).data('id');
+                        var footerDir = '<input type="hidden" id="id_Cliente" value="'+idCliente+'" name="">'+
                                         '<button type="button" id="btn_guardarDir" name="btn_guardar" value="'+((!datos) ? 'Guardar' : 'Actualizar')+'" data-id="'+((!datos) ? '0' : datos.idDir)+'" data-cat="DireccionCliente" class="enviarG  btn btn-success" >OK</button>';
                         $('#modalFooterDir').html(footerDir);
                         $('#calle1').val(((!datos) ? '' : datos.calle1));
@@ -1516,8 +1566,23 @@
                           $('#pais').html(options);
                           $('#pais').val(((!datos) ? '' : datos.idPais));
                         });
+
+                        var telefonoDir=obtenerElementos('TelefonoDir',idCliente);
+                        telefonoDir.done(function(respuesta){
+                          console.log(respuesta);
+                          var opTel = '<option value="-1">Seleccione teléfono</option>';
+                                    
+                          $.each(respuesta,function(index,telDir){
+                            opTel += '<option value="'+telDir.id+'">'+telDir.numero+'</option>';
+                          });
+                          $('#telefonoDir').html(opTel);
+                          $('#telefonoDir').val(((!datos) ? '-1' : datos.idTelDir));
+                        });
+                      }else{
+                        alertas('info',"Se debe ingresar al menos un telefono.")
+                      }
+                        
     }); 
-    }
 
     $(document).on('change','#pais', function(){ //::::--- FUNCION PARA CUANDO SE CAMBIE UN PAIS RECARGUE LOS ESTADOS ---:::://
                         var idPais = $(this).val();
@@ -1583,7 +1648,7 @@
 
   function alertas(tipo,mensaje){
     $('.top-right').notify({
-      message: { text: mensaje },
+      message: {text: decodeURIComponent(mensaje)},
       type: tipo
     }).show();
   }
