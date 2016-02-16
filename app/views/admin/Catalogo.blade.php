@@ -537,6 +537,7 @@
           </div>
         </div>
         <div class="modal-footer" id="modalFooterDir">
+          
         </div>
       </form>
     </div>
@@ -1523,6 +1524,7 @@
                         var options = "";
                         var idCliente= $(this).data('id');
                         var footerDir = '<input type="hidden" id="id_Cliente" value="'+idCliente+'" name="">'+
+                                        '<button type="button" class="btn btn-info" data-dismiss="modal" aria-hidden="true">CANCELAR</button>'+
                                         '<button type="button" id="btn_guardarDir" name="btn_guardar" value="'+((!datos) ? 'Guardar' : 'Actualizar')+'" data-id="'+((!datos) ? '0' : datos.idDir)+'" data-cat="DireccionCliente" class="enviarG  btn btn-success" >OK</button>';
                         $('#modalFooterDir').html(footerDir);
                         $('#calle1').val(((!datos) ? '' : datos.calle1));
