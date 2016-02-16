@@ -63,6 +63,7 @@ $(document).ready(function () {
                         $('#colorProd').html(prod.color); //el color
                         $('#piezasProd').html(prod.piezas_paquete);
                         $('#precioProd').html(accounting.formatMoney(prod.precio_venta));
+                        $('#descProd').html(prod.factor_descuento+'%');
                         $('.mialert').hide();
                         $('.mialert2').hide();
                         $('#noexiste').text('');

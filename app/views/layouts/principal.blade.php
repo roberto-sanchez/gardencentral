@@ -173,10 +173,10 @@
             </ul>
         </li>
         <li>
-            <h3><span class="glyphicon glyphicon-stats"></span>Reportes</h3>
+            <h3><span class="glyphicon glyphicon-search"></span>Consultas</h3>
             <ul>
-                <li><a href="{{ URL::to('pedidos/consultas') }}">Consultas</a></li>
-                <li><a href="#">Enlace 2</a></li>
+                <li><a href="{{ URL::to('consultas/pedidos') }}">Pedidos</a></li>
+                <li><a href="#">Enlace </a></li>
                 <li><a href="#">Enlace 3</a></li>
                 <li><a href="#">Enlace 4</a></li>
                 <li><a href="#">Enlace 5</a></li>
@@ -202,6 +202,12 @@
                 <li><a href="#">Enlace 4</a></li>
             </ul>
         </li>
+        <li>
+           <h3><span class="glyphicon glyphicon-list-alt"></span>Inventario</h3>
+           <ul>
+               <li><a href="{{ URL::to('consultas/inventario') }}">Consultas</a></li>
+           </ul>
+       </li>
     </ul>
   </div>
     </div>

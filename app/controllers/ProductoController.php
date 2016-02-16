@@ -202,7 +202,8 @@ public function getProducto(){
     $clave = Input::get('clave');
     $resp = DB::table('producto')
             ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-            ->select('producto.id','nombre','color','foto','piezas_paquete','clave','precio_venta')
+            ->join('familia', 'producto.familia_id', '=', 'familia.id')
+            ->select('producto.id','nombre','color','foto','piezas_paquete','clave','precio_venta', 'factor_descuento')
             ->where('clave', $clave)->first();
     if(count($resp)==0){
         $resp = array('indefinido' => 'El producto no existe. ');
@@ -488,7 +489,6 @@ public function getProducto(){
         return Response::json('correcto');
 
     }
-
 
 
     //actualizar la cntidad de productos

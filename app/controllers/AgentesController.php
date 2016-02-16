@@ -6,7 +6,7 @@ class AgentesController extends \BaseController {
 	public function __construct()
 	{
 
-		$this->beforeFilter('auth');  
+		$this->beforeFilter('auth');
 
 	}
 
@@ -24,8 +24,8 @@ class AgentesController extends \BaseController {
       //return Redirect::to('admin');
       return Redirect::to('users');
 
-    } 
-    	
+    }
+
    }
 
    //Pedidos
@@ -37,12 +37,12 @@ class AgentesController extends \BaseController {
    				->join('pedido','cliente.id', '=','pedido.cliente_id')
    				->OrderBy('created_at', 'DESC')
    				->where('cliente.agente_id', $ida)->get();
-   				
+
 
         //return Response::json($cliente);
         return Response::json(array('pedido' => $cliente));
-  
-    
+
+
     }
 
 
@@ -74,14 +74,14 @@ class AgentesController extends \BaseController {
     			->join('direccion_cliente','pedido.direccion_cliente_id', '=','direccion_cliente.id')
     			->where('pedido.id', $id)->pluck('pedido.direccion_cliente_id');
 
-    	$domi = DB::table('direccion_cliente') 
-            //->join('pedido', 'direccion_cliente.id', '=', 'pedido.direccion_cliente_id') 
-            ->join('cliente', 'direccion_cliente.cliente_id', '=', 'cliente.id')  
+    	$domi = DB::table('direccion_cliente')
+            //->join('pedido', 'direccion_cliente.id', '=', 'pedido.direccion_cliente_id')
+            ->join('cliente', 'direccion_cliente.cliente_id', '=', 'cliente.id')
             ->join('pais', 'direccion_cliente.pais_id', '=', 'pais.id')
             ->join('estado', 'direccion_cliente.estado_id', '=', 'estado.id')
             ->join('municipio', 'direccion_cliente.municipio_id', '=', 'municipio.id')
             ->join('telefono_cliente', 'direccion_cliente.telefono_cliente_id', '=', 'telefono_cliente.id')
-            ->where("direccion_cliente.id", $iddirec)->get(); 
+            ->where("direccion_cliente.id", $iddirec)->get();
 
           $ped = DB::table('cliente')
                 ->join('pedido','cliente.id', '=','pedido.cliente_id')
@@ -200,7 +200,7 @@ class AgentesController extends \BaseController {
 				$pedido -> delete();
 
 				Response::json('success');
-		
+
 
 	}
 

@@ -3184,6 +3184,12 @@ margin-bottom:.5em;
   font-size:2em;
 }
 
+/*--Tabla del Inventario--*/
+.data-inv{
+  width:90%;
+  margin:0 auto;
+}
+
 /*------ Mis puntos de corte ------*/
 @media(min-width:420px){
   #searchForm{

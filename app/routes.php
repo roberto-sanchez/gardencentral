@@ -65,6 +65,13 @@ Route::bind('producto', function($clave){
 //Admin
 Route::post('pedidos/verpedidos','AdminController@verpedidos');
 
+Route::get('consultas/inventario', 'AdminController@inventario');
+Route::get('consultas/pedidos', 'AdminController@pedidos');
+Route::get('consultas/listapedidos', 'AdminController@listapedidos');
+Route::get('consultas/listaagentes', 'AdminController@listaagentes');
+
+Route::POST('consultas/dpedidos', 'AdminController@dpedidos');
+
 // Ruta para la busqueda de productos
 Route::post('productos/getProducto','ProductoController@getProducto');
 
@@ -145,8 +152,6 @@ Route::post('productos/getVerificarTel','ProductoController@getVerificarTel');
 //Detalle del pedido
 Route::get('productos/datosdelpedido/{iddom}', 'ProductoController@datosdelpedido');
 
-//Detalle del pedido  con domicilio existente
-Route::get('productos/datosdelpedidoactual/{iddom}', 'ProductoController@datosdelpedidoactual');
 
 
 //Imprimir pdf

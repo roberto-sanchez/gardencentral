@@ -96,10 +96,70 @@ class AdminController extends \BaseController {
 	 *
 	 * @return Response
 	 */
-	public function create()
-	{
-		//
-	}
+	 public function inventario(){
+		 $inventario =	DB::table('producto')
+		 					->join('inventario','producto.id','=','inventario.producto_id')
+							->select('producto.id','clave','nombre','cantidad')
+							 ->get();
+		 return View::make('admin/inventario',
+	 											compact('inventario'));
+	 }
+
+	 public function pedidos(){
+		   return View::make('admin/pedidos');
+	 }
+
+	 public function listapedidos(){
+		 $pedidos =	DB::table('cliente')
+							->join('usuario','cliente.usuario_id','=','usuario.id')
+							->join('pedido','cliente.id','=','pedido.cliente_id')
+							->select('pedido.id','numero_cliente','nombre_cliente','agente_id', 'num_pedido','pedido.created_at','pedido.estatus','usuario')
+							->orderBy('created_at','desc')
+							 ->get();
+		  return Response::json(array('pedidos' => $pedidos));
+	 }
+
+	 public function listaagentes(){
+		 $id = Input::get('id');
+		 $agente = DB::table('usuario')
+		 					->select('usuario')
+		 					->where('id',$id)
+							->get();
+		 	return Response::json(array('agente' => $agente));
+	 }
+
+	 public function dpedidos(){
+		 $id = Input::get('id');
+
+		 //Obtenemos el id del producto detalle
+		 $d = DB::table('pedido')
+				 ->join('pedido_detalle','pedido.id', '=','pedido_detalle.pedido_id')
+				 ->where('pedido.id', $id)->pluck('pedido_detalle.id');
+
+		 $idd = DB::table('pedido')
+				 ->join('pedido_detalle','pedido.id', '=','pedido_detalle.pedido_id')
+				 ->where('pedido.id', $id)->pluck('pedido_detalle.producto_id');
+
+
+					$ped = DB::table('cliente')
+								->join('pedido','cliente.id', '=','pedido.cliente_id')
+								->where('pedido.id', $id)->get();
+
+
+		 $pro = DB::table('producto')
+								 ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
+								 ->join('producto_precio','producto.id', '=','producto_precio.producto_id')
+								 //->select('producto.created_at','precio_venta','clave','nombre','color','piezas_paquete')
+					 ->where('pedido_detalle.pedido_id', $id)->get();
+
+		 $dpro = DB::table('pedido_detalle')
+								 ->join('producto','pedido_detalle.producto_id', '=','producto.id')
+					 ->where('pedido_detalle.id', $d)->get();
+
+
+		 return Response::json(array('dpro' => $dpro, 'pro' => $pro, 'ped' => $ped));
+	 }
+
 
 	/**
 	 * Store a newly created resource in storage.

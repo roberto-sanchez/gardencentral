@@ -28,7 +28,6 @@
 <div class="users">
   <section class="container">
      @include('layouts/inc/estatus')
-
          <div class="buscador">
          {{ Form::open(['id'=>'searchForm','method' => 'POST', 'class' => 'buscador input-group has-feedback']) }}
 
@@ -65,6 +64,8 @@
                      Color: <span id="colorProd" class="text-info"></span>
                      <hr class="separador">
                      Precio: <span id="precioProd" class="text-info"></span>
+                     <hr class="separador">
+                     Descuento: <span id="descProd" class="text-info"></span>
                      <hr class="separador">
                      Piezas por paquete: <span id="piezasProd" class="text-info"></span>
                    </h2>
