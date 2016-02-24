@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost:3306
--- Tiempo de generación: 22-02-2016 a las 11:44:46
+-- Tiempo de generación: 23-02-2016 a las 20:06:14
 -- Versión del servidor: 5.6.26
 -- Versión de PHP: 5.5.30
 
@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS `cliente` (
   `numero_cliente` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB AUTO_INCREMENT=93 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=95 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `cliente`
@@ -114,7 +114,9 @@ INSERT INTO `cliente` (`id`, `rfc`, `usuario_id`, `agente_id`, `nivel_descuento_
 (89, 'uyigiugiughiu', 149, 92, 2, 'Cliente', 'Apellido', 'Apellido2', 'Comercial', '', '20160216123159149', '2016-02-16 18:31:59', '2016-02-16 18:31:59'),
 (90, 'melm8305281h0', 150, 0, 1, 'Juan', 'No se', '', '', '', '2016021752813150', '2016-02-17 11:28:13', '2016-02-17 11:28:13'),
 (91, 'melm8305281h0', 151, 0, 1, 'Oviler', 'Atom', '', '', '', '20160218170555151', '2016-02-18 23:05:55', '2016-02-18 23:05:55'),
-(92, 'melm8305281h0', 152, 27, 1, 'Benyi', 'Prais :p', '', 'Super Benyi', 'Portero Niupi', '20160220140001152', '2016-02-20 20:00:01', '2016-02-20 20:00:01');
+(92, 'melm8305281h0', 152, 27, 1, 'Benyi', 'Prais :p', '', 'Super Benyi', 'Portero Niupi', '20160220140001152', '2016-02-20 20:00:01', '2016-02-20 20:00:01'),
+(93, 'melm8305281h0', 153, 0, 1, 'Admin XD', 'SIn apellidos', '', '', '', '20160222182129153', '2016-02-23 00:21:29', '2016-02-23 00:21:29'),
+(94, 'melm8305281h0', 154, 0, 1, 'Homero', 'Simpsom', '', 'Contador', '', '20160223152914154', '2016-02-23 21:29:14', '2016-02-23 21:29:14');
 
 -- --------------------------------------------------------
 
@@ -128,7 +130,7 @@ CREATE TABLE IF NOT EXISTS `cliente_forma_pago` (
   `forma_pago_id` int(10) unsigned NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB AUTO_INCREMENT=721 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=730 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `cliente_forma_pago`
@@ -439,7 +441,16 @@ INSERT INTO `cliente_forma_pago` (`id`, `cliente_id`, `forma_pago_id`, `created_
 (717, 84, 1, '2016-02-22 18:24:56', '2016-02-22 18:24:56'),
 (718, 84, 3, '2016-02-22 18:30:27', '2016-02-22 18:30:27'),
 (719, 84, 1, '2016-02-22 18:36:23', '2016-02-22 18:36:23'),
-(720, 84, 1, '2016-02-22 19:41:59', '2016-02-22 19:41:59');
+(720, 84, 1, '2016-02-22 19:41:59', '2016-02-22 19:41:59'),
+(721, 84, 4, '2016-02-22 20:18:35', '2016-02-22 20:18:35'),
+(722, 84, 4, '2016-02-22 20:54:18', '2016-02-22 20:54:18'),
+(723, 84, 2, '2016-02-23 01:25:24', '2016-02-23 01:25:24'),
+(724, 84, 1, '2016-02-23 01:26:38', '2016-02-23 01:26:38'),
+(725, 84, 1, '2016-02-23 16:24:54', '2016-02-23 16:24:54'),
+(726, 84, 1, '2016-02-24 03:32:14', '2016-02-24 03:32:14'),
+(727, 84, 2, '2016-02-24 03:33:14', '2016-02-24 03:33:14'),
+(728, 84, 2, '2016-02-24 03:34:52', '2016-02-24 03:34:52'),
+(729, 91, 1, '2016-02-24 03:42:48', '2016-02-24 03:42:48');
 
 -- --------------------------------------------------------
 
@@ -526,7 +537,7 @@ CREATE TABLE IF NOT EXISTS `direccion_cliente` (
   `estatus` tinyint(1) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB AUTO_INCREMENT=383 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=385 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `direccion_cliente`
@@ -649,7 +660,9 @@ INSERT INTO `direccion_cliente` (`id`, `cliente_id`, `pais_id`, `estado_id`, `mu
 (379, 84, 1, 2, 15, 370, 'errerere', 'rererere', 'rerereer', 'rererrere', '66678', 'Otro', 1, '2016-02-21 20:22:13', '2016-02-21 20:22:13'),
 (380, 84, 1, 3, 20, 337, 'erererer', 'erererre', 'errereer', 'rereerer', '66666', 'Otro', 1, '2016-02-21 20:24:13', '2016-02-21 20:24:13'),
 (381, 84, 1, 2, 16, 371, 'dffdfd', 'dffdfdfd', 'fdfdfdfd', 'fdfdfd', '44533', 'Otro', 1, '2016-02-22 18:21:09', '2016-02-22 18:21:09'),
-(382, 84, 1, 1, 3, 337, 'hjjhhjjh', 'jhhjjh', 'jhjhjhjh', 'jhjhjhjhj', '77667', 'Otro', 1, '2016-02-22 18:24:56', '2016-02-22 18:24:56');
+(382, 84, 1, 1, 3, 337, 'hjjhhjjh', 'jhhjjh', 'jhjhjhjh', 'jhjhjhjhj', '77667', 'Otro', 1, '2016-02-22 18:24:56', '2016-02-22 18:24:56'),
+(383, 84, 1, 2, 14, 372, 'fdfdfd', 'fdfdfdfd', 'fdfddffd', 'fdfdfdfd', '44443', 'Otro', 1, '2016-02-23 01:26:38', '2016-02-23 01:26:38'),
+(384, 84, 1, 1, 4, 373, 'sadddsf', 'fdgdfgfdg', 'gggreerg', 'gegrgrgre', '55566', 'Otro', 1, '2016-02-24 03:34:52', '2016-02-24 03:34:52');
 
 -- --------------------------------------------------------
 
@@ -959,6 +972,60 @@ INSERT INTO `inventario` (`id`, `producto_id`, `cantidad`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `log`
+--
+
+CREATE TABLE IF NOT EXISTS `log` (
+  `id` int(10) unsigned NOT NULL,
+  `usuario_id` int(10) unsigned NOT NULL,
+  `pedido_id` int(10) unsigned NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `estatus_inicial` tinyint(1) NOT NULL,
+  `estatus_final` tinyint(1) NOT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `log`
+--
+
+INSERT INTO `log` (`id`, `usuario_id`, `pedido_id`, `created_at`, `estatus_inicial`, `estatus_final`, `updated_at`) VALUES
+(1, 154, 656, '2016-02-23 06:00:00', 1, 2, '0000-00-00 00:00:00'),
+(2, 154, 656, '2016-02-24 01:31:29', 1, 2, '2016-02-24 01:31:29'),
+(3, 154, 656, '2016-02-24 01:32:43', 0, 1, '2016-02-24 01:32:43'),
+(4, 154, 656, '2016-02-24 01:34:55', 3, 0, '2016-02-24 01:34:55'),
+(5, 154, 653, '2016-02-24 01:37:44', 1, 1, '2016-02-24 01:37:44'),
+(6, 154, 656, '2016-02-24 01:38:55', 1, 2, '2016-02-24 01:38:55'),
+(7, 154, 655, '2016-02-24 01:39:31', 2, 0, '2016-02-24 01:39:31'),
+(8, 154, 656, '2016-02-24 01:42:51', 2, 0, '2016-02-24 01:42:51'),
+(9, 154, 656, '2016-02-24 01:43:19', 0, 1, '2016-02-24 01:43:19'),
+(10, 154, 656, '2016-02-24 01:43:53', 1, 2, '2016-02-24 01:43:53'),
+(11, 154, 654, '2016-02-24 01:44:28', 2, 0, '2016-02-24 01:44:28'),
+(12, 154, 656, '2016-02-24 01:54:09', 2, 1, '2016-02-24 01:54:09'),
+(13, 154, 656, '2016-02-24 01:54:25', 1, 0, '2016-02-24 01:54:25'),
+(14, 154, 656, '2016-02-24 01:54:38', 0, 2, '2016-02-24 01:54:38'),
+(15, 154, 656, '2016-02-24 01:56:29', 2, 0, '2016-02-24 01:56:29'),
+(16, 154, 656, '2016-02-24 01:57:29', 0, 2, '2016-02-24 01:57:29'),
+(17, 154, 656, '2016-02-24 01:59:22', 2, 0, '2016-02-24 01:59:22'),
+(18, 154, 656, '2016-02-24 02:00:45', 0, 1, '2016-02-24 02:00:45'),
+(19, 154, 656, '2016-02-24 02:01:19', 1, 2, '2016-02-24 02:01:19'),
+(20, 154, 656, '2016-02-24 02:02:49', 2, 0, '2016-02-24 02:02:49'),
+(21, 154, 656, '2016-02-24 02:03:28', 0, 1, '2016-02-24 02:03:28'),
+(22, 154, 656, '2016-02-24 02:03:53', 1, 2, '2016-02-24 02:03:53'),
+(23, 154, 655, '2016-02-24 02:04:31', 0, 2, '2016-02-24 02:04:31'),
+(24, 154, 655, '2016-02-24 02:04:59', 2, 1, '2016-02-24 02:04:59'),
+(25, 154, 653, '2016-02-24 02:05:31', 1, 2, '2016-02-24 02:05:31'),
+(26, 154, 656, '2016-02-24 02:07:57', 2, 0, '2016-02-24 02:07:57'),
+(27, 154, 655, '2016-02-24 02:08:18', 1, 2, '2016-02-24 02:08:18'),
+(28, 154, 656, '2016-02-24 02:08:35', 0, 2, '2016-02-24 02:08:35'),
+(29, 154, 656, '2016-02-24 02:08:46', 2, 1, '2016-02-24 02:08:46'),
+(30, 154, 658, '2016-02-24 03:40:55', 0, 2, '2016-02-24 03:40:55'),
+(31, 154, 660, '2016-02-24 03:44:26', 0, 1, '2016-02-24 03:44:26'),
+(32, 154, 660, '2016-02-24 03:44:36', 1, 2, '2016-02-24 03:44:36');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `mensajeria`
 --
 
@@ -967,7 +1034,7 @@ CREATE TABLE IF NOT EXISTS `mensajeria` (
   `nombre` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB AUTO_INCREMENT=696 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=705 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `mensajeria`
@@ -1243,7 +1310,16 @@ INSERT INTO `mensajeria` (`id`, `nombre`, `created_at`, `updated_at`) VALUES
 (692, 'Tarjeta de crédito', '2016-02-22 18:24:56', '2016-02-22 18:24:56'),
 (693, 'Efectivo', '2016-02-22 18:30:27', '2016-02-22 18:30:27'),
 (694, 'Tarjeta de crédito', '2016-02-22 18:36:23', '2016-02-22 18:36:23'),
-(695, 'Tarjeta de crédito', '2016-02-22 19:41:59', '2016-02-22 19:41:59');
+(695, 'Tarjeta de crédito', '2016-02-22 19:41:59', '2016-02-22 19:41:59'),
+(696, 'Transferencia', '2016-02-22 20:18:35', '2016-02-22 20:18:35'),
+(697, 'Transferencia', '2016-02-22 20:54:18', '2016-02-22 20:54:18'),
+(698, 'Tarjeta de debito', '2016-02-23 01:25:24', '2016-02-23 01:25:24'),
+(699, 'Tarjeta de crédito', '2016-02-23 01:26:38', '2016-02-23 01:26:38'),
+(700, 'Tarjeta de crédito', '2016-02-23 16:24:54', '2016-02-23 16:24:54'),
+(701, 'Tarjeta de crédito', '2016-02-24 03:32:14', '2016-02-24 03:32:14'),
+(702, 'Tarjeta de debito', '2016-02-24 03:33:15', '2016-02-24 03:33:15'),
+(703, 'Tarjeta de debito', '2016-02-24 03:34:52', '2016-02-24 03:34:52'),
+(704, 'Tarjeta de crédito', '2016-02-24 03:42:48', '2016-02-24 03:42:48');
 
 -- --------------------------------------------------------
 
@@ -1450,14 +1526,14 @@ CREATE TABLE IF NOT EXISTS `pedido` (
   `cotizar_envio` tinyint(1) NOT NULL,
   `observaciones` text COLLATE utf8_unicode_ci NOT NULL,
   `estatus` tinyint(1) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=652 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=661 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `pedido`
 --
 
 INSERT INTO `pedido` (`id`, `cliente_id`, `mensajeria_id`, `direccion_cliente_id`, `forma_pago_id`, `num_pedido`, `fecha_registro`, `created_at`, `updated_at`, `fecha_entrega`, `cotizar_envio`, `observaciones`, `estatus`) VALUES
-(314, 80, 382, 248, 4, '2016020405480', '2016-02-01', '2016-02-04 10:07:36', '2016-02-04 10:07:36', '0000-00-00 00:00:00', 0, 'sddsdsds', 0),
+(314, 80, 382, 248, 4, '2016020405480', '2016-02-01', '2016-02-04 10:07:36', '2016-02-23 23:53:40', '0000-00-00 00:00:00', 0, 'sddsdsds', 1),
 (315, 80, 383, 249, 4, '2016020405480', '2016-02-01', '2016-02-04 10:11:03', '2016-02-04 10:11:03', '0000-00-00 00:00:00', 0, 'fdffdfdf', 0),
 (316, 80, 384, 250, 1, '2016020405480', '2016-02-01', '2016-02-04 10:12:14', '2016-02-04 10:12:14', '0000-00-00 00:00:00', 0, 'ddsddsdsds', 0),
 (317, 80, 385, 251, 3, '2016020405480', '2016-02-01', '2016-02-04 10:13:24', '2016-02-04 10:13:24', '0000-00-00 00:00:00', 0, 'dffd', 0),
@@ -1470,7 +1546,7 @@ INSERT INTO `pedido` (`id`, `cliente_id`, `mensajeria_id`, `direccion_cliente_id
 (324, 80, 392, 230, 1, '2016020405480', '2016-02-02', '2016-02-04 10:50:45', '2016-02-04 10:50:45', '0000-00-00 00:00:00', 0, ' ', 0),
 (325, 80, 393, 257, 2, '2016020405480', '2016-02-02', '2016-02-04 10:51:58', '2016-02-04 10:51:58', '0000-00-00 00:00:00', 0, 'df', 0),
 (326, 80, 394, 258, 4, '2016020405480', '2016-02-02', '2016-02-04 10:53:08', '2016-02-04 10:53:08', '0000-00-00 00:00:00', 0, 'hjjhjh', 0),
-(327, 81, 395, 259, 2, '2016020441681', '2016-02-02', '2016-02-04 17:19:16', '2016-02-15 07:27:34', '0000-00-00 00:00:00', 0, 'aaa.....', 2),
+(327, 81, 395, 259, 2, '2016020441681', '2016-02-02', '2016-02-04 17:19:16', '2016-02-23 23:52:18', '0000-00-00 00:00:00', 0, 'aaa.....', 0),
 (328, 76, 396, 260, 2, '2016020405476', '2016-02-02', '2016-02-04 17:22:53', '2016-02-04 17:22:53', '0000-00-00 00:00:00', 0, 'dsdsdssd....', 0),
 (329, 76, 397, 261, 2, '2016020405476', '2016-02-02', '2016-02-04 17:24:21', '2016-02-04 17:24:21', '0000-00-00 00:00:00', 0, '', 0),
 (330, 76, 398, 183, 2, '2016020405476', '2016-02-02', '2016-02-04 17:25:01', '2016-02-04 17:25:01', '0000-00-00 00:00:00', 0, ' ', 0),
@@ -1500,7 +1576,7 @@ INSERT INTO `pedido` (`id`, `cliente_id`, `mensajeria_id`, `direccion_cliente_id
 (354, 81, 430, 259, 2, '2016020555181', '0000-00-00', '2016-02-06 01:23:51', '2016-02-16 09:08:34', '0000-00-00 00:00:00', 0, ' ', 2),
 (363, 81, 439, 278, 4, '201602060181', '0000-00-00', '2016-02-06 19:30:01', '2016-02-17 11:53:57', '0000-00-00 00:00:00', 0, 'bnnbnbnb', 3),
 (364, 81, 440, 264, 4, '2016020664181', '0000-00-00', '2016-02-06 19:30:41', '2016-02-16 09:08:19', '0000-00-00 00:00:00', 0, ' ', 1),
-(365, 81, 441, 279, 2, '201602063681', '0000-00-00', '2016-02-06 19:31:36', '2016-02-17 11:53:44', '0000-00-00 00:00:00', 0, 'fgfgbbgbgf..', 1),
+(365, 81, 441, 279, 2, '201602063681', '0000-00-00', '2016-02-06 19:31:36', '2016-02-24 03:38:59', '0000-00-00 00:00:00', 0, 'fgfgbbgbgf..', 0),
 (369, 82, 445, 283, 2, '201602083182', '0000-00-00', '2016-02-08 17:40:31', '2016-02-08 17:40:31', '0000-00-00 00:00:00', 0, 'tyyttyty...', 0),
 (371, 82, 447, 285, 3, '20160208182', '0000-00-00', '2016-02-08 17:44:21', '2016-02-08 17:44:21', '0000-00-00 00:00:00', 0, 'qaqqaqa', 0),
 (372, 82, 451, 289, 2, '451', '0000-00-00', '2016-02-08 17:59:14', '2016-02-08 17:59:14', '0000-00-00 00:00:00', 0, 'ssasa', 0),
@@ -1639,7 +1715,7 @@ INSERT INTO `pedido` (`id`, `cliente_id`, `mensajeria_id`, `direccion_cliente_id
 (581, 92, 657, 376, 2, '2016022065792', '2016-02-20', '2016-02-21 05:25:42', '2016-02-21 05:25:42', '0000-00-00 00:00:00', 0, ' ', 0),
 (582, 92, 658, 377, 3, '2016022065892', '2016-02-20', '2016-02-21 05:26:52', '2016-02-21 05:26:52', '0000-00-00 00:00:00', 0, 'ergfergert', 0),
 (583, 92, 659, 377, 3, '2016022065992', '2016-02-20', '2016-02-21 05:30:48', '2016-02-21 05:30:48', '0000-00-00 00:00:00', 0, ' ', 0),
-(584, 92, 660, 376, 2, '2016022066092', '2016-02-20', '2016-02-21 05:31:56', '2016-02-21 05:31:56', '0000-00-00 00:00:00', 0, ' ', 0),
+(584, 92, 660, 376, 2, '2016022066092', '2016-02-20', '2016-02-21 05:31:56', '2016-02-23 23:54:24', '0000-00-00 00:00:00', 0, ' ', 2),
 (585, 84, 661, 340, 3, '2016022066184', '2016-02-20', '2016-02-21 05:33:24', '2016-02-21 05:33:24', '0000-00-00 00:00:00', 0, ' ', 0),
 (586, 84, 662, 339, 3, '2016022066284', '2016-02-20', '2016-02-21 05:34:59', '2016-02-21 05:34:59', '0000-00-00 00:00:00', 0, ' ', 0),
 (587, 84, 663, 339, 2, '2016022066384', '2016-02-20', '2016-02-21 05:35:59', '2016-02-21 05:35:59', '0000-00-00 00:00:00', 0, ' ', 0),
@@ -1691,7 +1767,7 @@ INSERT INTO `pedido` (`id`, `cliente_id`, `mensajeria_id`, `direccion_cliente_id
 (633, 84, 682, 366, 2, '2016022168284', '2016-02-21', '2016-02-21 19:02:49', '2016-02-21 19:02:49', '0000-00-00 00:00:00', 0, ' ', 0),
 (634, 84, 0, 0, 0, '2016022184', '2016-02-21', '2016-02-21 19:09:37', '2016-02-21 19:09:37', '0000-00-00 00:00:00', 0, ' ', 0),
 (635, 84, 683, 378, 2, '2016022168384', '2016-02-21', '2016-02-21 19:12:41', '2016-02-21 19:12:41', '0000-00-00 00:00:00', 0, 'gergerger', 0),
-(636, 84, 0, 0, 0, '2016022184', '2016-02-21', '2016-02-21 19:24:17', '2016-02-21 19:24:17', '0000-00-00 00:00:00', 0, ' ', 0),
+(636, 84, 0, 0, 0, '2016022184', '2016-02-21', '2016-02-21 19:24:17', '2016-02-23 23:45:16', '0000-00-00 00:00:00', 0, ' ', 1),
 (637, 84, 684, 340, 2, '2016022168484', '2016-02-21', '2016-02-21 19:51:50', '2016-02-21 19:51:50', '0000-00-00 00:00:00', 0, ' ', 0),
 (638, 84, 0, 0, 0, '2016022184', '2016-02-21', '2016-02-21 20:09:46', '2016-02-21 20:09:46', '0000-00-00 00:00:00', 0, ' ', 0),
 (639, 84, 0, 0, 0, '2016022184', '2016-02-21', '2016-02-21 20:18:30', '2016-02-21 20:18:30', '0000-00-00 00:00:00', 0, ' ', 0),
@@ -1699,14 +1775,23 @@ INSERT INTO `pedido` (`id`, `cliente_id`, `mensajeria_id`, `direccion_cliente_id
 (641, 84, 686, 379, 3, '2016022168684', '2016-02-21', '2016-02-21 20:22:13', '2016-02-21 20:22:13', '0000-00-00 00:00:00', 0, 'XD...', 0),
 (642, 84, 687, 380, 3, '2016022168784', '2016-02-21', '2016-02-21 20:24:14', '2016-02-21 20:24:14', '0000-00-00 00:00:00', 0, ':p ...', 0),
 (643, 84, 0, 0, 0, '2016022184', '2016-02-21', '2016-02-22 02:25:02', '2016-02-22 02:25:02', '0000-00-00 00:00:00', 0, ' ', 0),
-(644, 84, 688, 0, 3, '2016022268884', '2016-02-22', '2016-02-22 17:43:27', '2016-02-22 17:43:27', '0000-00-00 00:00:00', 0, ' ', 0),
+(644, 84, 688, 0, 3, '2016022268884', '2016-02-22', '2016-02-22 17:43:27', '2016-02-23 00:27:16', '0000-00-00 00:00:00', 0, ' ', 2),
 (645, 84, 689, 355, 2, '2016022268984', '2016-02-22', '2016-02-22 18:17:11', '2016-02-22 18:17:11', '0000-00-00 00:00:00', 1, ' ', 0),
-(646, 84, 690, 0, 3, '2016022269084', '2016-02-22', '2016-02-22 18:18:08', '2016-02-22 18:18:08', '0000-00-00 00:00:00', 0, ' ', 0),
-(647, 84, 691, 381, 1, '2016022269184', '2016-02-22', '2016-02-22 18:21:09', '2016-02-22 18:21:09', '0000-00-00 00:00:00', 1, 'xsxsxsxs', 0),
+(646, 84, 690, 0, 3, '2016022269084', '2016-02-22', '2016-02-22 18:18:08', '2016-02-23 00:11:43', '0000-00-00 00:00:00', 0, ' ', 1),
+(647, 84, 691, 381, 1, '2016022269184', '2016-02-22', '2016-02-22 18:21:09', '2016-02-23 00:11:02', '0000-00-00 00:00:00', 1, 'xsxsxsxs', 2),
 (648, 84, 692, 382, 1, '2016022269284', '2016-02-22', '2016-02-22 18:24:56', '2016-02-22 18:24:56', '0000-00-00 00:00:00', 1, 'Sin comentarios XD ...', 0),
 (649, 84, 693, 366, 3, '2016022269384', '2016-02-22', '2016-02-22 18:30:27', '2016-02-22 18:30:27', '0000-00-00 00:00:00', 1, ' ', 0),
-(650, 84, 694, 0, 1, '2016022269484', '2016-02-22', '2016-02-22 18:36:23', '2016-02-22 18:36:23', '0000-00-00 00:00:00', 0, ' ', 0),
-(651, 84, 695, 0, 1, '2016022269584', '2016-02-22', '2016-02-22 19:41:59', '2016-02-22 19:41:59', '0000-00-00 00:00:00', 0, ' ', 0);
+(650, 84, 694, 0, 1, '2016022269484', '2016-02-22', '2016-02-22 18:36:23', '2016-02-23 00:05:04', '0000-00-00 00:00:00', 0, ' ', 1),
+(651, 84, 695, 0, 1, '2016022269584', '2016-02-22', '2016-02-22 19:41:59', '2016-02-23 00:04:51', '0000-00-00 00:00:00', 0, ' ', 0),
+(652, 84, 696, 0, 4, '2016022269684', '2016-02-22', '2016-02-22 20:18:35', '2016-02-22 22:06:00', '0000-00-00 00:00:00', 0, ' ', 1),
+(653, 84, 697, 0, 4, '2016022284697', '2016-02-22', '2016-02-22 20:54:18', '2016-02-24 02:05:30', '0000-00-00 00:00:00', 0, ' ', 2),
+(654, 84, 698, 0, 2, '2016022284698', '2016-02-22', '2016-02-23 01:25:24', '2016-02-24 01:44:23', '0000-00-00 00:00:00', 0, ' ', 0),
+(655, 84, 699, 383, 1, '2016022284699', '2016-02-22', '2016-02-23 01:26:38', '2016-02-24 02:08:18', '0000-00-00 00:00:00', 1, 'assasasa', 2),
+(656, 84, 700, 0, 1, '2016022384700', '2016-02-23', '2016-02-23 16:24:54', '2016-02-24 02:08:46', '0000-00-00 00:00:00', 0, ' ', 1),
+(657, 84, 701, 0, 1, '2016022384701', '2016-02-23', '2016-02-24 03:32:14', '2016-02-24 03:32:14', '0000-00-00 00:00:00', 0, ' ', 0),
+(658, 84, 702, 383, 2, '2016022370284', '2016-02-23', '2016-02-24 03:33:15', '2016-02-24 03:40:55', '0000-00-00 00:00:00', 1, ' ', 2),
+(659, 84, 703, 384, 2, '2016022384703', '2016-02-23', '2016-02-24 03:34:52', '2016-02-24 03:37:19', '0000-00-00 00:00:00', 1, 'qdqwdqw', 3),
+(660, 91, 704, 0, 1, '2016022391704', '2016-02-23', '2016-02-24 03:42:48', '2016-02-24 03:47:44', '0000-00-00 00:00:00', 0, ' ', 1);
 
 -- --------------------------------------------------------
 
@@ -1721,7 +1806,7 @@ CREATE TABLE IF NOT EXISTS `pedido_detalle` (
   `cantidad` double NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB AUTO_INCREMENT=569 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=583 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `pedido_detalle`
@@ -2243,7 +2328,21 @@ INSERT INTO `pedido_detalle` (`id`, `pedido_id`, `producto_id`, `cantidad`, `cre
 (565, 650, 3, 44, '2016-02-22 18:36:23', '2016-02-22 18:36:23'),
 (566, 650, 9, 3, '2016-02-22 18:36:23', '2016-02-22 18:36:23'),
 (567, 650, 1, 88, '2016-02-22 18:36:23', '2016-02-22 18:36:23'),
-(568, 651, 5, 1, '2016-02-22 19:41:59', '2016-02-22 19:41:59');
+(568, 651, 5, 1, '2016-02-22 19:41:59', '2016-02-22 19:41:59'),
+(569, 652, 4, 78, '2016-02-22 20:18:35', '2016-02-22 20:18:35'),
+(570, 652, 6, 6, '2016-02-22 20:18:35', '2016-02-22 20:18:35'),
+(571, 653, 6, 14, '2016-02-22 20:54:18', '2016-02-22 20:54:18'),
+(572, 653, 4, 22, '2016-02-22 20:54:18', '2016-02-22 20:54:18'),
+(573, 653, 2, 3, '2016-02-22 20:54:18', '2016-02-22 20:54:18'),
+(574, 654, 4, 2, '2016-02-23 01:25:24', '2016-02-23 01:25:24'),
+(575, 655, 9, 3, '2016-02-23 01:26:38', '2016-02-23 01:26:38'),
+(576, 656, 9, 16, '2016-02-23 16:24:54', '2016-02-23 16:24:54'),
+(577, 657, 9, 16, '2016-02-24 03:32:14', '2016-02-24 03:32:14'),
+(578, 658, 4, 45, '2016-02-24 03:33:15', '2016-02-24 03:33:15'),
+(579, 658, 6, 80, '2016-02-24 03:33:15', '2016-02-24 03:33:15'),
+(580, 659, 2, 6, '2016-02-24 03:34:53', '2016-02-24 03:34:53'),
+(581, 659, 8, 40, '2016-02-24 03:34:53', '2016-02-24 03:34:53'),
+(582, 660, 4, 6, '2016-02-24 03:42:48', '2016-02-24 03:42:48');
 
 -- --------------------------------------------------------
 
@@ -2293,7 +2392,7 @@ CREATE TABLE IF NOT EXISTS `producto` (
   `estatus` tinyint(1) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `producto`
@@ -2308,7 +2407,9 @@ INSERT INTO `producto` (`id`, `clave`, `numero_articulo`, `nombre`, `ean_code`, 
 (6, 'AC133', 'C5066', 'Velas decorativas. Tamaño Chico', '1110415002963', 'white', 23, 1, 12, '260x260x395', 60, 1920, 'VelasdecorativasChico.png', 1, 1, 1, 0, 0, 1, 1, '2016-02-14 06:00:00', '0000-00-00 00:00:00'),
 (7, 'AC135', 'C7066', 'Maceta cerámica para plantas con diseño decorativo antiguo', '9910415002988', 'blue', 89, 1, 4, '260x260x395', 60, 1920, 'Macetacerámicaparaplantasdecorativoantiguo.png', 1, 1, 3, 0, 0, 1, 1, '2016-02-14 06:00:00', '0000-00-00 00:00:00'),
 (8, 'AC15', 'C9056', 'Porta vela cerámica con vidrio', '8810415002976', 'white', 56, 1, 12, '260x260x395', 60, 1920, 'Portavelaceramicaconvidrio.png', 1, 1, 2, 0, 0, 1, 1, '2016-02-14 06:00:00', '0000-00-00 00:00:00'),
-(9, 'AC29', 'C6032', 'Maceta cerámica rectangular para balcón con diseño decorativo antiguo', '3710415002955', 'pearl', 78, 1, 12, '260x260x395', 60, 11920, 'Macetaceramicarectangularparabalcondecorativoantiguo.png', 1, 1, 1, 0, 0, 1, 1, '2016-02-14 06:00:00', '0000-00-00 00:00:00');
+(9, 'AC29', 'C6032', 'Maceta cerámica rectangular para balcón con diseño decorativo antiguo', '3710415002955', 'pearl', 78, 1, 12, '260x260x395', 60, 11920, 'Macetaceramicarectangularparabalcondecorativoantiguo.png', 1, 1, 1, 0, 0, 1, 1, '2016-02-14 06:00:00', '0000-00-00 00:00:00'),
+(10, 'AH001', 'C6044', 'Planta de Tomillo en maceta terracota (CH)', '3710415002999', 'grey', 47, 1, 4, '260x260x395', 60, 11920, 'PlantadeTomilloenmacetaterracota.png', 1, 1, 1, 1, 23, 1, 1, '2016-02-23 06:00:00', '0000-00-00 00:00:00'),
+(11, 'AH003', 'C6088', 'Planta de Menta en maceta terracota (CH)', '3710415002761', 'grey', 47, 1, 2, '260x260x395', 60, 11920, 'PlantadeMentaenmacetaterracota(CH).png', 1, 1, 1, 1, 70, 1, 1, '2016-02-23 06:00:00', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -2324,7 +2425,7 @@ CREATE TABLE IF NOT EXISTS `producto_precio` (
   `moneda` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `vigencia` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `estatus` tinyint(1) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `producto_precio`
@@ -2339,7 +2440,9 @@ INSERT INTO `producto_precio` (`id`, `producto_id`, `precio_compra`, `precio_ven
 (7, 6, 90, 107, '$', '2016-02-14 06:00:00', 1),
 (8, 7, 40, 80, '$', '2016-02-14 06:00:00', 1),
 (9, 8, 108, 134, '$', '2016-02-14 06:00:00', 1),
-(10, 9, 150, 170, '$', '2016-02-14 06:00:00', 1);
+(10, 9, 150, 170, '$', '2016-02-14 06:00:00', 1),
+(11, 10, 80, 120, '$', '2016-02-23 06:00:00', 1),
+(12, 11, 99, 160, '$', '2016-02-23 06:00:00', 1);
 
 -- --------------------------------------------------------
 
@@ -2404,7 +2507,7 @@ CREATE TABLE IF NOT EXISTS `telefono_cliente` (
   `estatus` tinyint(1) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB AUTO_INCREMENT=372 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=374 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `telefono_cliente`
@@ -2507,7 +2610,9 @@ INSERT INTO `telefono_cliente` (`id`, `cliente_id`, `numero`, `tipo_tel`, `estat
 (368, 92, '34433443', 'Celular', 1, '2016-02-21 05:26:52', '2016-02-21 05:26:52'),
 (369, 84, '1112223344', 'Celular', 1, '2016-02-21 19:12:41', '2016-02-21 19:12:41'),
 (370, 84, '322323233', 'Celular', 1, '2016-02-21 20:22:13', '2016-02-21 20:22:13'),
-(371, 84, '1110003344', 'Celular', 1, '2016-02-22 18:21:09', '2016-02-22 18:21:09');
+(371, 84, '1110003344', 'Celular', 1, '2016-02-22 18:21:09', '2016-02-22 18:21:09'),
+(372, 84, '3322323323', 'Celular', 1, '2016-02-23 01:26:38', '2016-02-23 01:26:38'),
+(373, 84, '666623323', 'Celular', 1, '2016-02-24 03:34:52', '2016-02-24 03:34:52');
 
 -- --------------------------------------------------------
 
@@ -2561,7 +2666,7 @@ CREATE TABLE IF NOT EXISTS `usuario` (
   `remember_token` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB AUTO_INCREMENT=153 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=155 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `usuario`
@@ -2569,9 +2674,9 @@ CREATE TABLE IF NOT EXISTS `usuario` (
 
 INSERT INTO `usuario` (`id`, `rol_id`, `usuario`, `password`, `email`, `remember_token`, `created_at`, `updated_at`) VALUES
 (6, 1, 'angelitomh', '$2y$10$dSbYqUSQt0eO1rnJ5VpUreuyJ4pi0HoD2QE2IlmHAE9PpzdiTqc/m', 'angel@live.com', '', '2015-11-28 09:32:54', '2015-11-28 09:32:54'),
-(27, 2, 'flor99', '$2y$10$B0qG1786tvDFY8uFH2rlmO.aCMM12rgQrISaZkPvHltMf5PSI1wd6', 'angeldarkkiller99@live.com', 'e3XNndIOTQIOQUTG5tYXbNt7iyb5vLYdZiquvoIEgCCJiUy3AhnZ5jMUNJ6C', '2015-11-29 04:27:52', '2016-02-22 19:40:03'),
-(29, 3, 'Hector', '$2y$10$NEl79X9MHHEl3PhvxOcebOqzosUySo4aXe0FcFIPhPh4MXrgYIOkO', '', 'ypoaYIqUNPiWZ2eGs8v4tJMkwnB5h70S0szAnb82I0s1oxiV2G3gB2zXWAhu', '2015-11-29 04:31:28', '2016-02-22 02:12:36'),
-(51, 2, 'charly', '$2y$10$vt./IVh6CWWnxhNy8oAdQeAHhwAXxIsW48J3YclEyHqc7Kkiv9xz.', '', '1shjbKLNaWtiqpRxw5dMJcvRiiydnEaHn2mnWvLBAKVhF4jg2sKSPUbZWYCw', '2015-11-30 02:33:31', '2016-02-17 11:55:41'),
+(27, 2, 'flor99', '$2y$10$B0qG1786tvDFY8uFH2rlmO.aCMM12rgQrISaZkPvHltMf5PSI1wd6', 'angeldarkkiller99@live.com', '8AfUlGCbwXqNTz8ASzVHWtbqbqvZNtdm4g7UUSIlIkYLrd0ZHsQXngYWenlx', '2015-11-29 04:27:52', '2016-02-24 03:43:48'),
+(29, 3, 'Hector', '$2y$10$NEl79X9MHHEl3PhvxOcebOqzosUySo4aXe0FcFIPhPh4MXrgYIOkO', '', 'c01ce3L4fvb98O1guivu2NZZ2pAVkpMoD5xdWA2MQ8LDK7qwh34UrMEoNnHb', '2015-11-29 04:31:28', '2016-02-23 19:49:51'),
+(51, 2, 'charly', '$2y$10$vt./IVh6CWWnxhNy8oAdQeAHhwAXxIsW48J3YclEyHqc7Kkiv9xz.', '', 'eGcK3DurgJY5BovL30k2ZeARvqiG4CegXbyjQ0vNum1XBBisepKkSbDGQB89', '2015-11-30 02:33:31', '2016-02-23 22:28:53'),
 (52, 1, 'Luisillo', '$2y$10$eGReK7445dlcRVXjfD6dLuL35uSEHXeMgZBKOhD8Fje4tdrXxZNxC', '', '', '2015-12-02 23:47:30', '2015-12-02 23:47:30'),
 (66, 1, 'tytyyty', '$2y$10$gD.4.0oZB.sd7EgSZlOB1.3i70p/w293HMspkO6eMbQrz5TQSJqmu', '', '', '2015-12-03 00:35:13', '2015-12-03 00:35:13'),
 (67, 1, 'seesse', '$2y$10$CKJQ2aJuwk56xAJuQ5P9p.pVfUqYkOm1hTfFK1Pgs3nrKaLZYR0yC', '', '', '2015-12-03 00:36:21', '2015-12-03 00:36:21'),
@@ -2589,7 +2694,7 @@ INSERT INTO `usuario` (`id`, `rol_id`, `usuario`, `password`, `email`, `remember
 (89, 1, 'Yatziri', '$2y$10$9e/N6biQINZ4eJ/y2R49E.sjjEWfNjcjGyIMwytWdQMJWuqI2ylXu', '', '', '2015-12-04 12:46:29', '2015-12-04 12:46:29'),
 (90, 1, 'yovamh', '$2y$10$gLZmfXsVJ.LZqyC3XZcUkuV/DaY9epcigsfWmzxbQ7cKD/8xu3aU6', 'yova@gmail.com', '', '2015-12-04 17:47:09', '2015-12-04 17:47:09'),
 (91, 1, 'darkkangel', '$2y$10$2FPexXlPNTQ2onh.YPvUmujVgKpfK/FJW.9j8vonSHtuPyOB2e43i', 'angeldarkkiller99@live.com', '0DzRNEmvA1tY5FX9OfKxSWSeOedHo1OVxOJS3MPOTGjpXjKGqLpZGIel0giE', '2015-12-04 18:26:23', '2015-12-04 18:27:20'),
-(92, 2, 'Adri', '$2y$10$CTCAnuFunPCfiyiuHtRPi.tUnc0TLmjYpNBIGjxXj/IdGxQ4nyIGa', 'adri@hotmail.com', 'uSKqzxH2mvanqlbsCzUfLrWhVLH0VFInFZOjEsrFXlCK2tmvTsP4pYwbttgu', '2015-12-15 23:54:39', '2016-02-22 02:02:03'),
+(92, 2, 'Adri', '$2y$10$CTCAnuFunPCfiyiuHtRPi.tUnc0TLmjYpNBIGjxXj/IdGxQ4nyIGa', 'adri@hotmail.com', '0bnMsk3yUieEB87DN31YndHI3Th48c8iiiG1juS3Y8D3sY9s9cDVro3qM9YY', '2015-12-15 23:54:39', '2016-02-24 03:39:03'),
 (93, 1, 'Luis99', '$2y$10$mVgY.RnBElSZmcBqTpMPHeG4xNt6m.eyQp.5jD5Z0LONudpT/PZ7K', 'xsxs@live.com', '', '2015-12-17 02:57:37', '2015-12-17 02:57:37'),
 (95, 1, 'Luisito99', '$2y$10$h0sTinJks2X8srtsabYKFueJgMpsKcqf01wXmwqbLjjovjZlcEZNi', 'aaadda@live.com', '', '2015-12-17 03:05:29', '2015-12-17 03:05:29'),
 (97, 1, 'aqaqaqsqs', '$2y$10$TQr6s9i4zMkrjjx1f94j7eB4wAo0DJiffbB7qhfCPPTr.pkyIJ9G6', '', '', '2015-12-17 04:16:00', '2015-12-17 04:16:00'),
@@ -2627,15 +2732,17 @@ INSERT INTO `usuario` (`id`, `rol_id`, `usuario`, `password`, `email`, `remember
 (141, 1, 'Brolyn99', '$2y$10$yszudqW67OmCIcBvKU1VTe.4Nz2qIJK/RJ8tV0n7gRq2y7TCFfT1y', 'broly@gmail.com', 'N2fUCaE6s7wVzAd16fdaLgBQeWoWwh0W6UUfo2VB5e77ITp7G8JY3N8x3O68', '2016-02-04 17:15:17', '2016-02-11 08:22:29'),
 (142, 1, 'Sepala99', '$2y$10$hlsH6qny6Ued4cRv1ehw.eVx907B1JNaZsHvW51pxvN9x/hM/ZJve', 'sepala@live.com', 'ker3rmxq8joVCQROxIjXQ2XiYyY7wXvsN5qSeSfFPZhktcbRJaleiAzHeum0', '2016-02-05 21:00:09', '2016-02-14 17:59:32'),
 (143, 1, 'MajinBoo99', '$2y$10$czkzKExdYC7uOzRm7uD6AOUuOY5ZOs5WwBqLqQV53pmMWMeef0VS.', 'majon@outlook.es', '', '2016-02-10 00:39:00', '2016-02-10 00:39:00'),
-(144, 1, 'Cell99', '$2y$10$TRtBXWz6Ob8otIzT/.HKzeHrruVpnWLjMs.QWuDZlkaJCIOd8XSz.', 'cell@hotmail.com', 'aFTI1U9DKiOdeRmnXcGEwWyBse3nX3fGMU7hxYcQACXAuavKukiXCSHnz9zg', '2016-02-10 00:57:01', '2016-02-22 19:38:43'),
+(144, 1, 'Cell99', '$2y$10$TRtBXWz6Ob8otIzT/.HKzeHrruVpnWLjMs.QWuDZlkaJCIOd8XSz.', 'cell@hotmail.com', '3nKesHft3R4KkWo7IYicFX5m7QAROcHTjC9O1iYJ00VFncQHaJYJSmcMuNKR', '2016-02-10 00:57:01', '2016-02-24 03:56:40'),
 (145, 1, 'Frezeer99', '$2y$10$52U3//Wuu/y/Dy81kk0N1eNN.TmEDkvGTnfZ6xssrMU7JAopEEpm6', 'fre@live.com', 'DXiRK88s9YT1BjnEwKqMOedty3QgoclnFEvpbR4zMgHvp0LXyxUPLXQ3dF08', '2016-02-10 03:38:24', '2016-02-14 20:36:13'),
 (146, 1, 'Yeins99', '$2y$10$1LL16XJyZBN18vdM0gNMQOcbJewpaXMSFoBBKS.aseUgL/RhVUlwW', 'ye@live.com', '8wgifYFFHUpGKzmDC3omTMNPRsnEAzcc0U5K7s3A9uFYc4FZahBdP68OCcnt', '2016-02-11 03:42:25', '2016-02-11 04:09:47'),
 (147, 1, 'Tapion99', '$2y$10$lIoC7p2RR4foGyCtz0vnGO.BEuIjvgLW5Ou1ELVXOwOQmLBpqjRnq', 'Tapion@live.com', 'sUvwADaRVjwAGQ6CK6aHtCpUafMAfDS0LzOtBLx3Ik67WlFlLC1GvhOhTShk', '2016-02-14 16:12:31', '2016-02-14 17:42:25'),
 (148, 1, 'Naruto99', '$2y$10$VHpi/JHeOqifCET4NlanMOO1bcGHtInHpxf838NZuaLK3GybzTfE6', 'naruto@hotmail.com', 'UMyKarMzhFTDsQLqIYH3CX3japEHPVBu64XLF3p8acI0ON3VfWP09dJQ18c2', '2016-02-14 22:27:09', '2016-02-17 11:26:42'),
 (149, 1, 'Mr.Satan XD', '$2y$10$wLftYS0zC08rK8TQv5p.veJlxBoI4ASWNvDHGvz9pND8FX1cJrkhC', 'cell@live.com', '', '2016-02-16 18:31:59', '2016-02-16 18:31:59'),
 (150, 1, 'Chales99', '$2y$10$RoUOTYv1aHIpd05gYsZNdOu.wzyQoVEEqlWeC9pP/1ao5Q2E34vTO', 'chalesxd@live.com', 'naWr4BRwiZUNwzQ7S9m2FV5RaiFEZJeWQ8T83ul1tnp1xKMmoU7veBC2u7mm', '2016-02-17 11:28:13', '2016-02-17 11:53:12'),
-(151, 1, 'Oliver99', '$2y$10$Kkkm2e0zz/fw8RMWFwOKce8f6jDssyj80ohsX8CyXjrz8q7MILrqu', 'oli@hotmail.com', '9LvnuzhbZalPGexiB7dYWlVREWj8JULwH71mGbNAZRLdHjM7NhAmVK1fS9nT', '2016-02-18 23:05:55', '2016-02-22 02:35:32'),
-(152, 1, 'Benyi99', '$2y$10$jKnzkUVCS.qn6mPX.eJIYu3S41GRfSRiO7995gZCzPuTMyVwbwyIa', 'benyi@live.com', 'MCBtZ0Q3Qb5F6nKCwwciUVN4Ud4722Qs1xpmWa6mZN69emIxl6cELJQx5eYe', '2016-02-20 20:00:01', '2016-02-22 02:36:49');
+(151, 1, 'Oliver99', '$2y$10$Kkkm2e0zz/fw8RMWFwOKce8f6jDssyj80ohsX8CyXjrz8q7MILrqu', 'oli@hotmail.com', 'Fu8BxlvMNpRnufDOaOA2mTlmv0ZZC3dZL2EqsZvVta15H7TFEt4lTuYNRtV3', '2016-02-18 23:05:55', '2016-02-24 03:43:19'),
+(152, 1, 'Benyi99', '$2y$10$jKnzkUVCS.qn6mPX.eJIYu3S41GRfSRiO7995gZCzPuTMyVwbwyIa', 'benyi@live.com', 'MCBtZ0Q3Qb5F6nKCwwciUVN4Ud4722Qs1xpmWa6mZN69emIxl6cELJQx5eYe', '2016-02-20 20:00:01', '2016-02-22 02:36:49'),
+(153, 3, 'Admin99', '$2y$10$1FklyXZK5ZibB0zBXbKBheGfIfFuCv89SEzzU9u90n26UucOEBKr.', 'admin@outlook.es', '63coVJ0emBL0CNQRxdpBt7gy0xGKXdLXC5RzGFIflk9KnRu3gEfonPP6I4OO', '2016-02-23 00:21:29', '2016-02-24 03:48:33'),
+(154, 4, 'Homero99', '$2y$10$qPziejqMjlaoNeilnlIrpOvVBspaXkZgU25m3islf290KRseB1PZW', 'homero@hotmail.com', 'sRISWxu30LwXPq0mKdr6kiEn4cUj5rXI8PuHPPfLC9azMUofDKObp41n46ep', '2016-02-23 21:29:13', '2016-02-24 03:44:48');
 
 -- --------------------------------------------------------
 
@@ -2764,6 +2871,14 @@ ALTER TABLE `importador`
 ALTER TABLE `inventario`
   ADD PRIMARY KEY (`id`),
   ADD KEY `inventario_producto_id_foreign` (`producto_id`);
+
+--
+-- Indices de la tabla `log`
+--
+ALTER TABLE `log`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `log_usuario_id_foreign` (`usuario_id`),
+  ADD KEY `log_pedido_id_foreign` (`pedido_id`);
 
 --
 -- Indices de la tabla `mensajeria`
@@ -2898,12 +3013,12 @@ ALTER TABLE `almacen`
 -- AUTO_INCREMENT de la tabla `cliente`
 --
 ALTER TABLE `cliente`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=93;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=95;
 --
 -- AUTO_INCREMENT de la tabla `cliente_forma_pago`
 --
 ALTER TABLE `cliente_forma_pago`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=721;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=730;
 --
 -- AUTO_INCREMENT de la tabla `comercializador`
 --
@@ -2923,7 +3038,7 @@ ALTER TABLE `descuento`
 -- AUTO_INCREMENT de la tabla `direccion_cliente`
 --
 ALTER TABLE `direccion_cliente`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=383;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=385;
 --
 -- AUTO_INCREMENT de la tabla `direccion_proveedor`
 --
@@ -2965,10 +3080,15 @@ ALTER TABLE `importador`
 ALTER TABLE `inventario`
   MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=10;
 --
+-- AUTO_INCREMENT de la tabla `log`
+--
+ALTER TABLE `log`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=33;
+--
 -- AUTO_INCREMENT de la tabla `mensajeria`
 --
 ALTER TABLE `mensajeria`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=696;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=705;
 --
 -- AUTO_INCREMENT de la tabla `municipio`
 --
@@ -2988,12 +3108,12 @@ ALTER TABLE `pais`
 -- AUTO_INCREMENT de la tabla `pedido`
 --
 ALTER TABLE `pedido`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=652;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=661;
 --
 -- AUTO_INCREMENT de la tabla `pedido_detalle`
 --
 ALTER TABLE `pedido_detalle`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=569;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=583;
 --
 -- AUTO_INCREMENT de la tabla `precio`
 --
@@ -3003,12 +3123,12 @@ ALTER TABLE `precio`
 -- AUTO_INCREMENT de la tabla `producto`
 --
 ALTER TABLE `producto`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=10;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT de la tabla `producto_precio`
 --
 ALTER TABLE `producto_precio`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=11;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=13;
 --
 -- AUTO_INCREMENT de la tabla `proveedor`
 --
@@ -3023,7 +3143,7 @@ ALTER TABLE `rol`
 -- AUTO_INCREMENT de la tabla `telefono_cliente`
 --
 ALTER TABLE `telefono_cliente`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=372;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=374;
 --
 -- AUTO_INCREMENT de la tabla `telefono_proveedor`
 --
@@ -3038,7 +3158,7 @@ ALTER TABLE `unidad_medida`
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=153;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=155;
 --
 -- AUTO_INCREMENT de la tabla `usuario_detalle`
 --
