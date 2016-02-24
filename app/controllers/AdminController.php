@@ -110,13 +110,25 @@ class AdminController extends \BaseController {
 	 }
 
 	 public function listapedidos(){
+
 		 $pedidos =	DB::table('cliente')
 							->join('usuario','cliente.usuario_id','=','usuario.id')
 							->join('pedido','cliente.id','=','pedido.cliente_id')
-							->select('pedido.id','numero_cliente','nombre_cliente','agente_id', 'num_pedido','pedido.created_at','pedido.estatus','usuario')
+							->select('pedido.id','numero_cliente','nombre_cliente','paterno','agente_id', 'num_pedido','pedido.created_at','pedido.estatus')
 							->orderBy('created_at','desc')
 							 ->get();
-		  return Response::json(array('pedidos' => $pedidos));
+
+		 $agente =	DB::table('cliente')
+							->join('usuario','cliente.usuario_id','=','usuario.id')
+							->join('pedido','cliente.id','=','pedido.cliente_id')
+							->select('pedido.id','numero_cliente','usuario','agente_id', 'num_pedido','pedido.created_at','pedido.estatus','usuario')
+							->where('usuario.rol_id', 2)
+							->orderBy('created_at','desc')
+							 ->get();
+
+
+
+		  return Response::json(array('pedidos' => $pedidos, 'agente' => $agente));
 	 }
 
 	 public function listaagentes(){
@@ -129,37 +141,162 @@ class AdminController extends \BaseController {
 	 }
 
 	 public function dpedidos(){
-		 $id = Input::get('id');
+    	$id = Input::get('id');
 
-		 //Obtenemos el id del producto detalle
-		 $d = DB::table('pedido')
-				 ->join('pedido_detalle','pedido.id', '=','pedido_detalle.pedido_id')
-				 ->where('pedido.id', $id)->pluck('pedido_detalle.id');
+    	//Obtenemos el id del producto detalle
+    	$d = DB::table('pedido')
+    			->join('pedido_detalle','pedido.id', '=','pedido_detalle.pedido_id')
+    			->where('pedido.id', $id)->pluck('pedido_detalle.id');
 
-		 $idd = DB::table('pedido')
-				 ->join('pedido_detalle','pedido.id', '=','pedido_detalle.pedido_id')
-				 ->where('pedido.id', $id)->pluck('pedido_detalle.producto_id');
+    	$idd = DB::table('pedido')
+    			->join('pedido_detalle','pedido.id', '=','pedido_detalle.pedido_id')
+    			->where('pedido.id', $id)->pluck('pedido_detalle.producto_id');
+
+    	$iddirec = DB::table('pedido')
+    			->join('direccion_cliente','pedido.direccion_cliente_id', '=','direccion_cliente.id')
+    			->where('pedido.id', $id)->pluck('pedido.direccion_cliente_id');
+
+    	if($iddirec == null){
+            $t = 'tienda';
+            $domi = DB::table('cliente')
+            ->join('pedido', 'cliente.id', '=', 'pedido.cliente_id')
+            //->join('telefono_cliente', 'cliente.id', '=', 'telefono_cliente.cliente_id')
+            ->where("pedido.id", $id)
+            ->get();
+        } else {
+            $t = 'domicilio';
+        $domi = DB::table('direccion_cliente')
+            ->join('cliente', 'direccion_cliente.cliente_id', '=', 'cliente.id')
+            ->join('pais', 'direccion_cliente.pais_id', '=', 'pais.id')
+            ->join('estado', 'direccion_cliente.estado_id', '=', 'estado.id')
+            ->join('municipio', 'direccion_cliente.municipio_id', '=', 'municipio.id')
+            ->join('telefono_cliente', 'direccion_cliente.telefono_cliente_id', '=', 'telefono_cliente.id')
+            ->where("direccion_cliente.id", $iddirec)
+            ->get();
+        }
+
+          $ped = DB::table('cliente')
+                ->join('pedido','cliente.id', '=','pedido.cliente_id')
+                ->where('pedido.id', $id)->get();
 
 
-					$ped = DB::table('cliente')
-								->join('pedido','cliente.id', '=','pedido.cliente_id')
-								->where('pedido.id', $id)->get();
+    	$pro = DB::table('producto')
+    	            ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
+    	            ->join('producto_precio','producto.id', '=','producto_precio.producto_id')
+    	            //->select('producto.created_at','precio_venta','clave','nombre','color','piezas_paquete')
+    				->where('pedido_detalle.pedido_id', $id)->get();
+
+    	$dpro = DB::table('pedido_detalle')
+    	            ->join('producto','pedido_detalle.producto_id', '=','producto.id')
+    				->where('pedido_detalle.id', $d)->get();
 
 
-		 $pro = DB::table('producto')
-								 ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
-								 ->join('producto_precio','producto.id', '=','producto_precio.producto_id')
-								 //->select('producto.created_at','precio_venta','clave','nombre','color','piezas_paquete')
-					 ->where('pedido_detalle.pedido_id', $id)->get();
-
-		 $dpro = DB::table('pedido_detalle')
-								 ->join('producto','pedido_detalle.producto_id', '=','producto.id')
-					 ->where('pedido_detalle.id', $d)->get();
-
-
-		 return Response::json(array('dpro' => $dpro, 'pro' => $pro, 'ped' => $ped));
+    	return Response::json(array(
+    		'dpro' => $dpro, 
+    		'pro' => $pro, 
+    		'domi' => $domi, 
+    		'ped' => $ped,
+    		't' => $t
+    	));
 	 }
 
+
+	public function verestatusadmin(){
+		$id = Input::get('id');
+    	$pedido = DB::table('pedido')
+	    		->select('id','estatus')
+	    		->where('id', $id)->first();
+    	return Response::json($pedido);
+	}
+
+	public function cambiarestatusadmin(){
+		$id = Input::get('id');
+    	$estatus = Input::get('estatus');
+    	//Actualizamos el estatus
+    	$pedido = Pedido::find($id);
+    	$pedido->estatus = $estatus;
+    	$pedido->save();
+    	//Mandamos los datos actualizados
+    	$newestatus = DB::table('cliente')
+    			->join('usuario','cliente.usuario_id','=','usuario.id')
+    			->join('pedido', 'cliente.id', '=', 'pedido.cliente_id')
+
+    			->where('pedido.id', $id)
+    			->first();
+
+
+    	return Response::json($newestatus);
+	}
+
+
+	public function verificarpassadmin(){
+		$iduser = Auth::user()->id;
+
+		    $p = DB::table('usuario')
+		    		->where('id', $iduser)->pluck('password');
+
+		    if (Hash::check(Input::get('pass'), $p)) {
+			    $b = "coinciden";
+			} else {
+				$b = "No coinciden";
+			}
+
+
+		    return Response::json($b);
+	}
+
+
+	 public function exportarexcel(){
+	   Excel::create('Lista de pedidos', function($excel) {
+	     $excel->sheet('Sheetname', function($sheet) {
+	      $data=[];
+
+				$pedidos =	DB::table('cliente')
+						->join('usuario','cliente.usuario_id','=','usuario.id')
+						->join('pedido','cliente.id','=','pedido.cliente_id')
+						->select('pedido.id','numero_cliente','nombre_cliente','paterno','agente_id', 'num_pedido','pedido.created_at','pedido.estatus','usuario')
+						->orderBy('created_at','desc')
+						 ->get();
+						array_push($data, array('N° Cliente', 'N° Pedido', 'Fecha de registro', 'Agente', 'Estatus'));
+				foreach ($pedidos as $key => $value) {
+					array_push($data, array(
+						$value->num_pedido, 
+						$value->numero_cliente, 
+						$value->created_at, 
+						$value->nombre_cliente." ".$value->paterno,  
+						$value->agente_id, 
+						$value->estatus
+					  ));
+				}
+
+	       $sheet->fromArray($data, null, 'A1', false, false);
+	   });
+	  })->download('xlsx');
+	 }
+
+	 public function excel(){
+		 Excel::create('Inventario', function($excel) {
+			 $excel->sheet('Sheetname', function($sheet) {
+				$data=[];
+
+				$inventario =	DB::table('producto')
+	 		 					->join('inventario','producto.id','=','inventario.producto_id')
+	 							->select('producto.id','clave','nombre','cantidad')
+	 							 ->get();
+						array_push($data, array('Id', 'Clave', 'Producto', 'Cantidad'));
+				foreach ($inventario as $key => $value) {
+					array_push($data, array(
+						$value->id, 
+						$value->clave, 
+						$value->nombre, 
+						$value->cantidad
+					 ));
+				}
+
+				 $sheet->fromArray($data, null, 'A1', false, false);
+		 });
+		})->download('xlsx');
+	 }
 
 	/**
 	 * Store a newly created resource in storage.
@@ -167,21 +304,100 @@ class AdminController extends \BaseController {
 	 *
 	 * @return Response
 	 */
-	public function store()
-	{
-		//
+	public function listp(){
+			$user = DB::table('usuario')->get();
+			return View::make('admin/list', compact('user'));
+			//return View::make('admin/pedidos');
 	}
 
-	/**
-	 * Display the specified resource.
-	 * GET /admins/{id}
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id)
-	{
-		//
+	public function listarp(){
+		$p = DB::table('usuario')
+		//->orderBy('id', 'desc')
+		->get();
+
+		echo json_encode($p);
+
+		//return Response::json(array('p' => $p));
+		
+		/*$resources = array(
+			array("name" => "Resource 1", id => "resource1"),
+			array("name" => "Resource 2", id => "resource2")
+		);*/
+
+	/*	$columns = array(
+            array('db' => 'password', 'email' => 0, "usuario"),
+            array('db' => 'usuario', 'dt' => 1),
+        );
+
+       foreach($p as $it){
+            $it->id;
+        }
+		
+
+      echo json_encode($columns); */
+
+   /*   $personas = Usuario::all()->lists('usuario', 'id');
+	
+	foreach ($personas as $key => $value) {
+                    $p[] = array(
+                    	"id" => $key, 
+                    	"rol_id" => $key, 
+                    	"usuario" => $value
+                    	);
+	} */
+
+	
+
+
+
+
+
+
+		
+	}
+
+	public function agregar(){
+		return View::make('admin/agregar');
+	}
+
+	public function proveedores(){
+		$proveedor = DB::table('proveedor')
+		->select('id','nombre')
+		->get();
+		return response::json(array('proveedor' => $proveedor));
+	}
+
+	public function buscar(){
+		$clave = Input::get('clave');
+		$resp = DB::table('producto')
+						->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
+						->join('familia', 'producto.familia_id', '=', 'familia.id')
+						->select('producto.id','nombre','color','foto','piezas_paquete','clave','precio_compra', 'factor_descuento')
+						->where('clave', $clave)->first();
+		if(count($resp)==0){
+				$resp = array('indefinido' => 'El producto no existe. ');
+				return Response::json($resp);
+
+		} else {
+				return Response::json($resp);
+		}
+	}
+
+
+	public function addproducto() {
+		$clave = Input::get('clave');
+		$resp = DB::table('producto')
+						->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
+						->join('familia', 'producto.familia_id', '=', 'familia.id')
+						->select('producto.id','nombre','color','foto','piezas_paquete','clave','precio_compra', 'factor_descuento')
+						->where('clave', $clave)->get();
+		if(count($resp)==0){
+				$resp = array('indefinido' => 'El producto no existe. ');
+				return Response::json($resp);
+
+		} else {
+				return Response::json(array('resp' => $resp));
+		}
 	}
 
 	/**
@@ -191,9 +407,35 @@ class AdminController extends \BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function edit($id)
-	{
-		//
+	public function entradas(){
+		//Recibimos el Array y lo decodificamos desde json, para poder utilizarlo como objeto
+	  $idpro = json_decode(Input::get('aInfo'));
+		$fecha = Input::get('fecha');
+		$proveedor = Input::get('proveedor');
+		$factura = Input::get('factura');
+		$fechaFactura = Input::get('fechaFactura');
+		$obc = Input::get('obc');
+
+		$entrada = new Entrada;
+		$entrada->id = Input::get('id');
+		$entrada->proveedor_id = $proveedor;
+		$entrada->fecha_entrada = $fecha;
+		$entrada->factura = $factura;
+		$entrada->fecha_factura = $fechaFactura;
+		$entrada->observaciones = $obc;
+		$entrada->estatus = '1';
+		$entrada->save();
+
+for ($i=0; $i < count($idpro); $i++) {
+		$entradaDetalle = new EntradaDetalle;
+		$entradaDetalle->producto_id = $idpro[$i]->idp;
+		$entradaDetalle->entrada_id = $entrada['id'];
+		$entradaDetalle->cantidad = $idpro[$i]->cant;
+		$entradaDetalle->precio_compra = $idpro[$i]->pc;
+		$entradaDetalle->save();
+}
+
+		return Response::json('Correcto');
 	}
 
 	/**

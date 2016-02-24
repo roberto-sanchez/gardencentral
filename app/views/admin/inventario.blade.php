@@ -7,8 +7,15 @@
 @section('scripts')
 @parent
 @include('layouts/inc/lib')
+<script>
+  $(document).ready(function(){
+    $('.inventario').addClass('active');
+    $('.t-inventario').addClass('en-admin');
+  });
+</script>
 @stop
 
+@section('pedidos_user') @stop
 
 @section('username')
 <span class="glyphicon glyphicon-user"></span>
@@ -18,7 +25,9 @@
 @section('content')
 <div class="content">
   <div class="row">
-
+    <div class="menu-p">
+      <a href="{{ URL::to('consultas/excel') }}" class="btn btn-success">Exportar a Excel</a>
+    </div>
     <div class="data-inv">
       <table id="totalInventario" class="table table-first-column-number data-table display full">
         <thead>
@@ -48,7 +57,7 @@
 </div>
   <script>
   /* Funcion para el buscador y el pie de paginacion */
-
+/*
   $(function(){
      $('table.data-table.sort').dataTable( {
           "bPaginate": false,
@@ -69,7 +78,7 @@
           "sDom": '<""f>t<"F"lp>',
           "sPaginationType": "bootstrap"
       });
-  });
+  });*/
   </script>
 
 @stop

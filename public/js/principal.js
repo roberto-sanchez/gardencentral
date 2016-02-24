@@ -1,5 +1,149 @@
 $(document).ready(function () {
 
+      //Detalle del pedido del cliente
+    $(document).on('click', '#c-estatus', function(){
+          id = $(this).attr('data-id');
+          $('.im-pedido').attr('href', 'productos/imprimirpedido/'+id);
+          num = $(this).attr('class');
+          fe = $(this).attr('value');
+          $('.n-pedd').text('Pedido #'+num);
+          $('.n-peee').text('Fecha: '+fe);
+
+              t_deatelle = $('#detail-dp');
+              $.ajax({
+                type: "POST", //metodo
+                url: "/productos/detalledelpedido",
+                data: {id: id},
+                success: function (p) {
+                  if(p.t == 'tienda'){
+                      $('#sindomi').addClass('sindomi');
+                      $('.pc_domiclio').hide();
+                      $('.c_rfc').html(p.domi[0].rfc);
+                      $('.c_nombre').html(p.domi[0].nombre_cliente+" "+p.domi[0].paterno+" "+p.domi[0].materno);
+                      $('.c_correo').html(p.domi[0].email);
+                      $('.c_numero').html(p.domi[0].numero_cliente);
+                  } else {
+                     $('#sindomi').removeClass('sindomi');
+                     $('.pc_domiclio').show();
+                     $('.c_rfc').html(p.domi[0].rfc);
+                     $('.c_nombre').html(p.domi[0].nombre_cliente+" "+p.domi[0].paterno+" "+p.domi[0].materno);
+                     $('.c_correo').html(p.domi[0].email);
+                     $('.c_numero').html(p.domi[0].numero_cliente);
+
+                     $('.c_pais').html(p.domi[0].pais);
+                     $('.c_estado').html(p.domi[0].estados);
+                     $('.c_municipio').html(p.domi[0].municipio);
+
+                     $('.c_calle1').html(p.domi[0].calle1);
+                     $('.c_calle2').html(p.domi[0].calle2);
+                     $('.c_colonia').html(p.domi[0].colonia);
+
+                     $('.c_delegacion').html(p.domi[0].delegacion);
+                     $('.c_cp').html(p.domi[0].codigo_postal);
+                     $('.c_telefono').html(p.domi[0].numero);
+
+                     $('.d-pe').html('#'+p.ped[0].num_pedido);
+                     $('.d-fe').html('Fecha: '+p.ped[0].created_at);
+
+                   if(p.ped[0].observaciones == " "){
+                      $('.c_observaciones').text('No ay observaciones.');
+                   } else {
+
+                        $('.c_observaciones').text(p.ped[0].observaciones);
+                   }
+                  }
+
+
+                   pro = "";
+                for(datos in p.pro){
+                  des = p.pro[datos].precio_venta * p.pro[datos].factor_descuento;
+                  e = accounting.formatMoney(p.pro[datos].precio_venta - des);
+                  f = (p.pro[datos].precio_venta - des) * p.pro[datos].cantidad;
+                  t = accounting.formatMoney(p.pro[datos].precio_venta);
+
+                      pro += '<tr><td>'+p.pro[datos].clave+'</td>';
+                      pro += '<td>'+p.pro[datos].nombre+'</td>';
+                      pro += '<td>'+p.pro[datos].color+'</td>';
+                      pro += '<td>'+e+'</td>';
+                      pro += '<td>16%</td>';
+                      pro += '<td>'+p.pro[datos].piezas_paquete+'</td>';
+                      pro += '<td>'+p.pro[datos].cantidad+'</td>';
+                      pro += '<td><span class="img-p" id="'+p.pro[datos].nombre+'" data-id="'+p.pro[datos].foto+'" href="#verfotop" data-toggle="modal" alt="Foto del producto" title="Ver Foto del prodcto">Ver foto</span></td>';
+                      pro += '<td class="t-pro" value="'+f+'">'+accounting.formatMoney(f)+'</td></tr>';
+                    }
+
+                  t_deatelle.append(pro);
+
+                  resultado=0;
+                  $('.detail-t tbody tr').each(function(){
+                          cant  = $(this).find("[class*='t-pro']").attr('value');
+
+                          resultado += parseFloat(cant);
+                          $('.sub-p').text(accounting.formatMoney(resultado));
+
+                        });
+
+                  $('.sub-iva').html(accounting.formatMoney(iva = resultado * 0.16));
+                  $('.total-p').html(accounting.formatMoney(resultado += iva));
+
+                },
+
+                error: function(){
+                  alert('failure');
+                }
+           });
+   
+       });
+
+    $('.table-cli').hide();
+
+      //Foto del producto
+    $(document).on('click','.img-p',function(){
+      foto = $(this).attr('data-id');
+      nf = $(this).attr('id');
+      $('.f-p-p').prop('src', 'img/productos/'+foto);
+      $('.title-f').html(nf);
+    });
+
+
+    $('#det-p').click(function(){
+        $('#det-p').css('text-decoration', 'none');
+        $('.table-detail').fadeIn(500);
+        $('.table-cli').hide();
+        $('#det-p').addClass('enlace-active');
+        $('#fotop').removeClass('enlace-active');
+        $('#estatusp').removeClass('enlace-active');
+      });
+
+      $('#fotop').click(function(){
+        $('#fotop').css('text-decoration', 'none');
+        $('.table-detail').hide();
+        $('.table-cli').fadeIn(500);
+        $('#fotop').addClass('enlace-active');
+        $('#det-p').removeClass('enlace-active');
+        $('#estatusp').removeClass('enlace-active');
+      });
+
+
+      //Actualizaciones de contenidos de la pagina
+    $(document).on('click', '#con-pd', function(){
+          $('.table-cli').hide();
+         $("#detail-dp").load(location.href+" #detail-dp>*","");
+
+    });
+
+    $(document).on('click', '.close-mp', function(){
+      $('.table-cli').hide();
+      $("#detail-dp").load(location.href+" #detail-dp>*","");
+    });
+
+
+
+
+
+
+
+
     $('.cerrar-alert').click(function () {
         $('.mialert').hide();
         $('.msjdanger').text('');
@@ -36,6 +180,7 @@ $(document).ready(function () {
                 url: "productos/getProducto",
                 data: {clave: $('#clave').val()},
                 success: function (prod) {
+                  console.log(prod);
                     ver = prod.id;
                     if (ver === undefined) {
                         $('#productoPanel').hide();
@@ -63,7 +208,15 @@ $(document).ready(function () {
                         $('#colorProd').html(prod.color); //el color
                         $('#piezasProd').html(prod.piezas_paquete);
                         $('#precioProd').html(accounting.formatMoney(prod.precio_venta));
-                        $('#descProd').html(prod.factor_descuento+'%');
+                        num = prod.factor_descuento;
+                        n = num.toString(); //convertimos el entero en string
+                        descuento = n.substring(2); //ocultamos los primeros dos caracteres
+
+                        if(n.length == 3){
+                          v = $('#descProd').html(descuento+'0%');
+                        } else {
+                          $('#descProd').html(descuento+'%');
+                        }
                         $('.mialert').hide();
                         $('.mialert2').hide();
                         $('#noexiste').text('');
@@ -341,6 +494,52 @@ $(document).on('click', '.verfotop', function(){
 
         });
 
+      $('.g-tipo').hide();
+      $('.t-no-c').hide();
+      //SEleccionar el tipo de envio
+      $('.selectTipo', this).click(function(){
+          tipo = $(this).val();
+          console.log(tipo);
+
+          if(tipo == 'domicilio'){
+            $('.g-tipo').attr('id', 'g-tipo');
+            $('#g-tipo').hide(500);
+            $('.selecTipoEnvio').show(500);
+            $('#inpEnvio').val('1');  
+            $('.alert-pago').removeClass('alert-v');
+          } else if(tipo == 'tienda'){
+            $('#inpEnvio').val('0');
+            $('.g-tipo').attr('id', 'generar-tienda');
+            $('.selecTipoEnvio').hide(500);
+            $('#generar-tienda').show(300);
+            $('.alert-pago').addClass('alert-v');
+            console.log('seleccionaste la tienda');
+            $('.panel-entrega').hide();
+            $('#checkdomicilio').removeAttr('checked');
+            $('#checkfiscal').removeAttr('checked');
+            $('#checkpersonal').removeAttr('checked');
+            $('#checkpersonal').removeAttr('disabled');
+            $('#checkfiscal').removeAttr('disabled');
+            $('#domfiscal').hide();
+
+            $('.usar-d').removeClass('btn-success');
+            $('.cambiar-g').removeClass('glyphicon-ok');
+            $('.cambiar-g').addClass('glyphicon-off');
+          }    
+      });
+
+      $(document).on('click', '#generar-tienda', function(){
+           if($('.formapago').val() != null){
+              $('#p-s-dom').removeClass('disabled');
+              $('.t-error-pago').hide();
+              $('.t-exsts').show();
+              $('.t-cancel').hide();
+              $('.t-no-c').show();
+          }
+
+      });
+
+   
 
     //Cargar municipios de el estado a editar
     $("#listestados").change(function (event) {
@@ -603,6 +802,8 @@ $(document).on('click', '.verfotop', function(){
         $('.c-no').hide();
         $('.c-pe').show();
         $('.regis-exixts-t').addClass('disabled');
+        $('#p-s-dom').addClass('disabled');
+        $('.t-exsts').hide();
 
     } else {
         $('.regis-exixts-t').removeClass('disabled');
@@ -1450,10 +1651,51 @@ $('.phone-o').focus(function(){
     $('.regis-exixts-t').hide();
 
 
+//Registrar un pedido sin domicilio
+$('#p-s-dom').click(function(){
+  cotizar = $('#inpEnvio').val();
+  formapago = $('#formapago').val();
+  msjeria = $('#pago').val();
+
+   var DATA = [];
+
+        $('.tcarrito tbody tr').each(function(){
+            idp = $(this).attr('id');
+            cant  = $(this).find("input[class*='cant']").val();
+
+            item = {idp, cant};
+
+            DATA.push(item);
+        })
+
+        aInfo   = JSON.stringify(DATA);
+
+        id = 0;
+
+        formapago = $('#formapago').val();
+        msjeria = $('#pago').val();
+
+        $.ajax({
+            type: "POST",
+            url: "productos/pedidoexistente/"+id,
+            data: {aInfo: aInfo, formapago: formapago, msjeria: msjeria, cotizar: cotizar},
+            success: function (iddom) {
+
+                window.location.href = 'productos/datosdelpedido/' + iddom;
+
+            },
+            error: function () {
+                alert('failure');
+
+            }
+        });
+     
+});
 
 
 
-//Registrar un pedido co un domicilio existente
+
+//Registrar un pedido con un domicilio existente
     $('.confirm-d').click(function(){
         //Array principal donde estarán los datos de los productos
         var DATA = [];
@@ -1474,14 +1716,14 @@ $('.phone-o').focus(function(){
         aInfo   = JSON.stringify(DATA);
 
         id = $(this).attr('id');
-
+        cotizar = $('#inpEnvio').val();
         formapago = $('#formapago').val();
         msjeria = $('#pago').val();
 
         $.ajax({
             type: "POST", //metodo
             url: "productos/pedidoexistente/"+id,
-            data: {aInfo: aInfo, formapago: formapago, msjeria: msjeria},
+            data: {aInfo: aInfo, formapago: formapago, msjeria: msjeria, cotizar: cotizar},
             success: function (iddom) {
 
                 //redirigimosa¿ al detalle del pedido y le pasamos el id del domi
@@ -1514,7 +1756,7 @@ $('.phone-o').focus(function(){
 
         //convertiremos el array en json para evitar cualquier incidente con compativilidades.
         aInfo   = JSON.stringify(DATA);
-
+        cotizar = $('#inpEnvio').val();
         id = $(this).attr('id');
         pais = $('#pais').val();
         estado = $('#estado').val();
@@ -1532,7 +1774,7 @@ $('.phone-o').focus(function(){
        $.ajax({
             type: "POST", //metodo
             url: "productos/nuevopedido/"+id,
-            data: {aInfo: aInfo, pais: pais, estado: estado, municipio: municipio, calle1: calle1, calle2: calle2, colonia: colonia, delegacion: delegacion, cp: cp, tipodom: tipodom, formapago: formapago, msjeria: msjeria, coment: coment},
+            data: {aInfo: aInfo, cotizar: cotizar, pais: pais, estado: estado, municipio: municipio, calle1: calle1, calle2: calle2, colonia: colonia, delegacion: delegacion, cp: cp, tipodom: tipodom, formapago: formapago, msjeria: msjeria, coment: coment},
             success: function (iddom) {
 
                 //redirigimosa¿ al detalle del pedido y le pasamos el id del domi
@@ -1569,6 +1811,7 @@ $('.phone-o').focus(function(){
 
         id = 0;
         //obtenemos los valores de los campos del form
+        cotizar = $('#inpEnvio').val();
         pais = $('#pais').val();
         estado = $('#estado').val();
         municipio = $('#municipio').val();
@@ -1589,7 +1832,7 @@ $('.phone-o').focus(function(){
         $.ajax({
             type: "POST", //metodo
             url: "productos/nuevopedido/"+id,
-            data: {aInfo: aInfo, pais: pais, estado: estado, municipio: municipio, calle1: calle1, calle2: calle2, colonia: colonia, delegacion: delegacion, cp: cp, tipodom: tipodom, tel: tel, tipotel: tipotel, formapago: formapago, msjeria: msjeria, coment: coment},
+            data: {aInfo: aInfo, cotizar: cotizar, pais: pais, estado: estado, municipio: municipio, calle1: calle1, calle2: calle2, colonia: colonia, delegacion: delegacion, cp: cp, tipodom: tipodom, tel: tel, tipotel: tipotel, formapago: formapago, msjeria: msjeria, coment: coment},
             success: function (iddom) {
 
                 //redirigimosa¿ al detalle del pedido y le pasamos el id del domi

@@ -47,6 +47,10 @@
                   <ul class="dropdown-menu">
                       <li class="divider"></li>
                         <li><a href="#cambiarpass" data-toggle="modal"><span class="glyphicon glyphicon-lock"></span> Cambiar Contraseña</a></li>
+                      @section('pedidos_user')
+                        <li class="divider"></li>
+                        <li><a id="p_cliente" href="#pedidos" data-toggle="modal"><span class="glyphicon glyphicon-shopping-cart"></span> Pedidos</a></li>
+                      @show
                       <li class="divider"></li>
                         <li><a class="log-out" href="/logout"><span class="glyphicon glyphicon-off"></span> Cerrar Sesión</a></li>
                       <li class="divider"></li>
@@ -68,6 +72,11 @@
                     <li>
                       <a href="#cambiarpass" data-toggle="modal"><span class="glyphicon glyphicon-lock"></span> <span class="caption">Cambiar Contraseña</span></a>
                     </li>
+                    @section('pedidos_user')
+                      <li>
+                        <a id="p_cliente" href="#pedidos" data-toggle="modal"><span class="glyphicon glyphicon-shopping-cart"></span> <span class="caption">Pedidos</span></a>
+                      </li>
+                    @show
                     <li>
                       <a href="/logout"><span class="glyphicon glyphicon-off"></span> <span class="caption">Cerrar Sesión</span></a>
                     </li>
@@ -130,19 +139,7 @@
             </div>
             <!--  ____Menu que no sera visible en dispositivos moviles______ -->
             <ul class="nav nav-tabs hidden-xs">
-                <li class="active"><a href="index.html"><span class="glyphicon glyphicon-scale"></span> <span>Administración</span></a></li>
-                <li ><a href="reports.html" ><span class="glyphicon glyphicon-stats"></span> <span>Reportes</span></a></li>
-                <li ><a href="components.html" ><span class="glyphicon glyphicon-briefcase"></span> <span>Paquetes</span></a></li>
-                <li ><a href="pricing.html"><span class="glyphicon glyphicon-usd"></span> <span>Precios</span></a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span> Sistema <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="sign-in.html"><span>Copias de Seguridad</span></a></li>
-                        <li><a href="sign-up.html"><span>Logs</span></a></li>
-                        <li><a href="reset-password.html"><span>Licencia</span></a></li>
-                        <li><a href="reset-password.html"><span>Acerca de...</span></a></li>
-                    </ul>
-                </li>
+                <li class="active"><a href="{{ URL::to('admin') }}"><span class="glyphicon glyphicon-scale"></span> <span>Administración</span></a></li>
             </ul>
         </div>
     </div>
@@ -153,57 +150,56 @@
 
       <div id="acordeon">
     <ul>
-        <li>
-            <h3><span class="glyphicon glyphicon-home"></span>Administración</h3>
-            <ul>
-                <li><a href="#">Enlace 1</a></li>
-                <li><a href="#">Enlace 2</a></li>
-                <li><a href="#">Enlace 3</a></li>
-            </ul>
+        <li class="admin">
+            <h3 class="t-admin"><span class="glyphicon glyphicon-home"></span><a class="dash" id="dashboard" href="{{ URL::to('admin') }}">Dashboard</a></h3>
         </li>
         <!-- we will keep this LI open by default -->
-        <li class="active">
-            <h3><span class="glyphicon glyphicon-folder-open"></span>Catalogos</h3>
-            <ul>
-                <li><a href="#">Enlace 1</a></li>
-                <li><a href="#">Enlace 2</a></li>
-                <li><a href="#">Enlace 3</a></li>
-                <li><a href="#">Enlace 4</a></li>
-                <li><a href="#">Enlace 5</a></li>
+        <li class="catalogos">
+            <h3 class="t-catalogos"><span class="glyphicon glyphicon-folder-open"></span>Catalogos</h3>
+            <ul class="ScrollY">
+                <li><a href="{{ URL::to('/catalogo/Almacen') }}">Almacen</a></li>
+                <li><a href="{{ URL::to('/catalogo/Cliente') }}">Clientes</a></li>
+                <li><a href="{{ URL::to('/catalogo/Comercializador') }}">Comercializador</a></li>
+                <li><a href="{{ URL::to('/catalogo/Contacto') }}">Contacto</a></li>
+                <li><a href="{{ URL::to('/catalogo/Descuentos') }}">Descuentos</a></li>
+                <li><a href="{{ URL::to('/catalogo/Estados') }}">Estados</a></li>
+                <li><a href="{{ URL::to('/catalogo/Familias') }}">Familias</a></li>
+                <li><a href="{{ URL::to('/catalogo/FormaPago') }}">Formas de pago</a></li>
+                <li><a href="{{ URL::to('/catalogo/Importador') }}">Importador</a></li>
+                <li><a href="{{ URL::to('/catalogo/Mensajeria') }}">Mensajeria</a></li>
+                <li><a href="{{ URL::to('/catalogo/Municipios') }}">Municipio</a></li>
+                <li><a href="{{ URL::to('/catalogo/NivelDescuento') }}">Nivel de descuento</a></li>
+                <li><a href="{{ URL::to('/catalogo/Pais') }}">País</a></li>
+                <li><a href="{{ URL::to('/catalogo/Precio') }}">Precio</a></li>
+                <li><a href="{{ URL::to('/catalogo/Producto') }}">Producto</a></li>
+                <li><a href="{{ URL::to('/catalogo/Proveedor') }}">Proveedor</a></li>
+                <li><a href="{{ URL::to('/catalogo/Rol') }}">Rol</a></li>
+                <li><a href="{{ URL::to('/catalogo/UnidadMedida') }}">Unidad medida</a></li>
+                <li><a href="{{ URL::to('/catalogo/Usuario') }}">Usuario</a></li>
             </ul>
         </li>
-        <li>
-            <h3><span class="glyphicon glyphicon-search"></span>Consultas</h3>
+        <li class="pedidos">
+            <h3 class="t-pedidos"><span class="glyphicon glyphicon-search"></span>Consultas</h3>
             <ul>
                 <li><a href="{{ URL::to('consultas/pedidos') }}">Pedidos</a></li>
-                <li><a href="#">Enlace </a></li>
-                <li><a href="#">Enlace 3</a></li>
-                <li><a href="#">Enlace 4</a></li>
-                <li><a href="#">Enlace 5</a></li>
-                <li><a href="#">Enlace 6</a></li>
-                <li><a href="#">Enlace 7</a></li>
             </ul>
         </li>
-        <li>
-            <h3><span class="glyphicon glyphicon-folder-close"></span>Entradas</h3>
+        <li class="addentrada">
+            <h3 class="t-addentrada"><span class="glyphicon glyphicon-folder-close"></span>Entradas</h3>
             <ul>
-                <li><a href="#">Enlace 1</a></li>
-                <li><a href="#">Enlace 2</a></li>
-                <li><a href="#">Enlace 3</a></li>
-                <li><a href="#">Enlace 4</a></li>
+                <li><a href="{{ URL::to('entradas/agregar') }}">Nueva entrada</a></li>
             </ul>
         </li>
          <li>
             <h3><span class="glyphicon glyphicon-level-up"></span>Salidas</h3>
             <ul>
-                <li><a href="#">Enlace 1</a></li>
+                <li><a href="{{ URL::to('/salidas/listar') }}">Listar</a></li>
                 <li><a href="#">Enlace 2</a></li>
-                <li><a href="#">Enlace 3</a></li>
                 <li><a href="#">Enlace 4</a></li>
             </ul>
         </li>
-        <li>
-           <h3><span class="glyphicon glyphicon-list-alt"></span>Inventario</h3>
+        <li class="inventario">
+           <h3 class="t-inventario"><span class="glyphicon glyphicon-list-alt"></span>Inventario</h3>
            <ul>
                <li><a href="{{ URL::to('consultas/inventario') }}">Consultas</a></li>
            </ul>
@@ -224,9 +220,208 @@
       </p>
    </footer>
 
+   <!-- Modal para cambiar la contraseña -->
+   <div id="cambiarpass" class="modal fade">
+       <div class="modal-dialog">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                   <h2 class="modal-title text-danger"><span class="glyphicon glyphicon-lock"></span> Cambia tu contraseña</h2>
+               </div>
+               <div class="modal-body modal-c-pass">
+                   {{ Form::open(array('url' => 'users/cambiarpass')) }}
+                  <h4 class="text-info">Contraseña Actual</h4>
+                  <div class=" form-group">
+                     {{ Form::password('password0', array('class' => 'form-control', 'placeholder' => 'Contraseña actual', 'required')) }}
+                   </div>
+                   <h4 class="text-info">Nueva Contraseña</h4>
+                   <div class=" form-group">
+                     {{ Form::password('password1', array('class' => 'form-control', 'placeholder' => 'Nueva contraseña', 'required')) }}
+                   </div>
+                   <div class=" form-group">
+                     {{ Form::password('password2', array('class' => 'form-control', 'placeholder' => 'Repetir la nueva contraseña', 'required')) }}
+                   </div>
+               </div>
+               <div class="modal-footer">
+                   <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                   {{ Form::submit('Guardar', array('class' => 'btn btn-primary', 'id' => 'registrar')) }}
 
+                 {{ Form::close() }}
+               </div>
+           </div>
+       </div>
+   </div>
 
+  <!--Modal para listar los pedidos del usuario-->
+    <div id="pedidos" class=" modal fade" data-keyboard="false" data-backdrop="static">
+      <div class="modal-dialog ">
+        <div class="modal-content">
+          <div class="modal-header header-detalle">
+            <button type="button" class="close close-mp" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h2 class="modal-title text-center txt-p"><span class="glyphicon glyphicon-shopping-cart"></span> Pedidos</h2>
+          </div>
+          <div class="modal-body">
+          <h2 class="t-p-clientes"></h2>
+            <div class="pedidosCliente">
+                <div class="table-pd">
+                  <table class="table table-striped table-hover">
+                    <thead class="thead-pedido">
+                      <tr>
+                        <th>N° pedido</th>
+                        <th>Fecha de registro</th>
+                        <th>Forma de pago</th>
+                        <th>Estatus</th>
+                      </tr>
+                    </thead>
+                    <tbody id="pedido_cliente"></tbody>
+                 </table>
+               </div>
+            </div>
+          </div>
+          <div class="modal-footer modal-conf-estat">
 
+              <span id="con-pd" class="sa-p btn btn-primary" data-dismiss="modal" >
+                <span class="glyphicon glyphicon-chevron-left"></span>
+                 Cerrar
+              </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+     <!--Modal detalle del pedido del cliente-->
+    <div id="detallepedidocliente" class=" modal fade" data-keyboard="false" data-backdrop="static">
+            <div class="modal-dialog m-detalle">
+        <div class="modal-content content-p">
+          <div class="modal-header header-detalle">
+            <button type="button" class="close close-mp" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+           <h2 class="modal-title text-center n-pedd"></h2>
+           <h2 class="modal-title text-center n-peee"></h2>
+          </div>
+          <div class="modal-body content-datos">
+            <div class="cont-btn">
+               <span class="btnmenu-pedido btn">
+              <span class="glyphicon glyphicon-th-list"></span>
+               </span>
+            </div>
+            <div class="d-detallep">
+       <div class="content-navp">
+        <ol class="breadcrumb navegacion-p">
+          <li><a class="enlace-active" id="det-p" href="#">Pedido</a></li>
+          <li><a id="fotop" href="#">Domicilio</a></li>
+         </ol>
+       </div>
+            <div class="table-detail">
+              <table class="table table-striped table-hover detail-t">
+                <thead>
+                  <tr>
+                    <th>Clave</th>
+                    <th>Nombre</th>
+                    <th>Color</th>
+                    <th>Precio</th>
+                    <th>Iva</th>
+                    <th>Piezas por paquete</th>
+                    <th>Cantidad de paquetes</th>
+                    <th>Foto</th>
+                    <th>Total producto</th>
+                  </tr>
+                </thead>
+                <tbody id="detail-dp">
+
+                </tbody>
+             </table>
+             
+             <div class="cont-dt">
+               <table class="table-striped table-condensed table-hover total-pedido de-t" >
+                  <tr>
+                    <td id="subtotalp">
+                      <span class="text-info">Subtotal:  </span>
+                    </td>
+                    <td id="totalp">
+                      <span class="sub-p"></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="text-info">Iva: </span>
+                    </td>
+                    <td>
+                       <span class="sub-iva"></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="text-info">Total:  </span>
+                    </td>
+                    <td>
+                      <span class="total-p">
+                    </td>
+                  </tr>
+                </table>
+             </div>
+             <div class="imprimirpedido">
+              <a class="btn btn-info im-pedido" href="" target="_blank" >Imprimir pedido</a>
+            </div>
+           </div>
+           <div class="table-cli">
+              <table class="table cliente-pedido">
+                <tbody id="cli-dpedido" class="cli-pedidod">
+                  <tr id="sindomi">
+                  <td>RFC: <span class="c_rfc"></span> <span class="cir">• </span>Nombre: <span class="c_nombre"></span> <span class="cir">• </span>Correo: <span class="c_correo"></span> <span class="cir">• </span>N° cliente: <span class="c_numero"></span></td>
+                </tr>
+                <tr class="pc_domiclio">
+                  <td>País: <span class="c_pais"> </span><span class="cir">• </span>Estado: <span class="c_estado"></span> <span class="cir">• </span>Municipio: <span class="c_municipio"></span></td>
+                </tr>
+                <tr class="pc_domiclio">
+                  <td>Calle 1: <span class="c_calle1"></span> <span class="cir">• </span>Calle 2: <span class="c_calle2"></span> <span class="cir">• </span>Colonia: <span class="c_colonia"></span></td>
+                </tr>
+                <tr class="pc_domiclio">
+                  <td>Delegacion: <span class="c_delegacion"></span> <span class="cir">• </span>CP: <span class="c_cp"></span> <span class="cir">• </span>Teléfono: <span class="c_telefono"></span></td>
+                </tr>
+                <tr class="pc_domiclio onservaciones">
+                  <td>
+                    <div class="ob">Observaciones: <span class="c_observaciones"></span> </div>
+
+                  </td>
+                </tr>
+                </tbody>
+             </table>
+           </div>
+            </div>
+          </div>
+          <div class="modal-footer modal-conf-estat">
+
+              <span id="con-pd" class="sa-p btn btn-primary" data-dismiss="modal" >
+                <span class="glyphicon glyphicon-chevron-left"></span>
+                 Cerrar
+              </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+            <!--Modal para ver la foto del pedido-->
+    <div id="verfotop" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content c-fotope">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title title-f text-info text-center">
+            <span class="glyphicon glyphicon-picture"></span>
+
+             </h4>
+          </div>
+          <div class="modal-body m-foto">
+            <div class="v-foto">
+                <img class="f-p-p" alt="Foto del producto">
+            </div>
+          </div>
+          <div class="modal-footer f-foto modal-confirmar">
+
+          </div>
+        </div>
+      </div>
+    </div>
 
   <!-- Modal II  para confirmar cambio de contraseña -->
 <!--  <div id="confirmarpass" class="modal fade">

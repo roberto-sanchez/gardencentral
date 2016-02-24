@@ -123,6 +123,9 @@
                       <td>Precio: ${{ number_format($item->precio_venta, 2)}}</td>
                    </tr>
                    <tr class="tr-car filap_{{ $item->id }}" id="{{ $item->id }}">
+                      <td>Iva: 16%</td>
+                   </tr>
+                   <tr class="tr-car filap_{{ $item->id }}" id="{{ $item->id }}">
                       <td>Piezas paquete: {{ $item->piezas_paquete }}</td>
                    </tr>
                    <tr class="tr-car filap_{{ $item->id }}" id="{{ $item->id }}">
@@ -170,7 +173,8 @@
                     <span class="text-info">Iva: </span>
                   </td>
                   <td>
-                      ${{ $iva = number_format($total * 0.16, 2) }}
+                      <?php $iva = $total * 0.16 ?>
+                      ${{ number_format($total * 0.16, 2) }}
                   </td>
                 </tr>
                 <tr>
@@ -191,6 +195,7 @@
                       <th>Nombre</th>
                       <th>Color</th>
                       <th>Precio</th>
+                      <th>Iva</th>
                       <th>Piezas por paquete</th>
                       <th>Cantidad de paquetes</th>
                       <th>Foto</th>
@@ -205,6 +210,7 @@
                         <td class="p-nom">{{ $item->nombre }}</td>
                         <td>{{ $item->color }}</td>
                         <td><?php $des = $item->precio_venta * $item->factor_descuento ?>${{ number_format($tpro = $item->precio_venta - $des, 2) }}</td>
+                        <td>16%</td>
                         <td>{{ $item->piezas_paquete }}</td>
                         <td class="td-cpa">
                           <div class="c-pa">
@@ -243,7 +249,8 @@
                       <span class="text-info">Iva: </span>
                     </td>
                     <td>
-                        ${{ $iva = number_format($total * 0.16, 2) }}
+                       <?php $iva = $total * 0.16 ?>
+                        ${{ number_format($total * 0.16, 2) }}
                     </td>
                   </tr>
                   <tr>
@@ -262,42 +269,55 @@
             </div>
 
 
+              <div class="tipoEnvio">
+                <div class="select-tipo">
+                  <h3 class="text-info">Tipo de envió.</h3>
+                  <select class="selectTipo btn-group">
+                      <option value="nada" disabled selected>-- Seleccione --</option>
+                      <option value="tienda">Recoger en tienda</option>
+                      <option value="domicilio">Enviar a domicilio</option>
+                  </select>
+                </div>
+              </div>
+              <input id="inpEnvio" type="text">
 
           </div>
 
-
+         <div class="g-p-tipo">
+            <span id="g-tipo" href="#confirmpedido" data-toggle="modal" class="g-tipo btn btn-primary">
+              Generar pedido
+            </span>
+         </div>
 
             <div class="panel-elegir">
+              <div class="alert alert-info alert-v alert-pago">
+                <strong>Elige un domiclio.!</strong>
+              </div>
 
-            <div class="alert alert-info alert-pago">
-              <strong>Elige un domiclio.!</strong>
+              <div class="input-group infopago">
+                 <select id="formapago" class="btn btn-info form-control formapago" name="formapago">
+                     <option value="" disabled selected>Elige la forma de pago</option>
+                   @foreach($pago as $pagos)
+                     <option id="text_{{ $pagos->id }}" value="{{ $pagos->id }}">{{ $pagos->descripcion }}</option>
+                   @endforeach
+                 </select>
+              </div>
             </div>
 
-
-            <div class="input-group infopago">
-               <select id="formapago" class="btn btn-info form-control formapago" name="formapago">
-                   <option value="" disabled selected>Elige la forma de pago</option>
-                 @foreach($pago as $pagos)
-                   <option id="text_{{ $pagos->id }}" value="{{ $pagos->id }}">{{ $pagos->descripcion }}</option>
-                 @endforeach
-               </select>
-            </div>
-
-          </div>
-
-          <div class="panel-footer footer-total">
-
-            <div class="d-entrega">
-              <label>
-                <div class="radio">
-                  <input type="checkbox" name="domentrega" id="checkdomicilio">
-                    <label for="checkdomicilio" class="domicilio">
-                        <span class="text-primary">Domicilio de entrega</span>
-                    </label>
+        <section class="selecTipoEnvio">
+              <div class="panel-footer footer-total">
+                <div class="d-entrega">
+                  <label>
+                    <div class="radio">
+                      <input type="checkbox" name="domentrega" id="checkdomicilio">
+                        <label for="checkdomicilio" class="domicilio">
+                            <span class="text-primary">Domicilio de entrega</span>
+                        </label>
+                    </div>
+                  </label>
                 </div>
-              </label>
-            </div>
-         </div>
+             </div> <!--Panel footer-->
+             </section><!--selecTipoEnvio-->
         </div>  <!--Panel productos-->
       </div>
 
@@ -325,42 +345,27 @@
       </div>
   </div>
 
-
-<!-- Modal para cambiar la contraseña -->
-<div id="cambiarpass" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h2 class="modal-title text-danger"><span class="glyphicon glyphicon-lock"></span> Cambia tu contraseña</h2>
-            </div>
-            <div class="modal-body modal-c-pass">
-                {{ Form::open(array('url' => 'users/cambiarpass')) }}
-               <h4 class="text-info">Contraseña Actual</h4>
-               <div class=" form-group">
-                  {{ Form::password('password0', array('class' => 'form-control', 'placeholder' => 'Contraseña actual', 'required')) }}
+       <!-- Modal para confirmar el pedido sin domicilio -->
+            <div id="confirmpedido" class="modal fade">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title text-danger text-center">Confirmar pedido</h4>
+                  </div>
+                  <div class="modal-body">
+                  <h2 class="text-danger text-center t-error-pago">Debe seleccionar la forma de pago.</h2>
+                    <h2 class="text-primary text-center t-exsts">¿Están correctos sus datos?</h2>
+                  </div>
+                  <div class="modal-footer modal-confirmar">
+                      <button type="button" class="btn btn-danger confirm t-no-c" data-dismiss="modal">No</button>
+                      <button type="button" class="btn btn-danger t-cancel confirm" data-dismiss="modal">Cancelar</button>
+                     <a id="p-s-dom" class="btn btn-primary confirm " data-dismiss="modal" >Si</a>
+                     <span id="" class="btn btn-primary confirm regis-exixts-t" data-dismiss="modal" >Si</span>
+                  </div>
                 </div>
-                <h4 class="text-info">Nueva Contraseña</h4>
-                <div class=" form-group">
-                  {{ Form::password('password1', array('class' => 'form-control', 'placeholder' => 'Nueva contraseña', 'required')) }}
-                </div>
-                <div class=" form-group">
-                  {{ Form::password('password2', array('class' => 'form-control', 'placeholder' => 'Repetir la nueva contraseña', 'required')) }}
-                </div>
+              </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                {{ Form::submit('Guardar', array('class' => 'btn btn-primary', 'id' => 'registrar')) }}
-
-              {{ Form::close() }}
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-
 
   <!--____Domicilio de entrega_____-->
   <div class="panel panel-entrega">
@@ -581,6 +586,7 @@
 
                    </div>
 
+
             <div class='notifications top-right'></div>
             <div class="panel-footer footer-formpago">
             <a id="conf-p1" href="#confirmarpedido" class="btn btn-primary btn-conf-1 disabled" data-toggle="modal"> <!--   -->
@@ -617,6 +623,8 @@
                 </div>
               </div>
             </div>
+
+
 
 
               <!-- Modal para confirmar el pedido -->
@@ -821,6 +829,59 @@
 <script type="text/javascript">
 
 $(document).ready(function(){
+
+    //Listar pedidos del cliente
+    $('.pedidosCliente').hide();
+    pedido_c = $("#pedido_cliente");
+    $(document).on('click','#p_cliente', function(){
+          $.ajax({
+            type: 'POST',
+            url: '/productos/listarpedidos',
+            success: function(l){
+              console.log(l);
+              if(l.pedido== 0){
+                    $('.t-p-clientes').text('No tienes ningún pedido.');
+                  } else {
+                  $('.pedidosCliente').show();
+                   pe = "";
+                    for(datos in l.pedido) {
+                        pe += '<tr id="tr_'+l.pedido[datos].id+'"><td><a id="c-estatus" class="'+l.pedido[datos].num_pedido+'" value="'+l.pedido[datos].created_at+'" data-id="'+l.pedido[datos].id+'" href="#detallepedidocliente" data-toggle="modal">'+l.pedido[datos].num_pedido+'</a></td>';
+                        pe += '<td>'+l.pedido[datos].created_at+'</td>';
+                        pe += '<td>'+l.pedido[datos].nombre+'</td>';
+                        pe += '<td><span class="estatus_'+l.pedido[datos].estatus+'"></span></td></tr>';
+                      }
+
+                    pedido_c.append(pe);
+
+                    $('.estatus_0').text('Pendiente');
+                    $('.estatus_0').addClass('text-warning');
+                    $('.estatus_1').text('Crédito.');
+                    $('.estatus_1').addClass('text-primary');
+                    $('.estatus_2').text('Pagado');
+                    $('.estatus_2').addClass('text-success');
+                    $('.estatus_3').text('Cancelado');
+                    $('.estatus_3').addClass('text-danger');
+                }
+            },
+
+            error: function(){
+              alert('failure');
+            }
+          });
+    });
+
+
+    //Detalle del pedido del cliente
+    $(document).on('click', '#c-estatus', function(){
+          $('.table-detail').show();
+          $('#fotop').removeClass('enlace-active');
+          $('#det-p').addClass('enlace-active');
+          id = $(this).attr('data-id');
+          num = $(this).attr('class');
+          fe = $(this).attr('value');
+          $('.n-pe').text('Pedido #'+num);
+          $('.n-fe').text('Fecha: '+fe);
+    });
 
       //Listar domicilios
      dom = $('#dom_c');

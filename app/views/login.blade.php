@@ -44,7 +44,7 @@
                   <div class="input-group formPassword has-feedback">
                       <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
                       {{ Form::password('password',array('class' => 'form-control', 'id' => 'password', 'data-id' => '' ,'placeholder' => 'Contraseña', 'required')) }}
-                      <span class="spanPassword"></span>
+                      <span class="spanPasswordr"></span>
                  </div>
                  <span id="u-e" class="exists-user-e text-danger">El usuario no existe.</span>
                 </div>

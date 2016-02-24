@@ -32,6 +32,10 @@ class Usuario extends Eloquent implements UserInterface, RemindableInterface {
 		return $this->hasMany('UsuarioDetalle');
 	}
 
+	public function loges(){
+		return $this->hasMany('Loge');
+	}
+
 	public function rol(){
 		return $this->belongsTo('Rol');
 	}

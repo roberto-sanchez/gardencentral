@@ -7,7 +7,16 @@
 @section('scripts')
 @parent
 @include('layouts/inc/lib')
+<script>
+  $(document).ready(function(){
+    $('.admin').addClass('active');
+    $('.t-admin').addClass('en-admin');
+    $('.dash').attr('id','');
+  });
+</script>
 @stop
+
+@section('pedidos_user') @stop
 
 
 @section('username')
@@ -22,7 +31,7 @@
       <div class="cont-sidebar">
         <div class="sidebar caja-s">
             <div class="widget">
-                <h2>Campaigns</h2>
+                <h2>Totales</h2>
                 <ul class="cards list-group">
                     <li class="list-group-item">
                         <p class="text-info text-totalp" style=" line-height: 1em; margin-top: 0em">Total de pedidos.</p>
@@ -48,7 +57,7 @@
 
         <div class="sidebar caja-s">
           <div class="widget">
-              <h2>Campaigns</h2>
+              <h2>Estatus</h2>
               <ul class="cards list-group">
                   <li class="list-group-item">
                       <p class="text-primary text-totalp" style=" line-height: 1em; margin-top: 0em">Pedidos en proceso.</p>

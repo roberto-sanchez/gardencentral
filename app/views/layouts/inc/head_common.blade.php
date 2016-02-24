@@ -1,7 +1,8 @@
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {{ HTML::style('css/bootstrap.min.css') }}
-    {{ HTML::style('css/estilos.css') }}
+    {{ HTML::style('css/bootstrap-notify.css') }}
+    {{ HTML::style('css/estilosGlobales.css') }}
 
 
        <!--

@@ -42,6 +42,8 @@ Route::get('pedidos/detallepedido/{id}', 'AgentesController@detallepedido');
 Route::get('pedidos/verestatus', 'AgentesController@verestatus');
 Route::get('pedidos/cambiarestatus', 'AgentesController@cambiarestatus');
 Route::POST('pedidos/infopedidos', 'AgentesController@infopedidos');
+Route::POST('contabilidad/verificarpassconta', 'AgentesController@verificarpassconta');
+Route::POST('pedidos/registrarlog', 'AgentesController@registrarlog'); 
 
 
 
@@ -57,7 +59,7 @@ Route::controller('users','ProductoController');
 Route::bind('producto', function($clave){
 	return Producto::join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
 					->join('familia', 'producto.familia_id', '=', 'familia.id')
-					->select('producto.id','nombre','color','foto','piezas_paquete','clave','precio_venta','factor_descuento')
+					->select('producto.id','iva0','nombre','color','foto','piezas_paquete','clave','precio_venta','factor_descuento')
 					->where('clave', $clave)->first();
 
 });
@@ -69,6 +71,20 @@ Route::get('consultas/inventario', 'AdminController@inventario');
 Route::get('consultas/pedidos', 'AdminController@pedidos');
 Route::get('consultas/listapedidos', 'AdminController@listapedidos');
 Route::get('consultas/listaagentes', 'AdminController@listaagentes');
+Route::get('consultas/listp', 'AdminController@listp');
+Route::get('entradas/agregar', 'AdminController@agregar');
+Route::POST('entradas/proveedores', 'AdminController@proveedores');
+Route::POST('entradas/buscar', 'AdminController@buscar');
+Route::POST('entradas/addproducto', 'AdminController@addproducto');
+Route::POST('entradas/registrarentrada', 'AdminController@entradas');
+Route::GET('consultas/verestatusadmin', 'AdminController@verestatusadmin');
+Route::GET('consultas/cambiarestatusadmin', 'AdminController@cambiarestatusadmin');
+Route::POST('consultas/verificarpassadmin', 'AdminController@verificarpassadmin'); 
+
+
+//Exportar e Excel
+Route::get('consultas/exportarexcel', 'AdminController@exportarexcel');
+Route::get('consultas/excel', 'AdminController@excel');
 
 Route::POST('consultas/dpedidos', 'AdminController@dpedidos');
 
@@ -86,12 +102,11 @@ Route::post('productos/delete/{producto}', 'ProductoController@delete');
 
 //Vaciar todo el contenido de el carrito
 Route::post('productos/vaciar', 'ProductoController@vaciar');
-Route::get('productos/trash', 'ProductoController@trash');
 
 //Rutas para verificar datos
-Route::post('productos/getLoginUser','ProductoController@getLoginUser');
-Route::post('productos/getLoginPass','ProductoController@getLoginPass');
-Route::post('productos/getVerificarUser','ProductoController@getVerificarUser');
+Route::post('verificar/getLoginUser','LoginController@getLoginUser');
+Route::post('verificar/getLoginPass','LoginController@getLoginPass');
+Route::post('verificar/getVerificarUser','LoginController@getVerificarUser');
 Route::post('productos/getVerificaremail','ProductoController@getVerificaremail');
 
 //Actualizar la cantidad de productos
@@ -108,10 +123,12 @@ Route::delete('productos/eliminardomicilio', 'ProductoController@eliminardomicil
 Route::get('productos/listartelefonos', 'ProductoController@listartelefonos');
 
 //Rutas de los catalogos
+//Rutas de los catalogos
 Route::get('catalogo/{cat}', 'CatalogoController@getCatalogo');
 
-Route::post('catalogo/create', 'CatalogoController@create');
 
+Route::post('catalogo/create', 'CatalogoController@create');
+Route::post('getElementos/{cat}', 'CatalogoController@_getElementos');
 Route::delete('catalogo/destroy/{id}', 'CatalogoController@destroy');
 Route::put('catalogo/update/{id}', 'CatalogoController@update');
 
@@ -146,12 +163,21 @@ Route::get('productos/editar/{uddom}', 'ProductoController@editar');
 //Actualizar domiclio
 Route::post('productos/actualizar', 'ProductoController@actualizar');
 
-
+//Verificar teléfonos
+Route::post('productos/getVerificarTel','ProductoController@getVerificarTel');
 
 //Detalle del pedido
 Route::get('productos/datosdelpedido/{iddom}', 'ProductoController@datosdelpedido');
+
+//	Listar pedidos del cliente
+Route::POST('productos/listarpedidos', 'ProductoController@listarpedidos');
+Route::POST('productos/detalledelpedido', 'ProductoController@detalledelpedido');
 
 
 
 //Imprimir pdf
 Route::get('productos/imprimirpedido/{iddom}', 'ProductoController@imprimirpedido');
+
+Route::get('salidas/listar', 'AdminController@listp');
+
+Route::get('salidas/listarp', 'AdminController@listarp');

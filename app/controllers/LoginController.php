@@ -50,7 +50,7 @@ class LoginController extends \BaseController {
 
 	 }
 
-		elseif($rol == 2){
+		elseif($rol == 2 || $rol == 4 ){
 	 //Aqui redireccionare a las vistas del agente
 	 return Redirect::to('agentes');
 	}
@@ -66,6 +66,71 @@ class LoginController extends \BaseController {
 		//return Redirect::to('login');
 		return View::make('login', Input::all());
 	}
+
+
+
+	 //Verificar inicio de sesion
+  public function getLoginUser(){
+   $user = Input::get('usuario');
+
+    $resp = DB::table('usuario')
+            ->select('id', 'usuario')
+            ->where('usuario', $user)->first();
+
+    if(count($resp)==0){
+        return Response::json($resp);
+
+    } else {
+
+        return Response::json($resp);
+    }
+
+  }
+
+  public function getLoginPass(){
+  	$iduser = Input::get('idpass');
+    
+    $p = DB::table('usuario')
+		    		->where('id', $iduser)->pluck('password');
+
+
+   if (Hash::check(Input::get('pass'), $p)) {
+
+			    $b = "coinciden";
+
+			} else {
+
+				$b = "No coinciden";
+				
+			}
+
+		 return Response::json($b);
+
+  }
+
+
+
+   //Verificar disponibilidad de usuario y email
+  public function getVerificarUser(){
+   $user = Input::get('user');
+
+    $resp = DB::table('usuario')
+            ->select('usuario')
+            ->where('usuario', $user)->first();
+
+    if(count($resp)==0){
+
+        return Response::json($resp);
+
+    } else {
+
+        return Response::json($resp);
+    }
+
+
+  }
+
+
 
 
     //logout

@@ -40,7 +40,7 @@ if($('.sesion-f').length == 0){
 
         $.ajax({
             type: "POST",
-            url: "productos/getLoginUser",
+            url: "/verificar/getLoginUser",
              data: {usuario: usuario },
             success: function( u ){
                 d = u.usuario;
@@ -68,51 +68,33 @@ if($('.sesion-f').length == 0){
 });
 
 
-    //validamos la password
-    $('.formPassword').keyup(function(){
-        valor = $('#password').val();
-        if(valor.indexOf(' ') >= 0){
-            $('.spanPassword').show();
-            $('.formPassword').addClass('has-error');
-            $('.spanPassword').addClass('glyphicon glyphicon-remove form-control-feedback');
-         }
-          else if(valor.length <= 5 ){
-            $('.spanPassword').show();
-            $('.formPassword').addClass('has-error');
-            $('.spanPassword').addClass('glyphicon glyphicon-remove form-control-feedback');
-         }
-         else {
-            $('.formPassword').removeClass('has-error');
-            $('.spanPassword').removeClass('glyphicon-remove');
-            $('.spanPassword').addClass('glyphicon glyphicon-ok form-control-feedback');
-            $('.formPassword').addClass('has-success');
-
-         }
-    });
-
 /*Verificar si la contraseña existe */
- /* $('#password').keyup( function(){
+  $('#password').keyup( function(){
     if($('#password').val()!= ""){
          idpass = $('#password').attr('data-id');
-        pass = $('#password').val();
-         console.log(idpass);
-         //alert(pass);
+         pass = $('#password').val();
         $.ajax({
             type: "POST",
-            url: "productos/getLoginPass",
+            url: "/verificar/getLoginPass",
              data: {idpass: idpass, pass: pass },
             success: function( p ){
-                console.log(p);
-                vp = p.password;
-                console.log(vp);
-                //console.log(pass);
-
+                if (p == "No coinciden") {
+                     $('.formPassword').addClass('has-error');
+                     $('.spanPasswordr').addClass('glyphicon glyphicon-remove form-control-feedback');
+                     $('#acceder').addClass('disabled');
+                    } else {
+                      $('.formPassword').removeClass('has-error');
+                      $('.spanPasswordr').removeClass('glyphicon-remove');
+                      $('.spanPasswordr').addClass('glyphicon glyphicon-ok form-control-feedback');
+                      $('.formPassword').addClass('has-success');
+                      $('#acceder').removeClass('disabled');
+                }
 
             }
         });
      }
 });
- */
+ 
 
 /*Si la sesion falla obtendremos el valor del username y realizaremos lo siguiente*/
  if($('#username').val().trim().length == 0){
@@ -146,7 +128,7 @@ $('#password').focus(function(){
 
         $.ajax({
             type: "POST",
-            url: "productos/getVerificaremail",
+            url: "/productos/getVerificaremail",
              data: {email: email },
            beforeSend: function(){
               $('.email-r').removeClass('text-danger');
@@ -327,7 +309,7 @@ $('#password').focus(function(){
 
         $.ajax({
             type: "POST",
-            url: "productos/getVerificarUser",
+            url: "/verificar/getVerificarUser",
              data: {user: user },
            beforeSend: function(){
               $('.email-v').removeClass('text-danger');
@@ -388,7 +370,7 @@ $('#password').focus(function(){
 
         $.ajax({
             type: "POST",
-            url: "productos/getVerificaremail",
+            url: "/productos/getVerificaremail",
              data: {email: email },
            beforeSend: function(){
               $('.email-v').removeClass('text-danger');

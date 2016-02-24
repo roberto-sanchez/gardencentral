@@ -9,10 +9,14 @@
 {{ HTML::style('css/select2.min.css') }}
 @stop
 
+@section('pedidos_user') @stop
+
 @section('username')
 <span class="glyphicon glyphicon-user"></span>
 <strong> Bienvenido: {{ Auth::user()->usuario }} </strong>
 @stop
+
+@section('pedidos_user') @stop
 
 @section('menu_users')
   @parent
@@ -28,7 +32,7 @@
      @include('layouts/inc/estatus')
 
         <h1 class="text-primary text-center conf-pedido">Confirmación del pedido</h1>
-         @foreach($pedido as $pedi)
+       @foreach($pedido as $pedi)
         <h2 class="text-info text-center conf-num">
             N° pedido: {{ $pedi ->num_pedido }}
         </h2>
@@ -46,6 +50,7 @@
               </tr>
             </thead>
             <tbody id="body-det">
+          @if(count($direc))
             @foreach($direc as $d)
               <tr>
                 <td>RFC: <span class="rfc">{{ $d->rfc }}</span> <span>• </span>Nombre: {{ $d->nombre_cliente }} {{ $d->paterno }} {{ $d->materno }} <span>• </span>Correo: {{ Auth::user()->email }} <span>• </span>N° cliente: {{ $d->numero_cliente }}</td>
@@ -60,6 +65,13 @@
                 <td>Delegación: {{ $d->delegacion }} <span>• </span>CP: {{ $d->codigo_postal }} <span>• </span>Teléfono: {{ $d->numero }}</td>
               </tr>
               @endforeach
+            @else
+              @foreach($cli as $c)
+              <tr>
+                <td>RFC: <span class="rfc">{{ $c->rfc }}</span> <span>• </span>Nombre: {{ $c->nombre_cliente }} {{ $c->paterno }} {{ $c->materno }} <span>• </span>Correo: {{ Auth::user()->email }} <span>• </span>N° cliente: {{ $c->numero_cliente }}</td>
+              </tr>
+              @endforeach
+           @endif
 
             </tbody>
           </table>
@@ -80,6 +92,9 @@
                 </tr>
                 <tr>
                    <td><?php $des = $item->precio_venta * $item->factor_descuento ?>${{ number_format($tpro = $item->precio_venta - $des, 2) }}</td>
+                </tr>
+                <tr>
+                   <td>Iva: 16%</td>
                 </tr>
                 <tr>
                    <td>Piezas por paquete: {{ $item->piezas_paquete }}</td>
@@ -108,7 +123,8 @@
                     <span class="text-info">Iva: </span>
                   </td>
                   <td>
-                      ${{ $iva = number_format($total * 0.16, 2) }}
+                      <?php $iva = $total * 0.16 ?>
+                      ${{ number_format($total * 0.16, 2) }}
                   </td>
                 </tr>
                 <tr>
@@ -130,6 +146,7 @@
                 <th>Producto</th>
                 <th>Color</th>
                 <th>Precio</th>
+                <th>Iva</th>
                 <th>Piezas por paquete</th>
                 <th>Cantidad</th>
                 <th>Total producto</th>
@@ -140,10 +157,11 @@
                  <td>{{ $item->clave }}</td>
                  <td id="pro-d">{{ $item->nombre }}</td>
                  <td>{{ $item->color }}</td>
-                 <td>${{ number_format($item->precio_venta, 2)}}</td>
+                <td><?php $des = $item->precio_venta * $item->factor_descuento ?>${{ number_format($tpro = $item->precio_venta - $des, 2) }}</td>
+                 <td>16%</td>
                  <td>{{ $item->piezas_paquete }}</td>
                  <td>{{ $item->quantity }}</td>
-                 <td>${{ number_format($item->precio_venta * $item->quantity, 2) }}</td>
+                 <td>${{ number_format($sub = $tpro * $item->quantity, 2) }}</td>
                </tr>
               @endforeach
             </table>
@@ -161,7 +179,8 @@
                     <span class="text-info">Iva: </span>
                   </td>
                   <td>
-                      ${{ $iva = number_format($total * 0.16, 2) }}
+                      <?php $iva = $total * 0.16 ?>
+                      ${{ number_format($total * 0.16, 2) }}
                   </td>
                 </tr>
                 <tr>
@@ -181,7 +200,7 @@
           <a class="btn btn-default" href="{{ URL::to('productos/imprimirpedido',$iddom) }}" target="_blank" >Imprimir pedido en PDF</a>
         </div>
         <div id="generarcompra">
-          <a href="{{ URL::to('productos/trash') }}" class="btn btn-info">
+          <a href="{{ URL::to('users') }}" class="btn btn-info">
           <span class="glyphicon glyphicon-chevron-left"></span>
              Seguir comprando
           </a>
@@ -192,31 +211,6 @@
   </section>
 </div> <!-- Content users -->
 
-
-{{ HTML::script('js/principal.js') }}
-
-<script type="text/javascript">
-  $('.log-out').attr('id','cerrar');
-  $('.log-out').attr('href',"#");
-
-$('#cerrar').click(function(){
-
-      $.ajax({
-            type: "POST", //metodo
-            url: "/productos/vaciar",
-            success: function (v) {
-                //Cerramos la sesion
-                window.location.href = "/logout";
-
-            },
-            error: function () {
-                alert('failure');
-            }
-        });
-
-
-});
-</script>
 
 
 

@@ -7,6 +7,11 @@ class Pedido extends Eloquent{
 		return $this->hasMany('PedidoDetalle');
 	}
 
+	public function loges(){
+		return $this->hasMany('Loge');
+	}
+
+
 	public function cliente(){
 		return $this->belongsTo('Cliente');
 	}
