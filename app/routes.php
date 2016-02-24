@@ -146,8 +146,7 @@ Route::get('productos/editar/{uddom}', 'ProductoController@editar');
 //Actualizar domiclio
 Route::post('productos/actualizar', 'ProductoController@actualizar');
 
-//Verificar teléfonos
-Route::post('productos/getVerificarTel','ProductoController@getVerificarTel');
+
 
 //Detalle del pedido
 Route::get('productos/datosdelpedido/{iddom}', 'ProductoController@datosdelpedido');
