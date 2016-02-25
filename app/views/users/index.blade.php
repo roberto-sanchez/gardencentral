@@ -271,11 +271,11 @@
 
               <div class="tipoEnvio">
                 <div class="select-tipo">
-                  <h3 class="text-info">Tipo de envió.</h3>
+                  <h3 class="text-info">Cotizar Envío.</h3>
                   <select class="selectTipo btn-group">
                       <option value="nada" disabled selected>-- Seleccione --</option>
                       <option value="tienda">Recoger en tienda</option>
-                      <option value="domicilio">Enviar a domicilio</option>
+                      <option value="domicilio" title="Aplican costos adicionales">Enviar a domicilio</option>
                   </select>
                 </div>
               </div>

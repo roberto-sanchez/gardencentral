@@ -180,7 +180,6 @@ $(document).ready(function () {
                 url: "productos/getProducto",
                 data: {clave: $('#clave').val()},
                 success: function (prod) {
-                  console.log(prod);
                     ver = prod.id;
                     if (ver === undefined) {
                         $('#productoPanel').hide();
