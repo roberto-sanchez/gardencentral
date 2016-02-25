@@ -79,7 +79,8 @@ Route::POST('entradas/addproducto', 'AdminController@addproducto');
 Route::POST('entradas/registrarentrada', 'AdminController@entradas');
 Route::GET('consultas/verestatusadmin', 'AdminController@verestatusadmin');
 Route::GET('consultas/cambiarestatusadmin', 'AdminController@cambiarestatusadmin');
-Route::POST('consultas/verificarpassadmin', 'AdminController@verificarpassadmin'); 
+Route::POST('consultas/verificarpassadmin', 'AdminController@verificarpassadmin');
+Route::GET('inventario/listarinventario', 'AdminController@listarinventario'); 
 
 
 //Exportar e Excel

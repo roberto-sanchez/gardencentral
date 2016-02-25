@@ -97,12 +97,16 @@ class AdminController extends \BaseController {
 	 * @return Response
 	 */
 	 public function inventario(){
-		 $inventario =	DB::table('producto')
-		 					->join('inventario','producto.id','=','inventario.producto_id')
-							->select('producto.id','clave','nombre','cantidad')
-							 ->get();
-		 return View::make('admin/inventario',
-	 											compact('inventario'));
+		 return View::make('admin/inventario');
+	 }
+
+
+	 public function listarinventario(){
+	       $i = DB::table('producto')
+ 					->join('inventario','producto.id','=','inventario.producto_id')
+					->select('producto.id','clave','nombre','cantidad')
+					 ->get();
+		 echo json_encode($i);
 	 }
 
 	 public function pedidos(){
@@ -111,7 +115,7 @@ class AdminController extends \BaseController {
 
 	 public function listapedidos(){
 
-		 $pedidos =	DB::table('cliente')
+		    $p = DB::table('cliente')
 							->join('usuario','cliente.usuario_id','=','usuario.id')
 							->join('pedido','cliente.id','=','pedido.cliente_id')
 							->select('pedido.id','numero_cliente','nombre_cliente','paterno','agente_id', 'num_pedido','pedido.created_at','pedido.estatus')
@@ -128,7 +132,7 @@ class AdminController extends \BaseController {
 
 
 
-		  return Response::json(array('pedidos' => $pedidos, 'agente' => $agente));
+		  echo json_encode($p);
 	 }
 
 	 public function listaagentes(){

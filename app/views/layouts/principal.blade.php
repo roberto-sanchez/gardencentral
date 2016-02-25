@@ -193,7 +193,6 @@
          <li>
             <h3><span class="glyphicon glyphicon-level-up"></span>Salidas</h3>
             <ul>
-                <li><a href="{{ URL::to('/salidas/listar') }}">Listar</a></li>
                 <li><a href="#">Enlace 2</a></li>
                 <li><a href="#">Enlace 4</a></li>
             </ul>

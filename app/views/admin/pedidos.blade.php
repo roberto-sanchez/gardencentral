@@ -25,7 +25,7 @@
 @section('content')
 <div class="content">
   <!--<a href="{{ URL::to('consultas/listp') }}">Ver Listado</a>-->
-  <div class="row">
+  <div class="row row-pedidos">
     <div class="menu-p">
       <a href="{{ URL::to('consultas/exportarexcel') }}" class="btn btn-success">Exportar a Excel</a>
       <div class="btn-group">
@@ -44,7 +44,7 @@
     </div>
 
     <div class="data-pedidos">
-      <table id="table-pedido" class="table table-first-column-number data-table display full">
+      <table id="list_p_" class="table table-first-column-number data-table display full">
         <thead>
           <tr>
             <th>N° Pedido</th>
@@ -349,49 +349,147 @@ $(document).ready(function(){
 
 
   //Listar pedidos
-     tablepedido = $('#totalPedido');
+              $.ajax({
+                dataType: 'json',
+                url: "/consultas/listapedidos",
+                success: function (p) {
+                console.log(p);
+                tabla_a = $('#list_p_').DataTable({
+                  "oLanguage": { 
+                      "oPaginate": { 
+                      "sPrevious": "Anterior", 
+                      "sNext": "Siguiente", 
+                      "sLast": "Ultima", 
+                      "sFirst": "Primera" 
+                      }, 
+
+                  "sLengthMenu": 'Mostrar <select>'+ 
+                  '<option value="10">10</option>'+ 
+                  '<option value="20">20</option>'+ 
+                  '<option value="30">30</option>'+ 
+                  '<option value="40">40</option>'+ 
+                  '<option value="50">50</option>'+ 
+                  '<option value="-1">Todos</option>'+ 
+                  '</select> registros', 
+
+                  "sInfo": "Mostrando del _START_ a _END_ (Total: _TOTAL_ resultados)", 
+                  "sInfoFiltered": " - filtrados de _MAX_ registros", 
+                  "sInfoEmpty": "No hay resultados de búsqueda", 
+                  "sZeroRecords": "No hay registros a mostrar", 
+                  "sProcessing": "Espere, por favor...", 
+                  "sSearch": "Buscar:", 
+
+               },
+
+                "aaSorting": [[ 2, "desc" ]], 
+
+                fnCreatedRow : function (nRow, aData, iDataIndex) {
+                     $(nRow).addClass("fila_"+p[i].estatus);
+                     $(nRow).attr('id', "tr_"+p[i].id);
+                               
+                },
+
+                "sPaginationType": "simple_numbers",
+                 "sPaginationType": "bootstrap",
 
 
-        $.ajax({
-            type: "GET",
-            url: "/consultas/listapedidos",
-            success: function (p) {
-              console.log(p);
-              tp = "";
-              ta = "";
-              datos = 1;
-        for(datos in p.pedidos){
-                tp += '<tr id="tr_'+p.pedidos[datos].id+'" data-id="'+datos+'" class="fila_'+p.pedidos[datos].estatus+'"><td><a id="c-estatus" class="'+p.pedidos[datos].estatus+'" data-id="'+p.pedidos[datos].id+'" value="'+p.pedidos[datos].created_at+'" href="#modalpedido" data-toggle="modal">'+p.pedidos[datos].num_pedido+'</a></td>';
-                tp += '<td>'+p.pedidos[datos].numero_cliente+'</td>';
-                tp += '<td>'+p.pedidos[datos].created_at+'</td>';
-                tp += '<td>'+p.pedidos[datos].nombre_cliente+' '+p.pedidos[datos].paterno+'</td>';
-                if(p.pedidos[datos].agente_id == 0){
-                  tp += '<td class="text-danger">No asignado</td>';
 
-                } else {
+            });
 
-                  tp += '<td>'+p.pedidos[datos].agente_id+'</td>';
+
+                    tabla_a.fnClearTable();
+
+                      for(var i = 0; i < p.length; i++) {
+                             tabla_a.fnAddData([
+                                       '<a id="c-estatus" class="'+p[i].estatus+' v_'+p[i].razon_social+'" data-id="'+p[i].id+'" value="'+p[i].razon_social+'" href="#modalpedido" data-toggle="modal">'+p[i].num_pedido+'</a>',
+                                        p[i].numero_cliente,
+                                        p[i].created_at,
+                                        p[i].nombre_cliente+" "+p[i].paterno,
+                                        '<span class="a_'+p[i].agente_id+'">'+p[i].agente_id+'</span>',
+                                        '<span class="estatus_'+p[i].estatus+'"></span>',
+                                      ]);
+
+
+                              }
+
+                       /* $('.v_').attr('value', 'Sin razón social');
+                        $('.v_r_').text('Sin razón social');
+                        $('.v_r_').addClass('text-info'); */
+
+                        $('.a_0').text('No asignado');
+                        $('.a_0').addClass('text-danger');
+                        $('.estatus_0').text('Pendiente');
+                        $('.estatus_0').addClass('text-warning');
+                        $('.estatus_1').text('Crédito');
+                        $('.estatus_1').addClass('text-primary');
+                        $('.estatus_2').text('Pagado');
+                        $('.estatus_2').addClass('text-success');
+                        $('.estatus_3').text('Cancelado');
+                        $('.estatus_3').addClass('text-danger');
+
+                        $('.dataTables_paginate .prev a').text('Anterior');
+                        $('.dataTables_paginate .next a').text('Siguiente');
+
+
+
+                },
+                error: function () {
+                    alert("failure");
                 }
-                tp += '<td><span class="estatus_'+p.pedidos[datos].estatus+'"></span></td></tr>';
-
-             }
+            });
 
 
-            tablepedido.append(tp);
-            $('.estatus_0').text('Pendiente');
-            $('.estatus_0').addClass('text-warning');
-            $('.estatus_1').text('Crédito');
-            $('.estatus_1').addClass('text-primary');
-            $('.estatus_2').text('Pagado');
-            $('.estatus_2').addClass('text-success');
-            $('.estatus_3').text('Cancelado');
-            $('.estatus_3').addClass('text-danger');
-    },
 
-    error: function () {
-        alert("failure");
-    }
-});
+      $(document).on('click','.fancy > li, a',function(){
+       /* $('.v_').attr('value', 'Sin razón social');
+        $('.v_r_').text('Sin razón social');
+        $('.v_r_').addClass('text-info'); */
+
+        $('.a_0').text('No asignado');
+        $('.a_0').addClass('text-danger');
+        $('.estatus_0').text('Pendiente');
+        $('.estatus_0').addClass('text-warning');
+        $('.estatus_1').text('Crédito');
+        $('.estatus_1').addClass('text-primary');
+        $('.estatus_2').text('Pagado');
+        $('.estatus_2').addClass('text-success');
+        $('.estatus_3').text('Cancelado');
+        $('.estatus_3').addClass('text-danger');
+      });        
+      
+
+      $(document).on('keyup', '#list_p__filter', function(){
+       /* $('.v_').attr('value', 'Sin razón social');
+        $('.v_r_').text('Sin razón social'); 
+        $('.v_r_').addClass('text-info');*/
+        $('.a_0').text('No asignado');
+        $('.a_0').addClass('text-danger');
+        $('.estatus_0').text('Pendiente');
+        $('.estatus_0').addClass('text-warning');
+        $('.estatus_1').text('Crédito');
+        $('.estatus_1').addClass('text-primary');
+        $('.estatus_2').text('Pagado');
+        $('.estatus_2').addClass('text-success');
+        $('.estatus_3').text('Cancelado');
+        $('.estatus_3').addClass('text-danger');
+      });
+
+      $(document).on('click', '#list_p__length', function(){
+       /* $('.v_').attr('value', 'Sin razón social');
+        $('.v_r_').text('Sin razón social');
+        $('.v_r_').addClass('text-info'); */
+        $('.a_0').text('No asignado');
+        $('.a_0').addClass('text-danger');
+        $('.estatus_0').text('Pendiente');
+        $('.estatus_0').addClass('text-warning');
+        $('.estatus_1').text('Crédito');
+        $('.estatus_1').addClass('text-primary');
+        $('.estatus_2').text('Pagado');
+        $('.estatus_2').addClass('text-success');
+        $('.estatus_3').text('Cancelado');
+        $('.estatus_3').addClass('text-danger');
+      });
+
 
 
 

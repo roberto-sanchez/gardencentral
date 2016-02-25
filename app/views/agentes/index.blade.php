@@ -6,7 +6,6 @@
 
 @section('scripts')
 @parent
-
 @stop
 
 @section('username')
@@ -394,15 +393,15 @@
 
             $.ajax({
                 dataType: 'json',
-                url: "pedidos/listarpedidos",
+                url: "/pedidos/listarpedidos",
                 success: function (p) {
-                	if(p.pedido== 0){
+                	if(p == 0){
                 		$('.list-p').text('No tienes ningún pedido asignado.');
              			} else {
              			$('.list-p').text('Lista de pedidos.');
              			$('.t-agentes').show();
-    		            $('.content-ver').show();
-
+    		          $('.content-ver').show();
+                }
 
 
                 tabla_a = $('#list_p_').DataTable({
@@ -448,24 +447,6 @@
             });
 
 
-	             	 
-	             	/*	for(datos in p.pedido){
-                    if(p.pedido[datos].razon_social == ''){
-	                    '<td><a id="c-estatus" class="'+p.pedido[datos].estatus+'" data-id="'+p.pedido[datos].id+'" value="Sin razón social" href="#modalpedido" data-toggle="modal">'+p.pedido[datos].num_pedido+'</a></td>';
-                      } else {
-                      pe += '<tr class="fila_'+p.pedido[datos].estatus+'" id="tr_'+p.pedido[datos].id+'"><td><a id="c-estatus" class="'+p.pedido[datos].estatus+'" data-id="'+p.pedido[datos].id+'" value="'+p.pedido[datos].razon_social+'" href="#modalpedido" data-toggle="modal">'+p.pedido[datos].num_pedido+'</a></td>';
-                      }
-
-                      if(p.pedido[datos].razon_social == ''){
-                        pe += '<td class="text-info">Sin razón social</td>';
-                      } else {
-                      pe += '<td class="razonsocial">'+p.pedido[datos].razon_social+'</td>';
-                      }
-
-                      }
-
-                    tabla_a.append(pe); */
-
                     tabla_a.fnClearTable();
 
                       for(var i = 0; i < p.length; i++) {
@@ -494,8 +475,9 @@
                         $('.estatus_3').text('Cancelado');
                         $('.estatus_3').addClass('text-danger');
 
-                      
-             			}
+                        $('.dataTables_paginate .prev a').text('Anterior');
+                        $('.dataTables_paginate .next a').text('Siguiente');
+
 
 
                 },
@@ -503,6 +485,8 @@
                     alert("failure");
                 }
             });
+
+
     
       $(document).on('click','.fancy > li, a',function(){
         $('.v_').attr('value', 'Sin razón social');
@@ -549,12 +533,6 @@
         $('.estatus_3').text('Cancelado');
         $('.estatus_3').addClass('text-danger');
       });
-
-
-
-
-
-
 
 
 
@@ -983,7 +961,8 @@ $(document).on('click', '.c-pass', function(){
                 $('.estatus_3').addClass('text-danger');
 
             //Desactivamos nuevamente el boton
-            $('.c-pass').addClass('disabled');
+            $('.regist-c').addClass('disabled');
+            
 
         },
         error: function(){
