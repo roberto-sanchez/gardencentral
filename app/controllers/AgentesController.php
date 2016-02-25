@@ -54,7 +54,7 @@ class AgentesController extends \BaseController {
 
 
         //return Response::json($cliente);
-        return Response::json(array('pedido' => $cliente));
+        echo json_encode($cliente);
 
 
     }

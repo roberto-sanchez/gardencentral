@@ -10,8 +10,14 @@
 <script>
   $(document).ready(function(){
     $('.pedidos').addClass('active');
-    $('.t-pedidos').addClass('en-admin');
+    $('.t-pedidos').addClass('en-admin');   
+    
   });
+
+
+
+
+
 </script>
 @stop
 
@@ -26,7 +32,7 @@
   <div class="row">
 
     <div class="data-inv">
-        <table id="jsontable" class="display table table-bordered" width="100%">
+         <table id="mytable" class="table">
           <thead>
             <tr>
               <th>Id</th>
@@ -35,8 +41,6 @@
               <th>Email</th>
             </tr>
           </thead>
-          <tbody id="list_user">
-          </tbody>
         </table>
     </div>
 
@@ -50,6 +54,104 @@
   <script>
 
 
+$(document).ready(function(){
+
+
+    var oTable = $('#mytable').DataTable({
+
+      "oLanguage": { 
+          "oPaginate": { 
+          "sPrevious": "Anterior", 
+          "sNext": "Siguiente", 
+          "sLast": "Ultima", 
+          "sFirst": "Primera" 
+          }, 
+
+        "sLengthMenu": 'Mostrar <select>'+ 
+        '<option value="10">10</option>'+ 
+        '<option value="20">20</option>'+ 
+        '<option value="30">30</option>'+ 
+        '<option value="40">40</option>'+ 
+        '<option value="50">50</option>'+ 
+        '<option value="-1">Todos</option>'+ 
+        '</select> registros', 
+
+        "sInfo": "Mostrando del _START_ a _END_ (Total: _TOTAL_ resultados)", 
+
+        "sInfoFiltered": " - filtrados de _MAX_ registros", 
+
+        "sInfoEmpty": "No hay resultados de búsqueda", 
+
+        "sZeroRecords": "No hay registros a mostrar", 
+
+        "sProcessing": "Espere, por favor...", 
+
+        "sSearch": "Buscar:", 
+
+      }, 
+
+
+
+      //Ordenamos por la columna 2 de manera asc
+      "aaSorting": [[ 2, "asc" ]],
+
+      asStripeClasses : ["impar","par","tercero"],
+
+      "sPaginationType": "simple_numbers",
+          "sPaginationType": "bootstrap",
+
+        fnCreatedRow : function (nRow, aData, iDataIndex) {
+                $(nRow).addClass("otra");
+          },
+          //Agre clases a todas las columnas
+          'fnDrawCallback': function(){
+            $('td').addClass('xd')
+    },
+          //Agrega clases a las columnas que le especifiquemos
+          //Agregamos clases dependiendo de la posicion de las columnas
+      "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+          $('td:eq(0)', nRow).addClass( "avo-lime-h avo-heading-white" );
+          $('td:eq(1),td:eq(2),td:eq(3)', nRow).addClass( "avo-light" );
+        },
+
+
+    }); 
+
+    $.ajax({
+      url: "/salidas/listarp",
+      dataType: 'json',
+      success: function(s){
+        
+        console.log(s);
+
+          oTable.fnClearTable();
+
+            for(var i = 0; i < s.length; i++) {
+                     oTable.fnAddData([
+                                s[i].id,
+                                s[i].rol_id,
+                                s[i].usuario,
+                                s[i].email,
+                              ]);
+
+
+                    } // End For */
+
+
+
+            
+
+      },
+      error: function(e){
+         console.log(e.responseText);
+      }
+      });
+
+
+});
+
+
+
   /* $.ajax( {
                 "dataType": 'json',
                 "type": "GET",
@@ -58,8 +160,8 @@
                 "success": fnCallback
             } ); */
 
-
-var oTable = $('#jsontable').dataTable();  //Initialize the datatable
+/*
+var oTable = $('#jsontable').dataTable(); 
 
     $.ajax({
       url: "/salidas/listarp",
@@ -83,8 +185,8 @@ var oTable = $('#jsontable').dataTable();  //Initialize the datatable
       error: function(e){
          console.log(e.responseText);
       }
-      });
-
+      }); */
+/*
 
   $('#list_user').dataTable({
     'bJQueryUI': true,
@@ -110,7 +212,7 @@ $('#list_user').dataTable( {
     { className: "my_ejemplo" },
 
   ]
-} );
+} );  */
 
 
  /*    dom = $('#list_user');

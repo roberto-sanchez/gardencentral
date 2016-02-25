@@ -180,4 +180,4 @@ Route::get('productos/imprimirpedido/{iddom}', 'ProductoController@imprimirpedid
 
 Route::get('salidas/listar', 'AdminController@listp');
 
-Route::get('salidas/listarp', 'AdminController@listarp');
+Route::GET('salidas/listarp', 'AdminController@listarp');

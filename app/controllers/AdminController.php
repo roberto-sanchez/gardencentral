@@ -316,41 +316,7 @@ class AdminController extends \BaseController {
 		->get();
 
 		echo json_encode($p);
-
-		//return Response::json(array('p' => $p));
-		
-		/*$resources = array(
-			array("name" => "Resource 1", id => "resource1"),
-			array("name" => "Resource 2", id => "resource2")
-		);*/
-
-	/*	$columns = array(
-            array('db' => 'password', 'email' => 0, "usuario"),
-            array('db' => 'usuario', 'dt' => 1),
-        );
-
-       foreach($p as $it){
-            $it->id;
-        }
-		
-
-      echo json_encode($columns); */
-
-   /*   $personas = Usuario::all()->lists('usuario', 'id');
 	
-	foreach ($personas as $key => $value) {
-                    $p[] = array(
-                    	"id" => $key, 
-                    	"rol_id" => $key, 
-                    	"usuario" => $value
-                    	);
-	} */
-
-	
-
-
-
-
 
 
 		
