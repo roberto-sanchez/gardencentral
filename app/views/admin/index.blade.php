@@ -633,11 +633,8 @@ $.ajax({
     //Guardar nueva nota
     $(document).on('click', '#save-nota', function(){
       seccion = $('#seccion').val();
-      alert(seccion);
       nota = $('#nota').val();
-      alert(nota);
       contenido = $('#contenido').val();
-      alert(contenido);
 
       $.ajax({
         url: '/notas/agregarnota',
