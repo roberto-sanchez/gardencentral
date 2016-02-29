@@ -88,6 +88,65 @@ class AdminController extends \BaseController {
 	   ));
 	}
 
+	public function verbarras(){
+		//Total de pedidos
+		$p = DB::table('pedido')->count();
+
+		/*for($i = 1; $i <= $p; $i++){
+			$t = $i;
+		} */
+
+		echo json_encode($p);
+	}
+
+
+	public function vergrafica(){
+
+		//Pedidos del dia
+		$date = date('Y-m-d');
+		$p_date = DB::table('pedido')
+		->where('fecha_registro', $date)->count();
+
+		//Total de pedidos pagados
+		$p_pagados = DB::table('pedido')
+		->where('estatus','2')->count();
+
+		//Total de pedidos a crédito
+		$p_credito = DB::table('pedido')
+		->where('estatus','1')->count();
+
+		//Total de pedidos pendientes
+		$p_pendientes = DB::table('pedido')
+		->where('estatus','0')->count();
+
+		//Total de pedidos cancelados
+		$p_cancelados = DB::table('pedido')
+		->where('estatus','3')->count();
+
+        $dato = array(
+
+        	array('numero' => $p_date, 'estatus' => 'Del día'),
+        	array('numero' => $p_pagados, 'estatus' => 'Pagados'),
+        	array('numero' => $p_credito, 'estatus' => 'Crédito'),
+        	array('numero' => $p_pendientes, 'estatus' => 'Pendientes'),
+        	array('numero' => $p_cancelados, 'estatus' => 'Cancelados'),
+        );
+       
+        echo json_encode($dato);
+        
+	}
+
+
+	/*CRUD NOTAS DASHBOARD*/
+	PUBLIC FUNCTION listnotas(){
+		$seccion = Input::get('seccion');
+
+		$notas = DB::table('notas')
+				->where('sección', $seccion)
+				->select('id', 'nombre', 'created_at')
+				->get();
+		echo json_encode($notas);
+	}
 
 
 	/**
@@ -408,28 +467,87 @@ for ($i=0; $i < count($idpro); $i++) {
 		return Response::json('Correcto');
 	}
 
-	/**
-	 * Update the specified resource in storage.
-	 * PUT /admins/{id}
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
-	{
-		//
+
+	public function agregarpagina(){
+		return View::make('admin/paginas');
 	}
 
-	/**
-	 * Remove the specified resource from storage.
-	 * DELETE /admins/{id}
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function destroy($id)
-	{
-		//
+
+
+	public function notas(){
+
+		return View::make('admin/notas');
+	}
+
+
+	public function listarnotas(){
+
+		$notas = DB::table('notas')
+				->get();
+		echo json_encode($notas);
+
+	}
+
+
+	public function agregarnota(){
+		$seccion = Input::get('seccion');
+		$nota = Input::get('nota');
+		$contenido = Input::get('contenido');
+
+		$new_nota = new Nota;
+		$new_nota->sección = $seccion;
+		$new_nota->nombre = $nota;
+		$new_nota->texto = $contenido;
+		$new_nota->save();
+
+		$consulta = DB::table('notas')
+				->where('sección', $seccion)
+				->where('nombre', $nota)
+				->where('texto', $contenido)
+				->first();
+
+		return Response::json($consulta);
+	}
+
+	public function eliminarnota(){
+
+		$id = Input::get('id');
+
+		$nota = Nota::find($id); 
+        $nota->delete(); // Borramos 
+
+        return Response::json($nota);
+
+	}
+
+	public function editarnota(){
+		$id = Input::get('id');
+
+		$nota = DB::table('notas')
+				->where('id', $id)
+				->first();
+
+		return Response::json($nota);
+	}
+
+
+	public function actualizarnota(){
+		$id = Input::get('id');
+		$seccion = Input::get('seccion');
+		$nota = Input::get('nota');
+		$contenido = Input::get('contenido');
+
+		$ac_nota = Nota::find($id);
+		$ac_nota->sección = $seccion;
+		$ac_nota->nombre = $nota;
+		$ac_nota->texto = $contenido;
+		$ac_nota->save();
+
+		$new = DB::table('notas')
+					->where('id', $id)
+					->first();
+
+		return Response::json($new);
 	}
 
 

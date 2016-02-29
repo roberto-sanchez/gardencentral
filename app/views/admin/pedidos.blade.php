@@ -828,27 +828,6 @@ $(document).on('click','.img-p',function(){
 });
 
 
-/*  $(function(){
-     $('table.data-table.sort').dataTable( {
-          "bPaginate": false,
-          "bLengthChange": false,
-          "bFilter": false,
-          "bSort": true,
-          "bInfo": false,
-          "bAutoWidth": false
-      });
-     $('table.data-table.full').dataTable( {
-          "bPaginate": true,
-          "bLengthChange": true,
-          "bFilter": true,
-          "bSort": true,
-          "bInfo": true,
-          "bAutoWidth": true,
-          "sPaginationType": "full_numbers",
-          "sDom": '<""f>t<"F"lp>',
-          "sPaginationType": "bootstrap"
-      });
-  }); */
   </script>
 
 @stop

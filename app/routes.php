@@ -65,7 +65,9 @@ Route::bind('producto', function($clave){
 });
 
 //Admin
-Route::post('pedidos/verpedidos','AdminController@verpedidos');
+Route::post('pedidos/verpedidos','AdminController@verpedidos');  
+Route::get('pedidos/verbarras','AdminController@verbarras');
+Route::get('pedidos/vergrafica','AdminController@vergrafica');
 
 Route::get('consultas/inventario', 'AdminController@inventario');
 Route::get('consultas/pedidos', 'AdminController@pedidos');
@@ -81,6 +83,16 @@ Route::GET('consultas/verestatusadmin', 'AdminController@verestatusadmin');
 Route::GET('consultas/cambiarestatusadmin', 'AdminController@cambiarestatusadmin');
 Route::POST('consultas/verificarpassadmin', 'AdminController@verificarpassadmin');
 Route::GET('inventario/listarinventario', 'AdminController@listarinventario'); 
+Route::GET('paginas/agregarpagina', 'AdminController@agregarpagina'); 
+Route::GET('notas/notas', 'AdminController@notas');
+Route::GET('notas/listarnotas', 'AdminController@listarnotas');
+Route::POST('notas/agregarnota', 'AdminController@agregarnota');
+Route::GET('notas/eliminarnota', 'AdminController@eliminarnota');
+Route::GET('notas/editarnota', 'AdminController@editarnota');
+Route::GET('notas/actualizarnota', 'AdminController@actualizarnota');
+
+//Listar notas dependiendo de la vista
+Route::GET('notas/listnotas', 'AdminController@listnotas'); 
 
 
 //Exportar e Excel

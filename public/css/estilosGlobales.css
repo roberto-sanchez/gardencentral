@@ -3206,7 +3206,9 @@ margin-bottom:.5em;
 
 /*--------*****------ADMIN------******--------*/
 /*--- Index Admin ----*/
-
+.row-dashboard{
+  padding-bottom:1em;
+}
 
 /*---------Acordeon menu principal----------*/
 /*--Enlaces--*/
@@ -3290,9 +3292,9 @@ margin-bottom:.5em;
 
 /*-----Totales de los pedidos-------*/
 .cont-sidebar{
-  width:62%;
-  margin-bottom: 1em;
-  padding:0 0 0 1.5em;;
+  width:100%;
+  margin-bottom: .5em;
+  padding:1em 1em 0 1em;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -3303,14 +3305,191 @@ margin-bottom:.5em;
       -ms-flex-direction:row;
           flex-direction:row;
           -webkit-box-pack:justify;
--webkit-justify-content:space-between;
+-webkit-justify-content:space-around;
     -ms-flex-pack:justify;
-        justify-content:space-between;
+        justify-content:space-around;
 
 }
 
+.txt-est-p{
+  font-size:2em;
+}
+
+.content-pedidos{
+  width:730px;
+}
+
+
+.caja-p{
+  background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #e5e5e9), color-stop(1, #fbfbfc));
+  border: 1px solid #c4c4cd;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align:center;
+  -webkit-align-items:center;
+      -ms-flex-align:center;
+          align-items:center;
+  border-radius:3px;
+  padding:1em .5em;
+  width:230px;
+}
+
+.caja-p-t, .caja-p-e{
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack:justify;
+  -webkit-justify-content:space-between;
+      -ms-flex-pack:justify;
+          justify-content:space-between;
+}
+
+.caja-p-t{
+  margin-top:.5em;
+}
+
+.caja-p-e{
+  margin-top:1.5em;
+}
+
+.cantidad-p{
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align:center;
+  -webkit-align-items:center;
+      -ms-flex-align:center;
+          align-items:center;
+  -webkit-box-pack:center;
+  -webkit-justify-content:center;
+      -ms-flex-pack:center;
+          justify-content:center;
+  width:80px;
+  height:60px;
+  margin-right:.5em;
+}
+
+.cantidad-total{
+  border-radius:3px;
+  background:black;
+}
+
+.txt-total{
+  color:black;
+}
+
+.cantidad-dia{
+  border-radius:3px;
+  background:#31708f;
+}
+
+.txt-dia{
+  color:#31708f;
+}
+
+.cantidad-pagados{
+  border-radius:3px;
+  background: #3c763d;
+}
+
+.txt-pagados{
+  color:#3c763d;
+}
+
+.cantidad-credito{
+  border-radius:3px;
+  background:#337ab7;
+}
+
+.txt-credito{
+  color:#337ab7;
+}
+
+.cantidad-pendientes{
+  border-radius:3px;
+  background: #FE9A2E;
+}
+
+.txt-pendientes{
+  color:#FE9A2E;
+}
+
+.cantidad-cancelados{
+  border-radius:3px;
+  background: red;
+}
+
+.txt-cancelados{
+  color:red;
+}
+
+.cantidad-p p{
+  color:white;
+  font-size:2em;
+  margin:0;
+  padding:0;
+  
+}
+
+.text-p h2{
+  margin-bottom:.2em;
+  font-size:1.1em;
+}
+
+.text-p a{
+  color:#2E9AFE;
+}
+
+
 .caja-s{
-  width:330px;
+  width:320px;
+}
+
+.caja-s-g{
+  width:400px;
+  position:relative;
+}
+
+.datos-g{
+  position:absolute;
+  top:52px;
+  right:0;
+  float:right;
+}
+
+.datos-g h3{
+  font-size:.8em;
+  padding:.8em 0;
+  margin:0;
+}
+
+.datos-g h3 .color{
+  padding:.3em .9em;
+  margin-right:.5em;
+}
+
+.datos-g h3 .color-d{
+  background: #31708f;
+}
+
+.datos-g h3 .color-pa{
+  background: #3c763d;
+}
+
+.datos-g h3 .color-c{
+  background: #337ab7;
+}
+
+.datos-g h3 .color-pe{
+  background: #FE9A2E;
+}
+
+.datos-g h3 .color-ca{
+  background: red;
 }
 
 #i-total, #i-mas, #i-menos{
@@ -3318,8 +3497,107 @@ margin-bottom:.5em;
 }
 
 /*-----Dashboaard -- Totales inventario--------*/
+.seccion-inv{
+  display:-webkit-box;
+  display:-webkit-flex;
+  display:-ms-flexbox;
+  display:flex;
+}
+
+
+.seccion2-notas{
+  width:300px;
+}
+
+/*Tablita de las notas */
+#t-notas{
+  width:230px;
+  background:#fdfdbe;
+  margin:0 .5em .5em .5em;
+  
+}
+
+#head-notas{
+  border-bottom: 1px solid #CEECF5; 
+}
+
+#head-notas tr th:last-child{
+  border-left:1px solid #f4c398;
+  
+}
+
+#head-notas span{
+  margin-left:7px;
+  padding:0;
+  cursor:pointer;
+  border-radius:50%;
+  box-shadow:0px 0px 5px #D8D8D8;
+  background:#337ab7;
+  color:#fff;
+  width:30px;
+  height:30px;
+  display:-webkit-box;
+  display:-webkit-flex;
+  display:-ms-flexbox;
+  display:flex;
+  -webkit-box-pack:center;
+  -webkit-justify-content:center;
+      -ms-flex-pack:center;
+          justify-content:center;
+  -webkit-box-align:center;
+  -webkit-align-items:center;
+      -ms-flex-align:center;
+          align-items:center;
+    
+}
+
+
+
+#head-notas h2{
+  font-size:1em;
+  margin:0;
+  padding:0;
+  width:160px;
+  line-height:45px;
+}
+
+tbody tr{
+    border-bottom: 1px solid #CEECF5; 
+    text-align:center;
+}
+
+tbody .nota_fila td{
+  padding:.5em;
+  font-size:.8em;
+}
+
+
+tbody .nota_fila td:last-child{
+  border-left:1px solid #f4c398;
+
+}
+
+
+.fila-nota h2{
+  margin:0;
+  padding:.8em 0;
+  font-size:1em;
+  text-align:center;
+  border-bottom: 1px solid #CEECF5;
+  
+}
+
+.fila-nota hr{
+  margin:.9em 0 0 0;
+  border-color: #CEECF5;
+}
+
+#body-notas .fila-nota:last-child hr{
+  border-color:transparent;
+}
+
 .totales-inv, .inv-mas, .inv-menos{
-  width:100%;
+  width:900px;
   padding:1em;
   display: -webkit-box;
   display: -webkit-flex;
@@ -3339,7 +3617,7 @@ margin-bottom:.5em;
   border: 1px solid #cfcfd6;
   box-shadow: 0px 2px 3px #999;
   margin:.5em;
-  width:210px;
+  width:200px;
   height:80px;
   text-align:center;
   display: -webkit-box;
@@ -3372,7 +3650,57 @@ margin-bottom:.5em;
 
 .cont-text-i h2{
   font-size:2em;
+  margin-top:0;
 }
+
+/*Modals de las notas*/
+/*Agregar nota*/
+
+.header-nota{
+  background:#58A2F6;
+  border-radius:5px 5px 0px 0px;
+}
+
+.header-nota h4{
+  color:#fff;
+}
+
+.body-add-n{
+  margin:2em;
+}
+
+.body-add-n div label{
+  font-size:1.3em;
+}
+
+.body-add-n div input{
+  border-radius:4px;
+}
+
+.area-nota{
+  width:100%;
+}
+
+.d-nota{
+  margin-top:.5em;
+  width:100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack:end;
+  -webkit-justify-content:flex-end;
+      -ms-flex-pack:end;
+          justify-content:flex-end;
+}
+
+.txt-delete-n{
+  font-weight:normal;
+  padding:1em 0;
+}
+
+
+
 
 /*--Tabla del Inventario--*/
 
@@ -3616,6 +3944,12 @@ margin-bottom:.5em;
     -webkit-justify-content:space-between;
         -ms-flex-pack:justify;
             justify-content:space-between;
+}
+
+
+/*---Vista Admin--- Paginas*/
+.row-paginas{
+  padding:2em;
 }
 
 /*------ Mis puntos de corte ------*/
