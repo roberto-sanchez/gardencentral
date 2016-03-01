@@ -184,7 +184,8 @@
         <li class="paginas">
            <h3 class="t-paginas"><span class="glyphicon glyphicon-duplicate"></span>Paginas</h3>
             <ul>
-                <li><a href="{{ URL::to('/paginas/agregarpagina') }}">Términos y condiciones</a></li>
+               <!-- <li><a href="{{ URL::to('/paginas/agregarpagina') }}">Términos y condiciones</a></li>-->
+               <li><a href="#">Términos y condiciones</a></li>
                 <li><a href="{{ URL::to('/notas/notas') }}">Notas</a></li>
             </ul>
         </li>
@@ -270,11 +271,11 @@
             <button type="button" class="close close-mp" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h2 class="modal-title text-center txt-p"><span class="glyphicon glyphicon-shopping-cart"></span> Pedidos</h2>
           </div>
-          <div class="modal-body">
+          <div class="modal-body body-d-cli">
           <h2 class="t-p-clientes"></h2>
             <div class="pedidosCliente">
                 <div class="table-pd">
-                  <table class="table table-striped table-hover">
+                  <table id="list_p_" class="table table-striped table-hover">
                     <thead class="thead-pedido">
                       <tr>
                         <th>N° pedido</th>
@@ -283,14 +284,13 @@
                         <th>Estatus</th>
                       </tr>
                     </thead>
-                    <tbody id="pedido_cliente"></tbody>
                  </table>
                </div>
             </div>
           </div>
           <div class="modal-footer modal-conf-estat">
 
-              <span id="con-pd" class="sa-p btn btn-primary" data-dismiss="modal" >
+              <span id="con-pd" class="sa-p c-p-cli btn btn-primary" data-dismiss="modal" >
                 <span class="glyphicon glyphicon-chevron-left"></span>
                  Cerrar
               </span>

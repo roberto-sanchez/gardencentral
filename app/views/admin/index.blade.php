@@ -656,15 +656,15 @@ $.ajax({
              $('#contenido').val(" ");
 
             //recargamos
-             $(document).on('click','.fancy > li, a',function(){
+          /*   $(document).on('click','.fancy > li, a',function(){
 
-              $fila = "<tr id=tr_"+nota.id+" class='nota_fila'>"+
+             f = "<tr id=tr_"+nota.id+" class='nota_fila'>"+
                        "<td><span></span></td>"+
                        "<td><span class='hidden'>"+nota.created_at+"</span><a id='edit-nota' title='Detalle de la nota' value="+nota.id+" href='#actualizarnota' data-toggle='modal'>"+nota.nombre+"</a></td>"+
                     "</tr>";
+              $('tbody').prepend(f);
 
-                    $('tbody').prepend($fila);
-            });
+            }); */
 
             //Recargamos tambien si se decide agregar nueva nota
             $(document).on('click', '#r-add', function(){
@@ -736,13 +736,13 @@ $.ajax({
                 +'<tr/>'); 
 
 
-            $(document).on('click','.fancy > li, a',function(){
+       /*     $(document).on('click','.fancy > li, a',function(){
 
               $('#tr_'+id).replaceWith('<tr id="tr_'+a.id+'" class="nota_fila">'+
                 '<td><span></span></td>'
                 +'<td><span class="hidden">'+a.created_at+'</span><a id="edit-nota" title="Detalle de la nota" value='+a.id+' href="#actualizarnota" data-toggle="modal">'+a.nombre+'</a></td>'
                 +'<tr/>'); 
-            }); 
+            }); */
                   
         },
         error: function(){

@@ -35,7 +35,7 @@
     <h1 class="text-info text-center">Lista de notas.</h1>
 
     <div class="data-notas">
-        <button href="#agregarnota" data-toggle="modal" class="btn btn-success">Agregar Nota</button>
+        <button href="#agregarnota" data-toggle="modal" class="btn btn-primary add-n">Agregar Nota</button>
       <table id="list_p_" class="table">
         <thead>
           <tr>

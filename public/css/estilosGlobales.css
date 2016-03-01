@@ -3758,12 +3758,18 @@ tbody .nota_fila td:last-child{
 /**Modal confirmar la contraseña ---*/
 .confirmarpass{
   width:100%;
+  padding-bottom:1.8em;
+}
+
+.c-status-c{
+  margin-bottom:.5em;
+  font-size:1em;
 }
 
 .confirmarpass .input-pass{
   width:70%;
   margin:0 auto;
-  margin-top:1.7em;
+  margin-top:0;
   margin-bottom:0;
 }
 
@@ -3951,6 +3957,34 @@ tbody .nota_fila td:last-child{
 .row-paginas{
   padding:2em;
 }
+
+
+/*Vista admin-- Notas---------*/
+.data-notas{
+  width:80%;
+  margin:0 auto;
+  position:relative;
+}
+
+.add-n{
+  position:absolute;
+  top:0px;
+  right:200px;
+}
+
+
+#list_p_ thead tr th{
+    text-align:center;
+}
+
+.acc{
+
+}
+
+.editar-n{
+  margin-right:1em;
+}
+
 
 /*------ Mis puntos de corte ------*/
 @media(min-width:420px){

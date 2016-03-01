@@ -239,17 +239,31 @@
               Cambiar estatus.
              </h4>
           </div>
-          <div class="modal-body">
+          <div class="modal-body confirmarpass">
+            @if(Auth::user()->rol_id == 2)
             <h2 class="text-danger text-center c-status">¿Está seguro que desea cambiar el estatus del pedido?</h2>
-          <span class="label label-danger esta center"></span>
+            @else
+            <h2 class="text-danger text-center c-status-c">¿Está seguro que desea cambiar el estatus del pedido?</h2>
+              <div class=" input-group input-pass has-feedback">
+                <span class="input-group-addon">
+                  <span class="glyphicon glyphicon-lock"></span>
+                </span>
+                 {{ Form::password('password', array('class' => 'form-control', 'placeholder' => 'Contraseña', "id" => 'campo-pass')) }}
+                 <span class="add-gly"></span>
+              </div>
+              <div class="comparar-pass">
+                <span class="text-success v-password" id="msgPassA">verificando...</span>
+              </div>
+            @endif
+
           </div>
           <div class="modal-footer modal-confirmar">
 
               <button id="no-p" type="button" class="btn btn-danger confirm" data-dismiss="modal">No</button>
               @if(Auth::user()->rol_id == 2)
-                <span id="" class="c-pass btn btn-primary confirm" data-dismiss="modal" >Si</span>
+                <span id="" class="c-pass regist-c btn btn-primary confirm" data-dismiss="modal" >Si</span>
                @else
-                  <span id="" class="conf-pd btn btn-primary confirm" data-dismiss="modal" >Si</span>
+                  <span class="c-pass regist-c-conta regist-c disabled btn btn-primary confirm" data-dismiss="modal" ><span class="estado_i"></span>Si</span>
               @endif
           </div>
         </div>
@@ -274,39 +288,6 @@
           </div>
           <div class="modal-footer f-foto modal-confirmar">
 
-          </div>
-        </div>
-      </div>
-    </div>
-
-
-  <!--Modal para que el usuario confirme la pass y cambiar el estatus-->
-    <div id="confirmpass" class="modal fade" data-keyboard="false" data-backdrop="static">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title text-info text-center">
-            <span class="glyphicon glyphicon-lock"></span>
-              Confirmar contraseña.
-             </h4>
-          </div>
-          <div class="modal-body confirmarpass">
-            <div class=" input-group input-pass has-feedback">
-              <span class="input-group-addon">
-                <span class="glyphicon glyphicon-lock"></span>
-              </span>
-               {{ Form::password('password', array('class' => 'form-control', 'placeholder' => 'Contraseña', "id" => 'campo-pass')) }}
-               <span class="add-gly"></span>
-            </div>
-                <div class="comparar-pass">
-                  <span class="text-success v-password" id="msgPassA">verificando...</span>
-                </div>
-          </div>
-          <div class="modal-footer modal-confirmar-pass">
-
-              <button type="button" class="btn btn-danger confirm" data-dismiss="modal">No</button>
-              <span class="c-pass regist-c disabled btn btn-primary confirm" data-dismiss="modal" ><span class="estado_i"></span>Si</span>
           </div>
         </div>
       </div>
@@ -402,7 +383,6 @@
              			$('.t-agentes').show();
     		          $('.content-ver').show();
                 }
-
 
                 tabla_a = $('#list_p_').DataTable({
                   "oLanguage": { 
@@ -720,7 +700,7 @@
 		//Actualizaciones de contenidos de la pagina
 		$(document).on('click', '#con-pd', function(){
        $('.select-e').slideUp(300);
-			 $('.estatus-pe').hide();
+			 $('.estatus-pe').hide(); 
 			 $('.table-cli').hide();
 			 $("#d-dpedido").load(location.href+" #d-dpedido>*","");
        $('#det-p').addClass('enlace-active');
@@ -961,7 +941,7 @@ $(document).on('click', '.c-pass', function(){
                 $('.estatus_3').addClass('text-danger');
 
             //Desactivamos nuevamente el boton
-            $('.regist-c').addClass('disabled');
+            $('.regist-c-conta').addClass('disabled');
             
 
         },
@@ -976,7 +956,6 @@ $(document).on('click', '.c-pass', function(){
 
 $(document).on('click', '.regist-c', function(){
     e_inicial = $('.header-e').attr('id');
-
     e_final = $(this).attr('data-id');
 
     idp = $(this).attr('value');

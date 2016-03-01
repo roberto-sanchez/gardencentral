@@ -8,7 +8,37 @@
 @parent
 {{ HTML::style('css/select2.min.css') }}
 @include('layouts/inc/lib')
+<style>
 
+  #list_p__length{
+    display:none;
+  }
+  #list_p__filter{
+    float:left;
+    margin:.5em 0;
+  }
+
+  .pedidosCliente{
+    margin:0;
+    padding:0 .5em;
+  }
+
+  .t-p-clientes{
+    margin:0;
+    padding:0;
+  }
+  #list_p_{
+    margin-bottom:0;
+  }
+
+  .dataTables_paginate{
+    margin-bottom:.5em;
+    margin-top:.3em;
+  }
+
+
+
+</style>
 @stop
 
 @section('username')
@@ -835,32 +865,79 @@ $(document).ready(function(){
     pedido_c = $("#pedido_cliente");
     $(document).on('click','#p_cliente', function(){
           $.ajax({
-            type: 'POST',
+            dataType: 'json',
             url: '/productos/listarpedidos',
             success: function(l){
-              console.log(l);
-              if(l.pedido== 0){
+                if(l == 0){
                     $('.t-p-clientes').text('No tienes ningún pedido.');
                   } else {
-                  $('.pedidosCliente').show();
-                   pe = "";
-                    for(datos in l.pedido) {
-                        pe += '<tr id="tr_'+l.pedido[datos].id+'"><td><a id="c-estatus" class="'+l.pedido[datos].num_pedido+'" value="'+l.pedido[datos].created_at+'" data-id="'+l.pedido[datos].id+'" href="#detallepedidocliente" data-toggle="modal">'+l.pedido[datos].num_pedido+'</a></td>';
-                        pe += '<td>'+l.pedido[datos].created_at+'</td>';
-                        pe += '<td>'+l.pedido[datos].nombre+'</td>';
-                        pe += '<td><span class="estatus_'+l.pedido[datos].estatus+'"></span></td></tr>';
-                      }
+                    $('.pedidosCliente').show();
 
-                    pedido_c.append(pe);
+                      tabla_a = $('#list_p_').DataTable({
+                        "oLanguage": { 
+                            "oPaginate": { 
+                            "sPrevious": "Anterior", 
+                            "sNext": "Siguiente", 
+                            "sLast": "Ultima", 
+                            "sFirst": "Primera" 
+                            }, 
 
-                    $('.estatus_0').text('Pendiente');
-                    $('.estatus_0').addClass('text-warning');
-                    $('.estatus_1').text('Crédito.');
-                    $('.estatus_1').addClass('text-primary');
-                    $('.estatus_2').text('Pagado');
-                    $('.estatus_2').addClass('text-success');
-                    $('.estatus_3').text('Cancelado');
-                    $('.estatus_3').addClass('text-danger');
+                        "sLengthMenu": 'Mostrar <select>'+ 
+                        '<option value="10">10</option>'+ 
+                        '<option value="20">20</option>'+ 
+                        '<option value="30">30</option>'+ 
+                        '<option value="40">40</option>'+ 
+                        '<option value="50">50</option>'+ 
+                        '<option value="-1">Todos</option>'+ 
+                        '</select> registros', 
+
+                        "sInfo": "Mostrando del _START_ a _END_ (Total: _TOTAL_ pedidos)", 
+                        "sInfoFiltered": " - filtrados de _MAX_ registros", 
+                        "sInfoEmpty": "No hay resultados de búsqueda", 
+                        "sZeroRecords": "No hay registros a mostrar", 
+                        "sProcessing": "Espere, por favor...", 
+                        "sSearch": "Buscar:", 
+
+                     },
+
+                      "aaSorting": [[ 2, "desc" ]], 
+
+                      "sPaginationType": "simple_numbers",
+                       "sPaginationType": "bootstrap",
+
+
+
+                  });
+
+
+
+                  tabla_a.fnClearTable();
+
+                      for(var i = 0; i < l.length; i++) {
+                             tabla_a.fnAddData([
+                                       '<a id="c-estatus" class="'+l[i].num_pedido+'" data-id="'+l[i].id+'" value="'+l[i].created_at+'" href="#detallepedidocliente" data-toggle="modal">'+l[i].num_pedido+'</a>',
+                                        l[i].created_at,
+                                        l[i].nombre,
+                                        '<span class="estatus_'+l[i].estatus+'"</span>',
+                                      ]);
+
+
+                              }
+
+
+                        $('.estatus_0').text('Pendiente');
+                        $('.estatus_0').addClass('text-warning');
+                        $('.estatus_1').text('Crédito');
+                        $('.estatus_1').addClass('text-primary');
+                        $('.estatus_2').text('Pagado');
+                        $('.estatus_2').addClass('text-success');
+                        $('.estatus_3').text('Cancelado');
+                        $('.estatus_3').addClass('text-danger');
+
+                        $('.dataTables_paginate .prev a').text('Anterior');
+                        $('.dataTables_paginate .next a').text('Siguiente');
+
+
                 }
             },
 
@@ -869,6 +946,40 @@ $(document).ready(function(){
             }
           });
     });
+
+      //Reinicializamos la data table
+    $(document).on('click', '.c-p-cli', function(){
+      $('#list_p_').DataTable().fnDestroy();
+    });
+
+    $(document).on('click', '.close-mp', function(){
+      $('#list_p_').DataTable().fnDestroy();
+    });
+
+      $(document).on('click','.fancy > li, a',function(){
+        $('.estatus_0').text('Pendiente');
+        $('.estatus_0').addClass('text-warning');
+        $('.estatus_1').text('Crédito');
+        $('.estatus_1').addClass('text-primary');
+        $('.estatus_2').text('Pagado');
+        $('.estatus_2').addClass('text-success');
+        $('.estatus_3').text('Cancelado');
+        $('.estatus_3').addClass('text-danger');
+      });        
+      
+
+      $(document).on('keyup', '#list_p__filter', function(){
+        $('.estatus_0').text('Pendiente');
+        $('.estatus_0').addClass('text-warning');
+        $('.estatus_1').text('Crédito');
+        $('.estatus_1').addClass('text-primary');
+        $('.estatus_2').text('Pagado');
+        $('.estatus_2').addClass('text-success');
+        $('.estatus_3').text('Cancelado');
+        $('.estatus_3').addClass('text-danger');
+      });
+
+
 
 
     //Detalle del pedido del cliente

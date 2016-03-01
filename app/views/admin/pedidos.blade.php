@@ -254,31 +254,8 @@
               Cambiar estatus.
              </h4>
           </div>
-          <div class="modal-body">
-            <h2 class="text-danger text-center c-status">¿Está seguro que desea cambiar el estatus del pedido?</h2>
-          <span class="label label-danger esta center"></span>
-          </div>
-          <div class="modal-footer modal-confirmar">
-
-              <button id="no-p" type="button" class="btn btn-danger confirm" data-dismiss="modal">No</button>
-              <span id="" class="conf-pd btn btn-primary confirm" data-dismiss="modal" >Si</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!--Modal para que el usuario confirme la pass y cambiar el estatus-->
-    <div id="confirmpass" class="modal fade" data-keyboard="false" data-backdrop="static">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title text-info text-center">
-            <span class="glyphicon glyphicon-lock"></span>
-              Confirmar contraseña.
-             </h4>
-          </div>
           <div class="modal-body confirmarpass">
+            <h2 class="text-danger text-center c-status-c">¿Está seguro que desea cambiar el estatus del pedido?</h2>
             <div class=" input-group input-pass has-feedback">
               <span class="input-group-addon">
                 <span class="glyphicon glyphicon-lock"></span>
@@ -290,14 +267,15 @@
                   <span class="text-success v-password" id="msgPassA">verificando...</span>
                 </div>
           </div>
-          <div class="modal-footer modal-confirmar-pass">
+          <div class="modal-footer modal-confirmar">
 
-              <button type="button" class="btn btn-danger confirm" data-dismiss="modal">No</button>
-              <span id="c-pass" class="disabled btn btn-primary confirm" data-dismiss="modal" >Si</span>
+              <button id="no-p" type="button" class="btn btn-danger confirm" data-dismiss="modal">No</button>
+               <span id="c-pass" class="disabled regist-c btn btn-primary confirm" data-dismiss="modal" >Si</span>
           </div>
         </div>
       </div>
     </div>
+
 
 {{ HTML::script('js/accounting.min.js') }}
   <script>
@@ -600,6 +578,9 @@ $('.total-p').html(accounting.formatMoney(resultado += iva));
       $('.table-pd').show();
       $('.cancel-r').attr('data-id',estatus);
 
+      es_i = $(this).attr('class');
+      $('.header-e').attr('id', es_i);
+
       $.ajax({
         type:'GET',
         url:'/consultas/verestatusadmin',
@@ -812,6 +793,8 @@ $(document).on('click','.img-p',function(){
                 $('.estatus_2').text('Pagado');
                 $('.estatus_2').addClass('text-success');
 
+                $('#c-pass').addClass('disabled');
+
         },
         error: function(){
           alert('failure');
@@ -820,6 +803,29 @@ $(document).on('click','.img-p',function(){
       });
 
   });
+
+
+  $(document).on('click', '.regist-c', function(){
+    e_inicial = $('.header-e').attr('id');
+    e_final = $(this).attr('data-id');
+    idp = $(this).attr('value');
+
+   $.ajax({
+      type: 'POST',
+      url: '/pedidos/registrarlog',
+      data: {e_inicial: e_inicial, e_final: e_final, idp: idp},
+      success: function(r){
+        $('.header-e').attr('id', r);
+   
+      }, 
+      error: function(){
+        alert('failure');
+      }
+    }); 
+     
+});
+
+
 
 
 

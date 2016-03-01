@@ -183,7 +183,8 @@ Route::post('productos/getVerificarTel','ProductoController@getVerificarTel');
 Route::get('productos/datosdelpedido/{iddom}', 'ProductoController@datosdelpedido');
 
 //	Listar pedidos del cliente
-Route::POST('productos/listarpedidos', 'ProductoController@listarpedidos');
+Route::GET('productos/listarpedidos', 'ProductoController@listarpedidos');
+
 Route::POST('productos/detalledelpedido', 'ProductoController@detalledelpedido');
 
 

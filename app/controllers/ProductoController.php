@@ -53,9 +53,7 @@ class ProductoController extends \BaseController {
                     ->get();
 
 
-        return Response::json(array(
-               'pedido' => $pedido
-            ));
+        echo json_encode($pedido);
     }
 
     public function detalledelpedido(){
