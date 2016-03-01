@@ -64,12 +64,19 @@
              </h4>
           </div>
           <div class="modal-body body-add-n">
-            
-            <div class="form-group">
-                <label for="seccion" class="text-primary">Sección: </label>
-               {{ Form::text('seccion', null,  array('class' => 'form-control', 'id' => 'seccion', 'placeholder' => 'Sección')) }}
-            </div>
 
+           <div class="form-group">
+              <label for="seccion" class="text-primary">Sección: </label>
+              <select class="form-control" id="seccion">
+                <option value="Dashboard">Dashboard</option>
+                <option value="Pedidos">Pedidos</option>
+                <option value="Inventario">Inventario</option>
+                <option value="Entradas">Entradas</option>
+                <option value="Salidas">Salidas</option>
+                <option value="Términos y condiciones">Términos y condiciones</option>
+              </select>
+            </div>
+            
             
             <div class="form-group">
                 <label for="nota" class="text-primary">Nota: </label>
@@ -131,12 +138,19 @@
              </h4>
           </div>
           <div class="modal-body body-add-n">
-            
 
-            <div class="form-group">
-                <label for="seccion" class="text-primary">Sección: </label>
-               {{ Form::text('seccion', null,  array('class' => 'form-control', 'id' => 'seccionedit')) }}
+          <div class="form-group">
+              <label for="seccionedit" class="text-primary">Sección: </label>
+              <select class="form-control" id="seccionedit">
+                <option value="Dashboard">Dashboard</option>
+                <option value="Pedidos">Pedidos</option>
+                <option value="Inventario">Inventario</option>
+                <option value="Entradas">Entradas</option>
+                <option value="Salidas">Salidas</option>
+                <option value="Términos y condiciones">Términos y condiciones</option>
+              </select>
             </div>
+            
 
             <div class="form-group">
                 <label for="nota" class="text-primary">Nota: </label>
@@ -270,7 +284,7 @@
         error: function(){
           alert('failure');
         }
-      });
+      }); 
 
     });
 
