@@ -628,6 +628,25 @@ $.ajax({
           alert('failure');
         }
     });
+
+  $("#save-nota").click(function () {
+
+      if($("#seccion").val().length == 0){
+              $('#seccion').addClass('has-error');
+              return false;
+
+      } else if($("#nota").val().length == 0){
+              $('#nota').addClass('has-error');
+              return false;
+
+      } else if($("#contenido").val().length == 0){
+              $('#contenido').addClass('has-error');
+              return false;
+
+      }  else {
+          return true;
+      }
+});
   
 
     //Guardar nueva nota
@@ -715,6 +734,27 @@ $.ajax({
         }
       });
     });
+
+
+            //Validaciones al actualizar las notas
+    $("#actualizar-nota").click(function () {
+
+      if($("#seccionedit").val().length == 0){
+              $('#seccionedit').addClass('has-error');
+              return false;
+
+      } else if($("#notaedit").val().length == 0){
+              $('#notaedit').addClass('has-error');
+              return false;
+
+      } else if($("#contenidoedit").val().length == 0){
+              $('#contenidoedit').addClass('has-error');
+              return false;
+
+      }  else {
+          return true;
+      }
+});
 
     //Actualizar nota
     $(document).on('click', '#actualizar-nota', function(){
