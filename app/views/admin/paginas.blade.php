@@ -88,6 +88,9 @@
   </div>
 </div>
 
+<!--Alertas-->
+<div class="notifications top-right" data-html="true"></div>
+
     <!--  Modal para confirmar guardar Terminos y condiciones  -->
 <div id="guardart" class="modal fade" data-keyboard="false" data-backdrop="static">
       <div class="modal-dialog">
@@ -276,11 +279,11 @@
     $("#save-contenido").click(function () {
 
       if($("#terminos").val().length == 0){
-              $('#terminos').addClass('has-error');
+              alertas('error',"Agrega la descripción");
               return false;
 
       } else if($(".Editor-editor").html().length == 0){
-              $('.Editor-editor').addClass('has-error');
+              alertas('error',"Agrega el contenido");
               return false;
 
       }  else {
@@ -377,14 +380,14 @@
     $("#actualizar_c").click(function () {
 
         if($("#terminos").val().length == 0){
-                $('#terminos').addClass('has-error');
+                alertas('error',"Agrega la descripción");
                 return false;
 
         } else if($(".Editor-editor").html().length == 0){
-                $('.Editor-editor').addClass('has-error');
-                return false;
+              alertas('error',"Agrega el contenido");
+              return false;
 
-        }  else {
+      }  else {
             return true;
         }
    });
@@ -481,6 +484,16 @@
 
 
   });
+
+
+//Funciones para los alerts
+function alertas(tipo,mensaje){
+    $('.top-right').notify({
+      message: {text: decodeURIComponent(mensaje)},
+      type: tipo
+    }).show();
+  }
+
 
 
 

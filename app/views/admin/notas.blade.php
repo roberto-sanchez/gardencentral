@@ -8,7 +8,6 @@
 @parent
 @include('layouts/inc/lib')
 
-{{ Html::script('lib/ckeditor/ckeditor.js')  }}
 
 <script>
   $(document).ready(function(){
@@ -78,14 +77,16 @@
             </div>
             
             
-            <div class="form-group">
+            <div class="form-group error-n">
                 <label for="nota" class="text-primary">Nota: </label>
                {{ Form::text('nota', null,  array('class' => 'form-control', 'id' => 'nota', 'placeholder' => 'Nombre de la nota')) }}
+               <span class="icon-n"></span>
             </div>
 
-            <div class="area-nota">
+            <div class="area-nota error-c">
               <label class="text-primary">Contenido: </label>
               <textarea class="form-control" rows="5" id="contenido" placeholder="Contenido de la nota..."></textarea>
+              <span class="icon-c"></span>
             </div>
             
                 
@@ -151,14 +152,16 @@
             </div>
             
 
-            <div class="form-group">
+            <div class="form-group error-n">
                 <label for="nota" class="text-primary">Nota: </label>
                {{ Form::text('nota', null,  array('class' => 'form-control', 'id' => 'notaedit')) }}
+               <span class="icon-n"></span>
             </div>
 
-            <div class="area-nota">
+            <div class="area-nota error-c">
               <label class="text-primary">Contenido: </label>
               <textarea class="form-control" rows="5" id="contenidoedit" placeholder="Contenido de la nota..."></textarea>
+              <span class="icon-c"></span>
             </div>
                 
           </div>
@@ -259,17 +262,29 @@
               return false;
 
       } else if($("#nota").val().length == 0){
-              $('#nota').addClass('has-error');
+              $('.error-n').addClass('has-error has-feedback');
+              $('.icon-n').addClass('glyphicon glyphicon-remove form-control-feedback');
               return false;
 
       } else if($("#contenido").val().length == 0){
-              $('#contenido').addClass('has-error');
+              $('.error-c').addClass('has-error has-feedback');
+              $('.icon-c').addClass('glyphicon glyphicon-remove form-control-feedback');
               return false;
 
       }  else {
           return true;
       }
 });
+
+    $("#nota").focus( function(){
+        $('.error-n').removeClass('has-error has-feedback');
+        $('.icon-n').removeClass('glyphicon glyphicon-remove form-control-feedback');
+    });
+
+    $("#contenido").focus(function(){
+        $('.error-c').removeClass('has-error has-feedback');
+        $('.icon-c').removeClass('glyphicon glyphicon-remove form-control-feedback');
+    });
 
 
     //Guardar nota
@@ -367,15 +382,16 @@
     $("#actualizar-nota").click(function () {
 
       if($("#seccionedit").val().length == 0){
-              $('#seccionedit').addClass('has-error');
               return false;
 
       } else if($("#notaedit").val().length == 0){
-              $('#notaedit').addClass('has-error');
+              $('.error-n').addClass('has-error has-feedback');
+              $('.icon-n').addClass('glyphicon glyphicon-remove form-control-feedback');
               return false;
 
       } else if($("#contenidoedit").val().length == 0){
-              $('#contenidoedit').addClass('has-error');
+              $('.error-c').addClass('has-error has-feedback');
+              $('.icon-c').addClass('glyphicon glyphicon-remove form-control-feedback');
               return false;
 
       }  else {
@@ -383,8 +399,19 @@
       }
 });
 
+    $("#notaedit").focus( function(){
+        $('.error-n').removeClass('has-error has-feedback');
+        $('.icon-n').removeClass('glyphicon glyphicon-remove form-control-feedback');
+    });
+
+    $("#contenidoedit").focus(function(){
+        $('.error-c').removeClass('has-error has-feedback');
+        $('.icon-c').removeClass('glyphicon glyphicon-remove form-control-feedback');
+    });
+
     //Actualizar nota
     $(document).on('click', '#actualizar-nota', function(){
+
       id = $(this).attr('value');
 
       seccion = $('#seccionedit').val();
@@ -419,6 +446,8 @@
 
 
   });
+
+
 
 
   </script>

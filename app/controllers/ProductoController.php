@@ -212,7 +212,6 @@ public function getVerificaremail(){
 
 
 
-//busqueda de las fotos de los productos
 public function getProducto(){
     $clave = Input::get('clave');
     $resp = DB::table('producto')
