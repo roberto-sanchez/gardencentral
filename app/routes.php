@@ -91,6 +91,13 @@ Route::GET('notas/eliminarnota', 'AdminController@eliminarnota');
 Route::GET('notas/editarnota', 'AdminController@editarnota');
 Route::GET('notas/actualizarnota', 'AdminController@actualizarnota');
 
+Route::GET('paginas/listarterminos', 'AdminController@listarterminos');
+Route::POST('paginas/savepagina', 'AdminController@savepagina');
+Route::GET('paginas/eliminarpagina', 'AdminController@eliminarpagina');
+Route::GET('paginas/editarpagina', 'AdminController@editarpagina');
+Route::POST('paginas/actualizarpagina', 'AdminController@actualizarpagina');
+Route::POST('paginas/usarpagina', 'AdminController@usarpagina'); 
+
 //Listar notas dependiendo de la vista
 Route::GET('notas/listnotas', 'AdminController@listnotas'); 
 
@@ -100,6 +107,10 @@ Route::get('consultas/exportarexcel', 'AdminController@exportarexcel');
 Route::get('consultas/excel', 'AdminController@excel');
 
 Route::POST('consultas/dpedidos', 'AdminController@dpedidos');
+
+//Terminos y condiciones
+Route::GET('productos/terminosycondiciones','ProductoController@terminos');
+Route::GET('productos/verterminos','ProductoController@verterminos');
 
 // Ruta para la busqueda de productos
 Route::post('productos/getProducto','ProductoController@getProducto');
@@ -144,6 +155,7 @@ Route::post('catalogo/create', 'CatalogoController@create');
 Route::post('getElementos/{cat}', 'CatalogoController@_getElementos');
 Route::delete('catalogo/destroy/{id}', 'CatalogoController@destroy');
 Route::put('catalogo/update/{id}', 'CatalogoController@update');
+Route::post('catalogo/update/{id}', 'CatalogoController@update');
 
 
 

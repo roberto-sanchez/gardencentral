@@ -19,6 +19,9 @@ $(document).ready(function(){
 <strong> Bienvenido: {{ Auth::user()->usuario }} </strong>
 @stop
 
+
+@section('pedidos_user') @stop
+
 @section('content')
 
 <div class="content">
@@ -623,10 +626,7 @@ $(document).ready(function(){
                           break;
 
                         case 'Producto':  ?>
-                          <div>
-                            <button type="button" value="Nuevo" id="nuevoProducto" class="editarProducto btn btn-primary" data-info='' data-cat="Producto"><span class="glyphicon glyphicon-">NUEVO</span></button>
-                          </div>
-                          <div class="row" style="padding: 10px;">
+                          <div class="row">
                             <div class="table-responsive">
                               <table class="table table-first-column-check " id="tablaResult" style="text-align: center">
                                 
@@ -644,14 +644,14 @@ $(document).ready(function(){
                                 <tbody>
                                     @foreach($producto as $producto)
                                       <tr>
-                                        <td class="col-sm-1"><input type="text" id="claveProd_{{$producto->idProd}}" name="" class="form-control" value="{{$producto->clave}}" required disabled></td>
-                                        <td class="col-sm-3"><input type="text" id="nombreProd_{{$producto->idProd}}" name="" class="form-control" value="{{$producto->nomProd}}" required disabled></td>
-                                        <td class="col-sm-3"><input type="text" id="colorProd_{{$producto->idProd}}" name="" class="form-control" value="{{$producto->color}}" required disabled></td>
-                                        <td class="col-sm-1"><input type="text" id="almacenProd_{{$producto->idProd}}" name="" class="form-control" value="{{$producto->cveAlmacen}}" required disabled></td>
-                                        <td class="col-sm-2"><input type="text" id="familiaProd_{{$producto->idProd}}" name="" class="form-control" value="{{$producto->descrFamilia}}" required disabled></td>
-                                        <td class="col-sm-1" style="text-align: center"><input type="checkbox" id="estatusProd_{{$producto->idProd}}" name="" value="{{$producto->estatus}}" class="checkbox" <?php if ($producto->estatus===1): ?> checked <?php endif ?> disabled></td>
+                                        <td class="col-sm-1"><input type="text" id="claveProd_{{$producto->idProd}}" name="" class="form-control" value="{{$producto->clave}}" ></td>
+                                        <td class="col-sm-3"><input type="text" id="nombreProd_{{$producto->idProd}}" name="" class="form-control" value="{{$producto->nombre}}" required></td>
+                                        <td class="col-sm-3"><input type="text" id="colorProd_{{$producto->idProd}}" name="" class="form-control" value="{{$producto->color}}" required></td>
+                                        <td class="col-sm-1"><input type="text" id="almacenProd_{{$producto->idProd}}" name="" class="form-control" value="{{$producto->cveAlmacen}}" required></td>
+                                        <td class="col-sm-2"><input type="text" id="familiaProd_{{$producto->idProd}}" name="" class="form-control" value="{{$producto->descrFamilia}}" required></td>
+                                        <td class="col-sm-1" style="text-align: center"><input type="checkbox" id="estatusProd_{{$producto->idProd}}" name="" value="{{$producto->estatus}}" checked="true" class="checkbox" disabled></td>
                                         <td class="col-sm-1" >
-                                          <button type="button" value="Modificar" id="btn_editarProd" data-id="{{$producto->idProd}}" class="editar btn btn-primary" data-info='{{json_encode($producto,JSON_HEX_APOS)}}' data-cat="Producto"><span class="glyphicon glyphicon-edit"></span></button>
+                                          <button type="button" value="Modificar" id="btn_editarProd" data-id="{{$producto->idProd}}" class="editar btn btn-primary" data-info='{{json_encode($producto,JSON_HEX_APOS)}}' data-cat="Proveedor"><span class="glyphicon glyphicon-edit"></span></button>
                                         </td>
                                       </tr>
                                     @endforeach
@@ -675,8 +675,7 @@ $(document).ready(function(){
                         
                      
       </div>
-      <!-- CONTENIDO PARA VER TODOS LOS DETALLES DE UN CLIENTE O PROVEEDOR -->
-      <div id="contenido_esp" class="panel-body" style="display: none">  
+      <div id="contenido_esp" class="panel-body" style="display: none">  <!-- CONTENIDO PARA VER TODOS LOS DETALLES DE UN CLIENTE O PROVEEDOR -->
         <div style="padding: 5px;">
           <a href="/catalogo/{{$catalogo}}" type="button" class="btn-link"> REGRESAR </a>
         </div>
@@ -775,168 +774,7 @@ $(document).ready(function(){
           </div> 
         </div>
       </div>
-      <!-- CONTENIDO PARA VER LOS DETALLES DE UN PRODUCTO Y AGREGAR NUEVO -->
-      <div id="panelProducto" class="panel-body" style="display: none">  
-        <div style="padding: 5px;">
-          <a href="/catalogo/{{$catalogo}}" type="button" class="btn-link"> REGRESAR </a>
-        </div>
-        <div id="detallesProducto" style="padding: 5px;">
-          <form class="add" id="formProducto" enctype="multipart/form-data">
-            <div class="row">
-              <div class="col-sm-3 claveProd">
-                <label>Clave:</label>
-                <input type="text" id="claveProd" value="" class="form-control">
-              </div>
-              <div class="col-sm-3">
-                <label>N° Artículo:</label>
-                <input type="text" id="numArtProd" value="" class="form-control">
-              </div>
-              <div class="col-sm-3">
-                <label>Nombre:</label>
-                <input type="text" id="nomProd" value="" class="form-control">
-              </div>
-            </div>  
-            <div class="row">
-              <div class="col-sm-3">
-                <label>Ean-code:</label>
-                <input type="number" id="eanCodeProd" value="" class="form-control">
-              </div>
-              <div class="col-sm-3">
-                <label>Color:</label>
-                <input type="text" id="colorProd" value="" class="form-control">
-              </div>
-              <div class="col-sm-3">
-                <label>N° Color:</label>
-                <input type="number" id="numColorProd" value="" min=0 class="form-control">
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-sm-3">
-                <label>Unidad Medida:</label>
-                <select id="uMedidaProd" name="" class="form-control   options " value="" required >
-                </select> 
-              </div>
-              <div class="col-sm-3">
-                <label>Dimensiones:</label>
-                <input type="text" id="DimenProd" value="" class="form-control">
-              </div>
-              <div class="col-sm-3">
-                <label>Foto:</label>
-                <input type="file" id="fotoProd" value="" class="" accept="image/*">
-              </div>
-              
-            </div>
-            <div class="row">
-              <div class="col-sm-3">
-                <label>Piezas x paquete:</label>
-                <input type="number" id="piezasPaqProd" value="" min="1" class="form-control">
-              </div>
-              <div class="col-sm-3">
-                <label>Piezas pallet:</label>
-                <input type="number" id="piezasPalletProd" value="" min="1" class="form-control">
-              </div>
-              <div class="col-sm-3">
-                <label>Total Piezas:</label>
-                <input type="number" id="totalPiezasProd" value="" min="0" class="form-control">
-              </div>
-              
-            </div>
-            <div class="row">
-              <div class="col-sm-3">
-                <label>Importador:</label>
-                <select id="importadorProd" value="" class="form-control" required>
-                </select>
-              </div>
-              <div class="col-sm-3">
-                <label>Almacen:</label>
-                <select id="almacenProd" value="" class="form-control" required>
-                </select>
-              </div>
-              <div class="col-sm-3">
-                <label>Familia:</label>
-                <select id="familiaProd" value="" class="form-control" required>
-                </select>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-sm-3">
-                <label>Estatus web:</label>
-                <input type="checkbox" id="estatusWebProd" value="" class="form-control" disabled="" checked="">
-              </div>
-              <div class="col-sm-3">
-                <label>Estatus:</label>
-                <input type="checkbox" id="estatusProd" value="" class="form-control" disabled="" checked="">
-              </div>
-              <div class="col-sm-3">
-                
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-sm-3">
-                <img src="C:\Users\Gerbacio\Pictures\Macetacerámicaparaparedantigua.png" id="imgProd" alt="Imagen no encontrada" >
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-sm-offset-7">
-                <button type="button" id="btn_guardarProducto" name="btn_guardarProducto" value="Guardar" data-id="" data-info="" data-cat="Producto" class="btn btn-success"><span class="glyphicon glyphicon-">GUARDAR</span></button>
-              </div>
-            </div>
-          </form>
-        </div>
-        <div class="fancy-tab-container " id="tabProducto">
-          <ul id="myTabProducto" class="nav nav-tabs two-tabs fancy">
-            <li class="active"><a href="#tabPaneProdPrecio" data-toggle="tab">Producto</a></li>
-            <li><a href="#inventario" data-toggle="tab">Direccion</a></li>
-          </ul>
-          <div class="tab-content">
-            <div class="tab-pane fade in active table-responsive" id="tabPaneProdPrecio">
-              <table id="tableProdPrecio" class="table table-first-column-number ">
-                <thead >
-                  <tr>
-                    <th class="col-xs-2">Precio de compra</th>
-                    <th class="col-xs-2">Precio de venta</th>
-                    <th class="col-xs-2">Moneda</th>
-                    <th class="col-xs-2">Vigencia</th>
-                    <th class="col-xs-1">Estatus</th>
-                    <th class="col-xs-3"></th>
-                  </tr>
-                </thead>
-                <tbody id="tbodyProdPrecio">
-                  <tr id="trProdPrecio_0">
-                    <td class="col-xs-2"><input type="number" onkeyup="" id="precioCompraProd_0"  value="" class="form-control" min="0" disabled=""> </td>
-                    <td class="col-xs-2"><input type="number" onkeyup="" id="precioVentaProd_0"  value="" class="form-control" min="0" disabled=""> </td>
-                    <td class="col-xs-2">
-                      <select id="monedaProd_0" name="" class="form-control   options " value="" required disabled="">
-                        <option value="-1">Seleccione tipo de moneda</option>
-                        <option value="Pesos">Pesos Mx</option>
-                        <option value="Dolar">Dolar</option>
-                        <option value="Otro">Otro</option>
-                      </select>
-                    </td>
-                    <td class="col-xs-2"><input type="date" onkeyup="" id="vigenciaPrecioProd_0"  value="" class="form-control" disabled=""> </td>
-                    <td class="col-xs-1"><input type="checkbox" id="estatusPrecioProd_0"  value="1"   checked disabled></td>
-                    <td class="col-xs-3">
-                      <input type="hidden" id="idProducto" value="" name="">
-                      <button type="button" id="btn_guardarPrecioProd" name="btn_guardarPrecioProd" value="Guardar" data-id="0" data-cat="ProductoPrecio" class="enviarG  btn btn-success" disabled="">OK</button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="tab-pane fade table-responsive" id="inventario">
-                <table id="tableInventario" class="table table-first-column-check">
-                  <thead>
-                    
-                  </thead>
-                  <tbody id="tbodyClienteDir">
-                  
-                  </tbody>
-                </table>
-            </div> 
-                        
-          </div> 
-        </div>
-      </div>
+      
     </div>
     
 </div>
@@ -1063,7 +901,6 @@ $(document).ready(function(){
           
         </div>
         <div class="modal-footer" id="modalFooterDir">
-
         </div>
       </form>
     </div>
@@ -1122,7 +959,6 @@ $(document).ready(function(){
           $('#status_'+$(this).data('id')).prop('disabled',false);
           $('#btn_guardar_'+$(this).data('id')).prop('disabled',false);
           break;
-
         /*case 'Cliente':
             $('#rfc_'+$(this).data('id')).prop('disabled',false);
             $('#usuario_id_'+$(this).data('id')).prop('disabled',false);
@@ -1136,7 +972,6 @@ $(document).ready(function(){
             $('#numero_'+$(this).data('id')).prop('disabled',false);
             $('#btn_actualizar_'+$(this).data('id')).prop('disabled',false);
           break*/
-
         case 'Comercializador':
             $('#nombre_'+$(this).data('id')).prop('disabled',false);
             $('#btn_guardar_'+$(this).data('id')).prop('disabled',false);
@@ -1579,11 +1414,6 @@ $(document).ready(function(){
                   }
               break;
 
-           /* case 'Producto':
-              //alert($(this).data('id'));
-              
-              break;*/
-
             default:
                 msg += ';No se ha validado ningun dato.';
                 validar = false;
@@ -1602,7 +1432,7 @@ $(document).ready(function(){
           $(this).prop('disabled',false);
         }else {  //-- SI LAS VALIDACIONES SON CORRECTAS SE PROCEDE A RECOGER LOS DATOS A ENVIAR ---//
           if(confirmar()){
-              
+
             switch (catalogo){ //--- SIWTCH PARA RECOGER LOS VALORES DEPENDIENDO DE EL ALMACEN DEL QUE SE TRATE  ---//
 
               case 'Almacen':
@@ -1828,66 +1658,18 @@ $(document).ready(function(){
                   };
                 break;
 
-            /*  case 'Producto':
-               /* var datos={
-                    claveProd         : $('#claveProd').val().trim(),
-                    numArtProd        : $('#numArtProd').val().trim(),
-                    nomProd           : $('#nomProd').val().trim(),
-                    eanCodeProd       : $('#eanCodeProd').val().trim(),
-                    colorProd         : $('#colorProd').val().trim(),
-                    numColorProd      : $('#numColorProd').val().trim(),
-                    uMedidaProd       : $('#uMedidaProd').val().trim(),
-                    DimenProd         : $('#DimenProd').val().trim(),
-                    fotoProd          : $('#fotoProd')[0].files[0],
-                    piezasPaqProd     : $('#piezasPaqProd').val().trim(),
-                    piezasPalletProd  : $('#piezasPalletProd').val().trim(),
-                    totalPiezasProd   : $('#totalPiezasProd').val().trim(),
-                    importadorProd    : $('#importadorProd').val().trim(),
-                    almacenProd       : $('#almacenProd').val().trim(),
-                    familiaProd       : $('#familiaProd').val().trim(),
 
-                    estatusWebProd    : (($('#estatusWebProd').is(':checked')) ? '1' : '0'),
-                    estatusProd       : (($('#estatusProd').is(':checked')) ? '1' : '0'),
-                    catalogo    : catalogo,
-                    tipoMov     : $(this).val(),
-                    id_upd      : $(this).data('id')
-                  }; 
-                  
-                var datos = new FormData();
-                datos.append('claveProd',$('#claveProd').val().trim());
-                datos.append('numArtProd',$('#numArtProd').val().trim());
-                datos.append('nomProd',$('#nomProd').val().trim());
-                datos.append('eanCodeProd',$('#eanCodeProd').val().trim());
-                datos.append('colorProd',$('#colorProd').val().trim());
-                datos.append('numColorProd',$('#numColorProd').val().trim());
-                datos.append('uMedidaProd',$('#uMedidaProd').val().trim());
-                datos.append('DimenProd',$('#DimenProd').val().trim());
-                datos.append('piezasPaqProd',$('#piezasPaqProd').val().trim());
-                datos.append('piezasPalletProd',$('#piezasPalletProd').val().trim());
-                datos.append('totalPiezasProd',$('#totalPiezasProd').val().trim());
-                datos.append('importadorProd',$('#importadorProd').val().trim());
-                datos.append('almacenProd',$('#almacenProd').val().trim());
-                datos.append('familiaProd',$('#familiaProd').val().trim());
-                datos.append('fotoProd',$('#fotoProd')[0].files[0]);
-                datos.append('estatusWebProd',(($('#estatusWebProd').is(':checked')) ? '1' : '0'));
-                datos.append('estatusProd',(($('#estatusProd').is(':checked')) ? '1' : '0'));
-                datos.append('catalogo',catalogo);
-                console.log(datos);
-                break;*/
 
               default:
                 break;
 
             }
-            //alert($(this).val()
+            //alert($(this).val());
             if ($(this).val()==="Guardar") {
                 $.ajax({    //--- INICIA LA CONEXION MEDIANTE AJAX ---//  
                   url: "/catalogo/create",
                   type: "POST",
                   data: datos,
-                  //cache: false,
-                  //contentType: false,
-                  //processData: false,
                   success: function(respuesta){
                     console.log(respuesta);
 
@@ -1960,7 +1742,6 @@ $(document).ready(function(){
                                         '</tr>';
                                   $('#tbodyClienteDir').append(trDir);
                                   $('#myModal').modal('hide');
-
                           break;
 
                       case 'DescuentoCliente':
@@ -2161,12 +1942,6 @@ $(document).ready(function(){
                             $('#btn_guardarContacto').prop('disabled',false);
                           break;
 
-                   /*   case 'Producto':
-                        $('#btn_guardarProducto').val('Actualizar');
-                        $('#btn_guardarProducto').prop('disabled',false);
-                        break;*/
-
-
                     }
                     alertas('success',"Datos almacenados correctamente");
                     $('#btn_guardar').prop('disabled',false);
@@ -2197,10 +1972,6 @@ $(document).ready(function(){
                       case 'DescuentoCliente':
                           $('#btn_guardarDescuento').prop('disabled',false);
                         break;
-
-                     /* case 'Producto':
-                        $('#btn_guardarProducto').prop('disabled',false);
-                        break;*/
 
                       default:
                         $('#btn_guardar').prop('disabled',false);
@@ -2423,7 +2194,7 @@ $(document).ready(function(){
         }
     });
 
-//::::::::::::::::::---     FUNCION PARA MOSTRAR LA FORMA EDITAR DE CLIENTE Y PROVEEDOR ----::::::::::::::::::::::::::::::::::::::::::::::::::::://
+//::::::::::::::::::---     FUNCION PARA MOSTRAR LA FORMA EDITAR  ----::::::::::::::::::::::::::::::::::::::::::::::::::::://
     $(document).on('click', '#editarClienteProveedor', function () {
             $("#catalogo_principal").empty();
             var obj = $(this).data('info');
@@ -2433,7 +2204,7 @@ $(document).ready(function(){
             
         });
 
-//:::::::::::::::::::-----  FUNCION PARA MOSTRAR LA FORMA NUEVO DE CLIENTE Y PROVEEDOR  ----::::::::::::::::::::::::::::::::::::::::::::::::::::://
+//:::::::::::::::::::-----  FUNCION PARA MOSTRAR LA FORMA NUEVO   ----::::::::::::::::::::::::::::::::::::::::::::::::::::://
     $(document).on('click','#nuevo',function(){
           $("#catalogo_principal").empty();
             var obj =null;
@@ -2716,7 +2487,6 @@ $(document).ready(function(){
                       
                     }
                   break;
-               
           }
 
         
@@ -2836,320 +2606,7 @@ $(document).ready(function(){
       $('#descuento_'+$('#btn_guardar').data('id')).val($(this).val());
     });
 
-    //::-- FUNCIÓN PARA ABRIR EL PANEL DE DETALLESPRODUCTO Y AGREGAR UNO NUEVO ---::::::::::::::::://
-    $(document).on('click','#nuevoProducto', function(){
-      $('#catalogo_principal').empty();
-      $('#catalogo_principal').hide();
-      $('#panelProducto').show();
-      var uMedidaProdOption = obtenerElementos('UMedidas',null); //::- RECUPERA LAS UNIDADES DE MEDIDA DISPONIBLES
-      uMedidaProdOption.done(function(respuesta){
-        var optionUMedida = '<option value="-1">- Selecione unidad de medida -</option>';
-        $.each(respuesta,function(index,medidas){
-          console.log(medidas);
-          optionUMedida += '<option value="'+medidas.id+'" >'+medidas.descripcion+'</option>';
-        });
-        $('#uMedidaProd').html(optionUMedida);
-      });
-      var importadoresProdOption = obtenerElementos('Importadores',null); //::- rECUPERA LS IMPORTADORES DISPONIBLES
-      importadoresProdOption.done(function(respuesta){
-        var optionsImport = '<option value="-1">- Selecione importador -</option>';
-        $.each(respuesta, function(index,importadores){
-          console.log(importadores);
-          optionsImport += '<option value="'+importadores.id+'" >'+importadores.nombre+'</option>';
-        });
-        $('#importadorProd').html(optionsImport);
-      });
-      var almacenesProdOption = obtenerElementos('Almacenes',null);
-      almacenesProdOption.done(function(respuesta){
-        var optionsAlmacen = '<option value="-1">- Selecione almacen -</option>';
-        $.each(respuesta, function(index,almacenes){
-          console.log(almacenes);
-          optionsAlmacen += '<option value="'+almacenes.id+'" >'+almacenes.nombre+'</option>';
-        });
-        $('#almacenProd').html(optionsAlmacen);
-      });
-      var familiaProdOption = obtenerElementos('Familias',null);
-      familiaProdOption.done(function(respuesta){
-        var optionsFam = '<option value="-1">- Selecione familia -</option>';
-        $.each(respuesta, function(index,familias){
-          optionsFam += '<option value="'+familias.id+'" >'+familias.descripcion+'</option>';
-        });
-        $('#familiaProd').html(optionsFam);
-      });
 
-    });
-    //::-- FUNCIÓN PARA ABRIR EL PANEL DETALLESPRODUCTO Y LOS DETALLES DE UN PRODUCTO YA EXISTENTE, ASI COMO PARA MODIFICARLO
-    $(document).on('click','#btn_editarProd', function(){
-      var detProd=$(this).data('info');
-      $('#catalogo_principal').empty();
-      $('#catalogo_principal').hide();
-      $('#panelProducto').show();
-      $('#claveProd').val(detProd.clave);
-      $('#numArtProd').val(detProd.numero_articulo);
-      $('#nomProd').val(detProd.nomProd);
-      $('#eanCodeProd').val(detProd.ean_code);
-      $('#colorProd').val(detProd.color);
-      $('#numColorProd').val(detProd.numero_color);
-      var uMedidaProdOption = obtenerElementos('UMedidas',null); //::- RECUPERA LAS UNIDADES DE MEDIDA DISPONIBLES
-      uMedidaProdOption.done(function(respuesta){
-        var optionUMedida = "";
-        $.each(respuesta,function(index,medidas){
-          console.log(medidas);
-          optionUMedida += '<option value="'+medidas.id+'" >'+medidas.descripcion+'</option>';
-        });
-        $('#uMedidaProd').html(optionUMedida);
-      });
-      var importadoresProdOption = obtenerElementos('Importadores',null); //::- RECUPERA LOS IMPORTADORES DISPONIBLES
-      importadoresProdOption.done(function(respuesta){
-        var optionsImport = "";
-        $.each(respuesta, function(index,importadores){
-          console.log(importadores);
-          optionsImport += '<option value="'+importadores.id+'" >'+importadores.nombre+'</option>';
-        });
-        $('#importadorProd').html(optionsImport);
-      });
-      var almacenesProdOption = obtenerElementos('Almacenes',null);
-      almacenesProdOption.done(function(respuesta){
-        var optionsAlmacen = "";
-        $.each(respuesta, function(index,almacenes){
-          console.log(almacenes);
-          optionsAlmacen += '<option value="'+almacenes.id+'" >'+almacenes.nombre+'</option>';
-        });
-        $('#almacenProd').html(optionsAlmacen);
-      });
-      var familiaProdOption = obtenerElementos('Familias',null);
-      familiaProdOption.done(function(respuesta){
-        var optionsFam = "";
-        $.each(respuesta, function(index,familias){
-          optionsFam += '<option value="'+familias.id+'" >'+familias.descripcion+'</option>';
-        });
-        $('#familiaProd').html(optionsFam);
-      });
-
-      $('#uMedidaProd').val(detProd.unidad_medida_id);
-      $('#piezasPaqProd').val(detProd.piezas_paquete);
-      $('#DimenProd').val(detProd.dimensiones);
-      $('#piezasPalletProd').val(detProd.piezas_pallet);
-      $('#totalPiezasProd').val(detProd.total_piezas);
-      $('#fotoProd').val();
-      $('#importadorProd').val(detProd.importador_id);
-      $('#almacenProd').val(detProd.almacen_id);
-      $('#familiaProd').val(detProd.familia_id);
-      $('#estatusWebProd').prop('checked',(detProd.estatus_web===1 ? true : false));
-      $('#estatusProd').prop('checked',(detProd.estatus===1 ? true : false));
-      $('#estatusWebProd').prop('disabled',false);
-      $('#estatusProd').prop('disabled',false);
-      $('#btn_guardarProducto').data('id',detProd.idProd);
-      $('#btn_guardarProducto').val('Actualizar')
-      $('#precioCompraProd_0').prop('disabled',false);
-      $('#precioVentaProd_0').prop('disabled',false);
-      $('#monedaProd_0').prop('disabled',false);
-      $('#btn_guardarPrecioProd').prop('disabled',false);
-      $('#vigenciaPrecioProd_0').prop('disabled',false);
-      $('#idProducto').val(detProd.idProd);
-    });
-
-    //::-- FUNCION PARA GUARDAR UN PRODUCTO --:://
-    $(document).on('click','#btn_guardarProducto', function(){
-      $(this).prop('disabled',true);
-      var msg="";
-      var validar = true;
-      if ($('#claveProd').val().trim() === ""){
-                    //$('.claveProd'+$(this).data('id')).addClass('has-error');
-                    msg += ';Ingrese clave del producto.';
-                  validar = false;
-                  }else{
-                    $('.claveProd').removeClass('has-error');
-                  }
-              if ($('#numArtProd').val().trim() === ""){
-                    //$('.numArtProd'+$(this).data('id')).addClass('has-error');
-                    msg += ';Ingrese numero de articulo.';
-                  validar = false;
-                  }else{
-                    $('.numArtProd'+$(this).data('id')).removeClass('has-error');
-                  }
-              if ($('#nomProd').val().trim() === ""){
-                    //$('.nomProd'+$(this).data('id')).addClass('has-error');
-                    msg += ';Ingrese nombre.';
-                  validar = false;
-                  }else{
-                    $('.nomProd'+$(this).data('id')).removeClass('has-error');
-                  }
-              if ($('#eanCodeProd').val().trim() === ""){
-                    $('.eanCodeProd'+$(this).data('id')).addClass('has-error');
-                    msg += ';Ingrese Ean-code.';
-                  validar = false;
-                  }else{
-                    $('.eanCodeProd'+$(this).data('id')).removeClass('has-error');
-                  }
-              if ($('#colorProd').val().trim() === ""){
-                    $('.colorProd'+$(this).data('id')).addClass('has-error');
-                    msg += ';Ingrese color.';
-                  validar = false;
-                  }else{
-                    $('.colorProd'+$(this).data('id')).removeClass('has-error');
-                  }
-              if ($('#numColorProd').val().trim() === ""){
-                    $('.numColorProd'+$(this).data('id')).addClass('has-error');
-                    msg += ';Ingrese número de color.';
-                  validar = false;
-                  }else{
-                    $('.numColorProd'+$(this).data('id')).removeClass('has-error');
-                  }
-              if ($('#DimenProd').val().trim() === ""){
-                    $('.DimenProd'+$(this).data('id')).addClass('has-error');
-                    msg += ';Ingrese dimensiones.';
-                  validar = false;
-                  }else{
-                    $('.DimenProd'+$(this).data('id')).removeClass('has-error');
-                  }
-              if ($('#piezasPaqProd').val().trim() === ""){
-                    $('.piezasPaqProd'+$(this).data('id')).addClass('has-error');
-                    msg += ';Ingrese N° piezas.';
-                  validar = false;
-                  }else{
-                    $('.piezasPaqProd'+$(this).data('id')).removeClass('has-error');
-                  }
-              if ($('#piezasPalletProd').val().trim() === ""){
-                    $('.piezasPalletProd'+$(this).data('id')).addClass('has-error');
-                    msg += ';Ingrese N° piezas pallet.';
-                  validar = false;
-                  }else{
-                    $('.piezasPalletProd'+$(this).data('id')).removeClass('has-error');
-                  }
-              if ($('#totalPiezasProd').val().trim() === ""){
-                    $('.totalPiezasProd'+$(this).data('id')).addClass('has-error');
-                    msg += ';Ingrese total piezas.';
-                  validar = false;
-                  }else{
-                    $('.totalPiezasProd'+$(this).data('id')).removeClass('has-error');
-                  }
-              if ($('#uMedidaProd').val().trim() === "-1"){
-                    $('.uMedidaProd'+$(this).data('id')).addClass('has-error');
-                    msg += ';Seleccione unidad de medida.';
-                    validar = false;
-                  }else{
-                    $('.uMedidaProd'+$(this).data('id')).removeClass('has-error');
-                  }
-              if ($('#importadorProd').val().trim() === "-1"){
-                    $('.importadorProd'+$(this).data('id')).addClass('has-error');
-                    msg += ';Seleccione un importador.';
-                    validar = false;
-                  }else{
-                    $('.importadorProd').removeClass('has-error');
-                  }
-              if ($('#almacenProd').val().trim() === "-1"){
-                    $('.almacenProd'+$(this).data('id')).addClass('has-error');
-                    msg += ';Seleccione un almacen.';
-                    validar = false;
-                  }else{
-                    $('.almacenProd'+$(this).data('id')).removeClass('has-error');
-                  }
-              if ($('#familiaProd').val().trim() === "-1"){
-                    $('.familiaProd'+$(this).data('id')).addClass('has-error');
-                    msg += ';Seleccione una familia.';
-                    validar = false;
-                  }else{
-                    $('.familiaProd'+$(this).data('id')).removeClass('has-error');
-                  }
-      if(!validar){//------- PREGUNTA SI LAS VALIDACIONES SON INCORRECTAS MUESTRA UNA ADVERTENCIA CON LOS ERRORES ------------------//
-         // alert(msg);
-          var arreglo=msg.split(';'); //::- SEPARA LA CADENA DE TEXTO CADA QUE ENCUENTRA ";" 
-          for (var i=0; i<arreglo.length;i++){
-            if(arreglo[i]!==""){
-              alertas('error',arreglo[i]);
-            }
-          }
-          $(this).prop('disabled',false);
-      }else {  //-- SI LAS VALIDACIONES SON CORRECTAS SE PROCEDE A RECOGER LOS DATOS A ENVIAR ---//
-           var datos = new FormData();
-                datos.append('claveProd',$('#claveProd').val().trim());
-                datos.append('numArtProd',$('#numArtProd').val().trim());
-                datos.append('nomProd',$('#nomProd').val().trim());
-                datos.append('eanCodeProd',$('#eanCodeProd').val().trim());
-                datos.append('colorProd',$('#colorProd').val().trim());
-                datos.append('numColorProd',$('#numColorProd').val().trim());
-                datos.append('uMedidaProd',$('#uMedidaProd').val().trim());
-                datos.append('DimenProd',$('#DimenProd').val().trim());
-                datos.append('piezasPaqProd',$('#piezasPaqProd').val().trim());
-                datos.append('piezasPalletProd',$('#piezasPalletProd').val().trim());
-                datos.append('totalPiezasProd',$('#totalPiezasProd').val().trim());
-                datos.append('importadorProd',$('#importadorProd').val().trim());
-                datos.append('almacenProd',$('#almacenProd').val().trim());
-                datos.append('familiaProd',$('#familiaProd').val().trim());
-                datos.append('fotoProd',$('#fotoProd')[0].files[0]);
-                datos.append('estatusWebProd',(($('#estatusWebProd').is(':checked')) ? '1' : '0'));
-                datos.append('estatusProd',(($('#estatusProd').is(':checked')) ? '1' : '0'));
-                datos.append('catalogo','Producto');
-          if(confirmar()){
-            
-            if ($(this).val()==="Guardar") {
-                $.ajax({    //--- INICIA LA CONEXION MEDIANTE AJAX ---//  
-                  url: "/catalogo/create",
-                  type: "POST",
-                  data: datos,
-                  cache: false,
-                  contentType: false,
-                  processData: false,
-                  success: function(respuesta){
-                    console.log(respuesta);
-                    alertas('success',"Datos almacenados correctamente");
-                    $('#btn_guardarProducto').val('Actualizar');
-                    $('#btn_guardarProducto').data('id',respuesta.idProd);
-                    $('#btn_guardarProducto').prop('disabled',false);
-                    $('#precioCompraProd_0').prop('disabled',false);
-                    $('#precioVentaProd_0').prop('disabled',false);
-                    $('#monedaProd_0').prop('disabled',false);
-                    $('#vigenciaPrecioProd_0').prop('disabled',false);
-                    $('#btn_guardarPrecioProd').prop('disabled',false);
-                    $('#idProducto').val(respuesta.idProd);
-                  },
-                  error: function(msgError){
-                    console.log(msgError.responseText);
-
-                    var arreglo=msgError.responseText.split(';');
-                    for (var i=0; i<arreglo.length;i++){
-                      if(arreglo[i]!=='' && arreglo[i]!=="\""){
-                        alertas('error',arreglo[i]);
-                      }
-                    }
-                    $('#btn_guardarProducto').prop('disabled',false);
-                  }
-                });
-            }else if($(this).val()==="Actualizar"){
-                
-                var id_upd = $(this).data('id');
-                datos.append('id_upd',id_upd);
-                console.log(datos, id_upd);
-                $.ajax({
-                    url:  "/catalogo/update/"+id_upd,
-                    type: "POST",
-                    data: datos,
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    success: function (respuesta){
-                      console.log(respuesta);
-                      alertas('success',"Datos actualizados correctamente");
-                    },
-                    error: function(msgError){
-                      console.log(msgError);
-                     
-                       var arreglo=msgError.responseText.split(';');
-                      for (var i=0; i<arreglo.length;i++){
-                        if(arreglo[i]!=='' && arreglo[i]!=="\""){
-                          alertas('error',arreglo[i]);
-                        }
-                      }
-                      $('#btn_guardarProducto').prop('disabled',false);
-                    }
-                });
-            }
-          }else{
-            $(this).prop('disabled',false);
-          }
-      }
-    });
     $(function(){
        $('table.data-table.sort').dataTable( {
             "bPaginate": false,
@@ -3178,7 +2635,7 @@ $(document).ready(function(){
   function abrirModalDesc(valorAct,idCliente){  //:::-- FUNCION PARA ABRIR EL MODAL PARA AGREGAR UN NUEVO DESCUENTO DESDE CATALOGO CLIENTE
       $('#modalDescuentos').modal('show');    //::-- ABRE EL MODAL 
       $('#btn_CancelDescN').val(valorAct);    //::-- GUARDA EL VALOR ACTUAL PARA QUE CUENDO SE DE CANCELAR DEVUELVA EL SELECT AL VALOR QUE TENIA ANTES
-      $('#btn_guardarDescuento').prop('disabled',false);
+      //$('#btn_CancelDescN').data('id',idCliente);
     }
   
 

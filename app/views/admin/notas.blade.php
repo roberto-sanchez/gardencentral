@@ -107,7 +107,6 @@
           <div class="modal-header header-nota">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title text-danger text-center">
-            <span class="glyphicon glyphicon-edit"></span>
               Eliminar Nota
              </h4>
           </div>

@@ -184,8 +184,7 @@
         <li class="paginas">
            <h3 class="t-paginas"><span class="glyphicon glyphicon-duplicate"></span>Paginas</h3>
             <ul>
-               <!-- <li><a href="{{ URL::to('/paginas/agregarpagina') }}">Términos y condiciones</a></li>-->
-               <li><a href="#">Términos y condiciones</a></li>
+                <li><a href="{{ URL::to('/paginas/agregarpagina') }}">Términos y condiciones</a></li>
                 <li><a href="{{ URL::to('/notas/notas') }}">Notas</a></li>
             </ul>
         </li>
@@ -227,7 +226,12 @@
    <footer>
       <hr>
       <p>
-          &copy; Copyright: Todos los derechos reservados. Garden Central
+          &copy; Copyright: Todos los derechos reservados. Garden Central. 
+          @if(Auth::user()->rol_id == 1)
+            <a id="terminos_c" target="_blank" href="{{ URL::to('/productos/terminosycondiciones') }}">Términos y condiciones.</a>
+          @else
+          @endif
+
       </p>
    </footer>
 

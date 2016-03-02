@@ -3204,6 +3204,17 @@ margin-bottom:.5em;
 }
 
 
+/*-----***----terminos y condiciones----*********/
+#terminos_c{
+  color:#337ab7;
+  font-weight:bold;
+}
+
+#terminos_c:hover{
+  text-decoration:underline;
+}
+
+
 /*--------*****------ADMIN------******--------*/
 /*--- Index Admin ----*/
 .row-dashboard{
@@ -3955,9 +3966,79 @@ tbody .nota_fila td:last-child{
 
 /*---Vista Admin--- Paginas*/
 .row-paginas{
-  padding:2em;
+  padding:.5em 2em 1em 2em;
 }
 
+.g-contenidos{
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack:justify;
+ -webkit-justify-content:space-between;
+     -ms-flex-pack:justify;
+         justify-content:space-between;
+}
+
+.contenidos{
+  width:70%;
+}
+
+.form-terminos{
+  width:80%;
+}
+
+.form-terminos input{
+  border-radius:3px;
+}
+
+.estatus-contenidos{
+  width:25%;
+  margin:0;
+  padding:0;
+  margin-top:7.5em;
+}
+
+.table-estatus-c{
+  border:1px solid #cfcfd6;
+  width:100%;
+}
+
+
+
+#txtgContenido{
+  margin-bottom:0;
+}
+
+.head-t{
+  background: #e5e5e9;
+  background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #e5e5e9), color-stop(1, #fbfbfc));
+  padding:.5em 0;
+  position:relative;
+  cursor:pointer;
+}
+
+.ac-estatus{
+  font-size:1.5em;
+  position:absolute;
+  right:5px;
+  top:5px;
+  cursor:pointer;
+}
+
+.ac-estatus:hover{
+  text-shadow:0px 0px 10px white;
+  color:#31708f;
+}
+
+.content-t{
+  background:#fff;
+  padding:0 .5em .5em .5em;
+  display:none;
+  font-size:.8em;
+  width:274px;
+  overflow:hidden;
+}
 
 /*Vista admin-- Notas---------*/
 .data-notas{

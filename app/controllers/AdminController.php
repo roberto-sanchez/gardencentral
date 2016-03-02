@@ -472,6 +472,120 @@ for ($i=0; $i < count($idpro); $i++) {
 		return View::make('admin/paginas');
 	}
 
+	public function listarterminos(){
+		$t = DB::table('paginas')
+				->get();
+
+		echo json_encode($t);
+	}
+
+	public function savepagina(){
+
+		//Le cambiamos el estatus al contenido anterior
+		$pagina_antigua = DB::table('paginas')
+						->where('estatus', 1)
+						->pluck('id');
+
+		$old_p = Pagina::find($pagina_antigua);
+		$old_p->estatus = 0;
+		$old_p->save();
+
+		//Guardamos el nuevo contenido
+		$desc = Input::get('desc');
+		$contenido = Input::get('contenido');
+
+		$pagina = new Pagina;
+		$pagina->descripción = $desc;
+		$pagina->texto = $contenido;
+		$pagina->estatus = 1;
+		$pagina->save(); 
+
+		//Retornamos el nuevo contenido
+		$new_p = DB::table('paginas')
+					->where('descripción', $desc)
+					->where('texto', $contenido)
+					->first();
+
+		return Response::json($new_p);
+	}
+
+	public function eliminarpagina(){
+		$id = Input::get('id');
+		$pagina = Pagina::find($id);
+		$pagina->delete();
+
+		return Response::json($pagina);
+	}
+
+	public function editarpagina(){
+		$id = Input::get('id');
+
+		$editP = DB::table('paginas')
+				->where('id', $id)
+				->first();
+
+		return Response::json($editP);
+	}
+
+	public function actualizarpagina(){
+
+
+		//Le cambiamos el estatus al contenido anterior
+		$pagina_antigua = DB::table('paginas')
+						->where('estatus', 1)
+						->pluck('id');
+
+		$old_p = Pagina::find($pagina_antigua);
+		$old_p->estatus = 0;
+		$old_p->save();
+
+		//Actualizamos el contenido
+		$id = Input::get('id');
+		$desc = Input::get('desc');
+		$contenido = Input::get('contenido');
+
+		$act_p = Pagina::find($id);
+		$act_p->descripción = $desc;
+		$act_p->texto = $contenido;
+		$act_p->estatus = 1;
+		$act_p->save();
+
+		//Retornamos el nuevo contenido
+		$new_p = DB::table('paginas')
+					->where('id', $id)
+					->first();
+
+		return Response::json($new_p );
+	}
+
+
+	public function usarpagina(){
+
+		//Le cambiamos el estatus al contenido anterior
+		$pagina_antigua = DB::table('paginas')
+						->where('estatus', 1)
+						->pluck('id');
+
+		$old_p = Pagina::find($pagina_antigua);
+		$old_p->estatus = 0;
+		$old_p->save();
+
+		//Actualizamos el contenido
+		$id = Input::get('id');
+
+		$act_p = Pagina::find($id);
+		$act_p->estatus = 1;
+		$act_p->save();
+
+		//Retornamos el nuevo contenido
+		$new_p = DB::table('paginas')
+					->where('id', $id)
+					->first();
+
+		return Response::json($new_p );
+
+	}
+
 
 
 	public function notas(){

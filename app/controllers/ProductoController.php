@@ -9,6 +9,20 @@ class ProductoController extends \BaseController {
 
         }
 
+
+    public function terminos(){
+        return View::make('users/terminos');
+    }
+
+    public function verterminos(){
+        $terminos = DB::table('paginas')
+                    ->where('estatus', 1)
+                    ->first();
+
+        return Response::json($terminos);
+    }
+
+
     //Mostramos el contenido del carrito
     public function getIndex(){
 

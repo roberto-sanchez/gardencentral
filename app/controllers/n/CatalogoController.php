@@ -85,7 +85,7 @@ class CatalogoController extends \BaseController {
 	 		 				->leftJoin('importador','importador.id','=','producto.importador_id')
 	 		 				->leftJoin('almacen','almacen.id','=','producto.almacen_id')
 	 		 				->leftJoin('familia','familia.id','=','producto.familia_id')
-	 		 				->select('producto.id as idProd','producto.clave','producto.nombre as nomProd','producto.numero_articulo','producto.ean_code','producto.color','producto.numero_color','producto.unidad_medida_id','producto.piezas_paquete','producto.dimensiones','producto.piezas_pallet','producto.total_piezas','producto.foto','producto.importador_id','producto.almacen_id','producto.familia_id','producto.estatus_web','producto.estatus','uMedida.descripcion as descrUMedida','importador.nombre','almacen.clave as cveAlmacen','familia.descripcion as descrFamilia')
+	 		 				->select('producto.id as idProd','producto.clave','producto.nombre','producto.numero_articulo','producto.ean_code','producto.color','producto.numero_color','producto.unidad_medida_id','producto.piezas_paquete','producto.dimensiones','producto.piezas_pallet','producto.total_piezas','producto.foto','producto.importador_id','producto.almacen_id','producto.familia_id','producto.estatus_web','producto.estatus','uMedida.descripcion as descrUMedida','importador.nombre','almacen.clave as cveAlmacen','familia.descripcion as descrFamilia')
 	 		 				->get();
 
 	 		 	break;
@@ -244,8 +244,8 @@ class CatalogoController extends \BaseController {
 
 				case 'FormaPago':
 					$formaPago = new FormaDePago;
-					$formaPago ->descripcion = Input::get('descripcion');	
-					$formaPago ->save();
+					$formaPago -> descripcion = Input::get('descripcion');	
+					$formaPago -> save();
 					$resp = DB::table('forma_pago')
 							->where('id','=',$formaPago->id)->first();
 					break;
@@ -390,36 +390,6 @@ class CatalogoController extends \BaseController {
 							->where('id','=',$contacto->id)
 							->select('contacto.id as idContacto','contacto.proveedor_id as idProveedor','contacto.nombre','contacto.correo','contacto.estatus')
 							->first();
-					break;
-
-				case 'Producto':
-					$producto = new Producto;
-					$producto -> clave = Input::get('claveProd');
-					$producto -> numero_articulo = Input::get('numArtProd');
-					$producto -> nombre = Input::get('nomProd');
-					$producto -> ean_code = Input::get('eanCodeProd');
-					$producto -> color = Input::get('colorProd');
-					$producto -> numero_color = Input::get('numColorProd');
-					$producto -> unidad_medida_id = Input::get('uMedidaProd');
-					$producto -> piezas_paquete = Input::get('piezasPaqProd');
-					$producto -> dimensiones = Input::get('DimenProd');
-					$producto -> piezas_pallet = Input::get('piezasPalletProd');
-					$producto -> total_piezas = Input::get('totalPiezasProd');
-					$foto = Input::file('fotoProd');
-					$producto -> foto = $foto->getClientOriginalName();
-					$producto -> importador_id = Input::get('importadorProd');
-					$producto -> almacen_id = Input::get('almacenProd');
-					$producto -> familia_id = Input::get('familiaProd');
-					$producto -> estatus_web = Input::get('estatusWebProd');
-					$producto -> estatus = Input::get('estatusProd');
-					if($producto -> save()){
-						$foto->move('img/productos',$foto->getClientOriginalName());
-						$resp = DB::table('Producto')
-							->where('id','=',$producto->id)
-							->select('id as idProd','clave','nombre as nomProd','numero_articulo','ean_code','color','numero_color','unidad_medida_id','piezas_paquete','dimensiones','piezas_pallet','total_piezas','foto','importador_id','almacen_id','familia_id','estatus_web','estatus')
-							->first();
-					}
-					
 					break;
 
 				default:
@@ -709,29 +679,6 @@ class CatalogoController extends \BaseController {
 							->first();*/
 					break;
 
-				case 'Producto':
-					$producto = Producto::find($id);
-					$producto -> clave = Input::get('claveProd');
-					$producto -> numero_articulo = Input::get('numArtProd');
-					$producto -> nombre = Input::get('nomProd');
-					$producto -> ean_code = Input::get('eanCodeProd');
-					$producto -> color = Input::get('colorProd');
-					$producto -> numero_color = Input::get('numColorProd');
-					$producto -> unidad_medida_id = Input::get('uMedidaProd');
-					$producto -> piezas_paquete = Input::get('piezasPaqProd');
-					$producto -> dimensiones = Input::get('DimenProd');
-					$producto -> piezas_pallet = Input::get('piezasPalletProd');
-					$producto -> total_piezas = Input::get('totalPiezasProd');
-					$producto -> foto = Input::file('fotoProd')->getClientOriginalName();
-					$producto -> importador_id = Input::get('importadorProd');
-					$producto -> almacen_id = Input::get('almacenProd');
-					$producto -> familia_id = Input::get('familiaProd');
-					$producto -> estatus_web = Input::get('estatusWebProd');
-					$producto -> estatus = Input::get('estatusProd');
-					$producto -> save();
-
-					return Response::json('success');
-
 				default:
 					return Response::json(';Datos no actualizados;',500);
 					break;
@@ -850,11 +797,6 @@ class CatalogoController extends \BaseController {
 				$contacto -> delete();
 				break;
 
-			case 'Producto':
-				$producto = Producto::find($id);
-				$producto -> delete();
-				break;
-
 			default:
 				return Response::json('error',500);
 				break;
@@ -881,8 +823,7 @@ class CatalogoController extends \BaseController {
 				}
 		
 		$catalogo=Input::get('catalogo');
-		
-		$mensajeError="";
+		$mensajeError='';
 		switch ($catalogo) {
 			case 'Almacen':
 	    	  	$validator=Validator::make
@@ -1238,10 +1179,6 @@ class CatalogoController extends \BaseController {
 				# code...
 				break;
 
-			case 'Producto':
-				//$mensajeError .= "Error de validacion;";
-				break;
-
 			case 'Contacto':
 				$validator=Validator::make
 		      		(
@@ -1267,8 +1204,6 @@ class CatalogoController extends \BaseController {
 			    }	
 				break;
 
-			
-
 			default:
 				$mensajeError = "Registro no guardado";
 				# code...
@@ -1280,154 +1215,122 @@ class CatalogoController extends \BaseController {
 	public function _getElementos($cat){
 		$resp[]=null;
 	 	
-		try {
-				
-				
-		 	switch ($cat) {
-		 		case 'tabCliente':		//:::::::::::::::::------  CATALOGO PARA LOS TABS DEL CLIENTE -------:::::::://
-		 			$idCliente = Input::get('id');
-		 			$resp['telefonoCliente'] = DB::table('telefono_cliente as telefono')
-		 								->where('cliente_id', '=', $idCliente)
-		 								->select('telefono.id as idTel','telefono.cliente_id as idCliente','telefono.numero','telefono.tipo_tel','telefono.estatus')
-		 								->get();
-		 			$resp['dirCliente'] = DB::table('direccion_cliente as direccion')
-		 								->where('cliente_id', '=', $idCliente)
-		 								->leftJoin('pais','pais.id','=','direccion.pais_id')
-		 								->leftJoin('estado','estado.id','=','direccion.estado_id')
-		 								->leftJoin('municipio','municipio.id','=','direccion.municipio_id')
-		 								//->leftJoin('telefono_cliente','telefono_cliente.id','=','direccion.telefono_cliente_id')
-		 								->select('direccion.id as idDir','direccion.cliente_id as idCliente','direccion.pais_id as idPais','direccion.estado_id as idEstado','direccion.municipio_id as idMunicipio','direccion.calle1','direccion.calle2','direccion.colonia','direccion.delegacion','direccion.codigo_postal','direccion.tipo','direccion.estatus','direccion.telefono_cliente_id as idTelDir','pais.pais','estado.estados','municipio.municipio')
-		 								->get();
-		 			
-		 			return Response::json($resp);
-		 			break;
+	try {
+			
+			
+	 	switch ($cat) {
+	 		case 'tabCliente':		//:::::::::::::::::------  CATALOGO PARA LOS TABS DEL CLIENTE -------:::::::://
+	 			$idCliente = Input::get('id');
+	 			$resp['telefonoCliente'] = DB::table('telefono_cliente as telefono')
+	 								->where('cliente_id', '=', $idCliente)
+	 								->select('telefono.id as idTel','telefono.cliente_id as idCliente','telefono.numero','telefono.tipo_tel','telefono.estatus')
+	 								->get();
+	 			$resp['dirCliente'] = DB::table('direccion_cliente as direccion')
+	 								->where('cliente_id', '=', $idCliente)
+	 								->leftJoin('pais','pais.id','=','direccion.pais_id')
+	 								->leftJoin('estado','estado.id','=','direccion.estado_id')
+	 								->leftJoin('municipio','municipio.id','=','direccion.municipio_id')
+	 								//->leftJoin('telefono_cliente','telefono_cliente.id','=','direccion.telefono_cliente_id')
+	 								->select('direccion.id as idDir','direccion.cliente_id as idCliente','direccion.pais_id as idPais','direccion.estado_id as idEstado','direccion.municipio_id as idMunicipio','direccion.calle1','direccion.calle2','direccion.colonia','direccion.delegacion','direccion.codigo_postal','direccion.tipo','direccion.estatus','direccion.telefono_cliente_id as idTelDir','pais.pais','estado.estados','municipio.municipio')
+	 								->get();
+	 			
+	 			return Response::json($resp);
+	 			break;
 
-		 		case 'TelefonoCliente': 	//:::-- DEVUELVE TODOS LOS TELEFONOS DE UN DETERMINADO CLIENTE ----:::::::::::://
-		 			$idCliente = Input::get('id');
-		 			$resp = DB::table('telefono_cliente as telefono')
-		 						->where('cliente_id','=',$idCliente)
-		 						->select('telefono.id','telefono.numero')
-		 						->get();
-		 			return Response::json($resp);
-		 			break;	
+	 		case 'TelefonoCliente': 	//:::-- DEVUELVE TODOS LOS TELEFONOS DE UN DETERMINADO CLIENTE ----:::::::::::://
+	 			$idCliente = Input::get('id');
+	 			$resp = DB::table('telefono_cliente as telefono')
+	 						->where('cliente_id','=',$idCliente)
+	 						->select('telefono.id','telefono.numero')
+	 						->get();
+	 			return Response::json($resp);
+	 			break;	
 
-		 		case 'agentes':
-		 			$resp = DB::table('usuario')
-		 							-> where ('rol_id','=', '2')
-		 							->get();
-		 			return Response::json($resp);
-		 			break;
+	 		case 'agentes':
+	 			$resp = DB::table('usuario')
+	 							-> where ('rol_id','=', '2')
+	 							->get();
+	 			return Response::json($resp);
+	 			break;
 
-		 		case 'descuentoCliente':
-		 			$resp = NivelDescuento::all();
-		 			return Response::json($resp);
-		 			# code...
-		 			
-		 			break;
-		 		
-		 		case 'Pais':
-		 			$resp = DB::table('pais')
-		 							-> where ('estatus','=', '1')
-		 							-> select ('pais.id as idPais','pais.pais')
-		 							->get();
-		 			return Response::json($resp);
-		 			# code...
-		 			break;
-		 		
-		 		case 'Estados':
-		 			$idPais = Input::get('id');
-		 			$resp = DB::table('estado')
-		 							-> where ('estatus','=', '1')
-		 							-> where ('pais_id',$idPais)
-		 							-> select ('estado.id as idEstado','estado.estados')
-		 							->get();
-		 			return Response::json($resp);
-		 			break;
+	 		case 'descuentoCliente':
+	 			$resp = NivelDescuento::all();
+	 			return Response::json($resp);
+	 			# code...
+	 			
+	 			break;
+	 		
+	 		case 'Pais':
+	 			$resp = DB::table('pais')
+	 							-> where ('estatus','=', '1')
+	 							-> select ('pais.id as idPais','pais.pais')
+	 							->get();
+	 			return Response::json($resp);
+	 			# code...
+	 			break;
+	 		
+	 		case 'Estados':
+	 			$idPais = Input::get('id');
+	 			$resp = DB::table('estado')
+	 							-> where ('estatus','=', '1')
+	 							-> where ('pais_id',$idPais)
+	 							-> select ('estado.id as idEstado','estado.estados')
+	 							->get();
+	 			return Response::json($resp);
+	 			break;
 
-		 		case 'Municipios':
-		 			$idEstado = Input::get('id');
-		 			$resp = DB::table('municipio')
-		 							-> where ('estatus','=', '1')
-		 							-> where ('estado_id',$idEstado)
-		 							-> select ('municipio.id as idMunicipio','municipio.municipio')
-		 							->get();
-		 			return Response::json($resp);
-		 			break;
+	 		case 'Municipios':
+	 			$idEstado = Input::get('id');
+	 			$resp = DB::table('municipio')
+	 							-> where ('estatus','=', '1')
+	 							-> where ('estado_id',$idEstado)
+	 							-> select ('municipio.id as idMunicipio','municipio.municipio')
+	 							->get();
+	 			return Response::json($resp);
+	 			break;
 
-		 		case 'tabProveedor':		//:::::::::::::::::------  CATALOGO PARA LOS TABS DEL PROVEEDOR -------:::::::://
-		 			$idProveedor = Input::get('id');
-		 			$resp['telefonoProveedor'] = DB::table('telefono_proveedor as telefono')
-		 								->where('proveedor_id', '=', $idProveedor)
-		 								->select('telefono.id as idTel','telefono.proveedor_id as idProveedor','telefono.numero','telefono.tipo_tel','telefono.estatus')
-		 								->get();
-		 			$resp['dirProveedor'] = DB::table('direccion_proveedor as direccion')
-		 								->where('proveedor_id', '=', $idProveedor)
-		 								->leftJoin('pais','pais.id','=','direccion.pais_id')
-		 								->leftJoin('estado','estado.id','=','direccion.estado_id')
-		 								->leftJoin('municipio','municipio.id','=','direccion.municipio_id')
-		 								//->leftJoin('telefono_cliente','telefono_cliente.id','=','direccion.telefono_cliente_id')
-		 								->select('direccion.id as idDir','direccion.proveedor_id as idProveedor','direccion.pais_id as idPais','direccion.estado_id as idEstado','direccion.municipio_id as idMunicipio','direccion.calle1','direccion.calle2','direccion.colonia','direccion.delegacion','direccion.codigo_postal','direccion.tipo','direccion.estatus','pais.pais','estado.estados','municipio.municipio')
-		 								->get();
-		 			$resp['contacto'] = DB::table('contacto')
-		 								->where('proveedor_id','=',$idProveedor)
-		 								->select('contacto.id as idContacto','contacto.proveedor_id as idProveedor','contacto.nombre','contacto.correo','contacto.estatus')
-									 	->get();
-		 			return Response::json($resp);
+	 		case 'tabProveedor':		//:::::::::::::::::------  CATALOGO PARA LOS TABS DEL PROVEEDOR -------:::::::://
+	 			$idProveedor = Input::get('id');
+	 			$resp['telefonoProveedor'] = DB::table('telefono_proveedor as telefono')
+	 								->where('proveedor_id', '=', $idProveedor)
+	 								->select('telefono.id as idTel','telefono.proveedor_id as idProveedor','telefono.numero','telefono.tipo_tel','telefono.estatus')
+	 								->get();
+	 			$resp['dirProveedor'] = DB::table('direccion_proveedor as direccion')
+	 								->where('proveedor_id', '=', $idProveedor)
+	 								->leftJoin('pais','pais.id','=','direccion.pais_id')
+	 								->leftJoin('estado','estado.id','=','direccion.estado_id')
+	 								->leftJoin('municipio','municipio.id','=','direccion.municipio_id')
+	 								//->leftJoin('telefono_cliente','telefono_cliente.id','=','direccion.telefono_cliente_id')
+	 								->select('direccion.id as idDir','direccion.proveedor_id as idProveedor','direccion.pais_id as idPais','direccion.estado_id as idEstado','direccion.municipio_id as idMunicipio','direccion.calle1','direccion.calle2','direccion.colonia','direccion.delegacion','direccion.codigo_postal','direccion.tipo','direccion.estatus','pais.pais','estado.estados','municipio.municipio')
+	 								->get();
+	 			$resp['contacto'] = DB::table('contacto')
+	 								->where('proveedor_id','=',$idProveedor)
+	 								->select('contacto.id as idContacto','contacto.proveedor_id as idProveedor','contacto.nombre','contacto.correo','contacto.estatus')
+								 	->get();
+	 			return Response::json($resp);
 
-		 		case 'Comercializador':
-		 			$resp = DB::table('comercializador')
-		 					->select('comercializador.id','comercializador.nombre')
-		 					->get();
-		 			return Response::json($resp);	
-		 			break;
+	 		case 'Comercializador':
+	 			$resp = DB::table('comercializador')
+	 					->select('comercializador.id','comercializador.nombre')
+	 					->get();
+	 			return Response::json($resp);	
+	 			break;
 
-		 		case 'TelefonoProveedor': 	//:::-- DEVUELVE TODOS LOS TELEFONOS DE UN DETERMINADO PROVEEDOR ----:::::::::::://
-		 			$idProveedor = Input::get('id');
-		 			$resp = DB::table('telefono_proveedor as telefono')
-		 						->where('proveedor_id','=',$idProveedor)
-		 						->select('telefono.id','telefono.numero')
-		 						->get();
-		 			return Response::json($resp);
-		 			break;	
-		 		
-		 		case 'UMedidas':
-		 			$resp = DB::table('unidad_medida as medidas')
-		 					->where('estatus','=','1')
-		 					->select('medidas.id','medidas.descripcion')
-		 					->get();
-					return Response::json($resp);		 					
-		 			break;
-
-		 		case 'Importadores':
-		 			$resp = DB::table('importador')
-		 					->select('id','nombre')
-		 					->get();
-		 			return Response::json($resp);
-		 			break;
-
-		 		case 'Almacenes':
-		 			$resp = DB::table('almacen')
-		 					->where('estatus','=','1')
-		 					->select('id','nombre')
-		 					->get();
-		 			return Response::json($resp);
-		 			break;
-
-		 		case 'Familias':
-		 			$resp = DB::table('familia')
-		 					->where('estatus','=','1')
-		 					->select('id','descripcion')
-		 					->get();
-		 			return Response::json($resp);
-		 			break;
-
-		 		default:
-		 			# code...
-		 			break;
-		 	}
-		} catch (Exception $e) {
-					return Response::json(array("error" => $e->getCode()), 500);
-			}	
+	 		case 'TelefonoProveedor': 	//:::-- DEVUELVE TODOS LOS TELEFONOS DE UN DETERMINADO PROVEEDOR ----:::::::::::://
+	 			$idProveedor = Input::get('id');
+	 			$resp = DB::table('telefono_proveedor as telefono')
+	 						->where('proveedor_id','=',$idProveedor)
+	 						->select('telefono.id','telefono.numero')
+	 						->get();
+	 			return Response::json($resp);
+	 			break;	
+	 		default:
+	 			# code...
+	 			break;
+	 	}
+	} catch (Exception $e) {
+				return Response::json(array("error" => $e->getCode()), 500);
+		}	
 
 	}
 
