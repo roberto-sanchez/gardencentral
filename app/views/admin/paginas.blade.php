@@ -32,6 +32,28 @@
     cursor:pointer;
   }
 
+    /*--Modal imagen*/
+#InsertImage .modal-body{
+  overflow:hidden;
+}
+
+
+/*--Modal tablas*/
+#InsertTable #tblForm{
+  width:80%;
+  margin:0 auto;
+}
+
+#tblAlign{
+  margin-left:0;
+}
+
+#inputText{
+  margin: 1.7em 1em 0 1em;
+}
+
+
+
 </style>
 
 <script>
@@ -204,7 +226,7 @@
 
 
     //Listar terminos y condiciones
-        $.ajax({
+      $.ajax({
         url:'/paginas/listarterminos',
         dataType: 'json',
         success: function(t){
@@ -256,7 +278,7 @@
          
                       for(var i = 0; i < t.length; i++) {
                              tabla_n.fnAddData([
-                                        '<span class="hidden">'+t[i].created_at+'</span><div class="head-t">'+t[i].descripción+'</div><div class="content-t"><ol class="breadcrumb"><li><a class="usar-p" value="'+t[i].id+'">Publicar</a></li><li><a class="edit-p" value="'+t[i].id+'">Editar</a></li><li><a class="delete-t estatus_'+t[i].estatus+' " value="'+t[i].id+'">Eliminar</a></li></ol>'+t[i].texto+'</div>',
+                                        '<span class="hidden">'+t[i].created_at+'</span><div class="head-t">'+t[i].descripción+'</div><div class="content-t"><ol class="breadcrumb"><li><a class="usar-p p_'+t[i].estatus+' " value="'+t[i].id+'">Publicar</a></li><li><a class="edit-p" value="'+t[i].id+'">Editar</a></li><li><a class="delete-t estatus_'+t[i].estatus+' " value="'+t[i].id+'">Eliminar</a></li></ol>'+t[i].texto+'</div>',
                                                                             
                                         
                                       ]);
@@ -265,14 +287,23 @@
                               }
 
                               $('.estatus_1').removeClass('delete-t');
-
-
+                              $('.estatus_1').addClass('c-activo'); 
+                              $('.p_1').removeClass('usar-p');
 
         },
         error: function(){
           alert('failure');
         }
     });
+
+
+        $(document).on('click', '.c-activo', function(){
+          alertas('error',"No puedes eliminar un contenido activo.");
+        });
+
+        $(document).on('click', '.p_1', function(){
+           alertas('error',"Ya esta publicado.");
+        });
 
 
         //Validaciones para los campos del editor de contenidos
@@ -290,6 +321,9 @@
           return true;
       }
 });
+
+
+   
 
 
     //Guardar contenido
@@ -310,16 +344,24 @@
         success: function(t){
           console.log(t);
 
+          /*-__Listamos tambien el viejo contenido__-*/
+
           $fila = "<tr id=tr_"+t.id+">"+ 
-                       "<td><span class='hidden'>"+t.created_at+"</span><div class='head-t'>"+t.descripción+"<span class='ac-estatus estatus_"+t.estatus+" '></span></div><div class='content-t'><ol class='breadcrumb'><li><a value="+t.id+" class='usar-p' >Publicar</a></li><li><a class='edit-p' value="+t.id+" >Editar</a></li><li><a class='delete-t estatus_"+t.estatus+" ' value="+t.id+">Eliminar</a></li></ol>"+t.texto+"</div></td>"+
+                       "<td><span class='hidden'>"+t.created_at+"</span><div class='head-t'>"+t.descripción+"<span class='ac-estatus estatus_"+t.estatus+" '></span></div><div class='content-t'><ol class='breadcrumb'><li><a value="+t.id+" class='usar-p p_"+t.estatus+" ' >Publicar</a></li><li><a class='edit-p' value="+t.id+" >Editar</a></li><li><a class='delete-t estatus_"+t.estatus+" ' value="+t.id+">Eliminar</a></li></ol>"+t.texto+"</div></td>"+
                     "</tr>";
 
             $('tbody').prepend($fila);
 
             $('#terminos').val(' ');
             $('.Editor-editor').html(' ');
+          
             $('.estatus_1').removeClass('delete-t');
+            $('.estatus_1').addClass('c-activo'); 
+            $('.p_1').removeClass('usar-p');
 
+            $('.estatus_0').addClass('delete-t');  
+            $('.estatus_0').removeClass('c-activo'); 
+            $('.p_0').addClass('usar-p');
         },
         error: function(){
           alert('failure');
@@ -428,7 +470,7 @@
         $('.g-contenido').text('Guardar y publicar');
         $('.g-contenido').attr('id', 'save-contenido');
 
-        $('.estatus_1').removeClass('delete-t');
+       // $('.estatus_1').removeClass('delete-t');
 
 
         }
@@ -472,7 +514,7 @@
                 +'<tr/>');
 
 
-        $('.estatus_1').removeClass('delete-t');
+        //$('.estatus_1').removeClass('delete-t');
 
 
         }

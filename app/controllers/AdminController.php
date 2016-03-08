@@ -58,7 +58,6 @@ class AdminController extends \BaseController {
 						->select('clave','nombre','cantidad')->get();
 
 
-	//$price = DB::table('orders')->max('price');
 
 		//Productos con mas inventario
 		$i_mas = DB::table('producto')
@@ -401,7 +400,9 @@ class AdminController extends \BaseController {
 		$resp = DB::table('producto')
 						->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
 						->join('familia', 'producto.familia_id', '=', 'familia.id')
-						->select('producto.id','nombre','color','foto','piezas_paquete','clave','precio_compra', 'factor_descuento')
+						->Join('descuento', 'familia.id', "=", 'descuento.familia_id')
+
+						->select('producto.id','nombre','color','foto','piezas_paquete','clave','precio', 'descuento')
 						->where('clave', $clave)->first();
 		if(count($resp)==0){
 				$resp = array('indefinido' => 'El producto no existe. ');
@@ -418,7 +419,8 @@ class AdminController extends \BaseController {
 		$resp = DB::table('producto')
 						->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
 						->join('familia', 'producto.familia_id', '=', 'familia.id')
-						->select('producto.id','nombre','color','foto','piezas_paquete','clave','precio_compra', 'factor_descuento')
+						->Join('descuento', 'familia.id', "=", 'descuento.familia_id')
+						->select('producto.id','nombre','color','foto','piezas_paquete','clave','precio', 'descuento')
 						->where('clave', $clave)->get();
 		if(count($resp)==0){
 				$resp = array('indefinido' => 'El producto no existe. ');
@@ -437,6 +439,8 @@ class AdminController extends \BaseController {
 	 * @return Response
 	 */
 	public function entradas(){
+	 //$ruta = Input::get('file');
+		
 		//Recibimos el Array y lo decodificamos desde json, para poder utilizarlo como objeto
 	  $idpro = json_decode(Input::get('aInfo'));
 		$fecha = Input::get('fecha');
@@ -455,16 +459,16 @@ class AdminController extends \BaseController {
 		$entrada->estatus = '1';
 		$entrada->save();
 
-for ($i=0; $i < count($idpro); $i++) {
+     for ($i=0; $i < count($idpro); $i++) {
 		$entradaDetalle = new EntradaDetalle;
 		$entradaDetalle->producto_id = $idpro[$i]->idp;
 		$entradaDetalle->entrada_id = $entrada['id'];
 		$entradaDetalle->cantidad = $idpro[$i]->cant;
 		$entradaDetalle->precio_compra = $idpro[$i]->pc;
 		$entradaDetalle->save();
-}
+      }
 
-		return Response::json('Correcto');
+		return Response::json('Correcto'); 
 	}
 
 
@@ -608,20 +612,115 @@ for ($i=0; $i < count($idpro); $i++) {
 		$nota = Input::get('nota');
 		$contenido = Input::get('contenido');
 
-		$new_nota = new Nota;
-		$new_nota->sección = $seccion;
-		$new_nota->nombre = $nota;
-		$new_nota->texto = $contenido;
-		$new_nota->save();
+	    $nota_antigua = DB::table('notas')
+						->where('estatus', 1)
+						->where('sección', $seccion)
+						->pluck('id'); 
 
-		$consulta = DB::table('notas')
-				->where('sección', $seccion)
-				->where('nombre', $nota)
-				->where('texto', $contenido)
-				->first();
+		if(count($nota_antigua) == 0 ){
 
-		return Response::json($consulta);
+			$new_nota = new Nota;
+			$new_nota->sección = $seccion;
+			$new_nota->nombre = $nota;
+			$new_nota->texto = $contenido;
+			$new_nota->estatus = 1;
+			$new_nota->save();
+
+			$consulta = DB::table('notas')
+					->where('sección', $seccion)
+					->where('nombre', $nota)
+					->where('texto', $contenido)
+					->where('estatus', 1)
+					->get(); 
+
+			return Response::json(array('c' => $consulta, 'o' => 'vacio'));
+
+		} else {
+
+			$old_n = Nota::find($nota_antigua);
+			$old_n->estatus = 0;
+			$old_n->save(); 
+
+
+			$new_nota = new Nota;
+			$new_nota->sección = $seccion;
+			$new_nota->nombre = $nota;
+			$new_nota->texto = $contenido;
+			$new_nota->estatus = 1;
+			$new_nota->save();
+
+			$consulta = DB::table('notas')
+					->where('sección', $seccion)
+					->where('nombre', $nota)
+					->where('texto', $contenido)
+					->where('estatus', 1)
+					->get(); 
+
+			return Response::json(array('c' => $consulta, 'o' => $old_n));
+		}
+
+
+		
 	}
+
+	public function publicarnota(){
+		$id = Input::get('id');
+		$seccion = Input::get('seccion');
+		$p = Input::get('p');
+
+		if($p == 1){
+			//publicar nota
+			$nota_antigua = DB::table('notas')
+							->where('estatus', 1)
+							->where('sección', $seccion)
+							->pluck('id');
+
+			if(count($nota_antigua) == 0 ){
+				$new_nota = Nota::find($id);
+				$new_nota->estatus = 1;
+				$new_nota->save();
+
+
+				$consulta = DB::table('notas')
+						->where('id', $id)
+						->get(); 
+
+				return Response::json(array('c' => $consulta, 'o' => 'vacio')); 
+
+			} else {
+				
+				$old_n = Nota::find($nota_antigua);
+				$old_n->estatus = 0;
+				$old_n->save(); 
+
+				$new_nota = Nota::find($id);
+				$new_nota->estatus = 1;
+				$new_nota->save();
+
+				$consulta = DB::table('notas')
+						->where('id', $id)
+						->get();  
+
+				return Response::json(array('c' => $consulta, 'o' => $old_n)); 
+
+			}
+
+		} else {
+				//Despublicar
+			    $new_nota = Nota::find($id);
+				$new_nota->estatus = 0;
+				$new_nota->save();
+
+				$consulta = DB::table('notas')
+						->where('id', $id)
+						->get();  
+
+				return Response::json(array('c' => $consulta)); 
+		}
+
+
+	}
+
 
 	public function eliminarnota(){
 

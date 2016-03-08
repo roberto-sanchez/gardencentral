@@ -1,5 +1,7 @@
 $(document).ready(function () {
 
+      
+
       //Detalle del pedido del cliente
     $(document).on('click', '#c-estatus', function(){
           id = $(this).attr('data-id');
@@ -56,10 +58,10 @@ $(document).ready(function () {
 
                    pro = "";
                 for(datos in p.pro){
-                  des = p.pro[datos].precio_venta * p.pro[datos].factor_descuento;
-                  e = accounting.formatMoney(p.pro[datos].precio_venta - des);
-                  f = (p.pro[datos].precio_venta - des) * p.pro[datos].cantidad;
-                  t = accounting.formatMoney(p.pro[datos].precio_venta);
+                  des = p.pro[datos].precio * p.pro[datos].descuento;
+                  e = accounting.formatMoney(p.pro[datos].precio - des);
+                  f = (p.pro[datos].precio- des) * p.pro[datos].cantidad;
+                  t = accounting.formatMoney(p.pro[datos].precio);
 
                       pro += '<tr><td>'+p.pro[datos].clave+'</td>';
                       pro += '<td>'+p.pro[datos].nombre+'</td>';
@@ -180,10 +182,11 @@ $(document).ready(function () {
                 url: "productos/getProducto",
                 data: {clave: $('#clave').val()},
                 success: function (prod) {
-                    ver = prod.id;
-                    if (ver === undefined) {
-                        $('#productoPanel').hide();
+                  console.log(prod);
+                    ver = prod.producto.indefinido;
 
+                    if (ver === 'vacio') {
+                        $('#productoPanel').hide();
                         noexiste = [[ 'top', 'danger',  "El producto no existe." ]];
                         message = noexiste[Math.floor(Math.random() * noexiste.length)];
 
@@ -192,36 +195,33 @@ $(document).ready(function () {
                             type: message[1]
                         }).show();
 
-                        $('#noexiste').html(prod.indefinido);
                     } else {
                         $('#productoPanel').slideDown(1000);
                         //$('#idProd').attr('value', prod.id );
                         //$('#idProd').attr('href', 'productos/datosdelpedido/' +prod.id );
-                        $('.idProd').attr('id', 'product_' + prod.id);
-                        $('.idProd2').attr('id', +prod.id);
+                        $('.idProd').attr('id', 'product_' + prod.producto[0].id);
+                        $('.idProd2').attr('id', +prod.producto[0].id);
                         // $('#claveProd').attr('href', 'productos/add/'+prod.clave );
-                        $('.claveProd').attr('href', 'productos/add/' + prod.clave);
+                        $('.claveProd').attr('href', 'productos/add/' + prod.producto[0].clave);
                         //$('#claveProd').attr('value', prod.clave );
                         $('#nombreProd').html(prod.nombre); //mostramos el nombre del producto
-                        $('#imagenProd').prop('src', 'img/productos/' + prod.foto); //la imagen
-                        $('#colorProd').html(prod.color); //el color
-                        $('#piezasProd').html(prod.piezas_paquete);
-                        $('#precioProd').html(accounting.formatMoney(prod.precio_venta));
-                        num = prod.factor_descuento;
+                        $('#imagenProd').prop('src', 'img/productos/' + prod.producto[0].foto); //la imagen
+                        $('#colorProd').html(prod.producto[0].color); //el color
+                        $('#piezasProd').html(prod.producto[0].piezas_paquete);
+                        $('#precioProd').html(accounting.formatMoney(prod.producto[0].precio));
+                        num = prod.familia[0].descuento;
                         n = num.toString(); //convertimos el entero en string
-                        descuento = n.substring(2); //ocultamos los primeros dos caracteres
-
+                        desc = n.substring(2); //ocultamos los primeros dos caracteres
                         if(n.length == 3){
-                          v = $('#descProd').html(descuento+'0%');
+                           $('#descProd').html(desc+'0%');
                         } else {
-                          $('#descProd').html(descuento+'%');
+                          $('#descProd').html(desc+'%');
                         }
-                        $('.mialert').hide();
-                        $('.mialert2').hide();
-                        $('#noexiste').text('');
-                    }
+ 
+                     } 
 
                 },
+                
                 error: function (noexiste) {
                     alert("failure");
                 }

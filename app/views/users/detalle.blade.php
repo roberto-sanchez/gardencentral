@@ -7,6 +7,26 @@
 @section('scripts')
 @parent
 {{ HTML::style('css/select2.min.css') }}
+<style>
+
+  .notas_a{
+    width:70%;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack:start;
+  -webkit-justify-content:flex-start;
+      -ms-flex-pack:start;
+          justify-content:flex-start;
+  }
+
+  .alert-n_d{
+    display:none;
+    margin-left:.8em;
+  }
+
+</style>
 @stop
 
 @section('pedidos_user') @stop
@@ -91,7 +111,7 @@
                    <td>Color: {{ $item->color }}</td>
                 </tr>
                 <tr>
-                   <td><?php $des = $item->precio_venta * $item->factor_descuento ?>${{ number_format($tpro = $item->precio_venta - $des, 2) }}</td>
+                   <td><?php $des = $item->precio * $item->descuento ?>${{ number_format($tpro = $item->precio - $des, 2) }}</td>
                 </tr>
                 <tr>
                    <td>Iva: 16%</td>
@@ -103,7 +123,7 @@
                    <td>Cantidad: {{ $item->quantity }}</td>
                 </tr>
                 <tr>
-                   <td>Total producto: ${{ number_format($item->precio_venta * $item->quantity, 2) }}</td>
+                   <td>Total producto: ${{ number_format($item->precio * $item->quantity, 2) }}</td>
                 </tr>
 
               </tbody>
@@ -157,7 +177,7 @@
                  <td>{{ $item->clave }}</td>
                  <td id="pro-d">{{ $item->nombre }}</td>
                  <td>{{ $item->color }}</td>
-                <td><?php $des = $item->precio_venta * $item->factor_descuento ?>${{ number_format($tpro = $item->precio_venta - $des, 2) }}</td>
+                <td><?php $des = $item->precio * $item->descuento ?>${{ number_format($tpro = $item->precio - $des, 2) }}</td>
                  <td>16%</td>
                  <td>{{ $item->piezas_paquete }}</td>
                  <td>{{ $item->quantity }}</td>
@@ -192,6 +212,14 @@
                   </td>
                 </tr>
               </table>
+
+              <div class="notas_a">
+                <div class="alert alert-desc alert-n_d">
+                 <strong id="nota_detalle">Descuento incluido.</strong>
+              </div>
+   
+             </div>
+              
           </div>
         </div>
 
@@ -212,6 +240,37 @@
 </div> <!-- Content users -->
 
 
+<script>
+
+  $(document).ready(function(){
+
+    //Listar notas aclaratorias
+          $.ajax({
+                type: "GET",
+                url: "/productos/notasdetalle",
+                success: function (nota) {
+
+                   if(nota.texto == undefined){
+
+                   } else {
+                
+
+                   $('.alert-n_d').show();
+                   $('#nota_detalle').text(nota.texto);
+
+                   }
+
+
+        },
+
+        error: function () {
+            alert("failure");
+        }
+    });
+
+  });
+
+</script>
 
 
 @stop

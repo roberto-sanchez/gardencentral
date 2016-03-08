@@ -54,15 +54,6 @@ Route::controller('password', 'RemindersController');
 //controlador para los productos
 Route::controller('users','ProductoController');
 
-// Carrito de productos -------
-//ruta para obtener la clave del producto
-Route::bind('producto', function($clave){
-	return Producto::join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-					->join('familia', 'producto.familia_id', '=', 'familia.id')
-					->select('producto.id','iva0','nombre','color','foto','piezas_paquete','clave','precio_venta','factor_descuento')
-					->where('clave', $clave)->first();
-
-});
 
 //Admin
 Route::post('pedidos/verpedidos','AdminController@verpedidos');  
@@ -90,6 +81,8 @@ Route::POST('notas/agregarnota', 'AdminController@agregarnota');
 Route::GET('notas/eliminarnota', 'AdminController@eliminarnota');
 Route::GET('notas/editarnota', 'AdminController@editarnota');
 Route::GET('notas/actualizarnota', 'AdminController@actualizarnota');
+Route::GET('notas/publicarnota', 'AdminController@publicarnota');
+
 
 Route::GET('paginas/listarterminos', 'AdminController@listarterminos');
 Route::POST('paginas/savepagina', 'AdminController@savepagina');
@@ -114,6 +107,50 @@ Route::GET('productos/verterminos','ProductoController@verterminos');
 
 // Ruta para la busqueda de productos
 Route::post('productos/getProducto','ProductoController@getProducto');
+
+// Carrito de productos -------
+//ruta para obtener la clave del producto
+
+Route::bind('producto', function($clave){
+		$id_user = Auth::user()->id;
+		$nivel = DB::table('cliente')
+            ->join('nivel_descuento', 'cliente.nivel_descuento_id', '=', 'nivel_descuento.id')
+            ->select('descripcion')
+            ->where('cliente.usuario_id', $id_user)
+            ->pluck('descripcion');
+
+         if($nivel == 'Retail'){
+			return Producto::join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
+						->join('familia', 'producto.familia_id', '=', 'familia.id')
+						->Join('descuento', 'familia.id', "=", 'descuento.familia_id')
+						->select('producto.id','iva0','nombre','color','foto','piezas_paquete','clave','precio', 'familia.descripcion', 'descuento')
+						->where('clave', $clave)
+						->where('tipo', 1)
+						->first();
+
+         } else if($nivel == 'Mayorista'){
+         	return Producto::join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
+						->join('familia', 'producto.familia_id', '=', 'familia.id')
+						->Join('descuento', 'familia.id', "=", 'descuento.familia_id')
+						->select('producto.id','iva0','nombre','color','foto','piezas_paquete','clave','precio', 'familia.descripcion', 'descuento')
+						->where('clave', $clave)
+						->where('tipo', 2)
+						->first();
+         	
+         } else if($nivel == 'Distribuidor'){
+         	return Producto::join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
+						->join('familia', 'producto.familia_id', '=', 'familia.id')
+						->Join('descuento', 'familia.id', "=", 'descuento.familia_id')
+						->select('producto.id','iva0','nombre','color','foto','piezas_paquete','clave','precio', 'familia.descripcion', 'descuento')
+						->where('clave', $clave)
+						->where('tipo', 3)
+						->first();
+
+         }
+
+
+
+});
 
 //Agregar producto al carrito con sus paquetes
 Route::get('productos/add/{producto}/{quantity}','ProductoController@add');
@@ -145,6 +182,9 @@ Route::delete('productos/eliminardomicilio', 'ProductoController@eliminardomicil
 
 //Listar telefonos
 Route::get('productos/listartelefonos', 'ProductoController@listartelefonos');
+
+Route::get('productos/listnotas', 'ProductoController@listnotas');
+Route::get('productos/notasdetalle', 'ProductoController@notasdetalle');
 
 //Rutas de los catalogos
 //Rutas de los catalogos

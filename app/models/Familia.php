@@ -7,7 +7,7 @@ class Familia extends Eloquent{
 		return $this->hasMany('Producto');
 	}
 
-	public function descuento(){
-		return $this->belongsTo('Descuento');
+	public function descuentos(){
+		return $this->hasMany('Descuento');
 	}
 }

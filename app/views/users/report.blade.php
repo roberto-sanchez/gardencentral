@@ -87,7 +87,7 @@
                    <td>{{ $item->clave }}</td>
                    <td>{{ $item->nombre }}</td>
                    <td>{{ $item->color }}</td>
-                   <td><?php $des = $item->precio_venta * $item->factor_descuento ?>${{ number_format($tpro = $item->precio_venta - $des, 2) }}</td>
+                   <td><?php $des = $item->precio * $item->descuento ?>${{ number_format($tpro = $item->precio - $des, 2) }}</td>
                    <td>16%</td>
                    <td>{{ $item->piezas_paquete }}</td>
                    <td>{{ $item->cantidad }}</td>

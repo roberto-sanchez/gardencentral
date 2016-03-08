@@ -569,10 +569,10 @@
 
 		                pro = "";
              		for(datos in p.pro){
-                  des = p.pro[datos].precio_venta * p.pro[datos].factor_descuento;
-                  e = accounting.formatMoney(p.pro[datos].precio_venta - des);
-                  f = (p.pro[datos].precio_venta - des) * p.pro[datos].cantidad;
-                  t = accounting.formatMoney(p.pro[datos].precio_venta);
+                  des = p.pro[datos].precio * p.pro[datos].descuento;
+                  e = accounting.formatMoney(p.pro[datos].precio - des);
+                  f = (p.pro[datos].precio - des) * p.pro[datos].cantidad;
+                  t = accounting.formatMoney(p.pro[datos].precio);
 
 	                    pro += '<tr><td>'+p.pro[datos].clave+'</td>';
 	                    pro += '<td>'+p.pro[datos].nombre+'</td>';
@@ -644,10 +644,10 @@
 
 		                pro = "";
              		for(datos in p.pro){
-                  des = p.pro[datos].precio_venta * p.pro[datos].factor_descuento;
-                  e = accounting.formatMoney(p.pro[datos].precio_venta - des);
-                  f = (p.pro[datos].precio_venta - des) * p.pro[datos].cantidad;
-                  t = accounting.formatMoney(p.pro[datos].precio_venta);
+                  des = p.pro[datos].precio * p.pro[datos].descuento;
+                  e = accounting.formatMoney(p.pro[datos].precio - des);
+                  f = (p.pro[datos].precio - des) * p.pro[datos].cantidad;
+                  t = accounting.formatMoney(p.pro[datos].precio);
 
 	                    pro += '<tr><td>Clave: '+p.pro[datos].clave+'</td></tr>';
 	                    pro += '<tr><td>Nombre: '+p.pro[datos].nombre+'</td></tr>';
@@ -752,14 +752,7 @@
         $('#fotop').removeClass('enlace-active');
 			});
 
-    /*     	console.log($('#estado').attr('data-id'));
 
-           if($('.estatus').text() == 0){
-             	console.log('el valor es cero');
-             	$('.estatus').addClass('text-primary');
-             } else {
-             	console.log('1');
-             } */
      $(document).on('click', '#c-estatus', function(){
      	id = $(this).attr('data-id');
      	estatus = $(this).attr('class');

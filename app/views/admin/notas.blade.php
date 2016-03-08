@@ -67,11 +67,8 @@
            <div class="form-group">
               <label for="seccion" class="text-primary">Sección: </label>
               <select class="form-control" id="seccion">
-                <option value="Dashboard">Dashboard</option>
                 <option value="Pedidos">Pedidos</option>
-                <option value="Inventario">Inventario</option>
-                <option value="Entradas">Entradas</option>
-                <option value="Salidas">Salidas</option>
+                <option value="Detalle del pedido">Detalle del pedido</option>
                 <option value="Términos y condiciones">Términos y condiciones</option>
               </select>
             </div>
@@ -94,7 +91,7 @@
           <div class="modal-footer modal-confirmar-pass">
 
               <button id="cancelar-n" type="button" class="btn btn-danger confirm" data-dismiss="modal">Cancelar</button>
-              <span id="save-nota" class="btn btn-primary confirm" data-dismiss="modal" >Guardar Nota</span>
+              <span id="save-nota" class="btn btn-primary confirm" data-dismiss="modal" >Guardar y publicar</span>
           </div>
         </div>
       </div>
@@ -142,11 +139,8 @@
           <div class="form-group">
               <label for="seccionedit" class="text-primary">Sección: </label>
               <select class="form-control" id="seccionedit">
-                <option value="Dashboard">Dashboard</option>
                 <option value="Pedidos">Pedidos</option>
-                <option value="Inventario">Inventario</option>
-                <option value="Entradas">Entradas</option>
-                <option value="Salidas">Salidas</option>
+                <option value="Detalle del pedido">Detalle del pedido</option>
                 <option value="Términos y condiciones">Términos y condiciones</option>
               </select>
             </div>
@@ -167,11 +161,59 @@
           </div>
           <div class="modal-footer modal-confirmar-pass">
 
-              <button type="button" class="btn btn-danger confirm" data-dismiss="modal">Cancelar</button>
+              <button id="n-act" type="button" class="btn btn-danger confirm" data-dismiss="modal">Cancelar</button>
               <span id="actualizar-nota" class="btn btn-primary confirm" data-dismiss="modal" >
                  Actualizar
                  <span class="glyphicon glyphicon-refresh"></span>
               </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal publicar nota -->
+    <div id="publicar_n" class="modal fade" data-keyboard="false" data-backdrop="static">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header header-nota">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title text-danger text-center">
+              Publicar Nota
+             </h4>
+          </div>
+          <div class="modal-body">
+            
+          <h3 class="txt-delete-n text-danger text-center">¿Estás seguro que deseas publicar esta nota?</h3>
+                
+          </div>
+          <div class="modal-footer modal-confirmar-pass">
+
+              <button type="button" class="btn btn-danger confirm" data-dismiss="modal">No</button>
+              <span id="public-nota" class="btn btn-primary confirm" data-dismiss="modal" >Si</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+        <!-- Modal despublicar nota -->
+    <div id="no-publicar" class="modal fade" data-keyboard="false" data-backdrop="static">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header header-nota">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title text-danger text-center">
+              Publicar Nota
+             </h4>
+          </div>
+          <div class="modal-body">
+            
+          <h3 class="txt-delete-n text-danger text-center">¿Estás seguro que deseas desactivar esta nota?</h3>
+                
+          </div>
+          <div class="modal-footer modal-confirmar-pass">
+
+              <button type="button" class="btn btn-danger confirm" data-dismiss="modal">No</button>
+              <span id="no-public-nota" class="btn btn-primary confirm" data-dismiss="modal" >Si</span>
           </div>
         </div>
       </div>
@@ -237,7 +279,7 @@
                                         n[i].sección,
                                         n[i].nombre,
                                         '<span class="hidden">'+n[i].created_at+'</span>' + n[i].texto,
-                                        '<span class="acc"><span class="editar-n btn btn-info" href="#actualizarnota" data-toggle="modal" value="'+n[i].id+'"><span class="glyphicon glyphicon-edit"></span></span>' + '<span href="#eliminarnota" data-toggle="modal" class="delete-n btn btn-danger" value="'+n[i].id+'"><span class="glyphicon glyphicon-trash"></span><span></span>'
+                                        '<span class="acc"><span id="not_'+n[i].id +'" data-id="'+n[i].sección +'" class="usar-n btn btn-default usar_'+n[i].estatus+' " value="'+n[i].id+'"><span class=""></span></span><span class="editar-n btn btn-info" href="#actualizarnota" data-toggle="modal" value="'+n[i].id+'"><span class="glyphicon glyphicon-edit"></span></span>' + '<span href="#eliminarnota" data-toggle="modal" class="delete-n btn btn-danger" value="'+n[i].id+'"><span class="glyphicon glyphicon-trash"></span><span></span>'
                                         
                                       ]);
 
@@ -247,12 +289,22 @@
                         $('.dataTables_paginate .prev a').text('Anterior');
                         $('.dataTables_paginate .next a').text('Siguiente');
 
+    $('.usar_1').addClass('glyphicon glyphicon-ok');
+    $('.usar_1').addClass('btn-success');
+    $('.usar_1').attr('title', 'Desactivar nota');
+    $('.usar_1').removeClass('usar-n');
+    $('.usar_1').addClass('no-usar');
+
+    $('.usar_0').addClass('glyphicon glyphicon-off');
+    $('.usar_0').addClass('btn-default');
+    $('.usar_0').attr('title', 'Publicar esta nota');
 
         },
         error: function(){
           alert('failure');
         }
     });
+
 
     //Validaciones para las notas
     $("#save-nota").click(function () {
@@ -299,20 +351,39 @@
         type: 'POST',
         data: {seccion: seccion, nota: nota, contenido: contenido},
         success: function(nota){
-            console.log(nota);
 
-            $fila = "<tr id=tr_"+nota.id+">"+
-                       "<td>"+nota.sección+"</td>"+
-                       "<td>"+nota.nombre+"</td>"+
-                       "<td><span class='hidden'>"+nota.created_at+"</span>"+nota.texto+"</td>"+
-                       "<td><span class='acc'><span class='editar-n btn btn-info' href='#actualizarnota' data-toggle='modal' value="+nota.id+"><span class='glyphicon glyphicon-edit'></span></span><span href='#eliminarnota' data-toggle='modal' class='delete-n btn btn-danger' value="+nota.id+"><span class='glyphicon glyphicon-trash'></span><span></span></td>"+
+            $fila = "<tr id=tr_"+nota.c[0].id+">"+
+                       "<td>"+nota.c[0].sección+"</td>"+
+                       "<td>"+nota.c[0].nombre+"</td>"+
+                       "<td><span class='hidden'>"+nota.c[0].created_at+"</span>"+nota.c[0].texto+"</td>"+
+                       "<td><span class='acc'><span id='not_"+nota.c[0].id+"' data-id='"+nota.c[0].sección+"' class='no-usar btn-default usar_"+nota.c[0].estatus+" ' value="+nota.c[0].id+"><span class=''></span></span><span class='editar-n btn btn-info' href='#actualizarnota' data-toggle='modal' value="+nota.c[0].id+"><span class='glyphicon glyphicon-edit'></span></span><span href='#eliminarnota' data-toggle='modal' class='delete-n btn btn-danger' value="+nota.c[0].id+"><span class='glyphicon glyphicon-trash'></span><span></span></td>"+
                     "</tr>";
 
             $('tbody').prepend($fila);
 
-             $('#seccion').val(" ");
+            //Remplazamos los datos en la fila antigua
+            $('#not_'+nota.o.id).removeClass('usar_1');
+            $('#not_'+nota.o.id).removeClass('glyphicon glyphicon-ok');
+            $('#not_'+nota.o.id).removeClass('btn-success');
+            $('#not_'+nota.o.id).removeClass('no-usar');
+
+            $('#not_'+nota.o.id).addClass('usar_0');
+            $('#not_'+nota.o.id).addClass('glyphicon glyphicon-off');
+            $('#not_'+nota.o.id).attr('title', 'Publicar esta nota');
+            $('#not_'+nota.o.id).addClass('btn-default');
+            $('#not_'+nota.o.id).addClass('usar-n');
+
+
              $('#nota').val(" ");
              $('#contenido').val(" ");
+
+             $('.usar_1').addClass('glyphicon glyphicon-ok');
+             $('.usar_1').addClass('btn btn-success');
+             $('.usar_1').attr('title', 'Desactivar nota');
+
+             $('.usar_0').addClass('glyphicon glyphicon-off');
+             $('.usar_0').addClass('btn btn-default');
+             $('.usar_0').attr('title', 'Publicar esta nota');
 
         },
         error: function(){
@@ -322,10 +393,10 @@
 
     });
 
+
     //Cancelar guardar nota  
     $(document).on('click', '#cancelar-n', function(){
 
-             $('#seccion').val(" ");
              $('#nota').val(" ");
              $('#contenido').val(" ");
 
@@ -428,19 +499,128 @@
                 '<td>'+a.sección+'</td>'
                 +'<td>'+a.nombre+'</td>'
                 +'<td><span class="hidden">'+a.created_at+'</span>'+a.texto+'</td>'
-                +'<td><span class="acc"><span class="editar-n btn btn-info" href="#actualizarnota" data-toggle="modal" value="'+a.id+'"><span class="glyphicon glyphicon-edit"></span></span>' + '<span href="#eliminarnota" data-toggle="modal" class="delete-n btn btn-danger" value="'+a.id+'"><span class="glyphicon glyphicon-trash"></span><span></span></td>'
+                +'<td><span class="acc"><span id="not_'+a.id+'" data-id="'+a.sección+'" class="usar-n btn btn-default usar_'+a.estatus+' " href="#usarnota" data-toggle="modal" value="'+a.id+'"><span class=""></span></span><span class="editar-n btn btn-info" href="#actualizarnota" data-toggle="modal" value="'+a.id+'"><span class="glyphicon glyphicon-edit"></span></span>' + '<span href="#eliminarnota" data-toggle="modal" class="delete-n btn btn-danger" value="'+a.id+'"><span class="glyphicon glyphicon-trash"></span><span></span></td>'
                 +'<tr/>'); 
+
+             $('.usar_1').addClass('glyphicon glyphicon-ok');
+             $('.usar_1').addClass('btn btn-success');
+             $('.usar_1').attr('title', 'Desactivar nota');
+
+             $('.usar_0').addClass('glyphicon glyphicon-off');
+             $('.usar_0').addClass('btn btn-default');
+             $('.usar_0').attr('title', 'Publicar esta nota');
             
         },
         error: function(){
           alert('failure');
         }
       });
+
+
       
 
 
     });
     
+      //Publicar nota
+      $(document).on('click', '.usar-n', function(){
+        id = $(this).attr('value');
+        seccion = $(this).attr('data-id');
+
+        $('#public-nota').attr('value', id);
+        $('#public-nota').attr('data-id', seccion);
+        $('#publicar_n').modal({
+          show: 'false',
+        });
+      });
+
+      $(document).on('click', '#public-nota', function(){
+          id = $(this).attr('value');
+          seccion = $(this).attr('data-id');
+          p = 1;
+
+     $.ajax({
+        url: '/notas/publicarnota',
+        type: 'GET',
+         data: {id: id, seccion: seccion, p: p},
+        success: function(nota){
+
+            //Actualizamos los datos
+            $('#not_'+nota.c[0].id).removeClass('usar_0');
+            $('#not_'+nota.c[0].id).removeClass('glyphicon glyphicon-off');
+            $('#not_'+nota.c[0].id).removeClass('btn-default');
+            $('#not_'+nota.c[0].id).removeClass('usar-n');
+
+            $('#not_'+nota.c[0].id).addClass('usar_1');
+            $('#not_'+nota.c[0].id).addClass('glyphicon glyphicon-ok');
+            $('#not_'+nota.c[0].id).attr('title', 'Desactivar nota');
+            $('#not_'+nota.c[0].id).addClass('btn-success');
+            $('#not_'+nota.c[0].id).addClass('no-usar');
+
+            //Remplazamos los datos en la fila antigua
+            $('#not_'+nota.o.id).removeClass('usar_1');
+            $('#not_'+nota.o.id).removeClass('glyphicon glyphicon-ok');
+            $('#not_'+nota.o.id).removeClass('btn-success');
+            $('#not_'+nota.o.id).removeClass('no-usar');
+
+            $('#not_'+nota.o.id).addClass('usar_0');
+            $('#not_'+nota.o.id).addClass('glyphicon glyphicon-off');
+            $('#not_'+nota.o.id).attr('title', 'Publicar esta nota');
+            $('#not_'+nota.o.id).addClass('btn-default');
+            $('#not_'+nota.o.id).addClass('usar-n');
+            
+        },
+
+        error: function(){
+          alert('failure');
+        }
+      });
+
+      });
+
+
+      //Despublicar nota
+      $(document).on('click', '.no-usar', function(){
+        id = $(this).attr('value');
+
+        $('#no-public-nota').attr('value', id);
+
+        $('#no-publicar').modal({
+          show: 'false',
+        });
+      });
+
+      $(document).on('click', '#no-public-nota', function(){
+        id = $(this).attr('value');
+        p = 2;
+
+      $.ajax({
+        url: '/notas/publicarnota',
+        type: 'GET',
+         data: {id: id, p: p},
+        success: function(nota){
+
+            $('#not_'+nota.c[0].id).removeClass('usar_1');
+            $('#not_'+nota.c[0].id).removeClass('glyphicon glyphicon-ok');
+            $('#not_'+nota.c[0].id).removeClass('btn-success');
+            $('#not_'+nota.c[0].id).removeClass('no-usar');
+
+            $('#not_'+nota.c[0].id).addClass('usar_0');
+            $('#not_'+nota.c[0].id).addClass('glyphicon glyphicon-off');
+            $('#not_'+nota.c[0].id).attr('title', 'Publicar esta nota');
+            $('#not_'+nota.c[0].id).addClass('btn-default');
+            $('#not_'+nota.c[0].id).addClass('usar-n');
+
+            
+            
+        },
+
+        error: function(){
+          alert('failure');
+        }
+      });
+
+      });
     
 
 

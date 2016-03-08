@@ -9,6 +9,7 @@
 @include('layouts/inc/lib')
 {{ HTML::style('css/calendario.css') }}
 {{ HTML::script('js/calendario.js') }}
+{{ HTML::script('js/bootstrap-filestyle.min.js') }}
 <script>
   $(document).ready(function(){
     $('.addentrada').addClass('active');
@@ -66,14 +67,28 @@
                  <input type="text" name="fechaFactura" class="form-control" id="fechaFactura">
               </div>
             </div>
-            <div class="obse-e">
-              <label class=" text-info">OBSERVACIONES</label>
-              <textarea id="obc" name="comentarios" id="coment" class="form-control" rows="2"></textarea>
-            </div>
+              <div class="form-add-s">
+                  <div class="inputP form-group">
+                   <label for="numero_p">Numero de pedimento</label>
+                   <input type="text" name="numero_p" class="form-control" id="numeroPedimento">
+                </div>
+                <div class="obse-e">
+                  <label class=" text-info">OBSERVACIONES</label>
+                  <textarea id="obc" name="comentarios" id="coment" class="form-control" rows="2"></textarea>
+                </div>
+              </div>
           </form>
         </div>
         <div class="panel-footer footer-entrada">
-          {{ Form::open(['id'=>'searchE','method' => 'POST', 'class' => 'b-entrada input-group has-feedback']) }}
+            <div id="browse-p">
+          <!--  <form action="/entradas/registrarentrada" method="post"> -->
+              <label class="txt-browse text-primary">Cargar archivo de productos</label>
+              <input type="file" class="filestyle" data-buttonText="Buscar" data-buttonBefore="true" data-placeholder="Ningún archivo seleccionado" name="file">
+             <!-- <input type="submit" value="Enviar"> -->
+            </form>
+            </div>
+            <div>
+              {{ Form::open(['id'=>'searchE','method' => 'POST', 'class' => 'b-entrada input-group has-feedback']) }}
 
          {{ Form::text('input',null,array('class' => 'form-control', 'id' => 'clave','placeholder' => 'Clave del producto')) }}
 
@@ -83,6 +98,7 @@
              </button>
 
          {{ Form::close() }}
+            </div>
         </div>
     </div>
 
@@ -206,8 +222,8 @@ $(document).ready(function(){
                           $('#nombreProd').html(prod.nombre);
                           $('#imagenProd').prop('src', '/img/productos/' + prod.foto); //la imagen
                           $('#colorProd').html(prod.color);
-                          $('#precioProd').html(accounting.formatMoney(prod.precio_compra));
-                          $('.precioHiden').attr('id', prod.precio_compra);
+                          $('#precioProd').html(accounting.formatMoney(prod.precio));
+                          $('.precioHiden').attr('id', prod.precio);
                       }
 
                   },
@@ -253,9 +269,9 @@ $(document).ready(function(){
                              d += '<tr class="clave_'+addp.resp[datos].clave+'" value="clave_'+addp.resp[datos].clave+'" id="fila_'+addp.resp[datos].id+'"><td>'+addp.resp[datos].clave+'</td>';
                              d += '<td class="idpro" value="'+addp.resp[datos].id+'">'+addp.resp[datos].nombre+'</td>';
                              d += '<td>'+addp.resp[datos].color+'</td>';
-                             d += '<td class="p_c">'+accounting.formatMoney(addp.resp[datos].precio_compra)+'</td>';
-                             d += '<td><div class="c-pa"><input id="v_'+addp.resp[datos].id+'" type="number" class="form-control cant" data-id="'+addp.resp[datos].precio_compra+'" value="'+cantidad+'"><button value="'+addp.resp[datos].id+'" class="btn btn-primary btn_'+addp.resp[datos].clave+'" data-id="'+cantidad+'" id="actC"><span class="glyphicon glyphicon-refresh"></span></button></div></td>';
-                             d += '<td id="canti_'+addp.resp[datos].id+'">'+accounting.formatMoney(addp.resp[datos].precio_compra * cantidad)+'</td>';
+                             d += '<td class="p_c">'+accounting.formatMoney(addp.resp[datos].precio)+'</td>';
+                             d += '<td><div class="c-pa"><input id="v_'+addp.resp[datos].id+'" type="number" class="form-control cant" data-id="'+addp.resp[datos].precio+'" value="'+cantidad+'"><button value="'+addp.resp[datos].id+'" class="btn btn-primary btn_'+addp.resp[datos].clave+'" data-id="'+cantidad+'" id="actC"><span class="glyphicon glyphicon-refresh"></span></button></div></td>';
+                             d += '<td id="canti_'+addp.resp[datos].id+'">'+accounting.formatMoney(addp.resp[datos].precio * cantidad)+'</td>';
                              d += '<td><button id="q-t" value="'+addp.resp[datos].id+'" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></button></td>';
                           }
 
@@ -301,7 +317,7 @@ $(document).ready(function(){
     })
 
     //Validaciones para los campos del formularios
-    $("#gE").click(function () {
+ /*   $("#gE").click(function () {
 
     if($("#fecha").val().length == 0){
             $('.date').addClass('has-error');
@@ -375,7 +391,7 @@ $(document).ready(function(){
             }
         });
 
-    });
+    });  */
 
 
 

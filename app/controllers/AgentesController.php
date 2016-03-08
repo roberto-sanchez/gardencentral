@@ -118,6 +118,7 @@ class AgentesController extends \BaseController {
 
         $pro = DB::table('producto')
                     ->join('familia', 'producto.familia_id', '=', 'familia.id')
+                    ->Join('descuento', 'familia.id', "=", 'descuento.familia_id')
                     ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
                     ->join('producto_precio','producto.id', '=','producto_precio.producto_id')
                     //->select('producto.created_at','precio_venta','clave','nombre','color','piezas_paquete')

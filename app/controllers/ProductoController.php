@@ -116,6 +116,7 @@ class ProductoController extends \BaseController {
 
         $pro = DB::table('producto')
                     ->join('familia', 'producto.familia_id', '=', 'familia.id')
+                    ->Join('descuento', 'familia.id', "=", 'descuento.familia_id')
                     ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
                     ->join('producto_precio','producto.id', '=','producto_precio.producto_id')
                     //->select('producto.created_at','precio_venta','clave','nombre','color','piezas_paquete')
@@ -188,6 +189,27 @@ class ProductoController extends \BaseController {
 
     }
 
+    public function listnotas(){
+        $nota = DB::table('notas')
+                ->where('sección', 'Pedidos')
+                ->where('estatus', 1)
+                ->select('texto')
+                ->first();
+
+        return Response::json($nota);
+    }
+
+    public function notasdetalle(){
+        $nota = DB::table('notas')
+                ->where('sección', 'Detalle del pedido')
+                ->where('estatus', 1)
+                ->select('texto')
+                ->first();
+
+        return Response::json($nota);
+
+    }
+
 
   
 
@@ -213,18 +235,99 @@ public function getVerificaremail(){
 
 
 public function getProducto(){
-    $clave = Input::get('clave');
-    $resp = DB::table('producto')
-            ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-            ->join('familia', 'producto.familia_id', '=', 'familia.id')
-            ->select('producto.id','nombre','color','foto','piezas_paquete','clave','precio_venta', 'factor_descuento')
-            ->where('clave', $clave)->first();
-    if(count($resp)==0){
-        $resp = array('indefinido' => 'El producto no existe. ');
-        return Response::json($resp);
+    $id_user = Auth::user()->id;
+    $nivel = DB::table('cliente')
+            ->join('nivel_descuento', 'cliente.nivel_descuento_id', '=', 'nivel_descuento.id')
+            ->select('descripcion')
+            ->where('cliente.usuario_id', $id_user)
+            ->pluck('descripcion');
 
-    } else {
-        return Response::json($resp);
+    if($nivel == 'Retail'){
+
+        $clave = Input::get('clave');
+        $producto = DB::table('producto')
+                 ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
+                ->select('producto.id', 'nombre', 'color', 'foto', 'piezas_paquete', 'clave', 'precio')
+                ->where('clave', $clave)
+                ->where('tipo', 1)
+                ->get();
+
+        $id_f = DB::table('producto')
+                ->join('familia', 'producto.familia_id', '=', 'familia.id')
+                ->where('clave', $clave)
+                ->pluck('familia.id');
+
+        $familia = DB::table('familia')
+                ->join('descuento', 'familia.id', '=', 'descuento.familia_id')
+                ->where('familia.id', $id_f)
+                ->get();
+
+
+        if(count($producto)==0){
+            $producto = array('indefinido' => 'vacio');
+            return Response::json(array('producto' => $producto));
+
+        } else {
+            return Response::json(array('producto' => $producto, 'familia' => $familia, 'nivel' => $nivel));
+        }
+
+    } else if($nivel == 'Mayorista') {
+
+        $clave = Input::get('clave');
+        $producto = DB::table('producto')
+                 ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
+                ->select('producto.id', 'nombre', 'color', 'foto', 'piezas_paquete', 'clave', 'precio')
+                ->where('clave', $clave)
+                ->where('tipo', 2)
+                ->get();
+
+        $id_f = DB::table('producto')
+                ->join('familia', 'producto.familia_id', '=', 'familia.id')
+                ->where('clave', $clave)
+                ->pluck('familia.id');
+
+        $familia = DB::table('familia')
+                ->join('descuento', 'familia.id', '=', 'descuento.familia_id')
+                ->where('familia.id', $id_f)
+                ->get();
+
+
+        if(count($producto)==0){
+            $producto = array('indefinido' => 'vacio');
+            return Response::json(array('producto' => $producto));
+
+        } else {
+            return Response::json(array('producto' => $producto, 'familia' => $familia, 'nivel' => $nivel));
+        }
+
+    } else if($nivel == 'Distribuidor'){
+        $clave = Input::get('clave');
+        $producto = DB::table('producto')
+                 ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
+                ->select('producto.id', 'nombre', 'color', 'foto', 'piezas_paquete', 'clave', 'precio')
+                ->where('clave', $clave)
+                ->where('tipo', 3)
+                ->get();
+
+        $id_f = DB::table('producto')
+                ->join('familia', 'producto.familia_id', '=', 'familia.id')
+                ->where('clave', $clave)
+                ->pluck('familia.id');
+
+        $familia = DB::table('familia')
+                ->join('descuento', 'familia.id', '=', 'descuento.familia_id')
+                ->where('familia.id', $id_f)
+                ->get();
+
+
+        if(count($producto)==0){
+            $producto = array('indefinido' => 'vacio');
+            return Response::json(array('producto' => $producto));
+
+        } else {
+            return Response::json(array('producto' => $producto, 'familia' => $familia, 'nivel' => $nivel));
+        }
+
     }
 
 
@@ -497,29 +600,6 @@ public function getProducto(){
 
  }
 
-/*
- public function ejemplopedido(){
-    //Recibimos el Array y lo decodificamos desde json, para poder utilizarlo como objeto
-    $id = json_decode(Input::get('aInfo'));
-
-//por cada uo de estos arrays vamos a crear una query para poder hacer un insert en la base de datos. y para eso necesitamos recorrer el array por cada uno de sus posiciones
-    for ($i=0; $i < count($id); $i++) {
-   //Por cada objeto que encuentra en el array lo separa y crea una query
-    //$q[$i] = "UPDATE TABLA SET CAMPO1 = '".$DATA[$i]->tipo."', CAMPO2 = '".$DATA[$i]->desc."' WHERE ID =".$DATA[$i]->id;
-            $p_detalle = new PedidoDetalle;
-            $p_detalle->pedido_id = "313";
-            $p_detalle->producto_id = $id[$i]->idp;
-            $p_detalle->cantidad = $id[$i]->cant;
-            $p_detalle->save();
-}
-    return Response::json($id);
-
-
-
- }*/
-
-
-
 
     //Agregar producto con sus respectivos paquetes
     public function add(Producto $producto, $quantity){
@@ -530,6 +610,8 @@ public function getProducto(){
        $cart[$producto->clave]->quantity = $quantity;
        \Session::put('cart', $cart);
        return Redirect::back();
+       
+       
 
     }
 
@@ -567,11 +649,11 @@ public function getProducto(){
 
     //mostrar el total
     private function total(){
-        $cart = \Session::get('cart');
+      $cart = \Session::get('cart');
         $total = 0;
         foreach($cart as $item){
-            $m = $item->precio_venta * $item->factor_descuento;
-            $total += ($item->precio_venta - $m) * $item -> quantity;
+            $m = $item->precio * $item->descuento;
+            $total += ($item->precio - $m) * $item -> quantity;
         }
 
         return $total;
@@ -853,6 +935,7 @@ public function getProducto(){
 
                 $pro = DB::table('producto')
                             ->join('familia', 'producto.familia_id', '=', 'familia.id')
+                            ->Join('descuento', 'familia.id', "=", 'descuento.familia_id')
                             ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
                             ->join('producto_precio','producto.id', '=','producto_precio.producto_id')
                             ->where('pedido_detalle.pedido_id', $id)
@@ -866,9 +949,10 @@ public function getProducto(){
                 //Sacamos el total
                 $total = 0;
                 foreach($pro as $item){
-                    $m = $item->precio_venta * $item->factor_descuento;
-                    $total += ($item->precio_venta - $m) * $item -> cantidad;
+                    $m = $item->precio * $item->descuento;
+                    $total += ($item->precio - $m) * $item -> cantidad;
                 }
+
 
 
                 $pdf = View::make('users/report', 
@@ -902,6 +986,7 @@ public function getProducto(){
 
                     $pro = DB::table('producto')
                                 ->join('familia', 'producto.familia_id', '=', 'familia.id')
+                                ->Join('descuento', 'familia.id', "=", 'descuento.familia_id')
                                 ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
                                 ->join('producto_precio','producto.id', '=','producto_precio.producto_id')
                                 ->where('pedido_detalle.pedido_id', $id)
@@ -915,8 +1000,8 @@ public function getProducto(){
                     //Sacamos el total
                     $total = 0;
                     foreach($pro as $item){
-                        $m = $item->precio_venta * $item->factor_descuento;
-                        $total += ($item->precio_venta - $m) * $item -> cantidad;
+                        $m = $item->precio * $item->descuento;
+                        $total += ($item->precio - $m) * $item -> cantidad;
                     }
 
 

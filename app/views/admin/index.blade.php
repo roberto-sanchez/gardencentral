@@ -41,41 +41,6 @@
         stroke: #fff;
       }
 
-      /*DataTables de las notas*/
-    #t-notas_length{
-      display:none;
-    }
-
-    #t-notas_filter{
-      float:left;
-      margin-left:7px;
-    }
-
-    #t-notas_filter label input{
-      margin-left:0;
-      border-radius: 3px;
-    }
-
-    #t-notas_info{
-      display:none;
-    }
-
-    .dataTables_paginate{
-      margin-top:0;
-      width:100%;
-      display: -webkit-box;
-      display: -webkit-flex;
-      display: -ms-flexbox;
-      display: flex;
-    }
-
-    ul.fancy{
-      margin:0 auto;
-    }
-
-    ul.fancy li{
-      font-size:.7em;
-    }
 
 </style>
 @stop
@@ -92,7 +57,7 @@
 <div class="content">
   <div class="row row-dashboard">
 
-      <div class="cont-sidebar">
+    <div class="cont-sidebar">
       <div class="content-pedidos">
           <h2 class="txt-est-p text-primary">Estatus de los pedidos</h2>
         <div class="caja-p-t">
@@ -158,7 +123,7 @@
           </div>
         </div>
         </div>
-      </div>
+      </div><!-- end content-pedidos -->
       
         <div class="sidebar caja-s-g">
             <div class="graficaBarras"></div>
@@ -171,11 +136,10 @@
             </div>
         </div>
 
-      </div>
+      </div><!-- ENd cont-sidebar  -->
 
     <div class="seccion-inv">
 
-      <div class="seccion1-inv">
         <div class="cont-text-i">
           <h2 class="text-primary">Inventario</h2>
           <ul class="nav nav-tabs">
@@ -187,18 +151,7 @@
           <div class="totales-inv"></div>
           <div class="inv-mas"></div>
           <div class="inv-menos"></div>
-      </div><!--End seccion1-inv-->
 
-      <div class="seccion2-notas">
-        <table id="t-notas">
-          <thead id="head-notas">
-            <tr>
-              <th><span href="#agregarnota" data-toggle="modal" title="Agregar nota" class="glyphicon glyphicon-edit add-nota"></span></th>
-              <th><h2 class="text-center">Notas</h2></th>
-            </tr>
-          </thead>        
-        </table>
-      </div><!--End seccion2-notas-->
 
     </div><!-- End seccion-inv-->
 
@@ -211,112 +164,13 @@
 
 </div>
 
-<!--  Modal agregar nota  -->
-<div id="agregarnota" class="modal fade" data-keyboard="false" data-backdrop="static">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header header-nota">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title text-info text-center">
-            <span class="glyphicon glyphicon-edit"></span>
-              Agregar Nota
-             </h4>
-          </div>
-          <div class="modal-body body-add-n">   
-               {{ Form::text('seccion', 'Dashboard', array('class' => 'hidden', 'id' => 'seccion')) }}
-            <div class="form-group error-n">
-                <label for="nota" class="text-primary">Nota: </label>
-               {{ Form::text('nota', null,  array('class' => 'form-control', 'id' => 'nota', 'placeholder' => 'Nombre de la nota')) }}
-               <span class="icon-n"></span>
-            </div>
-            <div class="area-nota error-c">
-              <label class="text-primary">Contenido: </label>
-              <textarea class="form-control" rows="5" id="contenido" placeholder="Contenido de la nota..."></textarea>
-              <span class="icon-c"></span>
-            </div>
-                
-          </div>
-          <div class="modal-footer modal-confirmar-pass">
-
-              <button id="cancelar-n" type="button" class="btn btn-danger confirm" data-dismiss="modal">Cancelar</button>
-              <span id="save-nota" class="btn btn-primary confirm" data-dismiss="modal" >Guardar Nota</span>
-          </div>
-        </div>
-      </div>
-    </div>
 
 
-        <!--  Modal para confirmar actualizar nota  -->
-<div id="actualizarnota" class="modal fade" data-keyboard="false" data-backdrop="static">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header header-nota">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title text-info text-center">
-            <span class="glyphicon glyphicon-edit"></span>
-              Editar nota
-             </h4>
-          </div>
-          <div class="modal-body body-add-n">
-            
-               {{ Form::text('seccion', 'Dashboard', array('class' => 'hidden', 'id' => 'seccionedit')) }}
-
-            <div class="form-group error-n">
-                <label for="nota" class="text-primary">Nota: </label>
-               {{ Form::text('nota', null,  array('class' => 'form-control', 'id' => 'notaedit', 'placeholder' => 'Nombre de la nota')) }}
-               <span class="icon-n"></span>
-            </div>
-
-            <div class="area-nota error-c">
-              <label class="text-primary">Contenido: </label>
-              <textarea class="form-control" rows="5" id="contenidoedit" placeholder="Contenido de la nota..."></textarea>
-              <span class="icon-c"></span>
-            </div>
-
-            <div class="d-nota">
-              <button id="delet-n" class="btn btn-danger" title="Eliminar Nota">
-                  <span class="glyphicon glyphicon-trash"></span>
-                </button>
-            </div>            
-                
-          </div>
-          <div class="modal-footer modal-confirmar-pass">
-
-              <button type="button" class="btn btn-danger confirm" data-dismiss="modal">Cancelar</button>
-              <span id="actualizar-nota" class="btn btn-primary confirm" data-dismiss="modal" >
-                 Actualizar
-                 <span class="glyphicon glyphicon-refresh"></span>
-              </span>
-          </div>
-        </div>
-      </div>
-    </div>
 
 
-        <!--  Modal para confirmar eliminar nota  -->
-<div id="eliminarnota" class="modal fade" data-keyboard="false" data-backdrop="static">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header header-nota">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title text-danger text-center">
-            <span class="glyphicon glyphicon-edit"></span>
-              Eliminar Nota
-             </h4>
-          </div>
-          <div class="modal-body">
-            
-          <h3 class="text-danger text-center txt-delete-n">¿Estás seguro que deseas eliminar esta nota?</h3>
-                
-          </div>
-          <div class="modal-footer modal-confirmar-pass">
 
-              <button type="button" class="btn btn-danger confirm" data-dismiss="modal">No</button>
-              <span id="eliminar-nota" class="btn btn-primary confirm" data-dismiss="modal" >Si</span>
-          </div>
-        </div>
-      </div>
-    </div>
+
+
 
 
 
@@ -560,301 +414,6 @@ $.ajax({
   }
   });
 
-  seccion = 'Dashboard';
-
-  //Listar notas
-      $.ajax({
-        url:'/notas/listnotas',
-        dataType: 'json',
-        data: {seccion: seccion},
-        success: function(n){
-          console.log(n);
-          tabla_n = $('#t-notas').DataTable({
-                  "oLanguage": { 
-                      "oPaginate": { 
-                      "sPrevious": "Anterior", 
-                      "sNext": "Siguiente", 
-                      "sLast": "Ultima", 
-                      "sFirst": "Primera" 
-                      }, 
-
-                  "sLengthMenu": 'Mostrar <select>'+ 
-                  '<option value="10">10</option>'+ 
-                  '<option value="20">20</option>'+ 
-                  '<option value="30">30</option>'+ 
-                  '<option value="40">40</option>'+ 
-                  '<option value="50">50</option>'+ 
-                  '<option value="-1">Todos</option>'+ 
-                  '</select> registros', 
-
-                  "sInfo": "Mostrando del _START_ a _END_ (Total: _TOTAL_ resultados)", 
-                  "sInfoFiltered": " - filtrados de _MAX_ registros", 
-                  "sInfoEmpty": "No hay resultados de búsqueda", 
-                  "sZeroRecords": "No hay registros a mostrar", 
-                  "sProcessing": "Espere, por favor...", 
-                  "sSearch": "Buscar:", 
-
-               },
-
-               fnCreatedRow : function (nRow, aData, iDataIndex) {
-                     $(nRow).attr('id', "tr_"+n[i].id);
-                     $(nRow).attr('class', "nota_fila");
-                               
-                },
-
-                "aaSorting": [[ 1, "desc" ]], 
-
-
-                "sPaginationType": "simple_numbers",
-                 "sPaginationType": "bootstrap",
-
-
-
-            });
-
-            tabla_n.fnClearTable();
-         
-                      for(var i = 0; i < n.length; i++) {
-                             tabla_n.fnAddData([
-                                      '<span></span>',
-                                      '<span class="hidden">'+n[i].created_at+'</span>' + '<a id="edit-nota" title="Detalle de la nota" value="'+n[i].id+'"  href="#actualizarnota" data-toggle="modal">'+n[i].nombre+'</a>',
-                                    ]);
-
-                              }
-                        $('.dataTables_paginate .prev a').text(' ');
-                        $('.dataTables_paginate .prev a').addClass('glyphicon glyphicon-chevron-left');
-                        $('.dataTables_paginate .next a').text(' ');
-                        $('.dataTables_paginate .next a').addClass('glyphicon glyphicon-chevron-right');
-
-
-        },
-        error: function(){
-          alert('failure');
-        }
-    });
-
-
-    $("#save-nota").click(function () {
-
-      if($("#seccion").val().length == 0){
-              $('#seccion').addClass('has-error');
-              return false;
-
-      } else if($("#nota").val().length == 0){
-              $('.error-n').addClass('has-error has-feedback');
-              $('.icon-n').addClass('glyphicon glyphicon-remove form-control-feedback');
-              return false;
-
-      } else if($("#contenido").val().length == 0){
-              $('.error-c').addClass('has-error has-feedback');
-              $('.icon-c').addClass('glyphicon glyphicon-remove form-control-feedback');
-              return false;
-
-      }  else {
-          return true;
-      }
-});
-
-    $("#nota").focus( function(){
-        $('.error-n').removeClass('has-error has-feedback');
-        $('.icon-n').removeClass('glyphicon glyphicon-remove form-control-feedback');
-    });
-
-    $("#contenido").focus(function(){
-        $('.error-c').removeClass('has-error has-feedback');
-        $('.icon-c').removeClass('glyphicon glyphicon-remove form-control-feedback');
-    });
-
-  
-
-    //Guardar nueva nota
-    $(document).on('click', '#save-nota', function(){
-      seccion = $('#seccion').val();
-      nota = $('#nota').val();
-      contenido = $('#contenido').val();
-
-      $.ajax({
-        url: '/notas/agregarnota',
-        type: 'POST',
-        data: {seccion: seccion, nota: nota, contenido: contenido},
-        success: function(nota){
-            console.log(nota);
-
-            $('.add-nota').attr('id','r-add');
-
-            $fila = "<tr id=tr_"+nota.id+" class='nota_fila'>"+
-                       "<td><span></span></td>"+
-                       "<td><span class='hidden'>"+nota.created_at+"</span><a id='edit-nota' title='Detalle de la nota' value="+nota.id+" href='#actualizarnota' data-toggle='modal'>"+nota.nombre+"</a></td>"+
-                    "</tr>";
-
-            $('tbody').prepend($fila);
-
-             $('#nota').val(" ");
-             $('#contenido').val(" ");
-
-            //recargamos
-          /*   $(document).on('click','.fancy > li, a',function(){
-
-             f = "<tr id=tr_"+nota.id+" class='nota_fila'>"+
-                       "<td><span></span></td>"+
-                       "<td><span class='hidden'>"+nota.created_at+"</span><a id='edit-nota' title='Detalle de la nota' value="+nota.id+" href='#actualizarnota' data-toggle='modal'>"+nota.nombre+"</a></td>"+
-                    "</tr>";
-              $('tbody').prepend(f);
-
-            }); */
-
-            //Recargamos tambien si se decide agregar nueva nota
-            $(document).on('click', '#r-add', function(){
-                $fila = "<tr id=tr_"+nota.id+" class='nota_fila'>"+
-                       "<td><span></span></td>"+
-                       "<td><span class='hidden'>"+nota.created_at+"</span><a id='edit-nota' title='Detalle de la nota' value="+nota.id+" href='#actualizarnota' data-toggle='modal'>"+nota.nombre+"</a></td>"+
-                    "</tr>";
-
-                    $('tbody').prepend($fila);
-            });
-
-
-        },
-        error: function(){
-          alert('failure');
-        }
-      });
-
-    });
-
-    //Cancelar guardar nota  
-    $(document).on('click', '#cancelar-n', function(){
-
-             $('#seccion').val(" ");
-             $('#nota').val(" ");
-             $('#contenido').val(" ");
-
-    });
-
-
-    //Editar nota
-    $(document).on('click', '#edit-nota', function(){
-      id = $(this).attr('value');
-      $('#actualizar-nota').attr('value', id);
-      $('#delet-n').attr('value', id);
-      $.ajax({
-        url: '/notas/editarnota',
-        type: 'GET',
-        data: {id: id},
-        success: function(e){
-            $('#seccionedit').val(e.sección);
-            $('#notaedit').val(e.nombre);
-            $('#contenidoedit').val(e.texto);
-            
-        },
-        error: function(){
-          alert('failure');
-        }
-      });
-    });
-
-
-        //Validaciones al actualizar las notas
-    $("#actualizar-nota").click(function () {
-
-      if($("#seccionedit").val().length == 0){
-              return false;
-
-      } else if($("#notaedit").val().length == 0){
-              $('.error-n').addClass('has-error has-feedback');
-              $('.icon-n').addClass('glyphicon glyphicon-remove form-control-feedback');
-              //alertas('error',"Completa el nombre de la nota");
-              return false;
-
-      } else if($("#contenidoedit").val().length == 0){
-              $('.error-c').addClass('has-error has-feedback');
-              $('.icon-c').addClass('glyphicon glyphicon-remove form-control-feedback');
-              return false;
-
-      }  else {
-          return true;
-      }
-});
-
-    $("#notaedit").focus( function(){
-        $('.error-n').removeClass('has-error has-feedback');
-        $('.icon-n').removeClass('glyphicon glyphicon-remove form-control-feedback');
-    });
-
-    $("#contenidoedit").focus(function(){
-        $('.error-c').removeClass('has-error has-feedback');
-        $('.icon-c').removeClass('glyphicon glyphicon-remove form-control-feedback');
-    });
-
-    //Actualizar nota
-    $(document).on('click', '#actualizar-nota', function(){
-      id = $(this).attr('value');
-
-      seccion = $('#seccionedit').val();
-      nota = $('#notaedit').val();
-      contenido = $('#contenidoedit').val();
-
-      $.ajax({
-        url: '/notas/actualizarnota',
-        type: 'GET',
-         data: {id: id, seccion: seccion, nota: nota, contenido: contenido},
-        success: function(a){
-
-            $('#tr_'+id).replaceWith('<tr id="tr_'+a.id+'" class="nota_fila">'+
-                '<td><span></span></td>'
-                +'<td><span class="hidden">'+a.created_at+'</span><a id="edit-nota" title="Detalle de la nota" value='+a.id+' href="#actualizarnota" data-toggle="modal">'+a.nombre+'</a></td>'
-                +'<tr/>'); 
-
-
-       /*     $(document).on('click','.fancy > li, a',function(){
-
-              $('#tr_'+id).replaceWith('<tr id="tr_'+a.id+'" class="nota_fila">'+
-                '<td><span></span></td>'
-                +'<td><span class="hidden">'+a.created_at+'</span><a id="edit-nota" title="Detalle de la nota" value='+a.id+' href="#actualizarnota" data-toggle="modal">'+a.nombre+'</a></td>'
-                +'<tr/>'); 
-            }); */
-                  
-        },
-        error: function(){
-          alert('failure');
-        }
-      });
-      
-
-
-    });
-
-
-    //Eliminar nota
-    $(document).on('click', '#delet-n', function(){
-      id = $(this).attr('value');
-      $('#eliminar-nota').attr('value', id);
-
-      $('#eliminarnota').modal({
-          show: 'false'
-      }); 
-
-    });
-
-    //Confirm delete nota
-    $(document).on('click', '#eliminar-nota', function(){
-      id = $(this).attr('value');
-
-      //Ocultamos el modal
-      $('#actualizarnota').modal('hide');
-
-      $.ajax({
-        url: '/notas/eliminarnota',
-        type: 'GET',
-        data: {id: id},
-        success: function(e){
-            $('#tr_'+id).remove();
-        },
-        error: function(){
-          alert('failure');
-        }
-      });
-    });
 
 
 </script>

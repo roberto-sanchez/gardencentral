@@ -217,7 +217,7 @@ hr {
   -webkit-background-clip: padding-box;
   background-clip: padding-box;
 }
-.content {
+.content { 
   position: relative;
   background: #fff;
   margin-left: 200px;
@@ -903,29 +903,6 @@ input[type="password"]:focus {
   -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#6dc4e6',EndColorStr='#229ccb')";
   color: #0c3748;
   box-shadow: 0px 0px 5px rgba(grey,.5);
-}
-.alert-desc {
-  border:1px solid white;
-  width:160px;
-  border-radius:3px;
-  height:30px;
-  background: #229ccb;
-  background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #229ccb), color-stop(1, #6dc4e6));
-  background: -ms-linear-gradient(bottom, #229ccb, #6dc4e6);
-  background: -moz-linear-gradient(center bottom, #229ccb 0%, #6dc4e6 100%);
-  background: -o-linear-gradient(bottom, #229ccb, #6dc4e6);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#229ccb', EndColorStr='#6dc4e6');
-  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#6dc4e6',EndColorStr='#229ccb')";
-  color: #0c3748;
-  box-shadow: 0px 0px 5px rgba(grey,.5);
-}
-.alert-desc strong{
-  font-size:.9em;
-  line-height:15px;
-  margon:0;
-  padding:0;
-  color:white;
-  text-shadow:0px 0px 3px grey;
 }
 
 .alert.alert-success {
@@ -2033,6 +2010,30 @@ label {
 
 /*------ Mis estilos--------------*/
 /***************************/
+.alert-desc {
+  border:1px solid white;
+  border-radius:3px;
+  height:30px;
+  background: #229ccb;
+  background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #229ccb), color-stop(1, #6dc4e6));
+  background: -ms-linear-gradient(bottom, #229ccb, #6dc4e6);
+  background: -moz-linear-gradient(center bottom, #229ccb 0%, #6dc4e6 100%);
+  background: -o-linear-gradient(bottom, #229ccb, #6dc4e6);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#229ccb', EndColorStr='#6dc4e6');
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#6dc4e6',EndColorStr='#229ccb')";
+  color: #0c3748;
+  box-shadow: 0px 0px 5px rgba(grey,.5);
+}
+.alert-desc strong{
+  font-size:.9em;
+  line-height:15px;
+  margin:0;
+  padding:0;
+  color:white;
+  text-shadow:0px 0px 3px grey;
+}
+
+
 #main-menu{
   border:0;
 }
@@ -3327,7 +3328,7 @@ margin-bottom:.5em;
 }
 
 .content-pedidos{
-  width:730px;
+  width:65%;
 }
 
 
@@ -3461,7 +3462,7 @@ margin-bottom:.5em;
 }
 
 .caja-s-g{
-  width:400px;
+  width:35%;
   position:relative;
 }
 
@@ -3508,107 +3509,10 @@ margin-bottom:.5em;
 }
 
 /*-----Dashboaard -- Totales inventario--------*/
-.seccion-inv{
-  display:-webkit-box;
-  display:-webkit-flex;
-  display:-ms-flexbox;
-  display:flex;
-}
 
-
-.seccion2-notas{
-  width:300px;
-}
-
-/*Tablita de las notas */
-#t-notas{
-  width:230px;
-  background:#fdfdbe;
-  margin:0 .5em .5em .5em;
-  
-}
-
-#head-notas{
-  border-bottom: 1px solid #CEECF5; 
-}
-
-#head-notas tr th:last-child{
-  border-left:1px solid #f4c398;
-  
-}
-
-#head-notas span{
-  margin-left:7px;
-  padding:0;
-  cursor:pointer;
-  border-radius:50%;
-  box-shadow:0px 0px 5px #D8D8D8;
-  background:#337ab7;
-  color:#fff;
-  width:30px;
-  height:30px;
-  display:-webkit-box;
-  display:-webkit-flex;
-  display:-ms-flexbox;
-  display:flex;
-  -webkit-box-pack:center;
-  -webkit-justify-content:center;
-      -ms-flex-pack:center;
-          justify-content:center;
-  -webkit-box-align:center;
-  -webkit-align-items:center;
-      -ms-flex-align:center;
-          align-items:center;
-    
-}
-
-
-
-#head-notas h2{
-  font-size:1em;
-  margin:0;
-  padding:0;
-  width:160px;
-  line-height:45px;
-}
-
-tbody tr{
-    border-bottom: 1px solid #CEECF5; 
-    text-align:center;
-}
-
-tbody .nota_fila td{
-  padding:.5em;
-  font-size:.8em;
-}
-
-
-tbody .nota_fila td:last-child{
-  border-left:1px solid #f4c398;
-
-}
-
-
-.fila-nota h2{
-  margin:0;
-  padding:.8em 0;
-  font-size:1em;
-  text-align:center;
-  border-bottom: 1px solid #CEECF5;
-  
-}
-
-.fila-nota hr{
-  margin:.9em 0 0 0;
-  border-color: #CEECF5;
-}
-
-#body-notas .fila-nota:last-child hr{
-  border-color:transparent;
-}
-
+/*Totales del inventario */
 .totales-inv, .inv-mas, .inv-menos{
-  width:900px;
+  width:100%;
   padding:1em;
   display: -webkit-box;
   display: -webkit-flex;
@@ -3864,6 +3768,21 @@ tbody .nota_fila td:last-child{
   width:230px;
 }
 
+.form-add-s{
+  width:100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  
+}
+
+.inputP{
+  width:23%;
+  margin-top:.5em;
+  margin-right:5%;
+}
+
 .obse-e{
   width:40%;
 }
@@ -3873,10 +3792,22 @@ tbody .nota_fila td:last-child{
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack:end;
- -webkit-justify-content:flex-end;
-     -ms-flex-pack:end;
-         justify-content:flex-end;
+  -webkit-box-pack:justify;
+  -webkit-justify-content:space-between;
+      -ms-flex-pack:justify;
+          justify-content:space-between;
+}
+
+#browse-p{
+  width:295px;
+}
+
+#browse-p .txt-browse{
+  font-size:.8em;
+}
+
+.filestyle{
+  font-size:.8em;
 }
 
 .b-entrada{
@@ -4011,6 +3942,7 @@ tbody .nota_fila td:last-child{
 }
 
 .head-t{
+  text-align:center;
   background: #e5e5e9;
   background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #e5e5e9), color-stop(1, #fbfbfc));
   padding:.5em 0;
@@ -4040,6 +3972,11 @@ tbody .nota_fila td:last-child{
   overflow:hidden;
 }
 
+.content-t{
+  text-align:center;
+}
+
+
 /*Vista admin-- Notas---------*/
 .data-notas{
   width:80%;
@@ -4062,8 +3999,18 @@ tbody .nota_fila td:last-child{
 
 }
 
+.usar-n, .no-usar{
+  margin-right:1em;
+}
+
 .editar-n{
   margin-right:1em;
+}
+
+
+#save-nota, #actualizar-nota, 
+#cancelar-n, #n-act{
+  width:25%;
 }
 
 
