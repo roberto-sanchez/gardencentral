@@ -56,7 +56,8 @@ Route::controller('users','ProductoController');
 
 
 //Admin
-Route::post('pedidos/verpedidos','AdminController@verpedidos');  
+Route::post('pedidos/verpedidos','AdminController@verpedidos');
+Route::post('pedidos/detallepedido','AdminController@detallepedido'); 
 Route::get('pedidos/verbarras','AdminController@verbarras');
 Route::get('pedidos/vergrafica','AdminController@vergrafica');
 

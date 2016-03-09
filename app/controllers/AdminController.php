@@ -55,23 +55,27 @@ class AdminController extends \BaseController {
 		//Inventario
 		$i_total = DB::table('producto')
 						->join('inventario','producto.id', '=', 'inventario.producto_id')
-						->select('clave','nombre','cantidad')->get();
+						->select('inventario.producto_id','clave','nombre','cantidad')
+						->orderBy('cantidad','desc')
+						->get();
 
 
 
 		//Productos con mas inventario
 		$i_mas = DB::table('producto')
 						->join('inventario','producto.id', '=', 'inventario.producto_id')
-						->select('clave','nombre','cantidad')
+						->select('inventario.producto_id', 'clave','nombre','cantidad')
 						->orderBy('cantidad','desc')
-						->take(5)->get();
+						->take(5)
+						->get();
 
 		//Productos con menos inventario
 		$i_menos = DB::table('producto')
 						->join('inventario','producto.id', '=', 'inventario.producto_id')
-						->select('clave','nombre','cantidad')
+						->select('inventario.producto_id','clave','nombre','cantidad')
 						->orderBy('cantidad','asc')
-						->take(5)->get();
+						->take(5)
+						->get();
 
 
 		return Response::json(array(
@@ -136,15 +140,16 @@ class AdminController extends \BaseController {
 	}
 
 
-	/*CRUD NOTAS DASHBOARD*/
-	PUBLIC FUNCTION listnotas(){
-		$seccion = Input::get('seccion');
+	public function detallepedido(){
+		$id = Input::get('id');
 
-		$notas = DB::table('notas')
-				->where('sección', $seccion)
-				->select('id', 'nombre', 'created_at')
+		$i = DB::table('inventario_detalle')
+		        ->join('producto', 'inventario_detalle.producto_id', '=', 'producto.id')
+				->where('producto_id', $id)
+				->select('producto_id', 'clave', 'nombre','num_pedimento', 'cantidad')
 				->get();
-		echo json_encode($notas);
+
+		return Response::json(array('i' => $i));
 	}
 
 

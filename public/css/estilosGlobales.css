@@ -3528,6 +3528,7 @@ margin-bottom:.5em;
          flex-wrap:wrap;
 }
 .caja{
+  cursor:pointer;
   border-radius:3px;
   border: 1px solid #cfcfd6;
   box-shadow: 0px 2px 3px #999;
@@ -3627,6 +3628,84 @@ margin-bottom:.5em;
   width:90%;
   margin:0 auto;
   margin-bottom: 1em;
+}
+
+/*--- Modal detalle del producto ---*/
+
+.content-inventario{
+    width:715px;
+}
+
+.body-totales-i{
+  margin:.5em .8em;
+}
+
+#nombre-i{
+  font-size:1em;
+  margin-top:.3em;
+  margin-bottom:.5em;
+}
+
+.totales-p{
+  padding-top:.5em;
+  padding-bottom:.5em;
+  max-height:300px;
+  overflow-y: scroll;
+  border:1px solid #c4c4cd;
+  border-radius: 3px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient:horizontal;
+  -webkit-box-direction:normal;
+  -webkit-flex-direction:row;
+      -ms-flex-direction:row;
+          flex-direction:row;
+          -webkit-flex-wrap:wrap;
+     -ms-flex-wrap:wrap;
+         flex-wrap:wrap;
+}
+
+.caja-pedimento{
+  border:1px solid #c4c4cd;
+  border-radius:2px;
+  margin: .5em;
+  width: 120px;
+  height: 60px;
+  text-align: center;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack:center;
+  -webkit-justify-content:center;
+      -ms-flex-pack:center;
+          justify-content:center;
+  -webkit-box-align:center;
+  -webkit-align-items:center;
+      -ms-flex-align:center;
+          align-items:center;
+  background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #e5e5e9), color-stop(1, #fbfbfc));
+}
+
+.cont-pedimento{
+
+}
+
+.txt-total-inv{
+  margin:0;
+  margin-bottom:.3em;
+  font-size:1.2em;
+}
+
+.num-pedimento{
+  margin:0;
+  font-size:.9em;
+}
+
+#cerrar-m{
+  width: 100px;
 }
 
 /*----Menu de la vista de los pedidos*/

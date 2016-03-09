@@ -164,15 +164,29 @@
 
 </div>
 
+<!--  Modal para ver el detalle del producto del inventario -->
+<div id="verdetalle_i" class="modal fade" data-keyboard="false" data-backdrop="static">
+      <div class="modal-dialog">
+        <div class="modal-content content-inventario">
+          <div class="modal-header header-nota">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 id="clave-i" class="modal-title text-info text-center"></h4>
+          </div>
+          <div class="modal-body body-totales-i">
+            <h2 id="nombre-i" class="text-info text-center"></h2>
 
-
-
-
-
-
-
-
-
+            <div class="totales-p"></div>
+                
+          </div>
+          <div class="modal-footer modal-conf-estat">
+              <button id="cerrar-m" type="button" class="btn btn-primary confirm" data-dismiss="modal">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+              Cerrar
+              </button>
+          </div>
+        </div>
+      </div>
+    </div>
 
 
 <script>
@@ -189,9 +203,8 @@ function barras() {
         datos = data;
         console.log(datos);
         for(i = 0; i < datos; i++){
-          console.log(i);
+ 
         }
-        console.log('Numero' + datos);
     
     var t_p = [i];  
 
@@ -228,7 +241,6 @@ function cargarDatos() {
     //d3.json('js/datos.json', function(err, data) {
   d3.json('pedidos/vergrafica', function(err, data) {
         datos = data;
-        console.log(datos);
         graficar();
     });
 }
@@ -248,7 +260,6 @@ function graficar() {
 
     var pie = d3.layout.pie()
         .value(function(d) {
-          console.log( d.numero);
             return d.numero;
         });
 
@@ -375,9 +386,8 @@ inventMas = $('.inv-mas');
 inventMenos = $('.inv-menos');
 $.ajax({
     type: "POST",
-    url: "pedidos/verpedidos",
+    url: "/pedidos/verpedidos",
     success: function (d) {
-      console.log(d);
       div = "", divMas = "", divMenos = "";
       $('#total-p').text(d.p);
       $('#total-dia').text(d.p_date);
@@ -388,21 +398,21 @@ $.ajax({
 
       for(datos in d.i_total){
 
-              div += '<div class="caja"><div class="cont-t"><h4 class="text-info total-inv">'+d.i_total[datos].cantidad+'</h4><h3 class="clave-inv">'+d.i_total[datos].clave+'</h3></div></div>';
+              div += '<div value='+d.i_total[datos].producto_id+' class="caja"><div class="cont-t"><h4 class="text-info total-inv">'+d.i_total[datos].cantidad+'</h4><h3 class="clave-inv">'+d.i_total[datos].clave+'</h3></div></div>';
            }
 
           invent.append(div);
 
           for(datos in d.i_mas){
 
-                  divMas += '<div class="caja"><div class="cont-t"><h4 class="text-success total-inv">'+d.i_mas[datos].cantidad+'</h4><h3 class="clave-inv">'+d.i_mas[datos].clave+'</h3></div></div>';
+                  divMas += '<div value='+d.i_mas[datos].producto_id+' class="caja"><div class="cont-t"><h4 class="text-success total-inv">'+d.i_mas[datos].cantidad+'</h4><h3 class="clave-inv">'+d.i_mas[datos].clave+'</h3></div></div>';
                }
 
               inventMas.append(divMas);
 
               for(datos in d.i_menos){
 
-                    divMenos += '<div class="caja"><div class="cont-t"><h4 class="text-danger total-inv">'+d.i_menos[datos].cantidad+'</h4><h3 class="clave-inv">'+d.i_menos[datos].clave+'</h3></div></div>';
+                    divMenos += '<div value='+d.i_menos[datos].producto_id+' class="caja"><div class="cont-t"><h4 class="text-danger total-inv">'+d.i_menos[datos].cantidad+'</h4><h3 class="clave-inv">'+d.i_menos[datos].clave+'</h3></div></div>';
                    }
 
                   inventMenos.append(divMenos);
@@ -414,6 +424,47 @@ $.ajax({
   }
   });
 
+
+//Detalle del producto del inventario
+  $(document).on('click', '.caja', function(){
+    id = $(this).attr('value');
+    caja = $('.totales-p');
+  $.ajax({
+    type: "POST",
+    url: "/pedidos/detallepedido",
+    data: {id: id},
+    success: function (d) {
+      console.log(d);
+      $('#clave-i').text(d.i[0].clave);
+      $('#nombre-i').text(d.i[0].nombre);;
+      div = "";
+      for(datos in d.i){
+
+              div += '<div class="caja-pedimento"><div class="cont-pedimento"><h4 class="text-info txt-total-inv">'+d.i[datos].cantidad+'</h4><h3 class="num-pedimento">'+d.i[datos].num_pedimento+'</h3></div></div>';
+           }
+
+          caja.append(div); 
+
+  },
+
+  error: function () {
+      alert("failure");
+  }
+  });
+
+    $('#verdetalle_i').modal({
+      show: 'false',
+    });
+  });
+
+
+$(document).on('click', '#cerrar-m', function(){
+  $(".totales-p").load(location.href+" .totales-p>*","");
+})  
+
+$(document).on('click', '.close', function(){
+  $(".totales-p").load(location.href+" .totales-p>*","");
+});
 
 
 </script>
