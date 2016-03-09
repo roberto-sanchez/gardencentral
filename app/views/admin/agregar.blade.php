@@ -41,13 +41,12 @@
 <div class="content">
   <!--<a href="{{ URL::to('consultas/listp') }}">Ver Listado</a>-->
   <div class="row">
-    <div class='notifications top-right'></div>
     <div class="contenedor_e">
       <div class="panel panel-default">
 
         <div class="panel-heading">Registro de entrada</div>
         <div class="panel-body panel-entrada">
-          <form>
+          <form enctype="multipart/form-data" class="formulario">
             <div class="form-add-entrada">
               <div class="inputE date form-group">
                  <label for="ejemplo_email_1">Fecha</label>
@@ -60,7 +59,7 @@
               </div>
               <div class="inputE fa form-group">
                  <label for="ejemplo_email_1">FACTURA</label>
-                 <input type="text" class="form-control" id="factura">
+                 <input type="text" class="form-control" name="factura" id="factura">
               </div>
               <div class="inputE ffa form-group">
                  <label for="ejemplo_email_1">FECHA FACTURA</label>
@@ -68,26 +67,23 @@
               </div>
             </div>
               <div class="form-add-s">
-                  <div class="inputP form-group">
+                  <div class="inputP npe form-group">
                    <label for="numero_p">Numero de pedimento</label>
-                   <input type="text" name="numero_p" class="form-control" id="numeroPedimento">
+                   <input type="text" name="numeroPedimento" class="form-control" id="numeroPedimento">
                 </div>
                 <div class="obse-e">
                   <label class=" text-info">OBSERVACIONES</label>
-                  <textarea id="obc" name="comentarios" id="coment" class="form-control" rows="2"></textarea>
+                  <textarea id="obc" name="obc" id="coment" class="form-control" rows="2"></textarea>
                 </div>
               </div>
-          </form>
         </div>
         <div class="panel-footer footer-entrada">
             <div id="browse-p">
-          <!--  <form action="/entradas/registrarentrada" method="post"> -->
               <label class="txt-browse text-primary">Cargar archivo de productos</label>
-              <input type="file" class="filestyle" data-buttonText="Buscar" data-buttonBefore="true" data-placeholder="Ningún archivo seleccionado" name="file">
-             <!-- <input type="submit" value="Enviar"> -->
-            </form>
+              <input type="file" class="filestyle" data-buttonText="Buscar" data-buttonBefore="true" data-placeholder="Ningún archivo seleccionado" name="archivo_file" id="enviar_file">
             </div>
             <div>
+          </form>
               {{ Form::open(['id'=>'searchE','method' => 'POST', 'class' => 'b-entrada input-group has-feedback']) }}
 
          {{ Form::text('input',null,array('class' => 'form-control', 'id' => 'clave','placeholder' => 'Clave del producto')) }}
@@ -157,15 +153,41 @@
     </table>
     <div class="AgregarE">
       <button class="btn btn-danger" name="button" id="Li">Limpiar</button>
-      <button class="btn btn-primary disabled" name="button" id="gE">Guardar entrada</button>
+      <button class="btn btn-primary enviar_e disabled" name="button" id="gE">Guardar entrada</button>
     </div>
 
 
   </div><!--  Secierra el contenedor-->
 
+    <!--Alertas-->
+    <div class="notifications top-right" data-html="true"></div>
+
   </div>
 </div>
 
+<!--    Modal para confirmar guardar entrada   -->
+<div id="guardarentrada" class="modal fade" data-keyboard="false" data-backdrop="static">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header header-nota">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title text-danger text-center">
+              Guardar Entrada
+             </h4>
+          </div>
+          <div class="modal-body">
+            
+          <h3 class="txt-delete-n text-danger text-center">¿Estás seguro que deseas guardar esta entrada?</h3>
+                
+          </div>
+          <div class="modal-footer modal-confirmar-pass">
+
+              <button type="button" class="btn btn-danger confirm" data-dismiss="modal">No</button>
+              <span class="btn btn-primary confirm guardarentrada" data-dismiss="modal" >Si</span>
+          </div>
+        </div>
+      </div>
+    </div>
 
 {{ HTML::script('js/accounting.min.js') }}
   <script>
@@ -200,7 +222,11 @@ $(document).ready(function(){
 
       $('#btn_search').click(function () {
           if ($('#clave').val() == '' || $('#clave').val() == 'Clave del producto') {
+
           } else {
+            $('.enviar_e').attr('id', 'gE');
+            $('.enviar_e').removeClass('enviar_f');
+            $('#browse-p input[type=text]').val('');
             $('#prodE').val('');
               $.ajax({
                   type: "POST",
@@ -266,7 +292,7 @@ $(document).ready(function(){
                  }
 
                      for(datos in addp.resp){
-                             d += '<tr class="clave_'+addp.resp[datos].clave+'" value="clave_'+addp.resp[datos].clave+'" id="fila_'+addp.resp[datos].id+'"><td>'+addp.resp[datos].clave+'</td>';
+                             d += '<tr class="clave_'+addp.resp[datos].clave+'" value="clave_'+addp.resp[datos].clave+'" id="fila_'+addp.resp[datos].id+'"><td class="clavepro" >'+addp.resp[datos].clave+'</td>';
                              d += '<td class="idpro" value="'+addp.resp[datos].id+'">'+addp.resp[datos].nombre+'</td>';
                              d += '<td>'+addp.resp[datos].color+'</td>';
                              d += '<td class="p_c">'+accounting.formatMoney(addp.resp[datos].precio)+'</td>';
@@ -314,10 +340,11 @@ $(document).ready(function(){
     //Limpiar pedido
     $(document).on('click', '#Li', function(){
       $("#nEntrada").load(location.href+" #nEntrada>*","");
-    })
+    });
+
 
     //Validaciones para los campos del formularios
- /*   $("#gE").click(function () {
+    $("#gE").click(function () {
 
     if($("#fecha").val().length == 0){
             $('.date').addClass('has-error');
@@ -335,53 +362,89 @@ $(document).ready(function(){
             $('.ffa').addClass('has-error');
             return false;
 
+    } else if($("#numeroPedimento").val().length == 0){
+            $('.npe').addClass('has-error');
+            return false;
+
     } else {
         return true;
     }
 });
 
+    $("#enviar_f").click(function () {
+
+    if($("#fecha").val().length == 0){
+            $('.date').addClass('has-error');
+            return false;
+
+    } else if($('#idproveedor').val() == 0){
+            $('.prov').addClass('has-error');
+            return false;
+
+    } else if($("#factura").val().length == 0){
+            $('.fa').addClass('has-error');
+            return false;
+
+    } else if($("#fechaFactura").val().length == 0){
+            $('.ffa').addClass('has-error');
+            return false;
+
+    } else if($("#numeroPedimento").val().length == 0){
+            $('.npe').addClass('has-error');
+            return false;
+
+    } else {
+        return true;
+    }
+});
 
     $(document).on('click', '#gE', function(){
+      $('.guardarentrada').attr('id', 'guardar-entrada');
+      $('#guardarentrada').modal({
+        show: 'false',
+      });
+    });
+
+    $(document).on('click', '#guardar-entrada', function(){
       fecha = $('#fecha').val();
       proveedor = $('#idproveedor').val();
       factura = $('#factura').val();
-      fechaFactura =    $('#fechaFactura').val();
+      fechaFactura = $('#fechaFactura').val();
+      numeroPedimento = $('#numeroPedimento').val();
       obc = $('#obc').val();
-
+      tipo = 1;
 
       var DATA = [];
 
         $('.t-p-entrada tbody tr').each(function(){
+            clavepro = $(this).find("td[class*='clavepro']").text();
             idp = $(this).find("td[class*='idpro']").attr('value');
             cant  = $(this).find("input[class*='cant']").val();
             pc  = $(this).find("td[class*='p_c']").text();
 
-            item = {idp, cant, pc};
+            item = {clavepro, idp, cant, pc};
 
             DATA.push(item);
+
         })
 
-        //convertiremos el array en json para evitar cualquier incidente con compativilidades.
         aInfo   = JSON.stringify(DATA);
 
         $.ajax({
             type: "POST", //metodo
             url: "/entradas/registrarentrada",
-            data: {aInfo: aInfo, fecha: fecha, proveedor: proveedor, factura: factura, fechaFactura: fechaFactura, obc: obc },
+            data: {aInfo: aInfo, fecha: fecha, proveedor: proveedor, factura: factura, fechaFactura: fechaFactura, numeroPedimento: numeroPedimento, obc: obc, tipo: tipo },
             success: function (e) {
                 console.log(e);
-                noexiste = [[ 'top-right', 'success',  "Entrada guardada correctamente." ]];
-                message = noexiste[Math.floor(Math.random() * noexiste.length)];
+                alertas('success',"Entrada guardada correctamente.");
                 $("#nEntrada").load(location.href+" #nEntrada>*","");                 
                 $("#fecha").val('');
                 $('#idproveedor').prop('selectedIndex',0);
                 $("#factura").val('');
                 $("#fechaFactura").val('');
+                $('#numeroPedimento').val('');
                 $("#obc").val('');
-                $('.' + message[0]).notify({
-                    message: { text: message[2] },
-                    type: message[1]
-                }).show();
+                $('#browse-p input[type=text]').val('');
 
 
             },
@@ -389,13 +452,93 @@ $(document).ready(function(){
                 alert('failure');
 
             }
+        }); 
+
+    });  
+
+
+    $(document).on('click', '#enviar_file', function(){ 
+      $('.enviar_e').attr('id', 'enviar_f');
+      $('.enviar_e').addClass('enviar_f');
+      $('.enviar_e').removeClass('disabled');
+      $("#nEntrada").load(location.href+" #nEntrada>*","");
+      $('#productoPanel').hide();
+      $("#clave").val('');
+    });
+
+    $(document).on('click', '#enviar_f', function(){
+        $('.guardarentrada').attr('id', 'registrar-entrada');
+        $('#guardarentrada').modal({
+          show: 'false',
         });
+    });
 
-    });  */
+   
+     $(document).on('click', '#registrar-entrada', function(){
+          
+        //información del formulario
+         formData = new FormData($(".formulario")[0]);
 
+        //hacemos la petición ajax
+       $.ajax({
+            url: '/entradas/registrarentrada',
+            type: 'POST',
+            // Form data
+            //datos del formulario
+            data: formData,
+
+            //necesario para subir archivos via ajax
+            cache: false,
+            contentType: false,
+            processData: false, 
+            //mientras enviamos el archivo
+          /*  beforeSend: function(){
+                message = $("<span class='before'>Subiendo la imagen, por favor espere...</span>");
+                showMessage(message)
+            },*/
+            //una vez finalizado correctamente
+            success: function(data){
+                console.log(data);
+                if(data == 'indefinido'){
+                    alertas('error',"Error, el archivo introducido no es válido.");
+                } else {
+
+                  if(data == 'error'){
+                      alertas('error',"Error, la clave esta vacía oh no existe.");
+                  } else {
+
+                  alertas('success',"Entrada guardada correctamente.");
+                  $("#nEntrada").load(location.href+" #nEntrada>*","");                 
+                  $("#fecha").val('');
+                  $('#idproveedor').prop('selectedIndex',0);
+                  $("#factura").val('');
+                  $("#fechaFactura").val('');
+                  $('#numeroPedimento').val('');
+                  $("#obc").val('');
+                  $('#browse-p input[type=text]').val('');
+
+                  }
+
+                }
+            },
+
+            error: function(){
+                alert('failure');
+            }
+        });
+    });
 
 
 });
+
+
+//Funciones para los alerts
+function alertas(tipo,mensaje){
+    $('.top-right').notify({
+      message: {text: decodeURIComponent(mensaje)},
+      type: tipo
+    }).show();
+  }
 
 
 

@@ -403,7 +403,9 @@ class AdminController extends \BaseController {
 						->Join('descuento', 'familia.id', "=", 'descuento.familia_id')
 
 						->select('producto.id','nombre','color','foto','piezas_paquete','clave','precio', 'descuento')
-						->where('clave', $clave)->first();
+						->where('clave', $clave)
+						->where('tipo', 3)
+						->first();
 		if(count($resp)==0){
 				$resp = array('indefinido' => 'El producto no existe. ');
 				return Response::json($resp);
@@ -421,7 +423,9 @@ class AdminController extends \BaseController {
 						->join('familia', 'producto.familia_id', '=', 'familia.id')
 						->Join('descuento', 'familia.id', "=", 'descuento.familia_id')
 						->select('producto.id','nombre','color','foto','piezas_paquete','clave','precio', 'descuento')
-						->where('clave', $clave)->get();
+						->where('clave', $clave)
+						->where('tipo', 3)
+						->get();
 		if(count($resp)==0){
 				$resp = array('indefinido' => 'El producto no existe. ');
 				return Response::json($resp);
@@ -438,37 +442,276 @@ class AdminController extends \BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function entradas(){
-	 //$ruta = Input::get('file');
-		
-		//Recibimos el Array y lo decodificamos desde json, para poder utilizarlo como objeto
-	  $idpro = json_decode(Input::get('aInfo'));
+public function entradas(){
+
+	$tipo = Input::get('tipo');
+
+	if($tipo == 1){
+
+	    $idpro = json_decode(Input::get('aInfo'));
 		$fecha = Input::get('fecha');
 		$proveedor = Input::get('proveedor');
 		$factura = Input::get('factura');
 		$fechaFactura = Input::get('fechaFactura');
+		$numeroPedimento = Input::get('numeroPedimento');
+		//$total = Input::get('total');
 		$obc = Input::get('obc');
 
-		$entrada = new Entrada;
-		$entrada->id = Input::get('id');
-		$entrada->proveedor_id = $proveedor;
-		$entrada->fecha_entrada = $fecha;
-		$entrada->factura = $factura;
-		$entrada->fecha_factura = $fechaFactura;
-		$entrada->observaciones = $obc;
-		$entrada->estatus = '1';
-		$entrada->save();
 
-     for ($i=0; $i < count($idpro); $i++) {
-		$entradaDetalle = new EntradaDetalle;
-		$entradaDetalle->producto_id = $idpro[$i]->idp;
-		$entradaDetalle->entrada_id = $entrada['id'];
-		$entradaDetalle->cantidad = $idpro[$i]->cant;
-		$entradaDetalle->precio_compra = $idpro[$i]->pc;
-		$entradaDetalle->save();
-      }
+      //verificamos si existe el producto
+      for ($i=0; $i < count($idpro); $i++) {
+      	  $consulta = DB::table('producto')
+      	  			 ->where('clave', $idpro[$i]->clavepro)
+      	  			 ->select('clave')
+      	  			 ->first();
+      	  //Verificamos si ya hay un producto con dicha clave e la tabla producto
+      	  if(count($consulta)==0){
+	        return Response::json('No hay productos con esa clave');
 
-		return Response::json('Correcto'); 
+	    } else {
+
+			/*---- Insertamos en la entrada -----*/
+		     	$entrada = new Entrada;
+				$entrada->id = Input::get('id');
+				$entrada->proveedor_id = $proveedor;
+				$entrada->fecha_entrada = $fecha;
+				$entrada->factura = $factura;
+				$entrada->fecha_factura = $fechaFactura;
+				$entrada->num_pedimento = $numeroPedimento;
+				$entrada->observaciones = $obc;
+				$entrada->estatus = '1';
+				$entrada->save();
+
+		     for ($i=0; $i < count($idpro); $i++) {
+				$entradaDetalle = new EntradaDetalle;
+				$entradaDetalle->producto_id = $idpro[$i]->idp;
+				$entradaDetalle->entrada_id = $entrada['id'];
+				$entradaDetalle->cantidad = $idpro[$i]->cant;
+				$entradaDetalle->precio_compra = $idpro[$i]->pc;
+				$entradaDetalle->save();
+		      }
+		      
+	    	/*----- Insertar en el inventario -----*/
+	    	//verificamos si ya existe un producto con esa clave en el inventario
+	    	for ($i=0; $i < count($idpro); $i++) {
+
+			    	$consulta_i = DB::table('inventario')
+		      	  			 ->where('producto_id', $idpro[$i]->idp)
+		      	  			 ->select('producto_id')
+		      	  			 ->first();
+
+		      	  	//Si no existe el producto en el inv entonses lo registramos
+		      	  	if(count($consulta_i)==0){
+
+				      	$inventario = new Inventario;
+						$inventario->producto_id = $idpro[$i]->idp;
+						$inventario->cantidad = $idpro[$i]->cant;
+						$inventario->save();
+
+		      	  	  //si ya existe, le sumamos la cantidad a la cantidad actual
+		      	  	} else {
+		      	  		
+			      	  	//obtenemos el id del inventario
+			      	  	$id_i = DB::table('inventario')
+			      	  			 ->where('producto_id', $idpro[$i]->idp)
+			      	  			 ->pluck('id');
+
+		      	  		$inventario = Inventario::find($id_i);
+				        $inventario->cantidad += $idpro[$i]->cant;
+				        $inventario->save();
+		      	  	}
+	      	 }
+
+	      	 //Insertamos en el inventario detalle
+	      	 for ($i=0; $i < count($idpro); $i++) {
+		      	$inventario_d = new InventarioDetalle;
+				$inventario_d->producto_id = $idpro[$i]->idp;
+				$inventario_d->cantidad = $idpro[$i]->cant;
+				$inventario_d->num_pedimento = $numeroPedimento;
+				$inventario_d->save();
+			 }
+	    }
+
+
+      } //END for verificar
+      	  
+      
+		return Response::json('Correcto :)');
+
+	} else {
+
+
+		//obtenemos el archivo a subir
+	    $file = $_FILES['archivo_file']['name'];
+
+	    $fecha = Input::get('fecha');
+	    $proveedor = Input::get('proveedor');
+		$factura = Input::get('factura');
+		$fechaFactura = Input::get('fechaFactura');
+		$numeroPedimento = Input::get('numeroPedimento');
+		$obc = Input::get('obc');
+
+	    //comprobamos si existe un directorio para subir el archivo
+	    //si no es así, lo creamos
+	    if(!is_dir("uploads/"))
+	        mkdir("uploads/", 0777);
+
+	    $archivo = $_FILES['archivo_file']["tmp_name"];
+	    $destino = "uploads/".$_FILES['archivo_file']['name'];
+
+
+	if($_FILES['archivo_file']['type'] == 'text/plain'){
+
+		move_uploaded_file($archivo, $destino);
+
+
+		$lineas = file('uploads/'.$file);
+
+	      	/*---- Insertamos en la entrada -----*/
+		     	$entrada = new Entrada;
+				$entrada->id = Input::get('id');
+				$entrada->proveedor_id = $proveedor;
+				$entrada->fecha_entrada = $fecha;
+				$entrada->factura = $factura;
+				$entrada->fecha_factura = $fechaFactura;
+				$entrada->num_pedimento = $numeroPedimento;
+				$entrada->observaciones = $obc;
+				$entrada->estatus = '1';
+				$entrada->save();
+
+	//leemos los datos del archivo de texto
+	 foreach ($lineas as $linea_num => $linea) {
+
+	      $datos = explode(",",$linea);
+
+	           $clave = trim($datos[0]); 
+	           $cantidad = trim($datos[1]); 
+	           $precio = trim($datos[2]); 
+	           
+
+	      //consulta para obtener el id del producto
+	      $producto = DB::table('producto')
+	      			->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
+	      			->where('tipo', 3)
+	      			->where('clave', $clave)
+	      			->pluck('producto.id');
+
+
+
+	     //verificamos si existe el producto
+	    if(count($producto)==0){
+	    	//Si no existe eliminamos la entrada previamente registrada
+	    	$e = Entrada::find($entrada['id']);
+	    	$e->delete();
+	    	$e = 'error';
+	    	return Response::json($e);
+	      } else {
+
+	      	//registramos en la entrada detalle
+	      	$entradaDetalle = new EntradaDetalle;
+			$entradaDetalle->producto_id = $producto;
+			$entradaDetalle->entrada_id = $entrada['id'];
+			$entradaDetalle->cantidad = $cantidad;
+			$entradaDetalle->precio_compra = $precio;
+			$entradaDetalle->save();
+
+
+	      	//verificamos si ya existe un producto con esa clave en el inventario
+	      	$consulta_i = DB::table('inventario')
+  	  			 ->where('producto_id', $producto)
+  	  			 ->select('producto_id')
+  	  			 ->first();
+
+	  	  		//Si no existe el producto en el inv entonses lo registramos
+			    if(count($consulta_i)==0){
+			    	$inventario = new Inventario;
+				    $inventario->producto_id = $producto;
+				    $inventario->cantidad = $cantidad;
+				    $inventario->save();
+
+				   //Si ya existe le sumamos la cantidad a la cantidad actal
+			    } else {
+
+			    	//obtenemos el id del inventario
+			      	  	$id_i = DB::table('inventario')
+		      	  			 ->where('producto_id', $producto)
+		      	  			 ->pluck('id');
+
+		      	  		$inventario = Inventario::find($id_i);
+				        $inventario->cantidad += $cantidad;
+				        $inventario->save();
+			    }
+
+			    //Insertamos en el inventario detalle
+		      	$inventario_d = new InventarioDetalle;
+				$inventario_d->producto_id = $producto;
+				$inventario_d->cantidad = $cantidad;
+				$inventario_d->num_pedimento = $numeroPedimento;
+				$inventario_d->save();
+
+	       
+	      	
+	      }
+
+
+	  }
+
+
+
+		
+		} else {
+		    $i = 'indefinido';
+	    	return Response::json($i);
+		}
+
+	}
+
+
+
+
+/*	 $lineas = file('uploads/hola.txt');
+
+	 foreach ($lineas as $linea_num => $linea) {
+
+      $datos = explode(",",$linea);
+
+      echo $clave = trim($datos[0])." "; 
+      echo $producto = trim($datos[1])." "; 
+      echo $precio = trim($datos[2])."<br/>"; 
+  
+    
+} 
+*/
+
+
+	 //$ruta = Input::get('file');
+	/* $lineas = file('uploads/hola.txt');
+
+	 foreach ($lineas as $linea_num => $linea) {
+
+      $datos = explode("\t",$linea);
+ 
+      echo $clave = trim($datos[0]);  
+      echo $producto = trim($datos[1]);
+      echo $precio = trim($datos[2]);
+ 
+    
+} */
+
+
+/*	 $contents = array();
+
+		foreach(file('uploads/hola.txt') as $line) {
+
+			$contents[] = $line;
+
+		   }
+
+		dd($contents); */
+	
+	 //var_dump($lineas);
+		
+ 
 	}
 
 
