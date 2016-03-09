@@ -362,10 +362,6 @@ $(document).ready(function(){
             $('.ffa').addClass('has-error');
             return false;
 
-    } else if($("#numeroPedimento").val().length == 0){
-            $('.npe').addClass('has-error');
-            return false;
-
     } else {
         return true;
     }
@@ -389,11 +385,7 @@ $(document).ready(function(){
             $('.ffa').addClass('has-error');
             return false;
 
-    } else if($("#numeroPedimento").val().length == 0){
-            $('.npe').addClass('has-error');
-            return false;
-
-    } else {
+    }  else {
         return true;
     }
 });
