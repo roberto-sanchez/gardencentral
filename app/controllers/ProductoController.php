@@ -385,7 +385,7 @@ public function getProducto(){
         $formapago = Input::get('formapago');
         $msjeria = Input::get('msjeria');
         $coment = Input::get('coment');
-          if (Request::ajax()) {
+    if (Request::ajax()) {
         if($id == 0){
 
             $telefono = new TelefonoCliente;
@@ -437,12 +437,353 @@ public function getProducto(){
 
             //por cada uo de estos arrays vamos a crear una query para poder hacer un insert en la base de datos. y para eso necesitamos recorrer el array por cada uno de sus posiciones
             for ($i=0; $i < count($idpro); $i++) {
-                //Por cada objeto que encuentra en el array lo separa y crea una query
-                $p_detalle = new PedidoDetalle;
-                $p_detalle->pedido_id = $pedido['id'];
-                $p_detalle->producto_id = $idpro[$i]->idp;
-                $p_detalle->cantidad = $idpro[$i]->cant;
-                $p_detalle->save();
+                //Insertamos en la tabla los datos temporales
+                    $temporal = new TotalProducto;
+                    $temporal->clave = $idpro[$i]->clave;
+                    $temporal->cantidad = $idpro[$i]->cant;
+                    $temporal->save();
+
+
+            //total producto
+            $total = DB::table('producto')
+                    ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
+                    ->where('producto.clave', $idpro[$i]->clave)
+                    ->pluck('cantidad');
+
+            //obtenemos el numero total de pedimentos
+            $pedimentos = DB::table('producto')
+                    ->join('inventario_detalle', 'producto.id', '=', 'inventario_detalle.producto_id')
+                    ->where('producto.clave', $idpro[$i]->clave)
+                    ->count();
+
+
+            for($a = 0; $a < $pedimentos; $a++){
+
+                //obtenemos la cantidad del pedimento mas viejo
+                $cant = DB::table('producto')
+                        ->join('inventario_detalle', 'producto.id', '=', 'inventario_detalle.producto_id')
+                        ->where('producto.clave', $idpro[$i]->clave)
+                        ->orderBy('inventario_detalle.created_at', 'asc')
+                        ->pluck('cantidad');
+
+                //obtenemos el pedimento mas viejo
+                $num_p = DB::table('producto')
+                        ->join('inventario_detalle', 'producto.id', '=', 'inventario_detalle.producto_id')
+                        ->where('producto.clave', $idpro[$i]->clave)
+                        ->orderBy('inventario_detalle.created_at', 'asc')
+                        ->pluck('num_pedimento');
+
+                //obtenemos la cantidad almacenada temporalmente
+                $y1 = DB::table('total_producto')
+                    ->where('clave', $idpro[$i]->clave)
+                    ->pluck('cantidad');
+
+
+                if($y1 <= $cant){
+
+                     //echo $r = "Si es menor oh igual";
+
+                     //obtenemos los id del producto, ya depende si el usuario
+                     //es retail, mayorista o distribuidor
+                     //Retail--
+                     $p1 = DB::table('producto')
+                                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
+                                ->where('tipo', 1)
+                                ->where('clave', $idpro[$i]->clave)
+                                ->pluck('producto.id');
+
+
+                    //Mayorista--
+                     $p2 = DB::table('producto')
+                                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
+                                ->where('tipo', 2)
+                                ->where('clave', $idpro[$i]->clave)
+                                ->pluck('producto.id');
+
+
+                    //Distribuidor--
+                     $p3 = DB::table('producto')
+                                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
+                                ->where('tipo', 3)
+                                ->where('clave', $idpro[$i]->clave)
+                                ->pluck('producto.id');
+
+
+                    //Verificamos el id para obtener el id del inventario
+                    $inve1 = DB::table('inventario')
+                                ->where('producto_id', $p1)
+                                ->pluck('id');
+
+
+                    $inve2 = DB::table('inventario')
+                                ->where('producto_id', $p2)
+                                ->pluck('id');
+
+
+                    $inve3 = DB::table('inventario')
+                                ->where('producto_id', $p3)
+                                ->pluck('id');
+
+                    //comprobamos y obtenemos el id del inv
+                    if($inve1 != ""){
+
+                         //descontamos la cantidad del inventario
+                        $inv = Inventario::find($inve1);
+                        $inv->cantidad -= $y1;
+                        $inv->save();
+
+                        //Obtenemos el id del inventario detalle
+                        $id_i_d = DB::table('inventario_detalle')
+                                ->where('producto_id', $p1)
+                                ->where('num_pedimento', $num_p)
+                                ->pluck('id');
+
+                         //registramos en pedido detalle
+                        $p_detalle = new PedidoDetalle;
+                        $p_detalle->pedido_id = $pedido['id'];
+                        $p_detalle->producto_id = $idpro[$i]->idp;
+                        $p_detalle->num_pedimento = $num_p;
+                        $p_detalle->cantidad = $y1;
+                        $p_detalle->save();
+
+                        //descontamos la cantidad del inventario_detalle
+                        $inv_d = InventarioDetalle::find($id_i_d);
+                        $inv_d->cantidad -= $y1;
+                        $inv_d->save();
+
+                    } else if($inve2 != ""){
+
+                         //descontamos la cantidad del inventario
+                        $inv = Inventario::find($inve2);
+                        $inv->cantidad -= $y1;
+                        $inv->save();
+
+                        //Obtenemos el id del inventario detalle
+                        $id_i_d = DB::table('inventario_detalle')
+                                ->where('producto_id', $p2)
+                                ->where('num_pedimento', $num_p)
+                                ->pluck('id');
+
+                         //registramos en pedido detalle
+                        $p_detalle = new PedidoDetalle;
+                        $p_detalle->pedido_id = $pedido['id'];
+                        $p_detalle->producto_id = $idpro[$i]->idp;
+                        $p_detalle->num_pedimento = $num_p;
+                        $p_detalle->cantidad = $y1;
+                        $p_detalle->save();
+
+                        //descontamos la cantidad del inventario_detalle
+                        $inv_d = InventarioDetalle::find($id_i_d);
+                        $inv_d->cantidad -= $y1;
+                        $inv_d->save();
+
+                    } else if($inve3 != ""){
+
+                        //descontamos la cantidad del inventario
+                        $inv = Inventario::find($inve3);
+                        $inv->cantidad -= $y1;
+                        $inv->save();
+
+                        //Obtenemos el id del inventario detalle
+                        $id_i_d = DB::table('inventario_detalle')
+                                ->where('producto_id', $p3)
+                                ->where('num_pedimento', $num_p)
+                                ->pluck('id');
+
+                        //registramos en pedido detalle
+                        $p_detalle = new PedidoDetalle;
+                        $p_detalle->pedido_id = $pedido['id'];
+                        $p_detalle->producto_id = $idpro[$i]->idp;
+                        $p_detalle->num_pedimento = $num_p;
+                        $p_detalle->cantidad = $y1;
+                        $p_detalle->save();
+
+                        //descontamos la cantidad del inventario_detalle
+                        $inv_d = InventarioDetalle::find($id_i_d);
+                        $inv_d->cantidad -= $y1;
+                        $inv_d->save();
+
+                        //eliminamos los datos temporales
+                        $idy = DB::table('total_producto')
+                            ->where('clave', $idpro[$i]->clave)
+                            ->pluck('id');
+
+                        $y1 = TotalProducto::find($idy);
+                        $y1->delete();
+                        
+                    }
+
+                    break; //Detenemos el ciclo -------------------------------------
+
+
+                } else {
+                    //echo $r = "Es mayor, faltan productos";
+
+                    $p1 = DB::table('producto')
+                                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
+                                ->where('tipo', 1)
+                                ->where('clave', $idpro[$i]->clave)
+                                ->pluck('producto.id');
+
+
+                    //Mayorista--
+                     $p2 = DB::table('producto')
+                                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
+                                ->where('tipo', 2)
+                                ->where('clave', $idpro[$i]->clave)
+                                ->pluck('producto.id');
+
+
+                    //Distribuidor--
+                     $p3 = DB::table('producto')
+                                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
+                                ->where('tipo', 3)
+                                ->where('clave', $idpro[$i]->clave)
+                                ->pluck('producto.id');
+
+                      //Verificamos el id para obtener el id del inventario
+                    $inve1 = DB::table('inventario')
+                                ->where('producto_id', $p1)
+                                ->pluck('id');
+
+
+                    $inve2 = DB::table('inventario')
+                                ->where('producto_id', $p2)
+                                ->pluck('id');
+
+
+                    $inve3 = DB::table('inventario')
+                                ->where('producto_id', $p3)
+                                ->pluck('id');
+
+                    //comprobamos y obtenemos el id del inv
+                    if($inve1 != ""){
+
+                        //le restamos a la cantidad del producto la cantidad del pedimento
+                        $y_m = $y1 - $cant;
+
+                         //descontamos la cantidad del inventario
+                        $inv = Inventario::find($inve1);
+                        $inv->cantidad -= $y_m;
+                        $inv->save();
+
+                        //Obtenemos el id del inventario detalle
+                        $id_i_d = DB::table('inventario_detalle')
+                                ->where('producto_id', $p1)
+                                ->where('num_pedimento', $num_p)
+                                ->pluck('id');
+
+                        //descontamos la cantidad del inventario_detalle
+                        $inv_d = InventarioDetalle::find($id_i_d);
+                        $inv_d->cantidad -= $y_m;
+                        $inv_d->save();
+
+                        //registramos en pedido detalle
+                        $p_detalle = new PedidoDetalle;
+                        $p_detalle->pedido_id = $pedido['id'];
+                        $p_detalle->producto_id = $idpro[$i]->idp;
+                        $p_detalle->num_pedimento = $num_p;
+                        $p_detalle->cantidad = $cant;
+                        $p_detalle->save();
+
+                        //Borramos el producto
+                        $inv_d = InventarioDetalle::find($id_i_d);
+                        $inv_d->delete();
+
+                        //Actualizamos la cantidad de los datos temporales
+                        $id_t = DB::table('total_producto')
+                                ->where('clave', $idpro[$i]->clave)
+                                ->pluck('id');
+                        
+                        $y_a = TotalProducto::find($id_t);
+                        $y_a->cantidad -= $cant;
+                        $y_a->save();
+
+                    } else if($inve2 != ""){
+                        $y_m = $y1 - $cant;
+
+                         //descontamos la cantidad del inventario
+                        $inv = Inventario::find($inve2);
+                        $inv->cantidad -= $y_m;
+                        $inv->save();
+
+                        //Obtenemos el id del inventario detalle
+                        $id_i_d = DB::table('inventario_detalle')
+                                ->where('producto_id', $p2)
+                                ->where('num_pedimento', $num_p)
+                                ->pluck('id');
+
+                        //descontamos la cantidad del inventario_detalle
+                        $inv_d = InventarioDetalle::find($id_i_d);
+                        $inv_d->cantidad -= $y_m;
+                        $inv_d->save();
+
+                        //registramos en pedido detalle
+                        $p_detalle = new PedidoDetalle;
+                        $p_detalle->pedido_id = $pedido['id'];
+                        $p_detalle->producto_id = $idpro[$i]->idp;
+                        $p_detalle->num_pedimento = $num_p;
+                        $p_detalle->cantidad = $cant;
+                        $p_detalle->save();
+
+                        //Borramos el producto
+                        $inv_d = InventarioDetalle::find($id_i_d);
+                        $inv_d->delete();
+
+                        //Actualizamos la cantidad de los datos temporales
+                        $id_t = DB::table('total_producto')
+                                ->where('clave', $idpro[$i]->clave)
+                                ->pluck('id');
+                        
+                        $y_a = TotalProducto::find($id_t);
+                        $y_a->cantidad -= $cant;
+                        $y_a->save();
+
+                    } else if($inve3 != ""){
+                        $y_m = $y1 - $cant;
+
+                        //descontamos la cantidad del inventario
+                        $inv = Inventario::find($inve3);
+                        $inv->cantidad -= $cant;
+                        $inv->save();
+
+                        //Obtenemos el id del inventario detalle
+                        $id_i_d = DB::table('inventario_detalle')
+                                ->where('producto_id', $p3)
+                                ->where('num_pedimento', $num_p)
+                                ->pluck('id');
+
+
+                        //registramos en pedido detalle
+                        $p_detalle = new PedidoDetalle;
+                        $p_detalle->pedido_id = $pedido['id'];
+                        $p_detalle->producto_id = $idpro[$i]->idp;
+                        $p_detalle->num_pedimento = $num_p;
+                        $p_detalle->cantidad = $cant;
+                        $p_detalle->save();
+
+                        //Como la cantidad del pedimento no es suficiente lo borramos
+                        $inv_d = InventarioDetalle::find($id_i_d);
+                        $inv_d->delete();
+
+                        //Actualizamos la cantidad de los datos temporales
+                        $id_t = DB::table('total_producto')
+                                ->where('clave', $idpro[$i]->clave)
+                                ->pluck('id');
+                        
+                        $y_a = TotalProducto::find($id_t);
+                        $y_a->cantidad -= $cant;
+                        $y_a->save();
+
+                        
+                    }//---
+
+
+                }//-----
+
+
+
+            } //End for pedimentos
           }
 
 
@@ -489,36 +830,377 @@ public function getProducto(){
 
             //por cada uo de estos arrays vamos a crear una query para poder hacer un insert en la base de datos. y para eso necesitamos recorrer el array por cada uno de sus posiciones
             for ($i=0; $i < count($idpro); $i++) {
-                //Por cada objeto que encuentra en el array lo separa y crea una query
-                $p_detalle = new PedidoDetalle;
-                $p_detalle->pedido_id = $pedido['id'];
-                $p_detalle->producto_id = $idpro[$i]->idp;
-                $p_detalle->cantidad = $idpro[$i]->cant;
-                $p_detalle->save();
+                //Insertamos en la tabla los datos temporales
+                    $temporal = new TotalProducto;
+                    $temporal->clave = $idpro[$i]->clave;
+                    $temporal->cantidad = $idpro[$i]->cant;
+                    $temporal->save();
+
+
+            //total producto
+            $total = DB::table('producto')
+                    ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
+                    ->where('producto.clave', $idpro[$i]->clave)
+                    ->pluck('cantidad');
+
+            //obtenemos el numero total de pedimentos
+            $pedimentos = DB::table('producto')
+                    ->join('inventario_detalle', 'producto.id', '=', 'inventario_detalle.producto_id')
+                    ->where('producto.clave', $idpro[$i]->clave)
+                    ->count();
+
+
+            for($a = 0; $a < $pedimentos; $a++){
+
+                //obtenemos la cantidad del pedimento mas viejo
+                $cant = DB::table('producto')
+                        ->join('inventario_detalle', 'producto.id', '=', 'inventario_detalle.producto_id')
+                        ->where('producto.clave', $idpro[$i]->clave)
+                        ->orderBy('inventario_detalle.created_at', 'asc')
+                        ->pluck('cantidad');
+
+                //obtenemos el pedimento mas viejo
+                $num_p = DB::table('producto')
+                        ->join('inventario_detalle', 'producto.id', '=', 'inventario_detalle.producto_id')
+                        ->where('producto.clave', $idpro[$i]->clave)
+                        ->orderBy('inventario_detalle.created_at', 'asc')
+                        ->pluck('num_pedimento');
+
+                //obtenemos la cantidad almacenada temporalmente
+                $y1 = DB::table('total_producto')
+                    ->where('clave', $idpro[$i]->clave)
+                    ->pluck('cantidad');
+
+
+                if($y1 <= $cant){
+
+                     //echo $r = "Si es menor oh igual";
+
+                     //obtenemos los id del producto, ya depende si el usuario
+                     //es retail, mayorista o distribuidor
+                     //Retail--
+                     $p1 = DB::table('producto')
+                                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
+                                ->where('tipo', 1)
+                                ->where('clave', $idpro[$i]->clave)
+                                ->pluck('producto.id');
+
+
+                    //Mayorista--
+                     $p2 = DB::table('producto')
+                                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
+                                ->where('tipo', 2)
+                                ->where('clave', $idpro[$i]->clave)
+                                ->pluck('producto.id');
+
+
+                    //Distribuidor--
+                     $p3 = DB::table('producto')
+                                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
+                                ->where('tipo', 3)
+                                ->where('clave', $idpro[$i]->clave)
+                                ->pluck('producto.id');
+
+
+                    //Verificamos el id para obtener el id del inventario
+                    $inve1 = DB::table('inventario')
+                                ->where('producto_id', $p1)
+                                ->pluck('id');
+
+
+                    $inve2 = DB::table('inventario')
+                                ->where('producto_id', $p2)
+                                ->pluck('id');
+
+
+                    $inve3 = DB::table('inventario')
+                                ->where('producto_id', $p3)
+                                ->pluck('id');
+
+                    //comprobamos y obtenemos el id del inv
+                    if($inve1 != ""){
+
+                         //descontamos la cantidad del inventario
+                        $inv = Inventario::find($inve1);
+                        $inv->cantidad -= $y1;
+                        $inv->save();
+
+                        //Obtenemos el id del inventario detalle
+                        $id_i_d = DB::table('inventario_detalle')
+                                ->where('producto_id', $p1)
+                                ->where('num_pedimento', $num_p)
+                                ->pluck('id');
+
+                         //registramos en pedido detalle
+                        $p_detalle = new PedidoDetalle;
+                        $p_detalle->pedido_id = $pedido['id'];
+                        $p_detalle->producto_id = $idpro[$i]->idp;
+                        $p_detalle->num_pedimento = $num_p;
+                        $p_detalle->cantidad = $y1;
+                        $p_detalle->save();
+
+                        //descontamos la cantidad del inventario_detalle
+                        $inv_d = InventarioDetalle::find($id_i_d);
+                        $inv_d->cantidad -= $y1;
+                        $inv_d->save();
+
+                    } else if($inve2 != ""){
+
+                         //descontamos la cantidad del inventario
+                        $inv = Inventario::find($inve2);
+                        $inv->cantidad -= $y1;
+                        $inv->save();
+
+                        //Obtenemos el id del inventario detalle
+                        $id_i_d = DB::table('inventario_detalle')
+                                ->where('producto_id', $p2)
+                                ->where('num_pedimento', $num_p)
+                                ->pluck('id');
+
+                         //registramos en pedido detalle
+                        $p_detalle = new PedidoDetalle;
+                        $p_detalle->pedido_id = $pedido['id'];
+                        $p_detalle->producto_id = $idpro[$i]->idp;
+                        $p_detalle->num_pedimento = $num_p;
+                        $p_detalle->cantidad = $y1;
+                        $p_detalle->save();
+
+                        //descontamos la cantidad del inventario_detalle
+                        $inv_d = InventarioDetalle::find($id_i_d);
+                        $inv_d->cantidad -= $y1;
+                        $inv_d->save();
+
+                    } else if($inve3 != ""){
+
+                        //descontamos la cantidad del inventario
+                        $inv = Inventario::find($inve3);
+                        $inv->cantidad -= $y1;
+                        $inv->save();
+
+                        //Obtenemos el id del inventario detalle
+                        $id_i_d = DB::table('inventario_detalle')
+                                ->where('producto_id', $p3)
+                                ->where('num_pedimento', $num_p)
+                                ->pluck('id');
+
+                        //registramos en pedido detalle
+                        $p_detalle = new PedidoDetalle;
+                        $p_detalle->pedido_id = $pedido['id'];
+                        $p_detalle->producto_id = $idpro[$i]->idp;
+                        $p_detalle->num_pedimento = $num_p;
+                        $p_detalle->cantidad = $y1;
+                        $p_detalle->save();
+
+                        //descontamos la cantidad del inventario_detalle
+                        $inv_d = InventarioDetalle::find($id_i_d);
+                        $inv_d->cantidad -= $y1;
+                        $inv_d->save();
+
+                        //eliminamos los datos temporales
+                        $idy = DB::table('total_producto')
+                            ->where('clave', $idpro[$i]->clave)
+                            ->pluck('id');
+
+                        $y1 = TotalProducto::find($idy);
+                        $y1->delete();
+                        
+                    }
+
+                    break; //Detenemos el ciclo -------------------------------------
+
+
+                } else {
+                    //echo $r = "Es mayor, faltan productos";
+
+                    $p1 = DB::table('producto')
+                                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
+                                ->where('tipo', 1)
+                                ->where('clave', $idpro[$i]->clave)
+                                ->pluck('producto.id');
+
+
+                    //Mayorista--
+                     $p2 = DB::table('producto')
+                                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
+                                ->where('tipo', 2)
+                                ->where('clave', $idpro[$i]->clave)
+                                ->pluck('producto.id');
+
+
+                    //Distribuidor--
+                     $p3 = DB::table('producto')
+                                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
+                                ->where('tipo', 3)
+                                ->where('clave', $idpro[$i]->clave)
+                                ->pluck('producto.id');
+
+                      //Verificamos el id para obtener el id del inventario
+                    $inve1 = DB::table('inventario')
+                                ->where('producto_id', $p1)
+                                ->pluck('id');
+
+
+                    $inve2 = DB::table('inventario')
+                                ->where('producto_id', $p2)
+                                ->pluck('id');
+
+
+                    $inve3 = DB::table('inventario')
+                                ->where('producto_id', $p3)
+                                ->pluck('id');
+
+                    //comprobamos y obtenemos el id del inv
+                    if($inve1 != ""){
+
+                        //le restamos a la cantidad del producto la cantidad del pedimento
+                        $y_m = $y1 - $cant;
+
+                         //descontamos la cantidad del inventario
+                        $inv = Inventario::find($inve1);
+                        $inv->cantidad -= $y_m;
+                        $inv->save();
+
+                        //Obtenemos el id del inventario detalle
+                        $id_i_d = DB::table('inventario_detalle')
+                                ->where('producto_id', $p1)
+                                ->where('num_pedimento', $num_p)
+                                ->pluck('id');
+
+                        //descontamos la cantidad del inventario_detalle
+                        $inv_d = InventarioDetalle::find($id_i_d);
+                        $inv_d->cantidad -= $y_m;
+                        $inv_d->save();
+
+                        //registramos en pedido detalle
+                        $p_detalle = new PedidoDetalle;
+                        $p_detalle->pedido_id = $pedido['id'];
+                        $p_detalle->producto_id = $idpro[$i]->idp;
+                        $p_detalle->num_pedimento = $num_p;
+                        $p_detalle->cantidad = $cant;
+                        $p_detalle->save();
+
+                        //Borramos el producto
+                        $inv_d = InventarioDetalle::find($id_i_d);
+                        $inv_d->delete();
+
+                        //Actualizamos la cantidad de los datos temporales
+                        $id_t = DB::table('total_producto')
+                                ->where('clave', $idpro[$i]->clave)
+                                ->pluck('id');
+                        
+                        $y_a = TotalProducto::find($id_t);
+                        $y_a->cantidad -= $cant;
+                        $y_a->save();
+
+                    } else if($inve2 != ""){
+                        $y_m = $y1 - $cant;
+
+                         //descontamos la cantidad del inventario
+                        $inv = Inventario::find($inve2);
+                        $inv->cantidad -= $y_m;
+                        $inv->save();
+
+                        //Obtenemos el id del inventario detalle
+                        $id_i_d = DB::table('inventario_detalle')
+                                ->where('producto_id', $p2)
+                                ->where('num_pedimento', $num_p)
+                                ->pluck('id');
+
+                        //descontamos la cantidad del inventario_detalle
+                        $inv_d = InventarioDetalle::find($id_i_d);
+                        $inv_d->cantidad -= $y_m;
+                        $inv_d->save();
+
+                        //registramos en pedido detalle
+                        $p_detalle = new PedidoDetalle;
+                        $p_detalle->pedido_id = $pedido['id'];
+                        $p_detalle->producto_id = $idpro[$i]->idp;
+                        $p_detalle->num_pedimento = $num_p;
+                        $p_detalle->cantidad = $cant;
+                        $p_detalle->save();
+
+                        //Borramos el producto
+                        $inv_d = InventarioDetalle::find($id_i_d);
+                        $inv_d->delete();
+
+                        //Actualizamos la cantidad de los datos temporales
+                        $id_t = DB::table('total_producto')
+                                ->where('clave', $idpro[$i]->clave)
+                                ->pluck('id');
+                        
+                        $y_a = TotalProducto::find($id_t);
+                        $y_a->cantidad -= $cant;
+                        $y_a->save();
+
+                    } else if($inve3 != ""){
+                        $y_m = $y1 - $cant;
+
+                        //descontamos la cantidad del inventario
+                        $inv = Inventario::find($inve3);
+                        $inv->cantidad -= $cant;
+                        $inv->save();
+
+                        //Obtenemos el id del inventario detalle
+                        $id_i_d = DB::table('inventario_detalle')
+                                ->where('producto_id', $p3)
+                                ->where('num_pedimento', $num_p)
+                                ->pluck('id');
+
+
+                        //registramos en pedido detalle
+                        $p_detalle = new PedidoDetalle;
+                        $p_detalle->pedido_id = $pedido['id'];
+                        $p_detalle->producto_id = $idpro[$i]->idp;
+                        $p_detalle->num_pedimento = $num_p;
+                        $p_detalle->cantidad = $cant;
+                        $p_detalle->save();
+
+                        //Como la cantidad del pedimento no es suficiente lo borramos
+                        $inv_d = InventarioDetalle::find($id_i_d);
+                        $inv_d->delete();
+
+                        //Actualizamos la cantidad de los datos temporales
+                        $id_t = DB::table('total_producto')
+                                ->where('clave', $idpro[$i]->clave)
+                                ->pluck('id');
+                        
+                        $y_a = TotalProducto::find($id_t);
+                        $y_a->cantidad -= $cant;
+                        $y_a->save();
+
+                        
+                    }//---
+
+
+                }//-----
+
+
+
+            } //End for pedimentos
           }
         }
 
 
     return Response::json($pedido['id']);
   }
+  
  }
-
-
 
 
  public function pedidoexistente($id){
 
+        $formapago = Input::get('formapago');
+        $msjeria = Input::get('msjeria');
+        $cotizar = Input::get('cotizar');
+        $idpro = json_decode(Input::get('aInfo'));
+
+        $idusuario = Auth::user()->id;
+
+        $resp = DB::table('cliente')
+            ->where('usuario_id', $idusuario)->pluck('id');
+
         if($id == 0){
-            $idpro = json_decode(Input::get('aInfo'));
 
-            $formapago = Input::get('formapago');
-            $msjeria = Input::get('msjeria');
-            $cotizar = Input::get('cotizar');
-
-            $idusuario = Auth::user()->id;
-
-            $resp = DB::table('cliente')
-                ->where('usuario_id', $idusuario)->pluck('id');
 
             $clienteformapago = new ClienteFormaPago;
             $clienteformapago->cliente_id = $resp;
@@ -539,29 +1221,366 @@ public function getProducto(){
             $pedido->fecha_registro = date('Y-m-d');
             $pedido->cotizar_envio = $cotizar;
             $pedido->observaciones =  " ";
-            $pedido->save();
+            $pedido->save(); 
 
 
                 for ($i=0; $i < count($idpro); $i++) {
-                    $p_detalle = new PedidoDetalle;
-                    $p_detalle->pedido_id = $pedido['id'];
-                    $p_detalle->producto_id = $idpro[$i]->idp;
-                    $p_detalle->cantidad = $idpro[$i]->cant;
-                    $p_detalle->save();
-              }
+                    
+                    //Insertamos en la tabla los datos temporales
+                    $temporal = new TotalProducto;
+                    $temporal->clave = $idpro[$i]->clave;
+                    $temporal->cantidad = $idpro[$i]->cant;
+                    $temporal->save();
+
+
+            //total producto
+            $total = DB::table('producto')
+                    ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
+                    ->where('producto.clave', $idpro[$i]->clave)
+                    ->pluck('cantidad');
+
+            //obtenemos el numero total de pedimentos
+            $pedimentos = DB::table('producto')
+                    ->join('inventario_detalle', 'producto.id', '=', 'inventario_detalle.producto_id')
+                    ->where('producto.clave', $idpro[$i]->clave)
+                    ->count();
+
+
+
+            for($a = 0; $a < $pedimentos; $a++){
+
+                //obtenemos la cantidad del pedimento mas viejo
+                $cant = DB::table('producto')
+                        ->join('inventario_detalle', 'producto.id', '=', 'inventario_detalle.producto_id')
+                        ->where('producto.clave', $idpro[$i]->clave)
+                        ->orderBy('inventario_detalle.created_at', 'asc')
+                        ->pluck('cantidad');
+
+                //obtenemos el pedimento mas viejo
+                $num_p = DB::table('producto')
+                        ->join('inventario_detalle', 'producto.id', '=', 'inventario_detalle.producto_id')
+                        ->where('producto.clave', $idpro[$i]->clave)
+                        ->orderBy('inventario_detalle.created_at', 'asc')
+                        ->pluck('num_pedimento');
+
+                //obtenemos la cantidad almacenada temporalmente
+                $y1 = DB::table('total_producto')
+                    ->where('clave', $idpro[$i]->clave)
+                    ->pluck('cantidad');
+
+
+
+                if($y1 <= $cant){
+                    //echo $r = "Si es menor oh igual";
+
+                     //obtenemos los id del producto, ya depende si el usuario
+                     //es retail, mayorista o distribuidor
+                     //Retail--
+                     $p1 = DB::table('producto')
+                                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
+                                ->where('tipo', 1)
+                                ->where('clave', $idpro[$i]->clave)
+                                ->pluck('producto.id');
+
+
+                    //Mayorista--
+                     $p2 = DB::table('producto')
+                                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
+                                ->where('tipo', 2)
+                                ->where('clave', $idpro[$i]->clave)
+                                ->pluck('producto.id');
+
+
+                    //Distribuidor--
+                     $p3 = DB::table('producto')
+                                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
+                                ->where('tipo', 3)
+                                ->where('clave', $idpro[$i]->clave)
+                                ->pluck('producto.id');
+
+
+                    //Verificamos el id para obtener el id del inventario
+                    $inve1 = DB::table('inventario')
+                                ->where('producto_id', $p1)
+                                ->pluck('id');
+
+
+                    $inve2 = DB::table('inventario')
+                                ->where('producto_id', $p2)
+                                ->pluck('id');
+
+
+                    $inve3 = DB::table('inventario')
+                                ->where('producto_id', $p3)
+                                ->pluck('id');
+
+
+                    //comprobamos y obtenemos el id del inv
+                    if($inve1 != ""){
+
+                         //descontamos la cantidad del inventario
+                        $inv = Inventario::find($inve1);
+                        $inv->cantidad -= $y1;
+                        $inv->save();
+
+                        //Obtenemos el id del inventario detalle
+                        $id_i_d = DB::table('inventario_detalle')
+                                ->where('producto_id', $p1)
+                                ->where('num_pedimento', $num_p)
+                                ->pluck('id');
+
+                         //registramos en pedido detalle
+                        $p_detalle = new PedidoDetalle;
+                        $p_detalle->pedido_id = $pedido['id'];
+                        $p_detalle->producto_id = $idpro[$i]->idp;
+                        $p_detalle->num_pedimento = $num_p;
+                        $p_detalle->cantidad = $y1;
+                        $p_detalle->save();
+
+                        //descontamos la cantidad del inventario_detalle
+                        $inv_d = InventarioDetalle::find($id_i_d);
+                        $inv_d->cantidad -= $y1;
+                        $inv_d->save();
+
+                    } else if($inve2 != ""){
+
+                         //descontamos la cantidad del inventario
+                        $inv = Inventario::find($inve2);
+                        $inv->cantidad -= $y1;
+                        $inv->save();
+
+                        //Obtenemos el id del inventario detalle
+                        $id_i_d = DB::table('inventario_detalle')
+                                ->where('producto_id', $p2)
+                                ->where('num_pedimento', $num_p)
+                                ->pluck('id');
+
+                         //registramos en pedido detalle
+                        $p_detalle = new PedidoDetalle;
+                        $p_detalle->pedido_id = $pedido['id'];
+                        $p_detalle->producto_id = $idpro[$i]->idp;
+                        $p_detalle->num_pedimento = $num_p;
+                        $p_detalle->cantidad = $y1;
+                        $p_detalle->save();
+
+                        //descontamos la cantidad del inventario_detalle
+                        $inv_d = InventarioDetalle::find($id_i_d);
+                        $inv_d->cantidad -= $y1;
+                        $inv_d->save();
+
+                    } else if($inve3 != ""){
+
+                        //descontamos la cantidad del inventario
+                        $inv = Inventario::find($inve3);
+                        $inv->cantidad -= $y1;
+                        $inv->save();
+
+                        //Obtenemos el id del inventario detalle
+                        $id_i_d = DB::table('inventario_detalle')
+                                ->where('producto_id', $p3)
+                                ->where('num_pedimento', $num_p)
+                                ->pluck('id');
+
+                        //registramos en pedido detalle
+                        $p_detalle = new PedidoDetalle;
+                        $p_detalle->pedido_id = $pedido['id'];
+                        $p_detalle->producto_id = $idpro[$i]->idp;
+                        $p_detalle->num_pedimento = $num_p;
+                        $p_detalle->cantidad = $y1;
+                        $p_detalle->save();
+
+                        //descontamos la cantidad del inventario_detalle
+                        $inv_d = InventarioDetalle::find($id_i_d);
+                        $inv_d->cantidad -= $y1;
+                        $inv_d->save();
+
+                        //eliminamos los datos temporales
+                        $idy = DB::table('total_producto')
+                            ->where('clave', $idpro[$i]->clave)
+                            ->pluck('id');
+
+                        $y1 = TotalProducto::find($idy);
+                        $y1->delete();
+                        
+                    }
+
+                    break; //Detenemos el ciclo -------------------------------------
+
+                } else {
+                    //echo $r = "Es mayor, faltan productos";
+
+                    $p1 = DB::table('producto')
+                                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
+                                ->where('tipo', 1)
+                                ->where('clave', $idpro[$i]->clave)
+                                ->pluck('producto.id');
+
+
+                    //Mayorista--
+                     $p2 = DB::table('producto')
+                                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
+                                ->where('tipo', 2)
+                                ->where('clave', $idpro[$i]->clave)
+                                ->pluck('producto.id');
+
+
+                    //Distribuidor--
+                     $p3 = DB::table('producto')
+                                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
+                                ->where('tipo', 3)
+                                ->where('clave', $idpro[$i]->clave)
+                                ->pluck('producto.id');
+
+                      //Verificamos el id para obtener el id del inventario
+                    $inve1 = DB::table('inventario')
+                                ->where('producto_id', $p1)
+                                ->pluck('id');
+
+
+                    $inve2 = DB::table('inventario')
+                                ->where('producto_id', $p2)
+                                ->pluck('id');
+
+
+                    $inve3 = DB::table('inventario')
+                                ->where('producto_id', $p3)
+                                ->pluck('id');
+
+                    //comprobamos y obtenemos el id del inv
+                    if($inve1 != ""){
+
+                        //le restamos a la cantidad del producto la cantidad del pedimento
+                        $y_m = $y1 - $cant;
+
+                         //descontamos la cantidad del inventario
+                        $inv = Inventario::find($inve1);
+                        $inv->cantidad -= $y_m;
+                        $inv->save();
+
+                        //Obtenemos el id del inventario detalle
+                        $id_i_d = DB::table('inventario_detalle')
+                                ->where('producto_id', $p1)
+                                ->where('num_pedimento', $num_p)
+                                ->pluck('id');
+
+                        //descontamos la cantidad del inventario_detalle
+                        $inv_d = InventarioDetalle::find($id_i_d);
+                        $inv_d->cantidad -= $y_m;
+                        $inv_d->save();
+
+                        //registramos en pedido detalle
+                        $p_detalle = new PedidoDetalle;
+                        $p_detalle->pedido_id = $pedido['id'];
+                        $p_detalle->producto_id = $idpro[$i]->idp;
+                        $p_detalle->num_pedimento = $num_p;
+                        $p_detalle->cantidad = $cant;
+                        $p_detalle->save();
+
+                        //Borramos el producto
+                        $inv_d = InventarioDetalle::find($id_i_d);
+                        $inv_d->delete();
+
+                        //Actualizamos la cantidad de los datos temporales
+                        $id_t = DB::table('total_producto')
+                                ->where('clave', $idpro[$i]->clave)
+                                ->pluck('id');
+                        
+                        $y_a = TotalProducto::find($id_t);
+                        $y_a->cantidad -= $cant;
+                        $y_a->save();
+
+                    } else if($inve2 != ""){
+                        $y_m = $y1 - $cant;
+
+                         //descontamos la cantidad del inventario
+                        $inv = Inventario::find($inve2);
+                        $inv->cantidad -= $y_m;
+                        $inv->save();
+
+                        //Obtenemos el id del inventario detalle
+                        $id_i_d = DB::table('inventario_detalle')
+                                ->where('producto_id', $p2)
+                                ->where('num_pedimento', $num_p)
+                                ->pluck('id');
+
+                        //descontamos la cantidad del inventario_detalle
+                        $inv_d = InventarioDetalle::find($id_i_d);
+                        $inv_d->cantidad -= $y_m;
+                        $inv_d->save();
+
+                        //registramos en pedido detalle
+                        $p_detalle = new PedidoDetalle;
+                        $p_detalle->pedido_id = $pedido['id'];
+                        $p_detalle->producto_id = $idpro[$i]->idp;
+                        $p_detalle->num_pedimento = $num_p;
+                        $p_detalle->cantidad = $cant;
+                        $p_detalle->save();
+
+                        //Borramos el producto
+                        $inv_d = InventarioDetalle::find($id_i_d);
+                        $inv_d->delete();
+
+                        //Actualizamos la cantidad de los datos temporales
+                        $id_t = DB::table('total_producto')
+                                ->where('clave', $idpro[$i]->clave)
+                                ->pluck('id');
+                        
+                        $y_a = TotalProducto::find($id_t);
+                        $y_a->cantidad -= $cant;
+                        $y_a->save();
+
+                    } else if($inve3 != ""){
+                        $y_m = $y1 - $cant;
+
+                        //descontamos la cantidad del inventario
+                        $inv = Inventario::find($inve3);
+                        $inv->cantidad -= $cant;
+                        $inv->save();
+
+                        //Obtenemos el id del inventario detalle
+                        $id_i_d = DB::table('inventario_detalle')
+                                ->where('producto_id', $p3)
+                                ->where('num_pedimento', $num_p)
+                                ->pluck('id');
+
+
+                        //registramos en pedido detalle
+                        $p_detalle = new PedidoDetalle;
+                        $p_detalle->pedido_id = $pedido['id'];
+                        $p_detalle->producto_id = $idpro[$i]->idp;
+                        $p_detalle->num_pedimento = $num_p;
+                        $p_detalle->cantidad = $cant;
+                        $p_detalle->save();
+
+                        //Como la cantidad del pedimento no es suficiente lo borramos
+                        $inv_d = InventarioDetalle::find($id_i_d);
+                        $inv_d->delete();
+
+                        //Actualizamos la cantidad de los datos temporales
+                        $id_t = DB::table('total_producto')
+                                ->where('clave', $idpro[$i]->clave)
+                                ->pluck('id');
+                        
+                        $y_a = TotalProducto::find($id_t);
+                        $y_a->cantidad -= $cant;
+                        $y_a->save();
+
+                        
+                    }//---
+
+
+                }//-----
+
+
+            } // End for  pedimentos
+
+                     
+
+              } //End for principal
+                    
 
         } else {
 
-        $idpro = json_decode(Input::get('aInfo'));
-
-        $idusuario = Auth::user()->id;
-
-        $resp = DB::table('cliente')
-            ->where('usuario_id', $idusuario)->pluck('id');
-
-        $formapago = Input::get('formapago');
-        $msjeria = Input::get('msjeria');
-        $cotizar = Input::get('cotizar');
 
         $clienteformapago = new ClienteFormaPago;
         $clienteformapago->cliente_id = $resp;
@@ -587,12 +1606,358 @@ public function getProducto(){
 
 
             for ($i=0; $i < count($idpro); $i++) {
-                $p_detalle = new PedidoDetalle;
-                $p_detalle->pedido_id = $pedido['id'];
-                $p_detalle->producto_id = $idpro[$i]->idp;
-                $p_detalle->cantidad = $idpro[$i]->cant;
-                $p_detalle->save();
-          }
+
+                 //Insertamos en la tabla los datos temporales
+                    $temporal = new TotalProducto;
+                    $temporal->clave = $idpro[$i]->clave;
+                    $temporal->cantidad = $idpro[$i]->cant;
+                    $temporal->save();
+
+
+            //total producto
+            $total = DB::table('producto')
+                    ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
+                    ->where('producto.clave', $idpro[$i]->clave)
+                    ->pluck('cantidad');
+
+            //obtenemos el numero total de pedimentos
+            $pedimentos = DB::table('producto')
+                    ->join('inventario_detalle', 'producto.id', '=', 'inventario_detalle.producto_id')
+                    ->where('producto.clave', $idpro[$i]->clave)
+                    ->count();
+
+
+            for($a = 0; $a < $pedimentos; $a++){
+
+                //obtenemos la cantidad del pedimento mas viejo
+                $cant = DB::table('producto')
+                        ->join('inventario_detalle', 'producto.id', '=', 'inventario_detalle.producto_id')
+                        ->where('producto.clave', $idpro[$i]->clave)
+                        ->orderBy('inventario_detalle.created_at', 'asc')
+                        ->pluck('cantidad');
+
+                //obtenemos el pedimento mas viejo
+                $num_p = DB::table('producto')
+                        ->join('inventario_detalle', 'producto.id', '=', 'inventario_detalle.producto_id')
+                        ->where('producto.clave', $idpro[$i]->clave)
+                        ->orderBy('inventario_detalle.created_at', 'asc')
+                        ->pluck('num_pedimento');
+
+                //obtenemos la cantidad almacenada temporalmente
+                $y1 = DB::table('total_producto')
+                    ->where('clave', $idpro[$i]->clave)
+                    ->pluck('cantidad');
+
+
+                if($y1 <= $cant){
+
+                     //echo $r = "Si es menor oh igual";
+
+                     //obtenemos los id del producto, ya depende si el usuario
+                     //es retail, mayorista o distribuidor
+                     //Retail--
+                     $p1 = DB::table('producto')
+                                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
+                                ->where('tipo', 1)
+                                ->where('clave', $idpro[$i]->clave)
+                                ->pluck('producto.id');
+
+
+                    //Mayorista--
+                     $p2 = DB::table('producto')
+                                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
+                                ->where('tipo', 2)
+                                ->where('clave', $idpro[$i]->clave)
+                                ->pluck('producto.id');
+
+
+                    //Distribuidor--
+                     $p3 = DB::table('producto')
+                                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
+                                ->where('tipo', 3)
+                                ->where('clave', $idpro[$i]->clave)
+                                ->pluck('producto.id');
+
+
+                    //Verificamos el id para obtener el id del inventario
+                    $inve1 = DB::table('inventario')
+                                ->where('producto_id', $p1)
+                                ->pluck('id');
+
+
+                    $inve2 = DB::table('inventario')
+                                ->where('producto_id', $p2)
+                                ->pluck('id');
+
+
+                    $inve3 = DB::table('inventario')
+                                ->where('producto_id', $p3)
+                                ->pluck('id');
+
+                    //comprobamos y obtenemos el id del inv
+                    if($inve1 != ""){
+
+                         //descontamos la cantidad del inventario
+                        $inv = Inventario::find($inve1);
+                        $inv->cantidad -= $y1;
+                        $inv->save();
+
+                        //Obtenemos el id del inventario detalle
+                        $id_i_d = DB::table('inventario_detalle')
+                                ->where('producto_id', $p1)
+                                ->where('num_pedimento', $num_p)
+                                ->pluck('id');
+
+                         //registramos en pedido detalle
+                        $p_detalle = new PedidoDetalle;
+                        $p_detalle->pedido_id = $pedido['id'];
+                        $p_detalle->producto_id = $idpro[$i]->idp;
+                        $p_detalle->num_pedimento = $num_p;
+                        $p_detalle->cantidad = $y1;
+                        $p_detalle->save();
+
+                        //descontamos la cantidad del inventario_detalle
+                        $inv_d = InventarioDetalle::find($id_i_d);
+                        $inv_d->cantidad -= $y1;
+                        $inv_d->save();
+
+                    } else if($inve2 != ""){
+
+                         //descontamos la cantidad del inventario
+                        $inv = Inventario::find($inve2);
+                        $inv->cantidad -= $y1;
+                        $inv->save();
+
+                        //Obtenemos el id del inventario detalle
+                        $id_i_d = DB::table('inventario_detalle')
+                                ->where('producto_id', $p2)
+                                ->where('num_pedimento', $num_p)
+                                ->pluck('id');
+
+                         //registramos en pedido detalle
+                        $p_detalle = new PedidoDetalle;
+                        $p_detalle->pedido_id = $pedido['id'];
+                        $p_detalle->producto_id = $idpro[$i]->idp;
+                        $p_detalle->num_pedimento = $num_p;
+                        $p_detalle->cantidad = $y1;
+                        $p_detalle->save();
+
+                        //descontamos la cantidad del inventario_detalle
+                        $inv_d = InventarioDetalle::find($id_i_d);
+                        $inv_d->cantidad -= $y1;
+                        $inv_d->save();
+
+                    } else if($inve3 != ""){
+
+                        //descontamos la cantidad del inventario
+                        $inv = Inventario::find($inve3);
+                        $inv->cantidad -= $y1;
+                        $inv->save();
+
+                        //Obtenemos el id del inventario detalle
+                        $id_i_d = DB::table('inventario_detalle')
+                                ->where('producto_id', $p3)
+                                ->where('num_pedimento', $num_p)
+                                ->pluck('id');
+
+                        //registramos en pedido detalle
+                        $p_detalle = new PedidoDetalle;
+                        $p_detalle->pedido_id = $pedido['id'];
+                        $p_detalle->producto_id = $idpro[$i]->idp;
+                        $p_detalle->num_pedimento = $num_p;
+                        $p_detalle->cantidad = $y1;
+                        $p_detalle->save();
+
+                        //descontamos la cantidad del inventario_detalle
+                        $inv_d = InventarioDetalle::find($id_i_d);
+                        $inv_d->cantidad -= $y1;
+                        $inv_d->save();
+
+                        //eliminamos los datos temporales
+                        $idy = DB::table('total_producto')
+                            ->where('clave', $idpro[$i]->clave)
+                            ->pluck('id');
+
+                        $y1 = TotalProducto::find($idy);
+                        $y1->delete();
+                        
+                    }
+
+                    break; //Detenemos el ciclo -------------------------------------
+
+
+                } else {
+                    //echo $r = "Es mayor, faltan productos";
+
+                    $p1 = DB::table('producto')
+                                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
+                                ->where('tipo', 1)
+                                ->where('clave', $idpro[$i]->clave)
+                                ->pluck('producto.id');
+
+
+                    //Mayorista--
+                     $p2 = DB::table('producto')
+                                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
+                                ->where('tipo', 2)
+                                ->where('clave', $idpro[$i]->clave)
+                                ->pluck('producto.id');
+
+
+                    //Distribuidor--
+                     $p3 = DB::table('producto')
+                                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
+                                ->where('tipo', 3)
+                                ->where('clave', $idpro[$i]->clave)
+                                ->pluck('producto.id');
+
+                      //Verificamos el id para obtener el id del inventario
+                    $inve1 = DB::table('inventario')
+                                ->where('producto_id', $p1)
+                                ->pluck('id');
+
+
+                    $inve2 = DB::table('inventario')
+                                ->where('producto_id', $p2)
+                                ->pluck('id');
+
+
+                    $inve3 = DB::table('inventario')
+                                ->where('producto_id', $p3)
+                                ->pluck('id');
+
+                    //comprobamos y obtenemos el id del inv
+                    if($inve1 != ""){
+
+                        //le restamos a la cantidad del producto la cantidad del pedimento
+                        $y_m = $y1 - $cant;
+
+                         //descontamos la cantidad del inventario
+                        $inv = Inventario::find($inve1);
+                        $inv->cantidad -= $y_m;
+                        $inv->save();
+
+                        //Obtenemos el id del inventario detalle
+                        $id_i_d = DB::table('inventario_detalle')
+                                ->where('producto_id', $p1)
+                                ->where('num_pedimento', $num_p)
+                                ->pluck('id');
+
+                        //descontamos la cantidad del inventario_detalle
+                        $inv_d = InventarioDetalle::find($id_i_d);
+                        $inv_d->cantidad -= $y_m;
+                        $inv_d->save();
+
+                        //registramos en pedido detalle
+                        $p_detalle = new PedidoDetalle;
+                        $p_detalle->pedido_id = $pedido['id'];
+                        $p_detalle->producto_id = $idpro[$i]->idp;
+                        $p_detalle->num_pedimento = $num_p;
+                        $p_detalle->cantidad = $cant;
+                        $p_detalle->save();
+
+                        //Borramos el producto
+                        $inv_d = InventarioDetalle::find($id_i_d);
+                        $inv_d->delete();
+
+                        //Actualizamos la cantidad de los datos temporales
+                        $id_t = DB::table('total_producto')
+                                ->where('clave', $idpro[$i]->clave)
+                                ->pluck('id');
+                        
+                        $y_a = TotalProducto::find($id_t);
+                        $y_a->cantidad -= $cant;
+                        $y_a->save();
+
+                    } else if($inve2 != ""){
+                        $y_m = $y1 - $cant;
+
+                         //descontamos la cantidad del inventario
+                        $inv = Inventario::find($inve2);
+                        $inv->cantidad -= $y_m;
+                        $inv->save();
+
+                        //Obtenemos el id del inventario detalle
+                        $id_i_d = DB::table('inventario_detalle')
+                                ->where('producto_id', $p2)
+                                ->where('num_pedimento', $num_p)
+                                ->pluck('id');
+
+                        //descontamos la cantidad del inventario_detalle
+                        $inv_d = InventarioDetalle::find($id_i_d);
+                        $inv_d->cantidad -= $y_m;
+                        $inv_d->save();
+
+                        //registramos en pedido detalle
+                        $p_detalle = new PedidoDetalle;
+                        $p_detalle->pedido_id = $pedido['id'];
+                        $p_detalle->producto_id = $idpro[$i]->idp;
+                        $p_detalle->num_pedimento = $num_p;
+                        $p_detalle->cantidad = $cant;
+                        $p_detalle->save();
+
+                        //Borramos el producto
+                        $inv_d = InventarioDetalle::find($id_i_d);
+                        $inv_d->delete();
+
+                        //Actualizamos la cantidad de los datos temporales
+                        $id_t = DB::table('total_producto')
+                                ->where('clave', $idpro[$i]->clave)
+                                ->pluck('id');
+                        
+                        $y_a = TotalProducto::find($id_t);
+                        $y_a->cantidad -= $cant;
+                        $y_a->save();
+
+                    } else if($inve3 != ""){
+                        $y_m = $y1 - $cant;
+
+                        //descontamos la cantidad del inventario
+                        $inv = Inventario::find($inve3);
+                        $inv->cantidad -= $cant;
+                        $inv->save();
+
+                        //Obtenemos el id del inventario detalle
+                        $id_i_d = DB::table('inventario_detalle')
+                                ->where('producto_id', $p3)
+                                ->where('num_pedimento', $num_p)
+                                ->pluck('id');
+
+
+                        //registramos en pedido detalle
+                        $p_detalle = new PedidoDetalle;
+                        $p_detalle->pedido_id = $pedido['id'];
+                        $p_detalle->producto_id = $idpro[$i]->idp;
+                        $p_detalle->num_pedimento = $num_p;
+                        $p_detalle->cantidad = $cant;
+                        $p_detalle->save();
+
+                        //Como la cantidad del pedimento no es suficiente lo borramos
+                        $inv_d = InventarioDetalle::find($id_i_d);
+                        $inv_d->delete();
+
+                        //Actualizamos la cantidad de los datos temporales
+                        $id_t = DB::table('total_producto')
+                                ->where('clave', $idpro[$i]->clave)
+                                ->pluck('id');
+                        
+                        $y_a = TotalProducto::find($id_t);
+                        $y_a->cantidad -= $cant;
+                        $y_a->save();
+
+                        
+                    }//---
+
+
+                }//-----
+
+
+
+            } //End for pedimentos
+
+
+          }//End For
+
         }
         
 

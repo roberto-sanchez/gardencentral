@@ -1660,9 +1660,10 @@ $('#p-s-dom').click(function(){
 
         $('.tcarrito tbody tr').each(function(){
             idp = $(this).attr('id');
+            clave  = $(this).find("[class*='clave_pro']").attr('value');
             cant  = $(this).find("input[class*='cant']").val();
 
-            item = {idp, cant};
+            item = {idp, clave, cant};
 
             DATA.push(item);
         })
@@ -1670,16 +1671,15 @@ $('#p-s-dom').click(function(){
         aInfo   = JSON.stringify(DATA);
 
         id = 0;
-
-        formapago = $('#formapago').val();
-        msjeria = $('#pago').val();
+        //formapago = $('#formapago').val();
+       // msjeria = $('#pago').val();
 
         $.ajax({
             type: "POST",
             url: "productos/pedidoexistente/"+id,
             data: {aInfo: aInfo, formapago: formapago, msjeria: msjeria, cotizar: cotizar},
             success: function (iddom) {
-
+                console.log(iddom);
                 window.location.href = 'productos/datosdelpedido/' + iddom;
 
             },
@@ -1702,10 +1702,11 @@ $('#p-s-dom').click(function(){
         //recorremos cada TR para obtener el id del producto y el td de la cantidad
         $('.tcarrito tbody tr').each(function(){
             idp = $(this).attr('id');
+            clave  = $(this).find("[class*='clave_pro']").attr('value');
             cant  = $(this).find("input[class*='cant']").val();
 
             //declaramos un array para guardar estos datos
-            item = {idp, cant};
+            item = {idp, clave, cant};
 
             // hacemos un .push() para agregarlos a nuestro array principal "DATA".
             DATA.push(item);
@@ -1744,10 +1745,11 @@ $('#p-s-dom').click(function(){
         //recorremos cada TR para obtener el id del producto y el td de la cantidad
         $('.tcarrito tbody tr').each(function(){
             idp = $(this).attr('id');
+            clave  = $(this).find("[class*='clave_pro']").attr('value');
             cant  = $(this).find("input[class*='cant']").val();
 
             //declaramos un array para guardar estos datos
-            item = {idp, cant};
+            item = {idp, clave, cant};
 
             // hacemos un .push() para agregarlos a nuestro array principal "DATA".
             DATA.push(item);
@@ -1796,10 +1798,11 @@ $('#p-s-dom').click(function(){
         //recorremos cada TR para obtener el id del producto y el td de la cantidad
         $('.tcarrito tbody tr').each(function(){
             idp = $(this).attr('id');
+            clave  = $(this).find("[class*='clave_pro']").attr('value');
             cant  = $(this).find("input[class*='cant']").val();
 
             //declaramos un array para guardar estos datos
-            item = {idp, cant};
+            item = {idp, clave, cant};
 
             // hacemos un .push() para agregarlos a nuestro array principal "DATA".
             DATA.push(item);

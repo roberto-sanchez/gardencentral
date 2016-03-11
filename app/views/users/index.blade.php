@@ -160,7 +160,7 @@
               @foreach($cart as $item)
                 <thead>
                   <tr class="tr-car filap_{{ $item->id }}" id="{{ $item->id }}">
-                     <td>Clave: {{ $item->clave }}</td>
+                     <td class="clave_pro" value="{{ $item->clave }}">Clave: {{ $item->clave }}</td>
                    </tr>
                    <tr class="tr-car filap_{{ $item->id }}" id="{{ $item->id }}">
                       <td>Nombre: <div class="pnombre">{{ $item->nombre }}</div></td>
@@ -255,7 +255,7 @@
                   <tbody id="c-carp">
                     @foreach($cart as $item)
                       <tr class="tr-car filap_{{ $item->id }}" id="{{ $item->id }}">
-                        <td>{{ $item->clave }}</td>
+                        <td class="clave_pro" value="{{ $item->clave }}">{{ $item->clave }}</td>
                         <td class="p-nom">{{ $item->nombre }}</td>
                         <td>{{ $item->color }}</td>
                         <td><?php $des = $item->precio * $item->descuento ?>${{ number_format($tpro = $item->precio - $des, 2) }}</td>
