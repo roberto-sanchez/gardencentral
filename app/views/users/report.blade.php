@@ -126,6 +126,36 @@
               </table>
       </div>
 
+    </div>
+
+        <div class="num_p_d">
+          <div class="w-txt">
+            <h2 class=" txt-ped">Pedimentos</h2>
+          </div>
+          <table class="table table-striped table-condensed table-hover table-bordered table-detalle table-ped">
+           <thead>
+             <tr>
+               <th>Producto</th>
+               <th>Pedimento</th>
+               <th>Cantidad</th>
+             </tr>
+           </thead>
+           @foreach($pedimento as $pedi)
+            <tbody>
+              <tr>
+              <td>
+                {{ $pedi->clave }}
+              </td>
+              <td>
+                {{ $pedi->num_pedimento }}
+              </td>
+              <td>
+                {{ $pedi->cantidad }}
+              </td>
+            </tr>
+            </tbody>
+           @endforeach
+          </table>
         </div>
 
    </section>

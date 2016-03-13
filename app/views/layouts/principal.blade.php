@@ -305,7 +305,7 @@
 
      <!--Modal detalle del pedido del cliente-->
     <div id="detallepedidocliente" class=" modal fade" data-keyboard="false" data-backdrop="static">
-            <div class="modal-dialog m-detalle">
+      <div class="modal-dialog m-detalle">
         <div class="modal-content content-p">
           <div class="modal-header header-detalle">
             <button type="button" class="close close-mp" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -323,6 +323,7 @@
         <ol class="breadcrumb navegacion-p">
           <li><a class="enlace-active" id="det-p" href="#">Pedido</a></li>
           <li><a id="fotop" href="#">Domicilio</a></li>
+          <a title="Imprimir pedido" class="im-pedido" target="_blank" href="">Imprimir</a>
          </ol>
        </div>
             <div class="table-detail">
@@ -373,10 +374,27 @@
                   </tr>
                 </table>
              </div>
-             <div class="imprimirpedido">
-              <a class="btn btn-info im-pedido" href="" target="_blank" >Imprimir pedido</a>
-            </div>
+              
+      <div class="content-ped">      
+
+        <div class="div_p_d">
+          <h2 class="text-center text-info txt-ped-d">Pedimentos</h2>
+          <table class="table table-striped table-condensed table-hover table-bordered table-detalle">
+           <thead>
+             <tr>
+               <th>Producto</th>
+               <th>Pedimento</th>
+               <th>Cantidad</th>
+             </tr>
+           </thead>
+            <tbody id="body-ped"></tbody>
+          </table>
+        </div>
+      </div>
+
            </div>
+
+
            <div class="table-cli">
               <table class="table cliente-pedido">
                 <tbody id="cli-dpedido" class="cli-pedidod">

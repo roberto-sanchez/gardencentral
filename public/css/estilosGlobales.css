@@ -2671,6 +2671,8 @@ footer p{
 
 .table-detail{
   padding:0 1em;
+  max-height:310px;
+  overflow-y:scroll;
 }
 
 .detail-t{
@@ -2690,6 +2692,31 @@ footer p{
 .imprimirpedido{
   margin-bottom:.5em;
   margin-left:1.2em;
+}
+
+.im-pedido{
+  float:right;
+  margin-right:5%;
+}
+
+.im-pedido:hover{
+  text-decoration:underline;
+  color:#64A9F7;
+}
+
+
+.content-ped{
+  width:100%;
+  margin-bottom:.5em;
+}
+
+.div_p_d{
+  width:30%;
+}
+
+.txt-ped-d{
+  margin:0;
+  font-size:1em;
 }
 
 
@@ -2776,6 +2803,22 @@ footer p{
 .imprimirpdf a{
   border:1px solid grey;
   margin: 0 auto;
+}
+
+.txt-ped{
+  margin-bottom:.1em;
+  font-size: 1.2em;
+}
+
+.bolque-b{
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack:justify;
+  -webkit-justify-content:space-between;
+      -ms-flex-pack:justify;
+          justify-content:space-between;
 }
 
 /*--*******----Vista para los agentes---********--*/

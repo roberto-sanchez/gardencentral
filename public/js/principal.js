@@ -4,6 +4,7 @@ $(document).ready(function () {
 
       //Detalle del pedido del cliente
     $(document).on('click', '#c-estatus', function(){
+
           id = $(this).attr('data-id');
           $('.im-pedido').attr('href', 'productos/imprimirpedido/'+id);
           num = $(this).attr('class');
@@ -56,7 +57,7 @@ $(document).ready(function () {
                   }
 
 
-                   pro = "";
+                pro = "";
                 for(datos in p.pro){
                   des = p.pro[datos].precio * p.pro[datos].descuento;
                   e = accounting.formatMoney(p.pro[datos].precio - des);
@@ -87,6 +88,19 @@ $(document).ready(function () {
 
                   $('.sub-iva').html(accounting.formatMoney(iva = resultado * 0.16));
                   $('.total-p').html(accounting.formatMoney(resultado += iva));
+
+                  //Listamos los pedimentos
+                   pedimento = $('#body-ped');
+                   ped = "";
+
+                for(datos in p.pedimento){
+
+                      ped += '<tr><td>'+p.pedimento[datos].clave+'</td>';
+                      ped += '<td>'+p.pedimento[datos].num_pedimento+'</td>';
+                      ped += '<td>'+p.pedimento[datos].cantidad+'</td></tr>';
+                    }
+
+                  pedimento .append(ped);
 
                 },
 
@@ -129,14 +143,14 @@ $(document).ready(function () {
 
       //Actualizaciones de contenidos de la pagina
     $(document).on('click', '#con-pd', function(){
-          $('.table-cli').hide();
-         $("#detail-dp").load(location.href+" #detail-dp>*","");
+         $('.table-cli').hide();
+         $(".table-detail").load(location.href+" .table-detail>*",""); 
 
     });
 
     $(document).on('click', '.close-mp', function(){
       $('.table-cli').hide();
-      $("#detail-dp").load(location.href+" #detail-dp>*","");
+       $(".table-detail").load(location.href+" .table-detail>*","");  
     });
 
 

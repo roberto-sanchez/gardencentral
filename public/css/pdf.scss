@@ -122,11 +122,12 @@ header{
 
 
 	.div-total{
-		width:20%;
-		margin-left:78%;
+		width:100%;
+		position:relative;
 		.t-total{
-		    margin-top:.5em;
-			width:100px;
+			position:absolute;
+			left:76%;
+			width:170px;
 			background:#F5F5F5;
 			border:1px solid #DDDDDD;
 			padding: .2em .2em .1em .2em;
@@ -141,3 +142,27 @@ header{
 	}
 
 
+
+	.num_p_d{
+		width:100%;
+		position:relative;
+		.table-ped{
+			width:20%;
+			position:absolute;
+		    right:8%;
+		}
+
+		.w-txt{
+			margin-top:3.5em;
+			width:29%;
+			margin-left:71%;
+			.txt-ped{
+				font-size:1.2em;
+				text-align:center;
+				color:#6b6252;
+				margin-top:1em;
+				margin-bottom:.1em;
+			}
+			
+		}
+	}

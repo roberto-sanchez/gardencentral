@@ -89,6 +89,12 @@ class ProductoController extends \BaseController {
                 ->where('pedido.id', $id)
                 ->pluck('pedido.direccion_cliente_id');
 
+        $pedimento = DB::table('pedido_detalle')
+                        ->join('producto', 'pedido_detalle.producto_id', '=', 'producto.id')
+                        ->where('pedido_detalle.pedido_id', $id)
+                        ->select('clave', 'num_pedimento', 'cantidad')
+                        ->get();
+
         if($iddirec == null){
             $t = 'tienda';
             $domi = DB::table('cliente')
@@ -109,9 +115,9 @@ class ProductoController extends \BaseController {
         }
 
 
-             $ped = DB::table('cliente')
-                ->join('pedido','cliente.id', '=','pedido.cliente_id')
-                ->where('pedido.id', $id)->get();
+         $ped = DB::table('cliente')
+            ->join('pedido','cliente.id', '=','pedido.cliente_id')
+            ->where('pedido.id', $id)->get();
 
 
         $pro = DB::table('producto')
@@ -132,7 +138,8 @@ class ProductoController extends \BaseController {
                     'pro' => $pro, 
                     'domi' => $domi, 
                     'ped' => $ped,
-                    't' => $t
+                    't' => $t,
+                    'pedimento' => $pedimento
                 ));
     }
 
@@ -235,18 +242,61 @@ public function getVerificaremail(){
 
 
 public function getProducto(){
+
     $id_user = Auth::user()->id;
+    $clave = Input::get('clave');
+
     $nivel = DB::table('cliente')
             ->join('nivel_descuento', 'cliente.nivel_descuento_id', '=', 'nivel_descuento.id')
             ->select('descripcion')
             ->where('cliente.usuario_id', $id_user)
             ->pluck('descripcion');
 
+    //comprobamos si el producto existe en el inventario
+/*    $p1 = DB::table('producto')
+                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
+                ->where('tipo', 1)
+                ->where('clave', $clave)
+                ->pluck('producto.id');
+
+    $p2 = DB::table('producto')
+                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
+                ->where('tipo', 2)
+                ->where('clave', $clave)
+                ->pluck('producto.id');
+
+    $p3 = DB::table('producto')
+                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
+                ->where('tipo', 3)
+                ->where('clave', $clave)
+                ->pluck('producto.id');
+
+     $inve1 = DB::table('inventario')
+                ->where('producto_id', $p1)
+                ->pluck('id');
+
+
+    $inve2 = DB::table('inventario')
+                ->where('producto_id', $p2)
+                ->pluck('id');
+
+
+    $inve3 = DB::table('inventario')
+                ->where('producto_id', $p3)
+                ->pluck('id');
+
+    if($inve1 != ""){
+
+    } else if($inve2 != ""){
+
+    } else if($inve3 != ""){
+
+    } */
+    
     if($nivel == 'Retail'){
 
-        $clave = Input::get('clave');
         $producto = DB::table('producto')
-                 ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
+                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
                 ->select('producto.id', 'nombre', 'color', 'foto', 'piezas_paquete', 'clave', 'precio')
                 ->where('clave', $clave)
                 ->where('tipo', 1)
@@ -273,7 +323,6 @@ public function getProducto(){
 
     } else if($nivel == 'Mayorista') {
 
-        $clave = Input::get('clave');
         $producto = DB::table('producto')
                  ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
                 ->select('producto.id', 'nombre', 'color', 'foto', 'piezas_paquete', 'clave', 'precio')
@@ -301,7 +350,7 @@ public function getProducto(){
         }
 
     } else if($nivel == 'Distribuidor'){
-        $clave = Input::get('clave');
+
         $producto = DB::table('producto')
                  ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
                 ->select('producto.id', 'nombre', 'color', 'foto', 'piezas_paquete', 'clave', 'precio')
@@ -329,6 +378,7 @@ public function getProducto(){
         }
 
     }
+
 
 
  }
@@ -2178,6 +2228,12 @@ public function getProducto(){
                 ->take(1)
                 ->get();
 
+            $pedimento = DB::table('pedido_detalle')
+                        ->join('producto', 'pedido_detalle.producto_id', '=', 'producto.id')
+                        ->where('pedido_detalle.pedido_id', $iddom)
+                        ->select('clave', 'num_pedimento', 'cantidad')
+                        ->get();
+
             $cli = DB::table('cliente')
                     ->where('id', $idcliente)
                     ->get();
@@ -2191,7 +2247,16 @@ public function getProducto(){
            $vaciar = \Session::forget('cart');
             
             return View::make('users/detalle',
-                      compact('producto', 'total', 'direc','cli', 'iddom','pedido', 'vaciar'));
+                      compact(
+                        'producto', 
+                        'total', 
+                        'direc',
+                        'cli', 
+                        'iddom',
+                        'pedido', 
+                        'vaciar',
+                        'pedimento'
+                        ));
             } else {
 
                 if($idp == $idcliente){
@@ -2221,7 +2286,15 @@ public function getProducto(){
                    $vaciar = \Session::forget('cart');
                     
                     return View::make('users/detalle',
-                              compact('producto', 'total', 'direc', 'iddom','pedido', 'vaciar'));
+                              compact(
+                                'producto', 
+                                'total', 
+                                'direc', 
+                                'iddom',
+                                'pedido', 
+                                'vaciar',
+                                'pedimento'
+                                ));
 
                     } else {
                         echo "Error, la página solicitada no existe.";
@@ -2306,6 +2379,12 @@ public function getProducto(){
                             ->where('pedido_detalle.pedido_id', $id)
                             ->get();
 
+                $pedimento = DB::table('pedido_detalle')
+                        ->join('producto', 'pedido_detalle.producto_id', '=', 'producto.id')
+                        ->where('pedido_detalle.pedido_id', $id)
+                        ->select('clave', 'num_pedimento', 'cantidad')
+                        ->get();
+
                 $dpro = DB::table('pedido_detalle')
                             ->join('producto','pedido_detalle.producto_id', '=','producto.id')
                             ->where('pedido_detalle.id', $d)
@@ -2321,7 +2400,16 @@ public function getProducto(){
 
 
                 $pdf = View::make('users/report', 
-                        compact('dpro', 'pro', 'domi', 'ped', 'pedido', 'total', 'cli'));
+                        compact(
+                            'dpro', 
+                            'pro', 
+                            'domi', 
+                            'ped', 
+                            'pedido', 
+                            'total', 
+                            'cli',
+                            'pedimento'
+                            ));
                    
                     return PDF::load($pdf, 'A4', 'portrait')->show();
 
@@ -2357,6 +2445,12 @@ public function getProducto(){
                                 ->where('pedido_detalle.pedido_id', $id)
                                 ->get();
 
+                    $pedimento = DB::table('pedido_detalle')
+                        ->join('producto', 'pedido_detalle.producto_id', '=', 'producto.id')
+                        ->where('pedido_detalle.pedido_id', $id)
+                        ->select('clave', 'num_pedimento', 'cantidad')
+                        ->get();
+
                     $dpro = DB::table('pedido_detalle')
                                 ->join('producto','pedido_detalle.producto_id', '=','producto.id')
                                 ->where('pedido_detalle.id', $d)
@@ -2371,7 +2465,15 @@ public function getProducto(){
 
 
                     $pdf = View::make('users/report', 
-                            compact('dpro', 'pro', 'domi', 'ped', 'pedido', 'total'));
+                            compact(
+                                'dpro', 
+                                'pro', 
+                                'domi', 
+                                'ped', 
+                                'pedido', 
+                                'total',
+                                'pedimento'
+                                ));
                        
                         return PDF::load($pdf, 'A4', 'portrait')->show();
                 } else {

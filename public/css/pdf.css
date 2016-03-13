@@ -87,11 +87,12 @@ header .info {
     margin: 0; }
 
 .div-total {
-  width: 20%;
-  margin-left: 78%; }
+  width: 100%;
+  position: relative; }
   .div-total .t-total {
-    margin-top: .5em;
-    width: 100px;
+    position: absolute;
+    left: 76%;
+    width: 170px;
     background: #F5F5F5;
     border: 1px solid #DDDDDD;
     padding: .2em .2em .1em .2em;
@@ -100,5 +101,23 @@ header .info {
       background: #fff;
       font-size: .9em;
       padding: 0 .6em; }
+
+.num_p_d {
+  width: 100%;
+  position: relative; }
+  .num_p_d .table-ped {
+    width: 20%;
+    position: absolute;
+    right: 8%; }
+  .num_p_d .w-txt {
+    margin-top: 3.5em;
+    width: 29%;
+    margin-left: 71%; }
+    .num_p_d .w-txt .txt-ped {
+      font-size: 1.2em;
+      text-align: center;
+      color: #6b6252;
+      margin-top: 1em;
+      margin-bottom: .1em; }
 
 /*# sourceMappingURL=pdf.css.map */

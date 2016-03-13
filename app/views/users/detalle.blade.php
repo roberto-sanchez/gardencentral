@@ -215,7 +215,7 @@
 
               <div class="notas_a">
                 <div class="alert alert-desc alert-n_d">
-                 <strong id="nota_detalle">Descuento incluido.</strong>
+                 <strong id="nota_detalle"></strong>
               </div>
    
              </div>
@@ -223,18 +223,48 @@
           </div>
         </div>
 
+      <div class="bolque-b">
+        <div>
+          <div class="imprimirpdf">
+            <a class="btn btn-default" href="{{ URL::to('productos/imprimirpedido',$iddom) }}" target="_blank" >Imprimir pedido en PDF</a>
+          </div>
+          <div id="generarcompra">
+            <a href="{{ URL::to('users') }}" class="btn btn-info">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+               Seguir comprando
+            </a>
 
-        <div class="imprimirpdf">
-          <a class="btn btn-default" href="{{ URL::to('productos/imprimirpedido',$iddom) }}" target="_blank" >Imprimir pedido en PDF</a>
+          </div>
         </div>
-        <div id="generarcompra">
-          <a href="{{ URL::to('users') }}" class="btn btn-info">
-          <span class="glyphicon glyphicon-chevron-left"></span>
-             Seguir comprando
-          </a>
 
+        <div class="num_p_d">
+          <h2 class="text-center text-info txt-ped">Pedimentos</h2>
+          <table class="table table-striped table-condensed table-hover table-bordered table-detalle">
+           <thead>
+             <tr>
+               <th>Producto</th>
+               <th>Pedimento</th>
+               <th>Cantidad</th>
+             </tr>
+           </thead>
+           @foreach($pedimento as $pedi)
+            <tbody>
+              <tr>
+              <td>
+                {{ $pedi->clave }}
+              </td>
+              <td>
+                {{ $pedi->num_pedimento }}
+              </td>
+              <td>
+                {{ $pedi->cantidad }}
+              </td>
+            </tr>
+            </tbody>
+           @endforeach
+          </table>
         </div>
-
+      </div>
 
   </section>
 </div> <!-- Content users -->
