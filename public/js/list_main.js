@@ -1,10 +1,12 @@
 $(document).ready(function(){
+
+
     //Listar domicilios
      dom = $('#dom_c');
 
             $.ajax({
                 type: "GET",
-                url: "productos/listardomicilios",
+                url: "/productos/listardomicilios",
                 success: function (domi) {
                     d = "";
         //comprobamos si existen domicilios
@@ -48,7 +50,7 @@ $(document).ready(function(){
 
             $.ajax({
                 type: "GET",
-                url: "productos/listardomicilios",
+                url: "/productos/listardomicilios",
                 success: function (domi) {
                     d = "";
         //comprobamos si existen domicilios
@@ -94,7 +96,7 @@ $(document).ready(function(){
 
             $.ajax({
                 type: "GET",
-                url: "productos/listartelefonos",
+                url: "/productos/listartelefonos",
                 success: function (t) {
                     tel = "";
         //comprobamos si existen domicilios

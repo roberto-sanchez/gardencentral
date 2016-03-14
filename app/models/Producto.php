@@ -15,6 +15,10 @@ class Producto extends Eloquent{
 		return $this->hasMany('Inventario');
 	}
 
+	public function alertas(){
+		return $this->hasMany('Alerta');
+	}
+
 	public function pedidoDetalles(){
 		return $this->hasMany('PedidoDetalle');
 	}

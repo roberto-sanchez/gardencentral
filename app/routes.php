@@ -56,6 +56,8 @@ Route::controller('users','ProductoController');
 
 
 //Admin
+Route::get('/pedidos/alertaproducto','AdminController@alertaproducto');
+Route::get('/pedidos/borraralerta','AdminController@borraralerta');
 Route::post('pedidos/verpedidos','AdminController@verpedidos');
 Route::post('pedidos/detallepedido','AdminController@detallepedido'); 
 Route::get('pedidos/verbarras','AdminController@verbarras');
@@ -152,6 +154,7 @@ Route::bind('producto', function($clave){
 
 
 });
+
 
 //Agregar producto al carrito con sus paquetes
 Route::get('productos/add/{producto}/{quantity}','ProductoController@add');

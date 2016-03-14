@@ -77,7 +77,10 @@
 <div class="users">
   <section class="container">
      @include('layouts/inc/estatus')
-         <div class="buscador">
+     
+     <div class="notifications top-right" data-html="true"></div>
+
+      <div class="buscador">
          {{ Form::open(['id'=>'searchForm','method' => 'POST', 'class' => 'buscador input-group has-feedback']) }}
 
         {{ Form::text('input','Clave del producto',array('class' => 'form-control', 'id' => 'clave')) }}
@@ -89,13 +92,6 @@
 
       {{ Form::close() }}
       </div>
-
-      <div class="b-exists">
-        <div class='notifications top top-xs'></div>
-      </div>
-      <div class="ingresar-p">
-            <div class='notifications t'></div>
-          </div>
 
 
      <!--   <div id="productoPanel" class="panel" style="display:none;"> -->
@@ -641,7 +637,6 @@
                    </div>
 
 
-            <div class='notifications top-right'></div>
             <div class="panel-footer footer-formpago">
             <a id="conf-p1" href="#confirmarpedido" class="btn btn-primary btn-conf-1 disabled" data-toggle="modal"> <!--   -->
               Generar pedido

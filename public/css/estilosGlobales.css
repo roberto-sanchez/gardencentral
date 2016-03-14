@@ -3261,6 +3261,171 @@ margin-bottom:.5em;
 
 /*--------*****------ADMIN------******--------*/
 /*--- Index Admin ----*/
+
+/*Alertas de productos con cantidad minima*/
+.alerts-msjs{
+  display:none;
+  width:130px;
+  padding-top:5em;
+  margin:0;
+  padding:0;
+  margin-left:72%;
+  box-shadow:-1px 0px 1px black;
+  border-radius:3px;
+  color:#fff;
+  position:absolute;
+  bottom:20px;
+}
+
+.m-alert{
+  cursor:pointer;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  margin:0 auto;
+  width:130px;
+}
+
+.num-a{
+  background-color: #a93018;
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#d63d1e), to(#a93018));
+  background-image: -webkit-linear-gradient(top, #d63d1e, #a93018);
+  background-image: -o-linear-gradient(top, #d63d1e, #a93018);
+  margin:0;
+  padding:0;
+  padding:.3em;
+  width:30px;
+  text-align:center;
+  border-radius:3px 0 0 3px;
+}
+
+.msj-alerts{
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#f74a00+0,f48600+100 */
+background: #f74a00; /* Old browsers */
+background: -moz-linear-gradient(left,  #f74a00 0%, #f48600 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(left,  #f74a00 0%,#f48600 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to right,  #f74a00 0%,#f48600 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f74a00', endColorstr='#f48600',GradientType=1 ); /* IE6-9 */
+  margin:0;
+  padding:0;
+  padding:.3em;
+  width:100px;
+  text-align:center;
+  border-radius:0 3px 3px 0;
+}
+
+#m-alerts{
+  
+}
+
+
+.content-alerts{
+  border:0;
+  z-index:8;
+  width:840px;
+  margin-top:4em;
+  background:transparent;
+  box-shadow:none;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack:end;
+  -webkit-justify-content:flex-end;
+      -ms-flex-pack:end;
+          justify-content:flex-end;
+}
+
+.caja-alerts{
+  box-shadow: 0px 0px 20px #c4c4cd;
+  border-radius:3px;
+  z-index:80;
+  width:300px;
+  background:#e5e5e9;
+  border: 1px solid #c4c4cd;
+  margin-top:1em;
+  position:relative;
+}
+
+.pico{
+  padding:.5em;
+  position:absolute;
+  left:130px;
+  top:-22px;
+}
+
+.btn-c{
+  margin:.5em;
+  display:inline-block;
+}
+
+.n-a{
+  display:inline-block;
+  font-weight:normal;
+  font-size:.9em;
+  margin:0 0 0 2em;
+}
+
+.c-msjs{
+  margin:0 .5em .5em .5em;
+  background:white;
+  padding:.5em;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  box-shadow:0px 0px 3px grey inset;
+}
+
+.msj-icon{
+  color:#fff;
+  background:#e5e5e9;
+  border: 1px solid #c4c4cd;
+  font-size:2em;
+  text-align:center;
+  padding:.2em .5em;
+  height:40px;
+}
+
+.txt-msj{
+  width:100%;
+  padding-left:.3em;
+
+}
+
+.txt-msj p{
+  color:black;
+  text-align:left;
+  font-size:.8em;
+  margin-bottom:0;
+}
+
+.txt-d{
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack:justify;
+  -webkit-justify-content:space-between;
+      -ms-flex-pack:justify;
+          justify-content:space-between;
+}
+
+.txt-d small{
+  font-size:.8em; 
+  color:#c4c4cd;
+}
+
+.txt-d span{
+  font-size:.9em;
+  color:grey;
+}
+
+.borrar-alert{
+  cursor:pointer;
+}
+
 .row-dashboard{
   padding-bottom:1em;
 }
@@ -4064,26 +4229,14 @@ margin-bottom:.5em;
 }
 
 .head-t{
-  text-align:center;
   background: #e5e5e9;
   background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #e5e5e9), color-stop(1, #fbfbfc));
   padding:.5em 0;
-  position:relative;
+  width:100%;
   cursor:pointer;
+  text-align:center;
 }
 
-.ac-estatus{
-  font-size:1.5em;
-  position:absolute;
-  right:5px;
-  top:5px;
-  cursor:pointer;
-}
-
-.ac-estatus:hover{
-  text-shadow:0px 0px 10px white;
-  color:#31708f;
-}
 
 .content-t{
   background:#fff;
@@ -4091,12 +4244,10 @@ margin-bottom:.5em;
   display:none;
   font-size:.8em;
   width:274px;
-  overflow:hidden;
+  text-align:center;
+  overflow-x:scroll;
 }
 
-.content-t{
-  text-align:center;
-}
 
 
 /*Vista admin-- Notas---------*/

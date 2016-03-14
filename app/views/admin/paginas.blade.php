@@ -22,6 +22,29 @@
     display:none;
   }
 
+  #list_p__info{
+    display:none;
+  }
+
+  .dataTables_paginate {
+    width:100%;
+  }
+
+  ul.fancy{
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack:center;
+  -webkit-justify-content:center;
+      -ms-flex-pack:center;
+          justify-content:center;
+  }
+
+  ul.fancy li a{
+    font-size:.9em;
+  }
+
   .breadcrumb{
     background:white;
     margin-top:.2em;
@@ -225,6 +248,7 @@
     });
 
 
+
     //Listar terminos y condiciones
       $.ajax({
         url:'/paginas/listarterminos',
@@ -278,13 +302,31 @@
          
                       for(var i = 0; i < t.length; i++) {
                              tabla_n.fnAddData([
-                                        '<span class="hidden">'+t[i].created_at+'</span><div class="head-t">'+t[i].descripción+'</div><div class="content-t"><ol class="breadcrumb"><li><a class="usar-p p_'+t[i].estatus+' " value="'+t[i].id+'">Publicar</a></li><li><a class="edit-p" value="'+t[i].id+'">Editar</a></li><li><a class="delete-t estatus_'+t[i].estatus+' " value="'+t[i].id+'">Eliminar</a></li></ol>'+t[i].texto+'</div>',
+                                        '<span class="hidden">'+t[i].created_at+'</span>'+
+                                        '<div class="head-t">'+
+                                         t[i].descripción+
+                                         '</div>'+
+                                        '<div class="content-t">'+
+                                        '<ol class="breadcrumb">'+
+                                        '<li><a id="pub_'+t[i].id+'" class="usar-p p_'+t[i].estatus+' " value="'+t[i].id+'">Publicar</a></li>'+
+                                        '<li><a class="edit-p" value="'+t[i].id+'">Editar</a></li>'+
+                                        '<li><a id="el_'+t[i].id+'" class="delete-t estatus_'+t[i].estatus+' " value="'+t[i].id+'">Eliminar</a></li>'+
+                                        '</ol>'+t[i].texto+'</div>',
                                                                             
                                         
                                       ]);
 
 
                               }
+
+                              $('.p_1').text('Activo');
+                              $('.p_1').attr('title', 'Contenido publicado');
+                              $('.p_1').attr('class', 'text-success p_1');
+
+                              $('.p_0').attr('title', 'Publicar este contenido');
+
+                              $('.dataTables_paginate .prev a').text('Anterior');
+                              $('.dataTables_paginate .next a').text('Siguiente');
 
                               $('.estatus_1').removeClass('delete-t');
                               $('.estatus_1').addClass('c-activo'); 
@@ -302,8 +344,11 @@
         });
 
         $(document).on('click', '.p_1', function(){
-           alertas('error',"Ya esta publicado.");
+           alertas('error',"Contenido publicado.");
         });
+
+        
+
 
 
         //Validaciones para los campos del editor de contenidos
@@ -344,13 +389,33 @@
         success: function(t){
           console.log(t);
 
-          /*-__Listamos tambien el viejo contenido__-*/
 
-          $fila = "<tr id=tr_"+t.id+">"+ 
-                       "<td><span class='hidden'>"+t.created_at+"</span><div class='head-t'>"+t.descripción+"<span class='ac-estatus estatus_"+t.estatus+" '></span></div><div class='content-t'><ol class='breadcrumb'><li><a value="+t.id+" class='usar-p p_"+t.estatus+" ' >Publicar</a></li><li><a class='edit-p' value="+t.id+" >Editar</a></li><li><a class='delete-t estatus_"+t.estatus+" ' value="+t.id+">Eliminar</a></li></ol>"+t.texto+"</div></td>"+
+          $fila = "<tr id=tr_"+t.new_p[0].id+">"+ 
+                       "<td><span class='hidden'>"+t.new_p[0].created_at+"</span>"+
+                       "<div class='head-t'>"+t.new_p[0].descripción+"<span class='ac-estatus estatus_"+t.new_p[0].estatus+" '></span></div><div class='content-t'><ol class='breadcrumb'>"+
+                       "<li><a id='pub_"+t.new_p[0].id+"' value="+t.new_p[0].id+" class='usar-p p_"+t.new_p[0].estatus+" ' >Publicar</a></li>"+
+                       "<li><a class='edit-p' value="+t.new_p[0].id+" >Editar</a></li>"+
+                       "<li><a id='el_"+t.new_p[0].id+"' class='delete-t estatus_"+t.new_p[0].estatus+" ' value="+t.new_p[0].id+">Eliminar</a></li></ol>"+t.new_p[0].texto+"</div></td>"+
                     "</tr>";
 
-            $('tbody').prepend($fila);
+
+          $('tbody').prepend($fila);
+
+          alertas('success',"Contenido publicado satisfactoriamente.");
+
+          /*-__Remplazamos los datos de la pagina antigua__-*/
+          $('#el_'+t.old_page[0].id).attr('class', 'delete-t estatus_0');
+          $('#pub_'+t.old_page[0].id).attr('class', 'usar-p p_0');
+          $('#pub_'+t.old_page[0].id).text('Publicar');
+          $('#pub_'+t.old_page[0].id).attr('title', '');
+
+
+
+            $('.p_1').text('Activo');
+            $('.p_1').attr('title', 'Contenido publicado');
+            $('.p_1').attr('class', 'text-success p_1');
+
+            $('.p_0').attr('title', 'Publicar este contenido');
 
             $('#terminos').val(' ');
             $('.Editor-editor').html(' ');
@@ -391,6 +456,7 @@
         url: '/paginas/eliminarpagina',
         data:{id: id},
         success: function(d){
+          alertas('error',"Contenido eliminado.");
           $('#tr_'+id).remove();
         },
         error: function(){
@@ -460,9 +526,40 @@
         success: function(a){
           console.log(a);
 
-          $('#tr_'+a.id).replaceWith('<tr id="tr_'+a.id+'">'+
-                "<td><span class='hidden'>"+a.created_at+"</span><div class='head-t'>"+a.descripción+"<span class='ac-estatus estatus_"+a.estatus+" '></span></div><div class='content-t'><ol class='breadcrumb'><li><a value="+a.id+" class='usar-p'>Publicar</a></li><li><a class='edit-p' value="+a.id+" >Editar</a></li><li><a class='delete-t estatus_"+a.estatus+" ' value="+a.id+">Eliminar</a></li></ol>"+a.texto+"</div></td>"
+          $('#tr_'+a.new_p[0].id).replaceWith('<tr id="tr_'+a.new_p[0].id+'">'+
+                "<td><span class='hidden'>"+a.new_p[0].created_at+"</span>"+
+                "<div class='head-t'>"+a.new_p[0].descripción+"<span class='ac-estatus estatus_"+a.new_p[0].estatus+" '></span></div>"+
+                "<div class='content-t'><ol class='breadcrumb'>"+
+                "<li><a id='pub_"+a.new_p[0].id+"' value="+a.new_p[0].id+" class='usar-p p_"+a.new_p[0].estatus+"'>Publicar</a></li>"+
+                "<li><a class='edit-p' value="+a.new_p[0].id+" >Editar</a></li>"+
+                "<li><a id='el_"+a.new_p[0].id+"' class='delete-t estatus_"+a.new_p[0].estatus+" ' value="+a.new_p[0].id+">Eliminar</a></li>"+
+                "</ol>"+a.new_p[0].texto+"</div></td>"
                 +'<tr/>');
+
+          alertas('success',"Contenido publicado satisfactoriamente.");
+
+          /*-__Remplazamos los datos de la pagina antigua__-*/
+          $('#el_'+a.old_page[0].id).attr('class', 'delete-t estatus_0');
+          $('#pub_'+a.old_page[0].id).attr('class', 'usar-p p_0');
+          $('#pub_'+a.old_page[0].id).text('Publicar');
+          $('#pub_'+a.old_page[0].id).attr('title', '');
+
+
+
+          $('.p_1').text('Activo');
+          $('.p_1').attr('title', 'Contenido publicado');
+          $('.p_1').attr('class', 'text-success p_1');
+
+          $('.p_0').attr('title', 'Publicar este contenido');
+
+          $('.estatus_1').removeClass('delete-t');
+          $('.estatus_1').addClass('c-activo'); 
+          $('.p_1').removeClass('usar-p');
+
+          $('.estatus_0').addClass('delete-t');  
+          $('.estatus_0').removeClass('c-activo'); 
+          $('.p_0').addClass('usar-p');
+
 
          $('#terminos').val(' ');
          $('.Editor-editor').html(' ');
@@ -470,7 +567,6 @@
         $('.g-contenido').text('Guardar y publicar');
         $('.g-contenido').attr('id', 'save-contenido');
 
-       // $('.estatus_1').removeClass('delete-t');
 
 
         }
@@ -509,12 +605,43 @@
         success: function(a){
           console.log(a);
 
-          $('#tr_'+a.id).replaceWith('<tr id="tr_'+a.id+'">'+
-                "<td><span class='hidden'>"+a.created_at+"</span><div class='head-t'>"+a.descripción+"<span class='ac-estatus estatus_"+a.estatus+" '></span></div><div class='content-t'><ol class='breadcrumb'><li><a value="+a.id+" class='usar-p'>Publicar</a></li><li><a class='edit-p' value="+a.id+" >Editar</a></li><li><a class='delete-t estatus_"+a.estatus+" ' value="+a.id+">Eliminar</a></li></ol>"+a.texto+"</div></td>"
+          $('#tr_'+a.new_p[0].id).replaceWith('<tr id="tr_'+a.new_p[0].id+'">'+
+                "<td><span class='hidden'>"+a.new_p[0].created_at+"</span>"+
+                "<div class='head-t'>"+a.new_p[0].descripción+"<span class='ac-estatus estatus_"+a.new_p[0].estatus+" '></span></div>"+
+                "<div class='content-t'><ol class='breadcrumb'>"+
+                "<li><a id='pub_"+a.new_p[0].id+"' value="+a.new_p[0].id+" class='usar-p p_"+a.new_p[0].estatus+"'>Publicar</a></li>"+
+                "<li><a class='edit-p' value="+a.new_p[0].id+" >Editar</a></li>"+
+                "<li><a id='el_"+a.new_p[0].id+"' class='delete-t estatus_"+a.new_p[0].estatus+" ' value="+a.new_p[0].id+">Eliminar</a></li>"+
+                "</ol>"+a.new_p[0].texto+"</div></td>"
                 +'<tr/>');
+          
+          alertas('success',"Contenido publicado satisfactoriamente.");
 
 
-        //$('.estatus_1').removeClass('delete-t');
+          /*-__Remplazamos los datos de la pagina antigua__-*/
+          $('#el_'+a.old_page[0].id).attr('class', 'delete-t estatus_0');
+          $('#pub_'+a.old_page[0].id).attr('class', 'usar-p p_0');
+          $('#pub_'+a.old_page[0].id).text('Publicar');
+          $('#pub_'+a.old_page[0].id).attr('title', '');
+
+
+
+          $('.p_1').text('Activo');
+          $('.p_1').attr('title', 'Contenido publicado');
+          $('.p_1').attr('class', 'text-success p_1');
+
+          $('.p_0').attr('title', 'Publicar este contenido');
+
+          $('.estatus_1').removeClass('delete-t');
+          $('.estatus_1').addClass('c-activo'); 
+          $('.p_1').removeClass('usar-p');
+
+          $('.estatus_0').addClass('delete-t');  
+          $('.estatus_0').removeClass('c-activo'); 
+          $('.p_0').addClass('usar-p');
+
+
+
 
 
         }

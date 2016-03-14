@@ -196,43 +196,32 @@ $(document).ready(function () {
                 url: "productos/getProducto",
                 data: {clave: $('#clave').val()},
                 success: function (prod) {
-                  console.log(prod);
                     ver = prod.producto.indefinido;
-
-                    if (ver === 'vacio') {
-                        $('#productoPanel').hide();
-                        noexiste = [[ 'top', 'danger',  "El producto no existe." ]];
-                        message = noexiste[Math.floor(Math.random() * noexiste.length)];
-
-                        $('.' + message[0]).notify({
-                            message: { text: message[2] },
-                            type: message[1]
-                        }).show();
-
+                    if(ver === 'vacio'){
+                        alertas('error',"El producto no existe.");
                     } else {
-                        $('#productoPanel').slideDown(1000);
-                        //$('#idProd').attr('value', prod.id );
-                        //$('#idProd').attr('href', 'productos/datosdelpedido/' +prod.id );
-                        $('.idProd').attr('id', 'product_' + prod.producto[0].id);
-                        $('.idProd2').attr('id', +prod.producto[0].id);
-                        // $('#claveProd').attr('href', 'productos/add/'+prod.clave );
-                        $('.claveProd').attr('href', 'productos/add/' + prod.producto[0].clave);
-                        //$('#claveProd').attr('value', prod.clave );
-                        $('#nombreProd').html(prod.nombre); //mostramos el nombre del producto
-                        $('#imagenProd').prop('src', 'img/productos/' + prod.producto[0].foto); //la imagen
-                        $('#colorProd').html(prod.producto[0].color); //el color
-                        $('#piezasProd').html(prod.producto[0].piezas_paquete);
-                        $('#precioProd').html(accounting.formatMoney(prod.producto[0].precio));
-                        num = prod.familia[0].descuento;
-                        n = num.toString(); //convertimos el entero en string
-                        desc = n.substring(2); //ocultamos los primeros dos caracteres
-                        if(n.length == 3){
-                           $('#descProd').html(desc+'0%');
-                        } else {
-                          $('#descProd').html(desc+'%');
-                        }
- 
-                     } 
+
+                              $('#productoPanel').slideDown(1000);
+                              $('.idProd').attr('id', 'product_' + prod.producto[0].id);
+                              $('.idProd2').attr('id', +prod.producto[0].id);
+                              $('.claveProd').attr('href', 'productos/add/' + prod.producto[0].clave);
+                              $('#nombreProd').html(prod.nombre);
+                              $('#imagenProd').prop('src', 'img/productos/' + prod.producto[0].foto); 
+                              $('#colorProd').html(prod.producto[0].color); 
+                              $('#piezasProd').html(prod.producto[0].piezas_paquete);
+                              $('#precioProd').html(accounting.formatMoney(prod.producto[0].precio));
+
+                              num = prod.familia[0].descuento;
+                              n = num.toString(); //convertimos el entero en string
+                              desc = n.substring(2); //ocultamos los primeros dos caracteres
+                              if(n.length == 3){
+                                 $('#descProd').html(desc+'0%');
+                              } else {
+                                $('#descProd').html(desc+'%');
+                              }
+       
+                           
+                    }
 
                 },
                 
@@ -284,13 +273,7 @@ $(document).on('click', '.idProd2', function(){
 
         if ($('.idProd').val() == '') {
 
-            noexiste = [[ 't', 'danger',  "Ingrese la cantidad de paquetes." ]];
-                message = noexiste[Math.floor(Math.random() * noexiste.length)];
-
-                $('.' + message[0]).notify({
-                    message: { text: message[2] },
-                    type: message[1]
-                }).show();
+            alertas('error',"Ingrese la cantidad de paquetes.");
             return false;
 
         }
@@ -740,29 +723,18 @@ $(document).on('click', '.verfotop', function(){
 
 
      pais = $('#paisedit').val();
-   //  alert(pais);
      estado = $('#listestados').val();
-    // alert(estado);
-      municipio =  $('#municipioedit').val();
-    //  alert(municipio);
-      calle1 = $('#calle1edit').val();
-    //  alert(calle1);
-       calle2 = $('#calle2edit').val();
-     //  alert(calle2);
-       colonia = $('#coloniadit').val();
-      // alert(colonia);
-      delegacion =  $('#delegacionedit').val();
-    //  alert(delegacion);
-      cp =  $('#cpedit').val();
-     // alert(cp);
-      tel =  $('#teledit').val();
-    //  alert(tel);
-      tipodom = $('#t-dom').val();
-    //  alert(tipodom);
-      tipotel = $('#tipoedit').val();
-     // alert(tipotel);
+     municipio =  $('#municipioedit').val();
+     calle1 = $('#calle1edit').val();
+     calle2 = $('#calle2edit').val();
+     colonia = $('#coloniadit').val();
+     delegacion =  $('#delegacionedit').val();
+     cp =  $('#cpedit').val();
+     tel =  $('#teledit').val();
+     tipodom = $('#t-dom').val();
+     tipotel = $('#tipoedit').val();
      id = $('#iddom').val();
-   //  alert(id );
+
 
        $.ajax({
           url:  "productos/actualizar",
@@ -820,9 +792,6 @@ $(document).on('click', '.verfotop', function(){
 
     } else {
         $('.regis-exixts-t').removeClass('disabled');
-        //$('.confirm-d').removeClass('disabled');
-        //$('.text-pago').hide();
-        //$('.text-exito').show();
         $('.confirm-p').removeClass('disabled');
     }
 
@@ -831,17 +800,6 @@ $(document).on('click', '.verfotop', function(){
         forma = $('#text_'+id).text();
         $('.f-p').attr('value',id);
         $('.f-t').attr('value',forma);
-
-      /*  if($('.formapago').val() != null){
-            $('.confirm-p').removeClass('disabled');
-            $('.confirm-d').removeClass('disabled');
-             $('.regis-exixts-t').removeClass('disabled');
-            $('.text-exito').show();
-            $('.text-pago').hide();
-            $('.text-selectdom').hide();
-            $('.c-no').show();
-            $('.c-pe').hide();
-    } */
 
     });
 
@@ -853,25 +811,6 @@ $(document).on('click', '.verfotop', function(){
                 $('.text-pago').hide();
             }
         });
-
-
-
-        $('#veri').click(function(){
-        $.ajax({
-            type: "POST",
-            url: "productos/getVerificar",
-          //  data: "nick="+$('#formUser').val(),
-           /* beforeSend: function(){
-              $('#msgUsuario').html('<img src="loader.gif"/> verificando');
-            }, */
-            success: function( respuesta ){
-            /*  if(respuesta == '1')
-                $('#msgUsuario').html("Disponible");
-              else
-                $('#msgUsuario').html("No Disponible"); */
-            }
-        });
-    });
 
 
 
@@ -914,6 +853,8 @@ $(document).on('click', '.verfotop', function(){
         message: { text: message[2] },
         type: message[1]
     }).show();
+
+
 
   });
 
@@ -1864,21 +1805,14 @@ $('#p-s-dom').click(function(){
     });
 
 
-//Imprimir pedido
-    /*     $('#im-p').click(function(){
-
-     iddom = $('#im-p').val();
-
-     alert(iddom);
-
-     window.location.href='productos/imprimirpedido/'+iddom;
-
-
-     });
-
-
-     */
-
 
 
 }); //cerramos la funcion jquery principal
+
+
+function alertas(tipo,mensaje){
+    $('.top-right').notify({
+      message: {text: decodeURIComponent(mensaje)},
+      type: tipo
+    }).show();
+  }

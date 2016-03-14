@@ -35,6 +35,7 @@
           </button>
           <a class="navbar-brand" href="#">Garden Central</a>
         </div>
+
         <!--Menu oculto para dispositivos moviles -->
       <div class="hidden-xs">
           <ul class="nav navbar-nav pull-right menu-sm">
@@ -58,8 +59,20 @@
               </li>
 
           </ul>
+        @if(Auth::user()->rol_id == 3)
+          <div class="alerts-msjs">
+            <div class="m-alert">
+              <div class="num-a"></div>
+              <div class="msj-alerts">
+                Alertas
+              </div>
+            </div>
+          </div>
+           @else
+         @endif
       </div><!--/.navbar-collapse -->
 </div>
+
 
 </div>
 
@@ -485,6 +498,7 @@
         $(function() {
             $('.demo-cancel-click').click(function(){return false;});
         });
+
     </script>
 
 

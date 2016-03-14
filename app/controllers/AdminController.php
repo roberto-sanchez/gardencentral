@@ -28,6 +28,36 @@ class AdminController extends \BaseController {
 
   }
 
+  public function alertaproducto(){
+
+  	$t_alerts = DB::table('alertas')
+  				->where('estatus', 1)
+  				->count();
+
+  	$alert = DB::table('alertas')
+  			->join('producto', 'alertas.producto_id', '=', 'producto.id')
+  			->join('inventario', 'producto.id', '=', 'inventario.producto_id')
+  			->where('alertas.estatus', 1)
+  			->select('nombre', 'alertas.id', 'alertas.created_at', 'cantidad')
+  			->orderBy('created_at', 'asc')
+  			->get();
+
+  	return Response::json(array(
+  		  'alert' => $alert, 
+  		  't_alerts' => $t_alerts
+  		));
+  }
+
+  public function borraralerta(){
+  	$id = Input::get('id');
+  	
+  	$alerta = Alerta::find($id);
+  	$alerta->estatus = 0;
+  	$alerta->save();
+
+  	return Response::json($id);
+  }
+
 	public function verpedidos(){
 		//Total de pedidos
 		$p = DB::table('pedido')->count();
@@ -756,9 +786,17 @@ public function entradas(){
 		$new_p = DB::table('paginas')
 					->where('descripción', $desc)
 					->where('texto', $contenido)
-					->first();
+					->get();
 
-		return Response::json($new_p);
+		$old_page = DB::table('paginas')
+					->where('id', $pagina_antigua)
+					->get();
+
+		return Response::json(
+			array(
+				'new_p' => $new_p, 
+				'old_page' => $old_page 
+				));
 	}
 
 	public function eliminarpagina(){
@@ -805,9 +843,17 @@ public function entradas(){
 		//Retornamos el nuevo contenido
 		$new_p = DB::table('paginas')
 					->where('id', $id)
-					->first();
+					->get();
 
-		return Response::json($new_p );
+		$old_page = DB::table('paginas')
+					->where('id', $pagina_antigua)
+					->get();
+
+		return Response::json(
+			array(
+				'new_p' => $new_p, 
+				'old_page' => $old_page 
+				));
 	}
 
 
@@ -832,9 +878,17 @@ public function entradas(){
 		//Retornamos el nuevo contenido
 		$new_p = DB::table('paginas')
 					->where('id', $id)
-					->first();
+					->get();
 
-		return Response::json($new_p );
+		$old_page = DB::table('paginas')
+					->where('id', $pagina_antigua)
+					->get();
+
+		return Response::json(
+			array(
+				'new_p' => $new_p, 
+				'old_page' => $old_page 
+				));
 
 	}
 

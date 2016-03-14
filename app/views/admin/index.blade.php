@@ -17,6 +17,12 @@
 </script>
 <style>
 
+  .alerts-msjs{
+    display:block;
+  
+  }
+
+
       .barrat div{
             font-size: 10px;
             background:#31708f;
@@ -58,7 +64,10 @@
   <div class="row row-dashboard">
 
     <div class="cont-sidebar">
+
+
       <div class="content-pedidos">
+
           <h2 class="txt-est-p text-primary">Estatus de los pedidos</h2>
         <div class="caja-p-t">
           <div class="caja-p">
@@ -163,6 +172,36 @@
 
 
 </div>
+
+<!--  Modal alertas de productos -->
+<div id="m-alerts" data-backdrop="" class="modal modal-transparent fade" >
+      <div class="modal-dialog">
+        <div class="modal-content content-alerts">
+          <div class="modal-body body-alerts">
+              
+          <div class="caja-alerts">
+            <div class="pico">
+              <img src="img/triangulo.png" >
+            </div>
+            <button class="btn-c btn btn-default">Cerrar</button>
+            <h3 class="n-a"></h3>
+            <div class="content-msjs">
+              <div class="c-msjs">
+                <div class="msj-icon">
+                  <span class="glyphicon glyphicon-envelope"></span>
+                </div>
+                <div class="txt-msj"></div>
+              </div>
+            </div>
+          </div>
+                
+          </div>
+          <div class="modal-footer">
+
+          </div>
+        </div>
+      </div>
+    </div>
 
 <!--  Modal para ver el detalle del producto del inventario -->
 <div id="verdetalle_i" class="modal fade" data-keyboard="false" data-backdrop="static">
@@ -349,6 +388,80 @@ function graficar() {
 }
 
 */
+
+
+
+//Alertas de productos con cantidad minima
+  alerta_p = $('.txt-msj');
+
+  $.ajax({
+    type: "GET",
+    url: "/pedidos/alertaproducto",
+    success: function (a) {
+      $('.num-a').text(a.t_alerts);
+      $('.c-msjs').attr('id','div_'+a.alert[0].id);
+
+      if(a.t_alerts == 0){
+
+        $('.n-a').text('No hay alertas');
+        $('.content-msjs').hide();
+
+      } else {
+
+        $('.n-a').text('Nuevas alertas');
+
+      }
+
+      div = "";
+      for(datos in a.alert){
+
+              div += '<p>'+a.alert[datos].nombre+'<span class="text-info">Stock actual: '+a.alert[datos].cantidad+'</span></p>'+
+              '<div class="txt-d"><small>'+a.alert[datos].created_at+'</small>'+
+              '<span class="borrar-alert" value='+a.alert[datos].id+'>Borrar</span></div>';
+           }
+
+          alerta_p.append(div); 
+
+  },
+
+  error: function () {
+      alert("failure");
+  }
+  });
+
+
+  $(document).on('click', '.borrar-alert', function(){
+    id = $(this).attr('value');
+  $.ajax({
+    type: "GET",
+    url: "/pedidos/borraralerta",
+    data:{id: id},
+    success: function (e) {
+    $('#div_'+id).remove();
+
+  },
+
+  error: function () {
+      alert("failure");
+  }
+  });
+});
+  
+  
+
+  $(document).on('click', '.m-alert', function(){
+    $('#m-alerts').modal({
+      show:'false',
+
+    });
+  });
+
+  $(document).on('click', '.btn-c', function(){
+
+    $('#m-alerts').modal('hide');
+
+
+  });
 
 
 

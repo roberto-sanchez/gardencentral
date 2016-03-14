@@ -51,6 +51,10 @@
 </div>
 
 
+<!--Alertas-->
+<div class="notifications top-right" data-html="true"></div>
+
+
 <!--  Modal agregar nota  -->
 <div id="agregarnota" class="modal fade" data-keyboard="false" data-backdrop="static">
       <div class="modal-dialog">
@@ -361,6 +365,8 @@
 
             $('tbody').prepend($fila);
 
+            alertas('success',"Nota publicada satisfactoriamente.");
+
             //Remplazamos los datos en la fila antigua
             $('#not_'+nota.o.id).removeClass('usar_1');
             $('#not_'+nota.o.id).removeClass('glyphicon glyphicon-ok');
@@ -419,6 +425,7 @@
         data: {id: id},
         success: function(e){
             $('#tr_'+id).remove();
+            alertas('error',"Nota eliminada.");
         },
         error: function(){
           alert('failure');
@@ -568,6 +575,8 @@
             $('#not_'+nota.o.id).attr('title', 'Publicar esta nota');
             $('#not_'+nota.o.id).addClass('btn-default');
             $('#not_'+nota.o.id).addClass('usar-n');
+
+            alertas('success',"Nota publicada satisfactoriamente.");
             
         },
 
@@ -627,7 +636,13 @@
 
   });
 
-
+//Funciones para los alerts
+function alertas(tipo,mensaje){
+    $('.top-right').notify({
+      message: {text: decodeURIComponent(mensaje)},
+      type: tipo
+    }).show();
+  }
 
 
   </script>
