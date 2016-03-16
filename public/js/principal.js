@@ -69,8 +69,10 @@ $(document).ready(function () {
                       pro += '<td>'+p.pro[datos].color+'</td>';
                       pro += '<td>'+e+'</td>';
                       pro += '<td>16%</td>';
-                      pro += '<td>'+p.pro[datos].piezas_paquete+'</td>';
                       pro += '<td>'+p.pro[datos].cantidad+'</td>';
+                    /*  pro += '<td>'+
+                      '<small>'+p.pedimento[datos].num_pedimento+' - '+p.pro[datos].cantidad+'</small>'+
+                      '</td>';*/
                       pro += '<td><span class="img-p" id="'+p.pro[datos].nombre+'" data-id="'+p.pro[datos].foto+'" href="#verfotop" data-toggle="modal" alt="Foto del producto" title="Ver Foto del prodcto">Ver foto</span></td>';
                       pro += '<td class="t-pro" value="'+f+'">'+accounting.formatMoney(f)+'</td></tr>';
                     }
@@ -183,13 +185,7 @@ $(document).ready(function () {
 
     $('#btn_search').click(function () {
         if ($('#clave').val() == '' || $('#clave').val() == 'Clave del producto') {
-            noexiste = [[ 'top', 'danger',  "Escribe la clave del producto." ]];
-            message = noexiste[Math.floor(Math.random() * noexiste.length)];
-
-            $('.' + message[0]).notify({
-                message: { text: message[2] },
-                type: message[1]
-            }).show();
+            alertas('error',"Escribe la clave del producto.");
         } else {
             $.ajax({
                 type: "POST",
@@ -199,6 +195,7 @@ $(document).ready(function () {
                     ver = prod.producto.indefinido;
                     if(ver === 'vacio'){
                         alertas('error',"El producto no existe.");
+                        $('#productoPanel').hide();
                     } else {
 
                               $('#productoPanel').slideDown(1000);
@@ -490,7 +487,6 @@ $(document).on('click', '.verfotop', function(){
 
         });
 
-      $('.g-tipo').hide();
       $('.t-no-c').hide();
       //SEleccionar el tipo de envio
       $('.selectTipo', this).click(function(){
@@ -499,15 +495,16 @@ $(document).on('click', '.verfotop', function(){
 
           if(tipo == 'domicilio'){
             $('.g-tipo').attr('id', 'g-tipo');
-            $('#g-tipo').hide(500);
+            $('#g-tipo').hide();
             $('.selecTipoEnvio').show(500);
             $('#inpEnvio').val('1');  
+            $('#generar-tienda').show(300);
             $('.alert-pago').removeClass('alert-v');
           } else if(tipo == 'tienda'){
             $('#inpEnvio').val('0');
             $('.g-tipo').attr('id', 'generar-tienda');
             $('.selecTipoEnvio').hide(500);
-            $('#generar-tienda').show(300);
+            $('#generar-tienda').show();
             $('.alert-pago').addClass('alert-v');
             console.log('seleccionaste la tienda');
             $('.panel-entrega').hide();
@@ -1767,22 +1764,38 @@ $('#p-s-dom').click(function(){
         aInfo   = JSON.stringify(DATA);
 
         id = 0;
+        alert(id);
         //obtenemos los valores de los campos del form
         cotizar = $('#inpEnvio').val();
+        alert(cotizar);
         pais = $('#pais').val();
+        alert(pais);
         estado = $('#estado').val();
+        alert(estado);
         municipio = $('#municipio').val();
+        alert(municipio);
         calle1 = $('#calle1').val();
+        alert(calle1);
         calle2 = $('#calle2').val();
+        alert(calle1);
         colonia = $('#colonia').val();
+        alert(colonia);
         delegacion = $('#delegacion').val();
+        alert(delegacion);
         cp = $('#cp').val();
+        alert(cp);
         tipodom = $('.d-domicilio').val();
+        alert(tipodom);
         tel = $('.requerido').val();
+        alert(tel);
         tipotel = $('.t-tipo').val();
+        alert(tipotel);
         formapago = $('#formapago').val();
+        alert(formapago);
         msjeria = $('#pago').val();
+        alert(msjeria);
         coment = $('#coment').val();
+        alert(coment);
 
 
 
@@ -1803,7 +1816,6 @@ $('#p-s-dom').click(function(){
 
 
     });
-
 
 
 

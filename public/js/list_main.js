@@ -131,22 +131,24 @@ $(document).ready(function(){
         }
     });
 
-
-    //Listar notas aclaratorias
+     //Listar notas aclaratorias
+    contenedor = $('.list-n');
+            seccion = 'Pedidos';
           $.ajax({
                 type: "GET",
                 url: "/productos/listnotas",
-                success: function (nota) {
+                data:{seccion: seccion},
+                success: function (n) {
+                    console.log(n);
+                    no = "";
+                    for(datos in n.nota){
 
-                   if(nota.texto == undefined){
-
-                   } else {
+                    no += '<li class="text-info"><span>'+n.nota[datos].texto+'</span></li>';
+                 }
                 
+                   contenedor.append(no);
 
-                   $('.alert-n_p').show();
-                   $('#nota_pedidos').text(nota.texto);
-
-                   }
+                   
 
 
         },
@@ -158,4 +160,27 @@ $(document).ready(function(){
 
 
 
+    $('.logout').attr('class', 'l_vaciar');
+
+    $(document).on('click', '.l_vaciar', function(){
+
+
+      $.ajax({
+            type: "POST",
+            url: "/productos/vaciar",
+            success: function (v) {
+                //$('.panel-datos').hide();
+                //$("#t-pedidoc").load(location.href+" #t-pedidoc>*","");
+                window.location = window.location.href = '/logout';
+            },
+            error: function () {
+                alert('failure');
+            }
+        });
+
+    });
+
+
 });/*Function ready*/
+
+

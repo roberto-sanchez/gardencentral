@@ -247,27 +247,17 @@ class ProductoController extends \BaseController {
     }
 
     public function listnotas(){
+        $seccion = Input::get('seccion');
+
         $nota = DB::table('notas')
-                ->where('sección', 'Pedidos')
+                ->where('sección', $seccion)
                 ->where('estatus', 1)
+                ->orderBy('created_at', 'asc')
                 ->select('texto')
-                ->first();
+                ->get();
 
-        return Response::json($nota);
+        return Response::json(array('nota' => $nota));
     }
-
-    public function notasdetalle(){
-        $nota = DB::table('notas')
-                ->where('sección', 'Detalle del pedido')
-                ->where('estatus', 1)
-                ->select('texto')
-                ->first();
-
-        return Response::json($nota);
-
-    }
-
-
   
 
 
@@ -302,40 +292,18 @@ public function getProducto(){
             ->where('cliente.usuario_id', $id_user)
             ->pluck('descripcion');
 
-    //comprobamos si el producto existe en el inventario
- /*   $p1 = DB::table('producto')
-                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-                ->where('tipo', 1)
+
+    $p = DB::table('producto')
                 ->where('clave', $clave)
                 ->pluck('producto.id');
 
-    $p2 = DB::table('producto')
-                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-                ->where('tipo', 2)
-                ->where('clave', $clave)
-                ->pluck('producto.id'); */
 
-    $p3 = DB::table('producto')
-                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-                ->where('tipo', 3)
-                ->where('clave', $clave)
-                ->pluck('producto.id');
-
-    /* $inve1 = DB::table('inventario')
-                ->where('producto_id', $p1)
+    //verificamos que el producto este disponible ene l inventario
+    $inve = DB::table('inventario')
+                ->where('producto_id', $p)
                 ->pluck('id');
 
-
-    $inve2 = DB::table('inventario')
-                ->where('producto_id', $p2)
-                ->pluck('id'); */
-
-
-    $inve3 = DB::table('inventario')
-                ->where('producto_id', $p3)
-                ->pluck('id');
-
-    if($inve3 == ""){
+    if($inve == ""){
         $producto = array('indefinido' => 'vacio');
         return Response::json(array('producto' => $producto));
 
@@ -360,13 +328,12 @@ public function getProducto(){
                 ->get();
 
 
-        if(count($producto)==0){
-            $producto = array('indefinido' => 'vacio');
-            return Response::json(array('producto' => $producto));
-
-        } else {
-            return Response::json(array('producto' => $producto, 'familia' => $familia, 'nivel' => $nivel));
-        }
+            return Response::json(array(
+                'producto' => $producto, 
+                'familia' => $familia, 
+                'nivel' => $nivel
+                ));
+    
 
     } else if($nivel == 'Mayorista') {
 
@@ -388,13 +355,12 @@ public function getProducto(){
                 ->get();
 
 
-        if(count($producto)==0){
-            $producto = array('indefinido' => 'vacio');
-            return Response::json(array('producto' => $producto));
+            return Response::json(array(
+                'producto' => $producto, 
+                'familia' => $familia, 
+                'nivel' => $nivel
+                ));
 
-        } else {
-            return Response::json(array('producto' => $producto, 'familia' => $familia, 'nivel' => $nivel));
-        }
 
     } else if($nivel == 'Distribuidor'){
 
@@ -416,13 +382,12 @@ public function getProducto(){
                 ->get();
 
 
-        if(count($producto)==0){
-            $producto = array('indefinido' => 'vacio');
-            return Response::json(array('producto' => $producto));
-
-        } else {
-            return Response::json(array('producto' => $producto, 'familia' => $familia, 'nivel' => $nivel));
-        }
+            return Response::json(array(
+                'producto' => $producto, 
+                'familia' => $familia, 
+                'nivel' => $nivel
+            ));
+    
 
     } 
     } 
@@ -664,31 +629,11 @@ public function getProducto(){
 
 
                 if($y1 <= $cant){
+                    //echo $r = "Si es menor oh igual";
 
-                     //echo $r = "Si es menor oh igual";
-
-                     //obtenemos los id del producto, ya depende si el usuario
-                     //es retail, mayorista o distribuidor
-                     //Retail--
+                     //obtenemos los id del producto
                      $p1 = DB::table('producto')
                                 ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-                                ->where('tipo', 1)
-                                ->where('clave', $idpro[$i]->clave)
-                                ->pluck('producto.id');
-
-
-                    //Mayorista--
-                     $p2 = DB::table('producto')
-                                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-                                ->where('tipo', 2)
-                                ->where('clave', $idpro[$i]->clave)
-                                ->pluck('producto.id');
-
-
-                    //Distribuidor--
-                     $p3 = DB::table('producto')
-                                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-                                ->where('tipo', 3)
                                 ->where('clave', $idpro[$i]->clave)
                                 ->pluck('producto.id');
 
@@ -698,15 +643,6 @@ public function getProducto(){
                                 ->where('producto_id', $p1)
                                 ->pluck('id');
 
-
-                    $inve2 = DB::table('inventario')
-                                ->where('producto_id', $p2)
-                                ->pluck('id');
-
-
-                    $inve3 = DB::table('inventario')
-                                ->where('producto_id', $p3)
-                                ->pluck('id');
 
                     //comprobamos y obtenemos el id del inv
                     if($inve1 != ""){
@@ -743,17 +679,17 @@ public function getProducto(){
                         $y1 = TotalProducto::find($idy);
                         $y1->delete();
 
-                        //Alertas de los productos
+                    //Alertas de los productos
                     $p = DB::table('producto')
                         ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
                         ->orderBy('producto.cantidad_minima', 'asc')
-                        ->where('producto.id', $p3)
+                        ->where('producto.id', $p1)
                         ->pluck('cantidad_minima');
 
                     $inventario = DB::table('producto')
                             ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
                             ->orderBy('producto.cantidad_minima', 'asc')
-                            ->where('producto.id', $p3)
+                            ->where('producto.id', $p1)
                             ->pluck('cantidad');
 
                         //Comparamos la cantidad actual del producto del inventario con la cantidad minima del producto
@@ -761,13 +697,13 @@ public function getProducto(){
 
                             //verificamos si e producto ya existe
                             $i_v = DB::table('alertas')
-                            ->where('producto_id', $p3)
+                            ->where('producto_id', $p1)
                             ->first();
 
                             //Si no existe insertamos
                             if(count($i_v)==0){
                                 $alerta = new Alerta;
-                                $alerta->producto_id = $p3;
+                                $alerta->producto_id = $p1;
                                 $alerta->estatus = 1;
                                 $alerta->save();
 
@@ -780,191 +716,23 @@ public function getProducto(){
                             
                         }
 
-                    } else if($inve2 != ""){
-
-                         //descontamos la cantidad del inventario
-                        $inv = Inventario::find($inve2);
-                        $inv->cantidad -= $y1;
-                        $inv->save();
-
-                        //Obtenemos el id del inventario detalle
-                        $id_i_d = DB::table('inventario_detalle')
-                                ->where('producto_id', $p2)
-                                ->where('num_pedimento', $num_p)
-                                ->pluck('id');
-
-                         //registramos en pedido detalle
-                        $p_detalle = new PedidoDetalle;
-                        $p_detalle->pedido_id = $pedido['id'];
-                        $p_detalle->producto_id = $idpro[$i]->idp;
-                        $p_detalle->num_pedimento = $num_p;
-                        $p_detalle->cantidad = $y1;
-                        $p_detalle->save();
-
-                        //descontamos la cantidad del inventario_detalle
-                        $inv_d = InventarioDetalle::find($id_i_d);
-                        $inv_d->cantidad -= $y1;
-                        $inv_d->save();
-
-                        //eliminamos los datos temporales
-                        $idy = DB::table('total_producto')
-                            ->where('clave', $idpro[$i]->clave)
-                            ->pluck('id');
-
-                        $y1 = TotalProducto::find($idy);
-                        $y1->delete();
-
-                        //Alertas de los productos
-                    $p = DB::table('producto')
-                        ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
-                        ->orderBy('producto.cantidad_minima', 'asc')
-                        ->where('producto.id', $p3)
-                        ->pluck('cantidad_minima');
-
-                    $inventario = DB::table('producto')
-                            ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
-                            ->orderBy('producto.cantidad_minima', 'asc')
-                            ->where('producto.id', $p3)
-                            ->pluck('cantidad');
-
-                        //Comparamos la cantidad actual del producto del inventario con la cantidad minima del producto
-                        if($inventario <= $p){
-
-                            //verificamos si e producto ya existe
-                            $i_v = DB::table('alertas')
-                            ->where('producto_id', $p3)
-                            ->first();
-
-                            //Si no existe insertamos
-                            if(count($i_v)==0){
-                                $alerta = new Alerta;
-                                $alerta->producto_id = $p3;
-                                $alerta->estatus = 1;
-                                $alerta->save();
-
-                            //si ya existe no pasa nada
-                            } else {
-
-
-                            }
-                            
-                            
-                        }
-
-                    } else if($inve3 != ""){
-
-                        //descontamos la cantidad del inventario
-                        $inv = Inventario::find($inve3);
-                        $inv->cantidad -= $y1;
-                        $inv->save();
-
-                        //Obtenemos el id del inventario detalle
-                        $id_i_d = DB::table('inventario_detalle')
-                                ->where('producto_id', $p3)
-                                ->where('num_pedimento', $num_p)
-                                ->pluck('id');
-
-                        //registramos en pedido detalle
-                        $p_detalle = new PedidoDetalle;
-                        $p_detalle->pedido_id = $pedido['id'];
-                        $p_detalle->producto_id = $idpro[$i]->idp;
-                        $p_detalle->num_pedimento = $num_p;
-                        $p_detalle->cantidad = $y1;
-                        $p_detalle->save();
-
-                        //descontamos la cantidad del inventario_detalle
-                        $inv_d = InventarioDetalle::find($id_i_d);
-                        $inv_d->cantidad -= $y1;
-                        $inv_d->save();
-
-                        //eliminamos los datos temporales
-                        $idy = DB::table('total_producto')
-                            ->where('clave', $idpro[$i]->clave)
-                            ->pluck('id');
-
-                        $y1 = TotalProducto::find($idy);
-                        $y1->delete();
-
-                        //Alertas de los productos
-                    $p = DB::table('producto')
-                        ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
-                        ->orderBy('producto.cantidad_minima', 'asc')
-                        ->where('producto.id', $p3)
-                        ->pluck('cantidad_minima');
-
-                    $inventario = DB::table('producto')
-                            ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
-                            ->orderBy('producto.cantidad_minima', 'asc')
-                            ->where('producto.id', $p3)
-                            ->pluck('cantidad');
-
-                        //Comparamos la cantidad actual del producto del inventario con la cantidad minima del producto
-                        if($inventario <= $p){
-
-                            //verificamos si e producto ya existe
-                            $i_v = DB::table('alertas')
-                            ->where('producto_id', $p3)
-                            ->first();
-
-                            //Si no existe insertamos
-                            if(count($i_v)==0){
-                                $alerta = new Alerta;
-                                $alerta->producto_id = $p3;
-                                $alerta->estatus = 1;
-                                $alerta->save();
-
-                            //si ya existe no pasa nada
-                            } else {
-
-
-                            }
-                            
-                            
-                        }
-                        
-                    }
+                    } 
 
                     break; //Detenemos el ciclo -------------------------------------
-
 
                 } else {
                     //echo $r = "Es mayor, faltan productos";
 
-                    $p1 = DB::table('producto')
+                     //obtenemos los id del producto
+                     $p1 = DB::table('producto')
                                 ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-                                ->where('tipo', 1)
                                 ->where('clave', $idpro[$i]->clave)
                                 ->pluck('producto.id');
 
 
-                    //Mayorista--
-                     $p2 = DB::table('producto')
-                                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-                                ->where('tipo', 2)
-                                ->where('clave', $idpro[$i]->clave)
-                                ->pluck('producto.id');
-
-
-                    //Distribuidor--
-                     $p3 = DB::table('producto')
-                                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-                                ->where('tipo', 3)
-                                ->where('clave', $idpro[$i]->clave)
-                                ->pluck('producto.id');
-
-                      //Verificamos el id para obtener el id del inventario
+                    //Verificamos el id para obtener el id del inventario
                     $inve1 = DB::table('inventario')
                                 ->where('producto_id', $p1)
-                                ->pluck('id');
-
-
-                    $inve2 = DB::table('inventario')
-                                ->where('producto_id', $p2)
-                                ->pluck('id');
-
-
-                    $inve3 = DB::table('inventario')
-                                ->where('producto_id', $p3)
                                 ->pluck('id');
 
                     //comprobamos y obtenemos el id del inv
@@ -1014,13 +782,13 @@ public function getProducto(){
                     $p = DB::table('producto')
                         ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
                         ->orderBy('producto.cantidad_minima', 'asc')
-                        ->where('producto.id', $p3)
+                        ->where('producto.id', $p1)
                         ->pluck('cantidad_minima');
 
                     $inventario = DB::table('producto')
                             ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
                             ->orderBy('producto.cantidad_minima', 'asc')
-                            ->where('producto.id', $p3)
+                            ->where('producto.id', $p1)
                             ->pluck('cantidad');
 
                         //Comparamos la cantidad actual del producto del inventario con la cantidad minima del producto
@@ -1028,13 +796,13 @@ public function getProducto(){
 
                             //verificamos si e producto ya existe
                             $i_v = DB::table('alertas')
-                            ->where('producto_id', $p3)
+                            ->where('producto_id', $p1)
                             ->first();
 
                             //Si no existe insertamos
                             if(count($i_v)==0){
                                 $alerta = new Alerta;
-                                $alerta->producto_id = $p3;
+                                $alerta->producto_id = $p1;
                                 $alerta->estatus = 1;
                                 $alerta->save();
 
@@ -1047,158 +815,7 @@ public function getProducto(){
                             
                         }
 
-                    } else if($inve2 != ""){
-                        $y_m = $y1 - $cant;
-
-                         //descontamos la cantidad del inventario
-                        $inv = Inventario::find($inve2);
-                        $inv->cantidad -= $y_m;
-                        $inv->save();
-
-                        //Obtenemos el id del inventario detalle
-                        $id_i_d = DB::table('inventario_detalle')
-                                ->where('producto_id', $p2)
-                                ->where('num_pedimento', $num_p)
-                                ->pluck('id');
-
-                        //descontamos la cantidad del inventario_detalle
-                        $inv_d = InventarioDetalle::find($id_i_d);
-                        $inv_d->cantidad -= $y_m;
-                        $inv_d->save();
-
-                        //registramos en pedido detalle
-                        $p_detalle = new PedidoDetalle;
-                        $p_detalle->pedido_id = $pedido['id'];
-                        $p_detalle->producto_id = $idpro[$i]->idp;
-                        $p_detalle->num_pedimento = $num_p;
-                        $p_detalle->cantidad = $cant;
-                        $p_detalle->save();
-
-                        //Borramos el producto
-                        $inv_d = InventarioDetalle::find($id_i_d);
-                        $inv_d->delete();
-
-                        //Actualizamos la cantidad de los datos temporales
-                        $id_t = DB::table('total_producto')
-                                ->where('clave', $idpro[$i]->clave)
-                                ->pluck('id');
-                        
-                        $y_a = TotalProducto::find($id_t);
-                        $y_a->cantidad -= $cant;
-                        $y_a->save();
-
-                        //Alertas de los productos
-                    $p = DB::table('producto')
-                        ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
-                        ->orderBy('producto.cantidad_minima', 'asc')
-                        ->where('producto.id', $p3)
-                        ->pluck('cantidad_minima');
-
-                    $inventario = DB::table('producto')
-                            ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
-                            ->orderBy('producto.cantidad_minima', 'asc')
-                            ->where('producto.id', $p3)
-                            ->pluck('cantidad');
-
-                        //Comparamos la cantidad actual del producto del inventario con la cantidad minima del producto
-                        if($inventario <= $p){
-
-                            //verificamos si e producto ya existe
-                            $i_v = DB::table('alertas')
-                            ->where('producto_id', $p3)
-                            ->first();
-
-                            //Si no existe insertamos
-                            if(count($i_v)==0){
-                                $alerta = new Alerta;
-                                $alerta->producto_id = $p3;
-                                $alerta->estatus = 1;
-                                $alerta->save();
-
-                            //si ya existe no pasa nada
-                            } else {
-
-
-                            }
-                            
-                            
-                        }
-
-                    } else if($inve3 != ""){
-                        $y_m = $y1 - $cant;
-
-                        //descontamos la cantidad del inventario
-                        $inv = Inventario::find($inve3);
-                        $inv->cantidad -= $cant;
-                        $inv->save();
-
-                        //Obtenemos el id del inventario detalle
-                        $id_i_d = DB::table('inventario_detalle')
-                                ->where('producto_id', $p3)
-                                ->where('num_pedimento', $num_p)
-                                ->pluck('id');
-
-
-                        //registramos en pedido detalle
-                        $p_detalle = new PedidoDetalle;
-                        $p_detalle->pedido_id = $pedido['id'];
-                        $p_detalle->producto_id = $idpro[$i]->idp;
-                        $p_detalle->num_pedimento = $num_p;
-                        $p_detalle->cantidad = $cant;
-                        $p_detalle->save();
-
-                        //Como la cantidad del pedimento no es suficiente lo borramos
-                        $inv_d = InventarioDetalle::find($id_i_d);
-                        $inv_d->delete();
-
-                        //Actualizamos la cantidad de los datos temporales
-                        $id_t = DB::table('total_producto')
-                                ->where('clave', $idpro[$i]->clave)
-                                ->pluck('id');
-                        
-                        $y_a = TotalProducto::find($id_t);
-                        $y_a->cantidad -= $cant;
-                        $y_a->save();
-
-                        //Alertas de los productos
-                    $p = DB::table('producto')
-                        ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
-                        ->orderBy('producto.cantidad_minima', 'asc')
-                        ->where('producto.id', $p3)
-                        ->pluck('cantidad_minima');
-
-                    $inventario = DB::table('producto')
-                            ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
-                            ->orderBy('producto.cantidad_minima', 'asc')
-                            ->where('producto.id', $p3)
-                            ->pluck('cantidad');
-
-                        //Comparamos la cantidad actual del producto del inventario con la cantidad minima del producto
-                        if($inventario <= $p){
-
-                            //verificamos si e producto ya existe
-                            $i_v = DB::table('alertas')
-                            ->where('producto_id', $p3)
-                            ->first();
-
-                            //Si no existe insertamos
-                            if(count($i_v)==0){
-                                $alerta = new Alerta;
-                                $alerta->producto_id = $p3;
-                                $alerta->estatus = 1;
-                                $alerta->save();
-
-                            //si ya existe no pasa nada
-                            } else {
-
-
-                            }
-                            
-                            
-                        }
-
-                        
-                    }//---
+                    }  
 
 
                 }//-----
@@ -1295,31 +912,11 @@ public function getProducto(){
 
 
                 if($y1 <= $cant){
+                    //echo $r = "Si es menor oh igual";
 
-                     //echo $r = "Si es menor oh igual";
-
-                     //obtenemos los id del producto, ya depende si el usuario
-                     //es retail, mayorista o distribuidor
-                     //Retail--
+                     //obtenemos los id del producto
                      $p1 = DB::table('producto')
                                 ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-                                ->where('tipo', 1)
-                                ->where('clave', $idpro[$i]->clave)
-                                ->pluck('producto.id');
-
-
-                    //Mayorista--
-                     $p2 = DB::table('producto')
-                                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-                                ->where('tipo', 2)
-                                ->where('clave', $idpro[$i]->clave)
-                                ->pluck('producto.id');
-
-
-                    //Distribuidor--
-                     $p3 = DB::table('producto')
-                                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-                                ->where('tipo', 3)
                                 ->where('clave', $idpro[$i]->clave)
                                 ->pluck('producto.id');
 
@@ -1329,15 +926,6 @@ public function getProducto(){
                                 ->where('producto_id', $p1)
                                 ->pluck('id');
 
-
-                    $inve2 = DB::table('inventario')
-                                ->where('producto_id', $p2)
-                                ->pluck('id');
-
-
-                    $inve3 = DB::table('inventario')
-                                ->where('producto_id', $p3)
-                                ->pluck('id');
 
                     //comprobamos y obtenemos el id del inv
                     if($inve1 != ""){
@@ -1374,17 +962,17 @@ public function getProducto(){
                         $y1 = TotalProducto::find($idy);
                         $y1->delete();
 
-                        //Alertas de los productos
+                    //Alertas de los productos
                     $p = DB::table('producto')
                         ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
                         ->orderBy('producto.cantidad_minima', 'asc')
-                        ->where('producto.id', $p3)
+                        ->where('producto.id', $p1)
                         ->pluck('cantidad_minima');
 
                     $inventario = DB::table('producto')
                             ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
                             ->orderBy('producto.cantidad_minima', 'asc')
-                            ->where('producto.id', $p3)
+                            ->where('producto.id', $p1)
                             ->pluck('cantidad');
 
                         //Comparamos la cantidad actual del producto del inventario con la cantidad minima del producto
@@ -1392,13 +980,13 @@ public function getProducto(){
 
                             //verificamos si e producto ya existe
                             $i_v = DB::table('alertas')
-                            ->where('producto_id', $p3)
+                            ->where('producto_id', $p1)
                             ->first();
 
                             //Si no existe insertamos
                             if(count($i_v)==0){
                                 $alerta = new Alerta;
-                                $alerta->producto_id = $p3;
+                                $alerta->producto_id = $p1;
                                 $alerta->estatus = 1;
                                 $alerta->save();
 
@@ -1411,191 +999,23 @@ public function getProducto(){
                             
                         }
 
-                    } else if($inve2 != ""){
-
-                         //descontamos la cantidad del inventario
-                        $inv = Inventario::find($inve2);
-                        $inv->cantidad -= $y1;
-                        $inv->save();
-
-                        //Obtenemos el id del inventario detalle
-                        $id_i_d = DB::table('inventario_detalle')
-                                ->where('producto_id', $p2)
-                                ->where('num_pedimento', $num_p)
-                                ->pluck('id');
-
-                         //registramos en pedido detalle
-                        $p_detalle = new PedidoDetalle;
-                        $p_detalle->pedido_id = $pedido['id'];
-                        $p_detalle->producto_id = $idpro[$i]->idp;
-                        $p_detalle->num_pedimento = $num_p;
-                        $p_detalle->cantidad = $y1;
-                        $p_detalle->save();
-
-                        //descontamos la cantidad del inventario_detalle
-                        $inv_d = InventarioDetalle::find($id_i_d);
-                        $inv_d->cantidad -= $y1;
-                        $inv_d->save();
-
-                        //eliminamos los datos temporales
-                        $idy = DB::table('total_producto')
-                            ->where('clave', $idpro[$i]->clave)
-                            ->pluck('id');
-
-                        $y1 = TotalProducto::find($idy);
-                        $y1->delete();
-
-                        //Alertas de los productos
-                    $p = DB::table('producto')
-                        ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
-                        ->orderBy('producto.cantidad_minima', 'asc')
-                        ->where('producto.id', $p3)
-                        ->pluck('cantidad_minima');
-
-                    $inventario = DB::table('producto')
-                            ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
-                            ->orderBy('producto.cantidad_minima', 'asc')
-                            ->where('producto.id', $p3)
-                            ->pluck('cantidad');
-
-                        //Comparamos la cantidad actual del producto del inventario con la cantidad minima del producto
-                        if($inventario <= $p){
-
-                            //verificamos si e producto ya existe
-                            $i_v = DB::table('alertas')
-                            ->where('producto_id', $p3)
-                            ->first();
-
-                            //Si no existe insertamos
-                            if(count($i_v)==0){
-                                $alerta = new Alerta;
-                                $alerta->producto_id = $p3;
-                                $alerta->estatus = 1;
-                                $alerta->save();
-
-                            //si ya existe no pasa nada
-                            } else {
-
-
-                            }
-                            
-                            
-                        }
-
-                    } else if($inve3 != ""){
-
-                        //descontamos la cantidad del inventario
-                        $inv = Inventario::find($inve3);
-                        $inv->cantidad -= $y1;
-                        $inv->save();
-
-                        //Obtenemos el id del inventario detalle
-                        $id_i_d = DB::table('inventario_detalle')
-                                ->where('producto_id', $p3)
-                                ->where('num_pedimento', $num_p)
-                                ->pluck('id');
-
-                        //registramos en pedido detalle
-                        $p_detalle = new PedidoDetalle;
-                        $p_detalle->pedido_id = $pedido['id'];
-                        $p_detalle->producto_id = $idpro[$i]->idp;
-                        $p_detalle->num_pedimento = $num_p;
-                        $p_detalle->cantidad = $y1;
-                        $p_detalle->save();
-
-                        //descontamos la cantidad del inventario_detalle
-                        $inv_d = InventarioDetalle::find($id_i_d);
-                        $inv_d->cantidad -= $y1;
-                        $inv_d->save();
-
-                        //eliminamos los datos temporales
-                        $idy = DB::table('total_producto')
-                            ->where('clave', $idpro[$i]->clave)
-                            ->pluck('id');
-
-                        $y1 = TotalProducto::find($idy);
-                        $y1->delete();
-
-                        //Alertas de los productos
-                    $p = DB::table('producto')
-                        ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
-                        ->orderBy('producto.cantidad_minima', 'asc')
-                        ->where('producto.id', $p3)
-                        ->pluck('cantidad_minima');
-
-                    $inventario = DB::table('producto')
-                            ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
-                            ->orderBy('producto.cantidad_minima', 'asc')
-                            ->where('producto.id', $p3)
-                            ->pluck('cantidad');
-
-                        //Comparamos la cantidad actual del producto del inventario con la cantidad minima del producto
-                        if($inventario <= $p){
-
-                            //verificamos si e producto ya existe
-                            $i_v = DB::table('alertas')
-                            ->where('producto_id', $p3)
-                            ->first();
-
-                            //Si no existe insertamos
-                            if(count($i_v)==0){
-                                $alerta = new Alerta;
-                                $alerta->producto_id = $p3;
-                                $alerta->estatus = 1;
-                                $alerta->save();
-
-                            //si ya existe no pasa nada
-                            } else {
-
-
-                            }
-                            
-                            
-                        }
-                        
-                    }
+                    } 
 
                     break; //Detenemos el ciclo -------------------------------------
-
 
                 } else {
                     //echo $r = "Es mayor, faltan productos";
 
-                    $p1 = DB::table('producto')
+                     //obtenemos los id del producto
+                     $p1 = DB::table('producto')
                                 ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-                                ->where('tipo', 1)
                                 ->where('clave', $idpro[$i]->clave)
                                 ->pluck('producto.id');
 
 
-                    //Mayorista--
-                     $p2 = DB::table('producto')
-                                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-                                ->where('tipo', 2)
-                                ->where('clave', $idpro[$i]->clave)
-                                ->pluck('producto.id');
-
-
-                    //Distribuidor--
-                     $p3 = DB::table('producto')
-                                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-                                ->where('tipo', 3)
-                                ->where('clave', $idpro[$i]->clave)
-                                ->pluck('producto.id');
-
-                      //Verificamos el id para obtener el id del inventario
+                    //Verificamos el id para obtener el id del inventario
                     $inve1 = DB::table('inventario')
                                 ->where('producto_id', $p1)
-                                ->pluck('id');
-
-
-                    $inve2 = DB::table('inventario')
-                                ->where('producto_id', $p2)
-                                ->pluck('id');
-
-
-                    $inve3 = DB::table('inventario')
-                                ->where('producto_id', $p3)
                                 ->pluck('id');
 
                     //comprobamos y obtenemos el id del inv
@@ -1645,13 +1065,13 @@ public function getProducto(){
                     $p = DB::table('producto')
                         ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
                         ->orderBy('producto.cantidad_minima', 'asc')
-                        ->where('producto.id', $p3)
+                        ->where('producto.id', $p1)
                         ->pluck('cantidad_minima');
 
                     $inventario = DB::table('producto')
                             ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
                             ->orderBy('producto.cantidad_minima', 'asc')
-                            ->where('producto.id', $p3)
+                            ->where('producto.id', $p1)
                             ->pluck('cantidad');
 
                         //Comparamos la cantidad actual del producto del inventario con la cantidad minima del producto
@@ -1659,13 +1079,13 @@ public function getProducto(){
 
                             //verificamos si e producto ya existe
                             $i_v = DB::table('alertas')
-                            ->where('producto_id', $p3)
+                            ->where('producto_id', $p1)
                             ->first();
 
                             //Si no existe insertamos
                             if(count($i_v)==0){
                                 $alerta = new Alerta;
-                                $alerta->producto_id = $p3;
+                                $alerta->producto_id = $p1;
                                 $alerta->estatus = 1;
                                 $alerta->save();
 
@@ -1678,158 +1098,7 @@ public function getProducto(){
                             
                         }
 
-                    } else if($inve2 != ""){
-                        $y_m = $y1 - $cant;
-
-                         //descontamos la cantidad del inventario
-                        $inv = Inventario::find($inve2);
-                        $inv->cantidad -= $y_m;
-                        $inv->save();
-
-                        //Obtenemos el id del inventario detalle
-                        $id_i_d = DB::table('inventario_detalle')
-                                ->where('producto_id', $p2)
-                                ->where('num_pedimento', $num_p)
-                                ->pluck('id');
-
-                        //descontamos la cantidad del inventario_detalle
-                        $inv_d = InventarioDetalle::find($id_i_d);
-                        $inv_d->cantidad -= $y_m;
-                        $inv_d->save();
-
-                        //registramos en pedido detalle
-                        $p_detalle = new PedidoDetalle;
-                        $p_detalle->pedido_id = $pedido['id'];
-                        $p_detalle->producto_id = $idpro[$i]->idp;
-                        $p_detalle->num_pedimento = $num_p;
-                        $p_detalle->cantidad = $cant;
-                        $p_detalle->save();
-
-                        //Borramos el producto
-                        $inv_d = InventarioDetalle::find($id_i_d);
-                        $inv_d->delete();
-
-                        //Actualizamos la cantidad de los datos temporales
-                        $id_t = DB::table('total_producto')
-                                ->where('clave', $idpro[$i]->clave)
-                                ->pluck('id');
-                        
-                        $y_a = TotalProducto::find($id_t);
-                        $y_a->cantidad -= $cant;
-                        $y_a->save();
-
-                        //Alertas de los productos
-                    $p = DB::table('producto')
-                        ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
-                        ->orderBy('producto.cantidad_minima', 'asc')
-                        ->where('producto.id', $p3)
-                        ->pluck('cantidad_minima');
-
-                    $inventario = DB::table('producto')
-                            ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
-                            ->orderBy('producto.cantidad_minima', 'asc')
-                            ->where('producto.id', $p3)
-                            ->pluck('cantidad');
-
-                        //Comparamos la cantidad actual del producto del inventario con la cantidad minima del producto
-                        if($inventario <= $p){
-
-                            //verificamos si e producto ya existe
-                            $i_v = DB::table('alertas')
-                            ->where('producto_id', $p3)
-                            ->first();
-
-                            //Si no existe insertamos
-                            if(count($i_v)==0){
-                                $alerta = new Alerta;
-                                $alerta->producto_id = $p3;
-                                $alerta->estatus = 1;
-                                $alerta->save();
-
-                            //si ya existe no pasa nada
-                            } else {
-
-
-                            }
-                            
-                            
-                        }
-
-                    } else if($inve3 != ""){
-                        $y_m = $y1 - $cant;
-
-                        //descontamos la cantidad del inventario
-                        $inv = Inventario::find($inve3);
-                        $inv->cantidad -= $cant;
-                        $inv->save();
-
-                        //Obtenemos el id del inventario detalle
-                        $id_i_d = DB::table('inventario_detalle')
-                                ->where('producto_id', $p3)
-                                ->where('num_pedimento', $num_p)
-                                ->pluck('id');
-
-
-                        //registramos en pedido detalle
-                        $p_detalle = new PedidoDetalle;
-                        $p_detalle->pedido_id = $pedido['id'];
-                        $p_detalle->producto_id = $idpro[$i]->idp;
-                        $p_detalle->num_pedimento = $num_p;
-                        $p_detalle->cantidad = $cant;
-                        $p_detalle->save();
-
-                        //Como la cantidad del pedimento no es suficiente lo borramos
-                        $inv_d = InventarioDetalle::find($id_i_d);
-                        $inv_d->delete();
-
-                        //Actualizamos la cantidad de los datos temporales
-                        $id_t = DB::table('total_producto')
-                                ->where('clave', $idpro[$i]->clave)
-                                ->pluck('id');
-                        
-                        $y_a = TotalProducto::find($id_t);
-                        $y_a->cantidad -= $cant;
-                        $y_a->save();
-
-                        //Alertas de los productos
-                    $p = DB::table('producto')
-                        ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
-                        ->orderBy('producto.cantidad_minima', 'asc')
-                        ->where('producto.id', $p3)
-                        ->pluck('cantidad_minima');
-
-                    $inventario = DB::table('producto')
-                            ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
-                            ->orderBy('producto.cantidad_minima', 'asc')
-                            ->where('producto.id', $p3)
-                            ->pluck('cantidad');
-
-                        //Comparamos la cantidad actual del producto del inventario con la cantidad minima del producto
-                        if($inventario <= $p){
-
-                            //verificamos si e producto ya existe
-                            $i_v = DB::table('alertas')
-                            ->where('producto_id', $p3)
-                            ->first();
-
-                            //Si no existe insertamos
-                            if(count($i_v)==0){
-                                $alerta = new Alerta;
-                                $alerta->producto_id = $p3;
-                                $alerta->estatus = 1;
-                                $alerta->save();
-
-                            //si ya existe no pasa nada
-                            } else {
-
-
-                            }
-                            
-                            
-                        }
-
-                        
-                    }//---
+                    }  
 
 
                 }//-----
@@ -1933,28 +1202,9 @@ public function getProducto(){
                 if($y1 <= $cant){
                     //echo $r = "Si es menor oh igual";
 
-                     //obtenemos los id del producto, ya depende si el usuario
-                     //es retail, mayorista o distribuidor
-                     //Retail--
+                     //obtenemos los id del producto
                      $p1 = DB::table('producto')
                                 ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-                                ->where('tipo', 1)
-                                ->where('clave', $idpro[$i]->clave)
-                                ->pluck('producto.id');
-
-
-                    //Mayorista--
-                     $p2 = DB::table('producto')
-                                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-                                ->where('tipo', 2)
-                                ->where('clave', $idpro[$i]->clave)
-                                ->pluck('producto.id');
-
-
-                    //Distribuidor--
-                     $p3 = DB::table('producto')
-                                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-                                ->where('tipo', 3)
                                 ->where('clave', $idpro[$i]->clave)
                                 ->pluck('producto.id');
 
@@ -1962,16 +1212,6 @@ public function getProducto(){
                     //Verificamos el id para obtener el id del inventario
                     $inve1 = DB::table('inventario')
                                 ->where('producto_id', $p1)
-                                ->pluck('id');
-
-
-                    $inve2 = DB::table('inventario')
-                                ->where('producto_id', $p2)
-                                ->pluck('id');
-
-
-                    $inve3 = DB::table('inventario')
-                                ->where('producto_id', $p3)
                                 ->pluck('id');
 
 
@@ -2014,13 +1254,13 @@ public function getProducto(){
                     $p = DB::table('producto')
                         ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
                         ->orderBy('producto.cantidad_minima', 'asc')
-                        ->where('producto.id', $p3)
+                        ->where('producto.id', $p1)
                         ->pluck('cantidad_minima');
 
                     $inventario = DB::table('producto')
                             ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
                             ->orderBy('producto.cantidad_minima', 'asc')
-                            ->where('producto.id', $p3)
+                            ->where('producto.id', $p1)
                             ->pluck('cantidad');
 
                         //Comparamos la cantidad actual del producto del inventario con la cantidad minima del producto
@@ -2028,13 +1268,13 @@ public function getProducto(){
 
                             //verificamos si e producto ya existe
                             $i_v = DB::table('alertas')
-                            ->where('producto_id', $p3)
+                            ->where('producto_id', $p1)
                             ->first();
 
                             //Si no existe insertamos
                             if(count($i_v)==0){
                                 $alerta = new Alerta;
-                                $alerta->producto_id = $p3;
+                                $alerta->producto_id = $p1;
                                 $alerta->estatus = 1;
                                 $alerta->save();
 
@@ -2047,190 +1287,23 @@ public function getProducto(){
                             
                         }
 
-                    } else if($inve2 != ""){
-
-                         //descontamos la cantidad del inventario
-                        $inv = Inventario::find($inve2);
-                        $inv->cantidad -= $y1;
-                        $inv->save();
-
-                        //Obtenemos el id del inventario detalle
-                        $id_i_d = DB::table('inventario_detalle')
-                                ->where('producto_id', $p2)
-                                ->where('num_pedimento', $num_p)
-                                ->pluck('id');
-
-                         //registramos en pedido detalle
-                        $p_detalle = new PedidoDetalle;
-                        $p_detalle->pedido_id = $pedido['id'];
-                        $p_detalle->producto_id = $idpro[$i]->idp;
-                        $p_detalle->num_pedimento = $num_p;
-                        $p_detalle->cantidad = $y1;
-                        $p_detalle->save();
-
-                        //descontamos la cantidad del inventario_detalle
-                        $inv_d = InventarioDetalle::find($id_i_d);
-                        $inv_d->cantidad -= $y1;
-                        $inv_d->save();
-
-                        //eliminamos los datos temporales
-                        $idy = DB::table('total_producto')
-                            ->where('clave', $idpro[$i]->clave)
-                            ->pluck('id');
-
-                        $y1 = TotalProducto::find($idy);
-                        $y1->delete();
-
-                    //Alertas de los productos
-                    $p = DB::table('producto')
-                        ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
-                        ->orderBy('producto.cantidad_minima', 'asc')
-                        ->where('producto.id', $p3)
-                        ->pluck('cantidad_minima');
-
-                    $inventario = DB::table('producto')
-                            ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
-                            ->orderBy('producto.cantidad_minima', 'asc')
-                            ->where('producto.id', $p3)
-                            ->pluck('cantidad');
-
-                        //Comparamos la cantidad actual del producto del inventario con la cantidad minima del producto
-                        if($inventario <= $p){
-
-                            //verificamos si e producto ya existe
-                            $i_v = DB::table('alertas')
-                            ->where('producto_id', $p3)
-                            ->first();
-
-                            //Si no existe insertamos
-                            if(count($i_v)==0){
-                                $alerta = new Alerta;
-                                $alerta->producto_id = $p3;
-                                $alerta->estatus = 1;
-                                $alerta->save();
-
-                            //si ya existe no pasa nada
-                            } else {
-
-
-                            }
-                            
-                            
-                        }
-
-                    } else if($inve3 != ""){
-
-                        //descontamos la cantidad del inventario
-                        $inv = Inventario::find($inve3);
-                        $inv->cantidad -= $y1;
-                        $inv->save();
-
-                        //Obtenemos el id del inventario detalle
-                        $id_i_d = DB::table('inventario_detalle')
-                                ->where('producto_id', $p3)
-                                ->where('num_pedimento', $num_p)
-                                ->pluck('id');
-
-                        //registramos en pedido detalle
-                        $p_detalle = new PedidoDetalle;
-                        $p_detalle->pedido_id = $pedido['id'];
-                        $p_detalle->producto_id = $idpro[$i]->idp;
-                        $p_detalle->num_pedimento = $num_p;
-                        $p_detalle->cantidad = $y1;
-                        $p_detalle->save();
-
-                        //descontamos la cantidad del inventario_detalle
-                        $inv_d = InventarioDetalle::find($id_i_d);
-                        $inv_d->cantidad -= $y1;
-                        $inv_d->save();
-
-                        //eliminamos los datos temporales
-                        $idy = DB::table('total_producto')
-                            ->where('clave', $idpro[$i]->clave)
-                            ->pluck('id');
-
-                        $y1 = TotalProducto::find($idy);
-                        $y1->delete();
-
-                    //Alertas de los productos
-                    $p = DB::table('producto')
-                        ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
-                        ->orderBy('producto.cantidad_minima', 'asc')
-                        ->where('producto.id', $p3)
-                        ->pluck('cantidad_minima');
-
-                    $inventario = DB::table('producto')
-                            ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
-                            ->orderBy('producto.cantidad_minima', 'asc')
-                            ->where('producto.id', $p3)
-                            ->pluck('cantidad');
-
-                        //Comparamos la cantidad actual del producto del inventario con la cantidad minima del producto
-                        if($inventario <= $p){
-
-                            //verificamos si e producto ya existe
-                            $i_v = DB::table('alertas')
-                            ->where('producto_id', $p3)
-                            ->first();
-
-                            //Si no existe insertamos
-                            if(count($i_v)==0){
-                                $alerta = new Alerta;
-                                $alerta->producto_id = $p3;
-                                $alerta->estatus = 1;
-                                $alerta->save();
-
-                            //si ya existe no pasa nada
-                            } else {
-
-
-                            }
-                            
-                            
-                        } 
-                        
-                    }
+                    } 
 
                     break; //Detenemos el ciclo -------------------------------------
 
                 } else {
                     //echo $r = "Es mayor, faltan productos";
 
-                    $p1 = DB::table('producto')
+                     //obtenemos los id del producto
+                     $p1 = DB::table('producto')
                                 ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-                                ->where('tipo', 1)
                                 ->where('clave', $idpro[$i]->clave)
                                 ->pluck('producto.id');
 
 
-                    //Mayorista--
-                     $p2 = DB::table('producto')
-                                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-                                ->where('tipo', 2)
-                                ->where('clave', $idpro[$i]->clave)
-                                ->pluck('producto.id');
-
-
-                    //Distribuidor--
-                     $p3 = DB::table('producto')
-                                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-                                ->where('tipo', 3)
-                                ->where('clave', $idpro[$i]->clave)
-                                ->pluck('producto.id');
-
-                      //Verificamos el id para obtener el id del inventario
+                    //Verificamos el id para obtener el id del inventario
                     $inve1 = DB::table('inventario')
                                 ->where('producto_id', $p1)
-                                ->pluck('id');
-
-
-                    $inve2 = DB::table('inventario')
-                                ->where('producto_id', $p2)
-                                ->pluck('id');
-
-
-                    $inve3 = DB::table('inventario')
-                                ->where('producto_id', $p3)
                                 ->pluck('id');
 
                     //comprobamos y obtenemos el id del inv
@@ -2280,13 +1353,13 @@ public function getProducto(){
                     $p = DB::table('producto')
                         ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
                         ->orderBy('producto.cantidad_minima', 'asc')
-                        ->where('producto.id', $p3)
+                        ->where('producto.id', $p1)
                         ->pluck('cantidad_minima');
 
                     $inventario = DB::table('producto')
                             ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
                             ->orderBy('producto.cantidad_minima', 'asc')
-                            ->where('producto.id', $p3)
+                            ->where('producto.id', $p1)
                             ->pluck('cantidad');
 
                         //Comparamos la cantidad actual del producto del inventario con la cantidad minima del producto
@@ -2294,13 +1367,13 @@ public function getProducto(){
 
                             //verificamos si e producto ya existe
                             $i_v = DB::table('alertas')
-                            ->where('producto_id', $p3)
+                            ->where('producto_id', $p1)
                             ->first();
 
                             //Si no existe insertamos
                             if(count($i_v)==0){
                                 $alerta = new Alerta;
-                                $alerta->producto_id = $p3;
+                                $alerta->producto_id = $p1;
                                 $alerta->estatus = 1;
                                 $alerta->save();
 
@@ -2313,158 +1386,7 @@ public function getProducto(){
                             
                         }
 
-                    } else if($inve2 != ""){
-                        $y_m = $y1 - $cant;
-
-                         //descontamos la cantidad del inventario
-                        $inv = Inventario::find($inve2);
-                        $inv->cantidad -= $y_m;
-                        $inv->save();
-
-                        //Obtenemos el id del inventario detalle
-                        $id_i_d = DB::table('inventario_detalle')
-                                ->where('producto_id', $p2)
-                                ->where('num_pedimento', $num_p)
-                                ->pluck('id');
-
-                        //descontamos la cantidad del inventario_detalle
-                        $inv_d = InventarioDetalle::find($id_i_d);
-                        $inv_d->cantidad -= $y_m;
-                        $inv_d->save();
-
-                        //registramos en pedido detalle
-                        $p_detalle = new PedidoDetalle;
-                        $p_detalle->pedido_id = $pedido['id'];
-                        $p_detalle->producto_id = $idpro[$i]->idp;
-                        $p_detalle->num_pedimento = $num_p;
-                        $p_detalle->cantidad = $cant;
-                        $p_detalle->save();
-
-                        //Borramos el producto
-                        $inv_d = InventarioDetalle::find($id_i_d);
-                        $inv_d->delete();
-
-                        //Actualizamos la cantidad de los datos temporales
-                        $id_t = DB::table('total_producto')
-                                ->where('clave', $idpro[$i]->clave)
-                                ->pluck('id');
-                        
-                        $y_a = TotalProducto::find($id_t);
-                        $y_a->cantidad -= $cant;
-                        $y_a->save();
-
-                        //Alertas de los productos
-                    $p = DB::table('producto')
-                        ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
-                        ->orderBy('producto.cantidad_minima', 'asc')
-                        ->where('producto.id', $p3)
-                        ->pluck('cantidad_minima');
-
-                    $inventario = DB::table('producto')
-                            ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
-                            ->orderBy('producto.cantidad_minima', 'asc')
-                            ->where('producto.id', $p3)
-                            ->pluck('cantidad');
-
-                        //Comparamos la cantidad actual del producto del inventario con la cantidad minima del producto
-                        if($inventario <= $p){
-
-                            //verificamos si e producto ya existe
-                            $i_v = DB::table('alertas')
-                            ->where('producto_id', $p3)
-                            ->first();
-
-                            //Si no existe insertamos
-                            if(count($i_v)==0){
-                                $alerta = new Alerta;
-                                $alerta->producto_id = $p3;
-                                $alerta->estatus = 1;
-                                $alerta->save();
-
-                            //si ya existe no pasa nada
-                            } else {
-
-
-                            }
-                            
-                            
-                        }
-
-                    } else if($inve3 != ""){
-                        $y_m = $y1 - $cant;
-
-                        //descontamos la cantidad del inventario
-                        $inv = Inventario::find($inve3);
-                        $inv->cantidad -= $cant;
-                        $inv->save();
-
-                        //Obtenemos el id del inventario detalle
-                        $id_i_d = DB::table('inventario_detalle')
-                                ->where('producto_id', $p3)
-                                ->where('num_pedimento', $num_p)
-                                ->pluck('id');
-
-
-                        //registramos en pedido detalle
-                        $p_detalle = new PedidoDetalle;
-                        $p_detalle->pedido_id = $pedido['id'];
-                        $p_detalle->producto_id = $idpro[$i]->idp;
-                        $p_detalle->num_pedimento = $num_p;
-                        $p_detalle->cantidad = $cant;
-                        $p_detalle->save();
-
-                        //Como la cantidad del pedimento no es suficiente lo borramos
-                        $inv_d = InventarioDetalle::find($id_i_d);
-                        $inv_d->delete();
-
-                        //Actualizamos la cantidad de los datos temporales
-                        $id_t = DB::table('total_producto')
-                                ->where('clave', $idpro[$i]->clave)
-                                ->pluck('id');
-                        
-                        $y_a = TotalProducto::find($id_t);
-                        $y_a->cantidad -= $cant;
-                        $y_a->save();
-
-                        //Alertas de los productos
-                    $p = DB::table('producto')
-                        ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
-                        ->orderBy('producto.cantidad_minima', 'asc')
-                        ->where('producto.id', $p3)
-                        ->pluck('cantidad_minima');
-
-                    $inventario = DB::table('producto')
-                            ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
-                            ->orderBy('producto.cantidad_minima', 'asc')
-                            ->where('producto.id', $p3)
-                            ->pluck('cantidad');
-
-                        //Comparamos la cantidad actual del producto del inventario con la cantidad minima del producto
-                        if($inventario <= $p){
-
-                            //verificamos si e producto ya existe
-                            $i_v = DB::table('alertas')
-                            ->where('producto_id', $p3)
-                            ->first();
-
-                            //Si no existe insertamos
-                            if(count($i_v)==0){
-                                $alerta = new Alerta;
-                                $alerta->producto_id = $p3;
-                                $alerta->estatus = 1;
-                                $alerta->save();
-
-                            //si ya existe no pasa nada
-                            } else {
-
-
-                            }
-                            
-                            
-                        }
-
-                        
-                    }//---
+                    }  
 
 
                 }//-----
@@ -2548,31 +1470,11 @@ public function getProducto(){
 
 
                 if($y1 <= $cant){
+                    //echo $r = "Si es menor oh igual";
 
-                     //echo $r = "Si es menor oh igual";
-
-                     //obtenemos los id del producto, ya depende si el usuario
-                     //es retail, mayorista o distribuidor
-                     //Retail--
+                     //obtenemos los id del producto
                      $p1 = DB::table('producto')
                                 ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-                                ->where('tipo', 1)
-                                ->where('clave', $idpro[$i]->clave)
-                                ->pluck('producto.id');
-
-
-                    //Mayorista--
-                     $p2 = DB::table('producto')
-                                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-                                ->where('tipo', 2)
-                                ->where('clave', $idpro[$i]->clave)
-                                ->pluck('producto.id');
-
-
-                    //Distribuidor--
-                     $p3 = DB::table('producto')
-                                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-                                ->where('tipo', 3)
                                 ->where('clave', $idpro[$i]->clave)
                                 ->pluck('producto.id');
 
@@ -2582,15 +1484,6 @@ public function getProducto(){
                                 ->where('producto_id', $p1)
                                 ->pluck('id');
 
-
-                    $inve2 = DB::table('inventario')
-                                ->where('producto_id', $p2)
-                                ->pluck('id');
-
-
-                    $inve3 = DB::table('inventario')
-                                ->where('producto_id', $p3)
-                                ->pluck('id');
 
                     //comprobamos y obtenemos el id del inv
                     if($inve1 != ""){
@@ -2627,17 +1520,17 @@ public function getProducto(){
                         $y1 = TotalProducto::find($idy);
                         $y1->delete();
 
-                        //Alertas de los productos
+                    //Alertas de los productos
                     $p = DB::table('producto')
                         ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
                         ->orderBy('producto.cantidad_minima', 'asc')
-                        ->where('producto.id', $p3)
+                        ->where('producto.id', $p1)
                         ->pluck('cantidad_minima');
 
                     $inventario = DB::table('producto')
                             ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
                             ->orderBy('producto.cantidad_minima', 'asc')
-                            ->where('producto.id', $p3)
+                            ->where('producto.id', $p1)
                             ->pluck('cantidad');
 
                         //Comparamos la cantidad actual del producto del inventario con la cantidad minima del producto
@@ -2645,13 +1538,13 @@ public function getProducto(){
 
                             //verificamos si e producto ya existe
                             $i_v = DB::table('alertas')
-                            ->where('producto_id', $p3)
+                            ->where('producto_id', $p1)
                             ->first();
 
                             //Si no existe insertamos
                             if(count($i_v)==0){
                                 $alerta = new Alerta;
-                                $alerta->producto_id = $p3;
+                                $alerta->producto_id = $p1;
                                 $alerta->estatus = 1;
                                 $alerta->save();
 
@@ -2664,191 +1557,23 @@ public function getProducto(){
                             
                         }
 
-                    } else if($inve2 != ""){
-
-                         //descontamos la cantidad del inventario
-                        $inv = Inventario::find($inve2);
-                        $inv->cantidad -= $y1;
-                        $inv->save();
-
-                        //Obtenemos el id del inventario detalle
-                        $id_i_d = DB::table('inventario_detalle')
-                                ->where('producto_id', $p2)
-                                ->where('num_pedimento', $num_p)
-                                ->pluck('id');
-
-                         //registramos en pedido detalle
-                        $p_detalle = new PedidoDetalle;
-                        $p_detalle->pedido_id = $pedido['id'];
-                        $p_detalle->producto_id = $idpro[$i]->idp;
-                        $p_detalle->num_pedimento = $num_p;
-                        $p_detalle->cantidad = $y1;
-                        $p_detalle->save();
-
-                        //descontamos la cantidad del inventario_detalle
-                        $inv_d = InventarioDetalle::find($id_i_d);
-                        $inv_d->cantidad -= $y1;
-                        $inv_d->save();
-
-                        //eliminamos los datos temporales
-                        $idy = DB::table('total_producto')
-                            ->where('clave', $idpro[$i]->clave)
-                            ->pluck('id');
-
-                        $y1 = TotalProducto::find($idy);
-                        $y1->delete();
-
-                        //Alertas de los productos
-                    $p = DB::table('producto')
-                        ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
-                        ->orderBy('producto.cantidad_minima', 'asc')
-                        ->where('producto.id', $p3)
-                        ->pluck('cantidad_minima');
-
-                    $inventario = DB::table('producto')
-                            ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
-                            ->orderBy('producto.cantidad_minima', 'asc')
-                            ->where('producto.id', $p3)
-                            ->pluck('cantidad');
-
-                        //Comparamos la cantidad actual del producto del inventario con la cantidad minima del producto
-                        if($inventario <= $p){
-
-                            //verificamos si e producto ya existe
-                            $i_v = DB::table('alertas')
-                            ->where('producto_id', $p3)
-                            ->first();
-
-                            //Si no existe insertamos
-                            if(count($i_v)==0){
-                                $alerta = new Alerta;
-                                $alerta->producto_id = $p3;
-                                $alerta->estatus = 1;
-                                $alerta->save();
-
-                            //si ya existe no pasa nada
-                            } else {
-
-
-                            }
-                            
-                            
-                        }
-
-                    } else if($inve3 != ""){
-
-                        //descontamos la cantidad del inventario
-                        $inv = Inventario::find($inve3);
-                        $inv->cantidad -= $y1;
-                        $inv->save();
-
-                        //Obtenemos el id del inventario detalle
-                        $id_i_d = DB::table('inventario_detalle')
-                                ->where('producto_id', $p3)
-                                ->where('num_pedimento', $num_p)
-                                ->pluck('id');
-
-                        //registramos en pedido detalle
-                        $p_detalle = new PedidoDetalle;
-                        $p_detalle->pedido_id = $pedido['id'];
-                        $p_detalle->producto_id = $idpro[$i]->idp;
-                        $p_detalle->num_pedimento = $num_p;
-                        $p_detalle->cantidad = $y1;
-                        $p_detalle->save();
-
-                        //descontamos la cantidad del inventario_detalle
-                        $inv_d = InventarioDetalle::find($id_i_d);
-                        $inv_d->cantidad -= $y1;
-                        $inv_d->save();
-
-                        //eliminamos los datos temporales
-                        $idy = DB::table('total_producto')
-                            ->where('clave', $idpro[$i]->clave)
-                            ->pluck('id');
-
-                        $y1 = TotalProducto::find($idy);
-                        $y1->delete();
-
-                        //Alertas de los productos
-                    $p = DB::table('producto')
-                        ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
-                        ->orderBy('producto.cantidad_minima', 'asc')
-                        ->where('producto.id', $p3)
-                        ->pluck('cantidad_minima');
-
-                    $inventario = DB::table('producto')
-                            ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
-                            ->orderBy('producto.cantidad_minima', 'asc')
-                            ->where('producto.id', $p3)
-                            ->pluck('cantidad');
-
-                        //Comparamos la cantidad actual del producto del inventario con la cantidad minima del producto
-                        if($inventario <= $p){
-
-                            //verificamos si e producto ya existe
-                            $i_v = DB::table('alertas')
-                            ->where('producto_id', $p3)
-                            ->first();
-
-                            //Si no existe insertamos
-                            if(count($i_v)==0){
-                                $alerta = new Alerta;
-                                $alerta->producto_id = $p3;
-                                $alerta->estatus = 1;
-                                $alerta->save();
-
-                            //si ya existe no pasa nada
-                            } else {
-
-
-                            }
-                            
-                            
-                        }
-                        
-                    }
+                    } 
 
                     break; //Detenemos el ciclo -------------------------------------
-
 
                 } else {
                     //echo $r = "Es mayor, faltan productos";
 
-                    $p1 = DB::table('producto')
+                     //obtenemos los id del producto
+                     $p1 = DB::table('producto')
                                 ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-                                ->where('tipo', 1)
                                 ->where('clave', $idpro[$i]->clave)
                                 ->pluck('producto.id');
 
 
-                    //Mayorista--
-                     $p2 = DB::table('producto')
-                                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-                                ->where('tipo', 2)
-                                ->where('clave', $idpro[$i]->clave)
-                                ->pluck('producto.id');
-
-
-                    //Distribuidor--
-                     $p3 = DB::table('producto')
-                                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-                                ->where('tipo', 3)
-                                ->where('clave', $idpro[$i]->clave)
-                                ->pluck('producto.id');
-
-                      //Verificamos el id para obtener el id del inventario
+                    //Verificamos el id para obtener el id del inventario
                     $inve1 = DB::table('inventario')
                                 ->where('producto_id', $p1)
-                                ->pluck('id');
-
-
-                    $inve2 = DB::table('inventario')
-                                ->where('producto_id', $p2)
-                                ->pluck('id');
-
-
-                    $inve3 = DB::table('inventario')
-                                ->where('producto_id', $p3)
                                 ->pluck('id');
 
                     //comprobamos y obtenemos el id del inv
@@ -2898,13 +1623,13 @@ public function getProducto(){
                     $p = DB::table('producto')
                         ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
                         ->orderBy('producto.cantidad_minima', 'asc')
-                        ->where('producto.id', $p3)
+                        ->where('producto.id', $p1)
                         ->pluck('cantidad_minima');
 
                     $inventario = DB::table('producto')
                             ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
                             ->orderBy('producto.cantidad_minima', 'asc')
-                            ->where('producto.id', $p3)
+                            ->where('producto.id', $p1)
                             ->pluck('cantidad');
 
                         //Comparamos la cantidad actual del producto del inventario con la cantidad minima del producto
@@ -2912,13 +1637,13 @@ public function getProducto(){
 
                             //verificamos si e producto ya existe
                             $i_v = DB::table('alertas')
-                            ->where('producto_id', $p3)
+                            ->where('producto_id', $p1)
                             ->first();
 
                             //Si no existe insertamos
                             if(count($i_v)==0){
                                 $alerta = new Alerta;
-                                $alerta->producto_id = $p3;
+                                $alerta->producto_id = $p1;
                                 $alerta->estatus = 1;
                                 $alerta->save();
 
@@ -2931,158 +1656,7 @@ public function getProducto(){
                             
                         }
 
-                    } else if($inve2 != ""){
-                        $y_m = $y1 - $cant;
-
-                         //descontamos la cantidad del inventario
-                        $inv = Inventario::find($inve2);
-                        $inv->cantidad -= $y_m;
-                        $inv->save();
-
-                        //Obtenemos el id del inventario detalle
-                        $id_i_d = DB::table('inventario_detalle')
-                                ->where('producto_id', $p2)
-                                ->where('num_pedimento', $num_p)
-                                ->pluck('id');
-
-                        //descontamos la cantidad del inventario_detalle
-                        $inv_d = InventarioDetalle::find($id_i_d);
-                        $inv_d->cantidad -= $y_m;
-                        $inv_d->save();
-
-                        //registramos en pedido detalle
-                        $p_detalle = new PedidoDetalle;
-                        $p_detalle->pedido_id = $pedido['id'];
-                        $p_detalle->producto_id = $idpro[$i]->idp;
-                        $p_detalle->num_pedimento = $num_p;
-                        $p_detalle->cantidad = $cant;
-                        $p_detalle->save();
-
-                        //Borramos el producto
-                        $inv_d = InventarioDetalle::find($id_i_d);
-                        $inv_d->delete();
-
-                        //Actualizamos la cantidad de los datos temporales
-                        $id_t = DB::table('total_producto')
-                                ->where('clave', $idpro[$i]->clave)
-                                ->pluck('id');
-                        
-                        $y_a = TotalProducto::find($id_t);
-                        $y_a->cantidad -= $cant;
-                        $y_a->save();
-
-                        //Alertas de los productos
-                    $p = DB::table('producto')
-                        ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
-                        ->orderBy('producto.cantidad_minima', 'asc')
-                        ->where('producto.id', $p3)
-                        ->pluck('cantidad_minima');
-
-                    $inventario = DB::table('producto')
-                            ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
-                            ->orderBy('producto.cantidad_minima', 'asc')
-                            ->where('producto.id', $p3)
-                            ->pluck('cantidad');
-
-                        //Comparamos la cantidad actual del producto del inventario con la cantidad minima del producto
-                        if($inventario <= $p){
-
-                            //verificamos si e producto ya existe
-                            $i_v = DB::table('alertas')
-                            ->where('producto_id', $p3)
-                            ->first();
-
-                            //Si no existe insertamos
-                            if(count($i_v)==0){
-                                $alerta = new Alerta;
-                                $alerta->producto_id = $p3;
-                                $alerta->estatus = 1;
-                                $alerta->save();
-
-                            //si ya existe no pasa nada
-                            } else {
-
-
-                            }
-                            
-                            
-                        }
-
-                    } else if($inve3 != ""){
-                        $y_m = $y1 - $cant;
-
-                        //descontamos la cantidad del inventario
-                        $inv = Inventario::find($inve3);
-                        $inv->cantidad -= $cant;
-                        $inv->save();
-
-                        //Obtenemos el id del inventario detalle
-                        $id_i_d = DB::table('inventario_detalle')
-                                ->where('producto_id', $p3)
-                                ->where('num_pedimento', $num_p)
-                                ->pluck('id');
-
-
-                        //registramos en pedido detalle
-                        $p_detalle = new PedidoDetalle;
-                        $p_detalle->pedido_id = $pedido['id'];
-                        $p_detalle->producto_id = $idpro[$i]->idp;
-                        $p_detalle->num_pedimento = $num_p;
-                        $p_detalle->cantidad = $cant;
-                        $p_detalle->save();
-
-                        //Como la cantidad del pedimento no es suficiente lo borramos
-                        $inv_d = InventarioDetalle::find($id_i_d);
-                        $inv_d->delete();
-
-                        //Actualizamos la cantidad de los datos temporales
-                        $id_t = DB::table('total_producto')
-                                ->where('clave', $idpro[$i]->clave)
-                                ->pluck('id');
-                        
-                        $y_a = TotalProducto::find($id_t);
-                        $y_a->cantidad -= $cant;
-                        $y_a->save();
-
-                        //Alertas de los productos
-                    $p = DB::table('producto')
-                        ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
-                        ->orderBy('producto.cantidad_minima', 'asc')
-                        ->where('producto.id', $p3)
-                        ->pluck('cantidad_minima');
-
-                    $inventario = DB::table('producto')
-                            ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
-                            ->orderBy('producto.cantidad_minima', 'asc')
-                            ->where('producto.id', $p3)
-                            ->pluck('cantidad');
-
-                        //Comparamos la cantidad actual del producto del inventario con la cantidad minima del producto
-                        if($inventario <= $p){
-
-                            //verificamos si e producto ya existe
-                            $i_v = DB::table('alertas')
-                            ->where('producto_id', $p3)
-                            ->first();
-
-                            //Si no existe insertamos
-                            if(count($i_v)==0){
-                                $alerta = new Alerta;
-                                $alerta->producto_id = $p3;
-                                $alerta->estatus = 1;
-                                $alerta->save();
-
-                            //si ya existe no pasa nada
-                            } else {
-
-
-                            }
-                            
-                            
-                        }
-
-                        
-                    }//---
+                    }  
 
 
                 }//-----
@@ -3469,6 +2043,7 @@ public function getProducto(){
                             ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
                             ->join('producto_precio','producto.id', '=','producto_precio.producto_id')
                             ->where('pedido_detalle.pedido_id', $id)
+                            ->where('producto.id', $idd )
                             ->get();
 
                 $pedimento = DB::table('pedido_detalle')
@@ -3479,7 +2054,7 @@ public function getProducto(){
 
                 $dpro = DB::table('pedido_detalle')
                             ->join('producto','pedido_detalle.producto_id', '=','producto.id')
-                            ->where('pedido_detalle.id', $d)
+                            ->where('pedido_detalle.id', $id)
                             ->get();
 
                 //Sacamos el total
@@ -3545,7 +2120,7 @@ public function getProducto(){
 
                     $dpro = DB::table('pedido_detalle')
                                 ->join('producto','pedido_detalle.producto_id', '=','producto.id')
-                                ->where('pedido_detalle.id', $d)
+                                ->where('pedido_detalle.id', $id)
                                 ->get();
 
                     //Sacamos el total

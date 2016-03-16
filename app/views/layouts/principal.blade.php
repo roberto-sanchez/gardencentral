@@ -53,7 +53,11 @@
                         <li><a id="p_cliente" href="#pedidos" data-toggle="modal"><span class="glyphicon glyphicon-shopping-cart"></span> Pedidos</a></li>
                       @show
                       <li class="divider"></li>
-                        <li><a class="log-out" href="/logout"><span class="glyphicon glyphicon-off"></span> Cerrar Sesión</a></li>
+                      @if(Auth::user()->rol_id == 1)
+                        <li><a class="logout"><span class="glyphicon glyphicon-off"></span> Cerrar Sesión</a></li>
+                      @else
+                        <li><a href="/logout"><span class="glyphicon glyphicon-off"></span> Cerrar Sesión</a></li>
+                      @endif
                       <li class="divider"></li>
                   </ul>
               </li>
@@ -91,7 +95,7 @@
                       </li>
                     @show
                     <li>
-                      <a href="/logout"><span class="glyphicon glyphicon-off"></span> <span class="caption">Cerrar Sesión</span></a>
+                      <a href="/logout"><span class="logout glyphicon glyphicon-off"></span> <span class="caption">Cerrar Sesión</span></a>
                     </li>
                 </ul>
             </div>
@@ -170,7 +174,7 @@
                 <li><a href="{{ URL::to('/catalogo/Almacen') }}">Almacen</a></li>
                 <li><a href="{{ URL::to('/catalogo/Cliente') }}">Clientes</a></li>
                 <li><a href="{{ URL::to('/catalogo/Comercializador') }}">Comercializador</a></li>
-                <li><a href="{{ URL::to('/catalogo/Contacto') }}">Contacto</a></li>
+               <!-- <li><a href="{{ URL::to('/catalogo/Contacto') }}">Contacto</a></li>-->
                 <li><a href="{{ URL::to('/catalogo/Descuentos') }}">Descuentos</a></li>
                 <li><a href="{{ URL::to('/catalogo/Estados') }}">Estados</a></li>
                 <li><a href="{{ URL::to('/catalogo/Familias') }}">Familias</a></li>
@@ -180,7 +184,7 @@
                 <li><a href="{{ URL::to('/catalogo/Municipios') }}">Municipio</a></li>
                 <li><a href="{{ URL::to('/catalogo/NivelDescuento') }}">Nivel de descuento</a></li>
                 <li><a href="{{ URL::to('/catalogo/Pais') }}">País</a></li>
-                <li><a href="{{ URL::to('/catalogo/Precio') }}">Precio</a></li>
+                <!--<li><a href="{{ URL::to('/catalogo/Precio') }}">Precio</a></li>-->
                 <li><a href="{{ URL::to('/catalogo/Producto') }}">Producto</a></li>
                 <li><a href="{{ URL::to('/catalogo/Proveedor') }}">Proveedor</a></li>
                 <li><a href="{{ URL::to('/catalogo/Rol') }}">Rol</a></li>
@@ -214,13 +218,13 @@
                 <li><a href="{{ URL::to('/entradas/agregar') }}">Nueva entrada</a></li>
             </ul>
         </li>
-         <li>
+       <!--  <li>
             <h3><span class="glyphicon glyphicon-level-up"></span>Salidas</h3>
             <ul>
                 <li><a href="#">Enlace 2</a></li>
                 <li><a href="#">Enlace 4</a></li>
             </ul>
-        </li>
+        </li>-->
         <li class="inventario">
            <h3 class="t-inventario"><span class="glyphicon glyphicon-list-alt"></span>Inventario</h3>
            <ul>
@@ -348,8 +352,8 @@
                     <th>Color</th>
                     <th>Precio</th>
                     <th>Iva</th>
-                    <th>Piezas por paquete</th>
-                    <th>Cantidad de paquetes</th>
+                    <th>Cantidad</th>
+                  <!--  <th>Pedimento</th>-->
                     <th>Foto</th>
                     <th>Total producto</th>
                   </tr>

@@ -67,8 +67,12 @@ class CatalogoController extends \BaseController {
 	 		 	$data['estados'] = Estado::all();
 	 		 	break;
 
-	 		case 'NivelDescuento':
-	 		 	$data['nivelDescuento'] = nivel_descuento::all();
+	 		case 'Descuentos':
+	 		 	$data['descuentos'] = Descuentos::all();
+	 		 	$data['familias'] = DB::table('familia')
+	 		 					->where('estatus','=','1')
+	 		 					->select('id','descripcion','estatus')
+	 		 					->get();
 	 		 	break;
 
 	 		case 'Pais':
@@ -76,7 +80,7 @@ class CatalogoController extends \BaseController {
 	 		 	break;
 
 	 		case 'Precio':
-	 		 	$data['precio'] = Precio::all();
+	 		 	$data['precio'] = PrecioProducto::all();
 	 		 	break;
 
 	 		case 'Producto':
@@ -85,7 +89,7 @@ class CatalogoController extends \BaseController {
 	 		 				->leftJoin('importador','importador.id','=','producto.importador_id')
 	 		 				->leftJoin('almacen','almacen.id','=','producto.almacen_id')
 	 		 				->leftJoin('familia','familia.id','=','producto.familia_id')
-	 		 				->select('producto.id as idProd','producto.clave','producto.nombre as nomProd','producto.numero_articulo','producto.ean_code','producto.color','producto.numero_color','producto.unidad_medida_id','producto.piezas_paquete','producto.dimensiones','producto.piezas_pallet','producto.total_piezas','producto.foto','producto.importador_id','producto.almacen_id','producto.familia_id','producto.estatus_web','producto.estatus','uMedida.descripcion as descrUMedida','importador.nombre','almacen.clave as cveAlmacen','familia.descripcion as descrFamilia')
+	 		 				->select('producto.id as idProd','producto.clave','producto.nombre as nomProd','producto.numero_articulo','producto.ean_code','producto.color','producto.numero_color','producto.unidad_medida_id','producto.piezas_paquete','producto.dimensiones','producto.piezas_pallet','producto.total_piezas','producto.foto','producto.importador_id','producto.almacen_id','producto.familia_id','producto.iva0 as iva','producto.cantidad_minima','producto.estatus_web','producto.estatus','uMedida.descripcion as descrUMedida','importador.nombre','almacen.clave as cveAlmacen','familia.descripcion as descrFamilia')
 	 		 				->get();
 
 	 		 	break;
@@ -106,7 +110,11 @@ class CatalogoController extends \BaseController {
 	 		 	break;
 
 	 		case 'Usuario':
-	 		 	$data['usuario'] = Usuario::all();
+	 		 	$data['usuario'] = DB::table('usuario')
+	 		 			->leftJoin('rol','rol.id','=','usuario.rol_id')
+	 		 			->select('usuario.id','usuario.usuario','usuario.email','usuario.rol_id','rol.nombre as rol')
+	 		 			->orderBy('usuario.rol_id','desc')
+	 		 			->get();
 	 		 	break;	
 
 	 		default:
@@ -241,13 +249,24 @@ class CatalogoController extends \BaseController {
 					$resp = DB::table('Comercializador')   
 	            			->where("nombre", $comercializador->nombre)->first();
 					break;
+				case 'Importador':
+					$importador = new Importador;
+					$importador -> nombre = Input::get('nomImportador');
+					$importador -> save();
+					$resp = DB::table('importador')
+						->where('id','=',$importador->id)
+						->select('id','nombre')
+						->first();
+					break;
 
 				case 'FormaPago':
 					$formaPago = new FormaDePago;
 					$formaPago ->descripcion = Input::get('descripcion');	
 					$formaPago ->save();
 					$resp = DB::table('forma_pago')
-							->where('id','=',$formaPago->id)->first();
+							->where('id','=',$formaPago->id)
+							->select('id','descripcion')
+							->first();
 					break;
 
 				case 'NivelDescuento':
@@ -410,6 +429,8 @@ class CatalogoController extends \BaseController {
 					$producto -> importador_id = Input::get('importadorProd');
 					$producto -> almacen_id = Input::get('almacenProd');
 					$producto -> familia_id = Input::get('familiaProd');
+					$producto -> iva0 = Input::get('iva');
+					$producto -> cantidad_minima = Input::get('cantMinProd');
 					$producto -> estatus_web = Input::get('estatusWebProd');
 					$producto -> estatus = Input::get('estatusProd');
 					if($producto -> save()){
@@ -420,6 +441,54 @@ class CatalogoController extends \BaseController {
 							->first();
 					}
 					
+					break;
+
+				case 'ProductoPrecio':
+					$productoPrecio = new PrecioProducto;
+					//var_dump($productoPrecio);
+					//die;
+					$productoPrecio -> producto_id = Input::get('idProducto');
+					$productoPrecio -> precio = Input::get('precio');
+					$productoPrecio -> tipo = Input::get('tipoPrecio');
+					$productoPrecio -> moneda = Input::get('monedaProd');
+					$productoPrecio -> fecha_inicio = Input::get('fechaInicio');
+					$productoPrecio -> fecha_fin = Input::get('fechaFin');
+					$productoPrecio -> estatus = Input::get('estatus');
+					$productoPrecio -> save();
+					$resp = DB::table('producto_precio')
+							-> where('id','=',$productoPrecio->id)
+							-> select(DB::raw('from_unixtime(unix_timestamp(fecha_inicio),\'%Y-%m-%d\') as fechaInicio,from_unixtime(unix_timestamp(fecha_fin),\'%Y-%m-%d\') as fechaFin, id, precio, tipo, moneda, estatus'))
+							-> first();
+					break;
+
+				case 'Descuentos':
+					$descuento = new Descuentos;
+					$descuento -> familia_id = Input::get('familiaDesc');
+					$descuento -> descripcion = Input::get('descrDesc');
+					$descuento -> descuento = Input::get('descDesc');
+					$descuento -> fecha_inicio = Input::get('fechaInicioDesc');
+					$descuento -> fecha_fin = Input::get('fechaFinDesc');
+					$descuento -> estatus = Input::get('estatusDesc');
+					$descuento -> save();
+					$resp['descuento'] = DB::table('descuento')
+						->where('id','=',$descuento->id)
+						->select('id','familia_id','descripcion','descuento','fecha_inicio','fecha_fin','estatus')
+						->first();
+					$resp['familias'] = DB::table('familia')
+								->where('estatus','=','1')
+	 		 					->select('id','descripcion','estatus')
+	 		 					->get();
+					break;
+				case 'Usuario':
+					$usuario = new Usuario;
+					$usuario -> rol_id = Input::get('rol');
+					$usuario -> usuario = Input::get('usuario');
+					$usuario -> password = Hash::make(Input::get('contraseña'));
+					$usuario -> email = Input::get('email');
+					$usuario -> save();
+					$resp = DB::table('Usuario')
+						->where('id','=',$usuario->id)
+						->select('id','rol_id','usuario','email')->first();
 					break;
 
 				default:
@@ -581,7 +650,12 @@ class CatalogoController extends \BaseController {
 	            			->where("nombre", $comercializador -> nombre)->first();
 
 					break;
-
+				case 'Importador':
+					$importador = Importador::find($id);
+					$importador -> nombre = Input::get('nomImportador');
+					$importador -> save();
+					return Response::json('success');
+					break;
 				case 'FormaPago':
 					$formaPago = FormaDePago::find($id);
 					$formaPago -> descripcion = Input::get('descripcion');	
@@ -722,16 +796,67 @@ class CatalogoController extends \BaseController {
 					$producto -> dimensiones = Input::get('DimenProd');
 					$producto -> piezas_pallet = Input::get('piezasPalletProd');
 					$producto -> total_piezas = Input::get('totalPiezasProd');
-					$producto -> foto = Input::file('fotoProd')->getClientOriginalName();
 					$producto -> importador_id = Input::get('importadorProd');
 					$producto -> almacen_id = Input::get('almacenProd');
 					$producto -> familia_id = Input::get('familiaProd');
+					$producto -> iva0 = Input::get('iva');
+					$producto -> cantidad_minima = Input::get('cantMinProd');
 					$producto -> estatus_web = Input::get('estatusWebProd');
 					$producto -> estatus = Input::get('estatusProd');
-					$producto -> save();
+					//$foto = Input::file('fotoProd');
+					if(Input::hasFile('fotoProd')) {
+						$foto = Input::file('fotoProd');
+						$producto -> foto = $foto->getClientOriginalName();
+						if ($producto -> save()) {
+							$foto->move('img/productos',$foto->getClientOriginalName());
+							
+						}
+					}else{
+						$producto -> save();
+					}
+					$resp = DB::table('Producto')
+							->where('id','=',$producto->id)
+							->select('id as idProd','clave','nombre as nomProd','numero_articulo','ean_code','color','numero_color','unidad_medida_id','piezas_paquete','dimensiones','piezas_pallet','total_piezas','foto','importador_id','almacen_id','familia_id','estatus_web','estatus')
+							->first();
+					return Response::json($resp);
 
+				case 'ProductoPrecio':
+					$productoPrecio = PrecioProducto::find($id);
+					$productoPrecio -> producto_id = Input::get('idProducto');
+					$productoPrecio -> precio = Input::get('precio');
+					$productoPrecio -> tipo = Input::get('tipoPrecio');
+					$productoPrecio -> moneda = Input::get('monedaProd');
+					$productoPrecio -> fecha_inicio = Input::get('fechaInicio');
+					$productoPrecio -> fecha_fin = Input::get('fechaFin');
+					$productoPrecio -> estatus = Input::get('estatus');
+					$productoPrecio -> save();
 					return Response::json('success');
+					
+					break;
 
+				case 'Descuentos':
+					$descuento = Descuentos::find($id);
+					$descuento -> familia_id = Input::get('familiaDesc');
+					$descuento -> descripcion = Input::get('descrDesc');
+					$descuento -> descuento = Input::get('descDesc');
+					$descuento -> fecha_inicio = Input::get('fechaInicioDesc');
+					$descuento -> fecha_fin = Input::get('fechaFinDesc');
+					$descuento -> estatus = Input::get('estatusDesc');
+					$descuento -> save();
+					return Response::json('success');
+					break;
+				case 'Usuario':
+					$usuario = Usuario::find($id);
+					$usuario -> rol_id = Input::get('rol');
+					$usuario -> usuario = Input::get('usuario');
+					if (Input::has('contraseña')) { // Si hay una nueva contraseña, esta reemplazara a la anterior
+						$usuario -> password = Hash::make(Input::get('contraseña'));//de lo contrario quedara la misma
+					}
+					$usuario -> email = Input::get('email');
+					$usuario -> save();
+					return Response::json('success');
+					break;
+					
 				default:
 					return Response::json(';Datos no actualizados;',500);
 					break;
@@ -789,7 +914,10 @@ class CatalogoController extends \BaseController {
 					//Response::json('success');
 				# code...
 				break;
-			
+			case 'Importador':
+				$importador = Importador::find($id);
+				$importador -> delete();
+				break;
 			case 'FormaPago':
 				$formaPago = FormaDePago::find($id);
 				$formaPago ->delete();
@@ -855,6 +983,20 @@ class CatalogoController extends \BaseController {
 				$producto -> delete();
 				break;
 
+			case 'ProductoPrecio':
+				$productoPrecio = PrecioProducto::find($id);
+				$productoPrecio -> delete();
+				break;
+
+			case 'Descuentos':
+				$descuento = Descuentos::find($id);
+				$descuento -> delete();
+				break;
+			case 'Usuario':
+				$usuario = Usuario::find($id);
+				$usuario -> delete();
+				break;
+
 			default:
 				return Response::json('error',500);
 				break;
@@ -872,6 +1014,7 @@ class CatalogoController extends \BaseController {
 		$movimiento = Input::get('tipoMov');
 		$id = Input::get('id_upd');
 		$no_id;
+		
 		if ($movimiento==='Guardar') {		
 			$no_id ="";				//Si es un registro nuevo pasara la validacion normal
 			# code...
@@ -881,7 +1024,7 @@ class CatalogoController extends \BaseController {
 				}
 		
 		$catalogo=Input::get('catalogo');
-		
+
 		$mensajeError="";
 		switch ($catalogo) {
 			case 'Almacen':
@@ -1012,7 +1155,20 @@ class CatalogoController extends \BaseController {
 		        	if($validator->messages()->first('nombre')) {	$mensajeError.=";El nombre ya existe.;";	}
 	      		}
 				break;
-
+			case 'Importador':
+				$validator=Validator::make
+	      		(
+	        		[		          		
+			   	    	'nombre' => Input::get('nomImportador')		          
+		        	],
+	    	    	[
+		        		'nombre' => 'required|unique:Importador,nombre'.$no_id
+			        ]
+	    		);
+	    		if($validator->fails()) {
+		        	if($validator->messages()->first('nombre')) {	$mensajeError.=";El nombre de importador ya existe.;";	}
+	      		}
+				break;
 			case 'FormaPago':
 				$validator=Validator::make
 	      		(
@@ -1239,7 +1395,57 @@ class CatalogoController extends \BaseController {
 				break;
 
 			case 'Producto':
-				//$mensajeError .= "Error de validacion;";
+				$validator=Validator::make
+		      		(
+		        		[
+			          		'clave' 			=> Input::get('claveProd'),
+				   	    	'numero_articulo' 	=> Input::get('numArtProd'),	          
+				   	    	'nombre' 			=> Input::get('nomProd'),
+				   	    	'ean_code' 			=> Input::get('eanCodeProd'),
+				   	    	'color' 			=> Input::get('colorProd'),
+				   	    	'numero_color' 		=> Input::get('numColorProd'),
+				   	    	'unidad_medida_id' 	=> Input::get('uMedidaProd'),	
+				   	    	'piezas_paquete'	=> Input::get('piezasPaqProd'),
+				   	    	'dimensiones' 		=> Input::get('DimenProd'),
+				   	    	'piezas_pallet' 	=> Input::get('piezasPalletProd'),
+				   	    	'total_piezas'		=> Input::get('totalPiezasProd'),
+				   	    	'foto' 				=> Input::get('fotoProd'),
+				   	    	'importador_id'		=> Input::get('importadorProd'),
+				   	    	'almacen_id'		=> Input::get('almacenProd'),
+				   	    	'familia_id'		=> Input::get('familiaProd'),
+				   	    	'iva0'	 			=> Input::get('iva'),
+				   	    	'cantidad_minima'	=> Input::get('cantMinProd'),
+				   	    	'estatus_web'		=> Input::get('estatusWebProd'),
+				   	    	'estatus' 			=> Input::get('estatusProd')
+			        	],
+		    	    	[
+			    	        'clave' 			=> 'required|unique:Producto,clave'.$no_id,
+				   	    	'numero_articulo' 	=> 'required|unique:Producto,numero_articulo'.$no_id,
+				   	    	'nombre' 			=> 'required|unique:Producto,nombre'.$no_id,
+				   	    	'ean_code' 			=> 'required|unique:Producto,ean_code'.$no_id,
+				   	    	'color' 			=> 'required',
+				   	    	'numero_color' 		=> 'required',
+				   	    	'unidad_medida_id' 	=> 'required',
+				   	    	'piezas_paquete'	=> 'required',
+				   	    	'dimensiones' 		=> 'required',
+				   	    	'piezas_pallet' 	=> 'required',
+				   	    	'total_piezas'		=> 'required',
+				   	    	'foto' 				=> 'required',
+				   	    	'importador_id'		=> 'required',
+				   	    	'almacen_id'		=> 'required',
+				   	    	'familia_id'		=> 'required',
+				   	    	'iva0'	 			=> 'required',
+				   	    	'cantidad_minima'	=> 'required',
+				   	    	'estatus_web'		=> 'required',
+				   	    	'estatus'			=> 'required'
+				        ]
+		    		);
+				if($validator->fails()) {
+	    		    if($validator->messages()->first('clave')) {	$mensajeError.=";La clave ya existe.;";	}
+		        	if($validator->messages()->first('numero_articulo')) {	$mensajeError.=";El numero de articulo ya existe.;";	}
+			       	if($validator->messages()->first('nombre')) {	$mensajeError.=";El nombre ya existe.";	}
+			       	if($validator->messages()->first('ean_code')) {	$mensajeError.=";El codigo ean-code ya existe.";	}
+			    }	
 				break;
 
 			case 'Contacto':
@@ -1267,7 +1473,87 @@ class CatalogoController extends \BaseController {
 			    }	
 				break;
 
-			
+			case 'ProductoPrecio':
+				$validator=Validator::make
+		      		(
+		        		[
+			          		'precio' 		=> Input::get('precio'),
+				   	    	'tipo' 			=> Input::get('tipoPrecio'),	          
+				   	    	'moneda' 		=> Input::get('monedaProd'),
+				   	    	'producto_id' 	=> Input::get('idProducto'),
+				   	    	'fecha_inicio' 	=> Input::get('fechaInicio'),
+				   	    	'fecha_fin' 	=> Input::get('fechaFin'),
+				   	    	'estatus' 		=> Input::get('estatus')
+			        	],
+		    	    	[
+			    	      'precio' 			=> 	'required',
+			        	  'tipo' 			=>	'required',
+			        	  'moneda' 			=> 	'required',
+			        	  'producto_id' 	=> 	'required',
+			        	  'fecha_inicio'	=>	'required',
+			        	  'fecha_fin'		=>	'required',
+			        	  'estatus' 		=>	'required'
+				        ]
+		    		);
+		    	if($validator->fails()) {
+	    		    if($validator->messages()->first('precio')) {	$mensajeError.=";Ingrese precio.;";	}
+		        	if($validator->messages()->first('producto_id')) {	$mensajeError.=";Falta idProducto.;";	}
+			    }	
+				break;
+
+			case 'Descuentos':
+				$validator=Validator::make
+		      		(
+		        		[
+			          		'descripcion' 	=> Input::get('descrDesc'),
+				   	    	'familia_id' 	=> Input::get('familiaDesc'),	          
+				   	    	'descuento' 	=> Input::get('descDesc'),
+				   	    	'fecha_inicio' 	=> Input::get('fechaInicioDesc'),
+				   	    	'fecha_fin' 	=> Input::get('fechaFinDesc'),
+				   	    	'estatus' 		=> Input::get('estatusDesc')
+			        	],
+		    	    	[
+				    	    'descripcion' 	=> 	'required|unique:Descuento,descripcion'.$no_id,
+				        	'familia_id' 	=>	'required',
+				        	'descuento' 	=> 	'required',
+				        	'fecha_inicio'	=>	'required',
+				        	'fecha_fin'		=>	'required',
+				        	'estatus' 		=>	'required'
+				        ]
+		    		);
+		    	if($validator->fails()) {
+	    		    if($validator->messages()->first('descripcion')) {	$mensajeError.=";La descripcion ya existe.;";	}
+		        }	
+				break;
+			case 'Usuario':
+				$contraseña = '';
+				if ($movimiento === "Guardar") {
+					$contraseña = 'required';
+				}
+				$validator = Validator::make
+				(
+					[
+						'usuario' => Input::get('usuario'),
+						'password' => Input::get('contraseña'),
+						'email' => Input::get('email'),
+						'rol_id' => Input::get('rol'),
+					],
+					[
+						'usuario' =>			'required|unique:Usuario,usuario'.$no_id,
+						'password'	=>			$contraseña,			
+						'email' =>				'required|email|unique:Usuario,email'.$no_id,
+						'rol_id' =>				'required',
+					]
+
+				);
+				if($validator->fails()) {
+	    		  	if($validator->messages()->first('usuario')) {	$mensajeError.=";El usuario ya existe. ;";	}
+			       	if($validator->messages()->first('password')) {	$mensajeError.=";Ingrese password. ;";	}
+			       	if($validator->messages()->first('email')) {	$mensajeError.=";El e-mail ya existe. ;";	}
+			       	if($validator->messages()->first('rol_id')) {	$mensajeError.=";Seleccione rol. ;";	}
+			       	
+	      		}
+				break;
 
 			default:
 				$mensajeError = "Registro no guardado";
@@ -1418,6 +1704,17 @@ class CatalogoController extends \BaseController {
 		 					->where('estatus','=','1')
 		 					->select('id','descripcion')
 		 					->get();
+		 			return Response::json($resp);
+		 			break;
+
+		 		case 'ProductoPrecio':
+		 			$idProducto = Input::get('id');
+		 			/*$vigencia =DB::raw("from_unixtime(unix_timestamp(vigencia),'%b %d, %Y %l:%i %p') as vigencia");
+		 			$resp =PrecioProducto::get(array('id','precio', $vigencia));*/
+		 			$resp = DB::table('Producto_precio as precio')
+		 					-> where ('producto_id','=',$idProducto)
+		 					-> select (DB::raw('from_unixtime(unix_timestamp(fecha_inicio),\'%Y-%m-%d\') as fechaInicio,from_unixtime(unix_timestamp(fecha_fin),\'%Y-%m-%d\') as fechaFin, id, precio, tipo, moneda, estatus'))
+		 					-> get();
 		 			return Response::json($resp);
 		 			break;
 

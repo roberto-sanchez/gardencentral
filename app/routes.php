@@ -69,9 +69,8 @@ Route::get('consultas/listapedidos', 'AdminController@listapedidos');
 Route::get('consultas/listaagentes', 'AdminController@listaagentes');
 Route::get('consultas/listp', 'AdminController@listp');
 Route::get('entradas/agregar', 'AdminController@agregar');
-Route::POST('entradas/proveedores', 'AdminController@proveedores');
-Route::POST('entradas/buscar', 'AdminController@buscar');
-Route::POST('entradas/addproducto', 'AdminController@addproducto');
+Route::POST('entradas/listproducto', 'AdminController@listproducto');
+
 Route::POST('entradas/registrarentrada', 'AdminController@entradas');
 Route::GET('consultas/verestatusadmin', 'AdminController@verestatusadmin');
 Route::GET('consultas/cambiarestatusadmin', 'AdminController@cambiarestatusadmin');
@@ -188,7 +187,6 @@ Route::delete('productos/eliminardomicilio', 'ProductoController@eliminardomicil
 Route::get('productos/listartelefonos', 'ProductoController@listartelefonos');
 
 Route::get('productos/listnotas', 'ProductoController@listnotas');
-Route::get('productos/notasdetalle', 'ProductoController@notasdetalle');
 
 //Rutas de los catalogos
 //Rutas de los catalogos

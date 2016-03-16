@@ -5,7 +5,7 @@
 /* Positioning */
 .notifications.top-right {
   right: 10px;
-  top: 125px;
+  top: 1px;
 }
 
 .notifications.top-left {
@@ -26,6 +26,6 @@
 /* Notification Element */
 .notifications > div {
   position: relative;
-  z-index: 9999;
+  z-index: 1;
   margin: 5px 0px;
 }

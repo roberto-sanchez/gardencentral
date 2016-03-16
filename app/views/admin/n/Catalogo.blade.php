@@ -32,44 +32,46 @@ $(document).ready(function(){
                       switch ($catalogo) {
                         case 'Almacen':      ?>
                             <div class="table-responsive">
-                              <table id="tablaResult" class="table table-first-column-number" >
-                                  <thead>
-                                    <tr>
-                                      <th class="col-md-4">Clave</th>
-                                      <th class="col-md-4">Nombre</th>
-                                      <th class="col-md-1">Status</th>
-                                      <th class="col-md-3">Acción</th>
-                                    </tr>
-                                  </thead>  
-                                  <tbody>
-                                    <form>
-                                      <tr>
-                                        <td><input type="text" id="clave_0" name="clave" required class="form-control"> </td>
-                                        <td><input type="text" id="nombre_0" name="nombre" required class="form-control"> </td>
-                                        <td><input type="checkbox" id="status_0" name="status" value=1 checked="true" class="form-check" disabled></td>
-                                        <td><button type="button" id="btn_guardar" name="btn_guardar" value="Guardar" data-id="0" data-cat="Almacen" class="enviarG btn btn-success"> <span class="glyphicon glyphicon-">OK</span></button></td>
-                                      </tr>
-                                    </form>
-                                  
-                                    @foreach($almacenes as $almacen)
-                                    {{Form::open() }}
-                                      <tr id="tr_{{$almacen->id}}">
-                                        <td> <input type="text" name="clave_{{$almacen->id}}" value="{{$almacen->clave}}" id="clave_{{$almacen->id}}" disabled="disabled" required class="form-control"> </td>
-                                        <td> <input type="text" name="nombre_{{$almacen->id}}" value="{{$almacen->nombre}}" id="nombre_{{$almacen->id}}" disabled="disabled" required class="form-control"></td>
-                                        <td> <input type="checkbox" name="status_{{$almacen->id}}" value="{{$almacen->estatus}}"  id="status_{{$almacen->id}}" disabled="disabled" <?php  if ($almacen->estatus==1): ?> checked <?php endif ?> class="form-check"> </td>
-                                        
-                                        <td>
-                                          <button type="button" value="Modificar" id="btn_mod" data-id="{{$almacen->id}}" data-cat="Almacen" class="modificar btn btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
-                                          <button type="button" value="Actualizar" id="btn_guardar_{{$almacen->id}}" disabled="disabled" data-id="{{$almacen->id}}" data-cat="Almacen"class="enviarG btn btn-success"><span class="glyphicon glyphicon-">OK</span></button>
-                                          <button type="button" id="btn_Eliminar" value="Eliminar" data-id="{{$almacen->id}}" data-cat="Almacen" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
-                                        </td>
+                            <table id="tablaResult" class="table table-first-column-check">
+                                <thead>
+                                  <tr>
+                                    <th class="col-md-4">Clave</th>
+                                    <th class="col-md-4">Nombre</th>
+                                    <th class="col-md-1">Status</th>
+                                    <th class="col-md-3">Acción</th>
+                                  </tr>
+                                </thead>  
+                                <tbody>
+                                  <form>
+                                  <tr visible="false">
+                                    <td><input type="text" id="clave_0" name="clave" required class="form-control"> </td>
+                                    <td><input type="text" id="nombre_0" name="nombre" required class="form-control"> </td>
+                                    <td><input type="checkbox" id="status_0" name="status" value=1 checked="true" class="checkbox" disabled></td>
+                                <!--    <input type="hidden" id="catalogo_0" value="Almacen"  >
+                                    <input type="hidden" id="tipoMov_0" value="Guardar" name=""> -->
+                                    <td><button type="button" id="btn_guardar" name="btn_guardar" value="Guardar" data-id="0" data-cat="Almacen" class="enviarG btn btn-success"> <span class="glyphicon glyphicon-">OK</span></button></td>
+                                  </tr>
+                                  </form>
+                                
+                                  @foreach($almacenes as $almacen)
+                                  {{Form::open() }}
+                                    <tr id="tr_{{$almacen->id}}">
+                                      <td> <input type="text" name="clave_{{$almacen->id}}" value="{{$almacen->clave}}" id="clave_{{$almacen->id}}" disabled="disabled" required class="form-control"> </td>
+                                      <td> <input type="text" name="nombre_{{$almacen->id}}" value="{{$almacen->nombre}}" id="nombre_{{$almacen->id}}" disabled="disabled" required class="form-control"></td>
+                                      <td> <input type="checkbox" name="status_{{$almacen->id}}" value="{{$almacen->estatus}}"  id="status_{{$almacen->id}}" disabled="disabled" <?php  if ($almacen->estatus==1): ?> checked <?php endif ?> class="form-check"> </td>
+                                      
+                                      <td>
+                                        <button type="button" value="Modificar" id="btn_mod" data-id="{{$almacen->id}}" data-cat="Almacen" class="modificar btn btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
+                                        <button type="button" value="Actualizar" id="btn_guardar_{{$almacen->id}}" disabled="disabled" data-id="{{$almacen->id}}" data-cat="Almacen"class="enviarG btn btn-success"><span class="glyphicon glyphicon-">OK</span></button>
+                                        <button type="button" id="btn_Eliminar" value="Eliminar" data-id="{{$almacen->id}}" data-cat="Almacen" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+                                      </td>
 
-                                      </tr>
-                                    {{Form::close()}}                          
-                                    @endforeach
-                                    
-                                  </tbody>
-                              </table>
+                                    </tr>
+                                  {{Form::close()}}                          
+                                  @endforeach
+                                  
+                                </tbody>
+                            </table>
                             </div>
                             <?php
                             break;
@@ -78,261 +80,252 @@ $(document).ready(function(){
                           <div>
                             <button type="button" value="Nuevo" id="nuevo" class="editar btn btn-primary" data-info="" data-cat="Cliente" ><span class="glyphicon glyphicon-">NUEVO</span></button>
                           </div>
-                          <div class="row col-xs-12" style="margin-top: 1em">
-                            <div class="table-responsive">
-                              <table class="table table-first-column-check" id="tablaResult">
-                                <thead>
-                                  <tr>
-                                    <th class="col-md-3">RFC</th>
-                                    <th class="col-md-2">Usuario</th>
-                                    <th class="col-md-2">Agente</th>
-                                    <th class="col-md-3">Numero cliente</th>
-                                    <th class="col-md-2"></th>
-                                  </tr>
-                                </thead>
-                                <tbody>              
+                          <div class="table-responsive">
+                          <table class="table table-first-column-check" id="tablaResult">
+                            <thead>
+                              <tr>
+                                <th class="col-md-3">RFC</th>
+                                <th class="col-md-2">Usuario</th>
+                                <th class="col-md-2">Agente</th>
+                                <th class="col-md-3">Numero cliente</th>
+                                <th class="col-md-2"></th>
+                              </tr>
+                            </thead>
+                            <tbody>              
 
-                                @foreach($clientes as $cliente)
-                                
-                                <!--<form class="form-group"> -->
-                                  <tr id="tr_{{$cliente->id}}">
-                                    <td><input type="text" id="rfc_{{$cliente->id}}"  value="{{$cliente->rfc}} " disabled   class="form-control input-xlarge"></td>
-                                    <td><input type="text" id="usuario_id_{{$cliente->id}}"  value="{{$cliente->usuario}}" disabled class="form-control"></td>
-                                    <td><input type="text" id="agente_id_{{$cliente->id}}"  value="{{$cliente->agente}}" disabled class="form-control"></td>
-                                    <td><input type="text" id="numero_cliente_{{$cliente->id}}"  value="{{$cliente->numero_cliente}}" disabled class="form-control"></td>
-                                    <td style="width: 150px; height: 25px; ">
-                                      <button type="button" value="Modificar" id="editarClienteProveedor" data-id="{{$cliente->id}}" class="editar btn btn-primary" data-info='{{json_encode($cliente,JSON_HEX_APOS)}}' data-cat="Cliente"><span class="glyphicon glyphicon-edit"></span></button>
-                                    <!--  <input type="hidden" id="campo_id{{$cliente->id}}" value="{{$cliente->id}}" name="campo_id" >
-                                      <button type="button" value="Actualizar" id="btn_actualizar_{{$cliente->id}}" disabled="disabled" data-id="{{$cliente->id}}" > Act</button> -->
-                                      <button type="button" id="btn_Eliminar" value="Eliminar" data-id="{{$cliente->id}}" data-cat="Cliente" data-info="{{$cliente->idUsuario}}" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
-                                    </td>
-                                  </tr>
-                                <!--</form> -->
+                            @foreach($clientes as $cliente)
+                            
+                            <!--<form class="form-group"> -->
+                              <tr id="tr_{{$cliente->id}}">
+                                <td><input type="text" id="rfc_{{$cliente->id}}"  value="{{$cliente->rfc}} " disabled   class="form-control input-xlarge"></td>
+                                <td><input type="text" id="usuario_id_{{$cliente->id}}"  value="{{$cliente->usuario}}" disabled class="form-control"></td>
+                                <td><input type="text" id="agente_id_{{$cliente->id}}"  value="{{$cliente->agente}}" disabled class="form-control"></td>
+                                <td><input type="text" id="numero_cliente_{{$cliente->id}}"  value="{{$cliente->numero_cliente}}" disabled class="form-control"></td>
+                                <td style="width: 150px; height: 25px; ">
+                                  <button type="button" value="Modificar" id="editarClienteProveedor" data-id="{{$cliente->id}}" class="editar btn btn-primary" data-info='{{json_encode($cliente,JSON_HEX_APOS)}}' data-cat="Cliente"><span class="glyphicon glyphicon-edit"></span></button>
+                                <!--  <input type="hidden" id="campo_id{{$cliente->id}}" value="{{$cliente->id}}" name="campo_id" >
+                                  <button type="button" value="Actualizar" id="btn_actualizar_{{$cliente->id}}" disabled="disabled" data-id="{{$cliente->id}}" > Act</button> -->
+                                  <button type="button" id="btn_Eliminar" value="Eliminar" data-id="{{$cliente->id}}" data-cat="Cliente" data-info="{{$cliente->idUsuario}}" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+                                </td>
+                              </tr>
+                            <!--</form> -->
 
-                                @endforeach()
-                                </tbody>
-                              </table> 
-                            </div>
+                            @endforeach()
+                            </tbody>
+                          </table> 
                           </div>
                           <?php
                           break;
                         
                         case 'Comercializador': ?>
-                          <div class="row col-sm-8">
-                            <div class="table-responsive">
-                              <table class="table table-first-column-check" id="tablaResult">
-                                <thead>
+                          <table class="table table-first-column-check" id="tablaResult">
+                            <thead>
+                              <tr>
+                                <th style="width: 200px;">Nombre</th>
+                                <th></th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                                <form>
                                   <tr>
-                                    <th class="col-xs-6">Nombre</th>
-                                    <th class="col-xs-6"></th>
+                                    <td><input type="text" id="nombre_0" name="nombre_0" value="" class="form-control"></td>
+                                    <td>
+                                      <!-- <input type="hidden" id="tipoMov_0" value="Guardar" name="">-->
+                                        <button type="button" id="btn_guardar" name="btn_guardar" value="Guardar" data-id="0" data-cat="Comercializador" class="enviarG btn btn-success"> <span class="glyphicon glyphicon-">OK</span> </button>
+                                    </td>
                                   </tr>
-                                </thead>
-                                <tbody>
-                                    <form>
-                                      <tr>
-                                        <td><input type="text" id="nombre_0" name="nombre_0" value="" class="form-control"></td>
-                                        <td>
-                                          <!-- <input type="hidden" id="tipoMov_0" value="Guardar" name="">-->
-                                            <button type="button" id="btn_guardar" name="btn_guardar" value="Guardar" data-id="0" data-cat="Comercializador" class="enviarG btn btn-success"> <span class="glyphicon glyphicon-">OK</span> </button>
-                                        </td>
-                                      </tr>
-                                    </form>
-                                    @forelse($comercializadores as $comercializador)
-                                    <form>
-                                      <tr id="tr_{{$comercializador->id}}">
-                                        <td class="col-xs-6"><input type="text" id="nombre_{{$comercializador->id}}" name="nombre_{{$comercializador->id}}" value="{{$comercializador->nombre}}" disabled="disabled" class="form-control"></td>
-                                        <td class="col-xs-6">
-                                          <button type="button" value="Modificar" id="btn_mod" data-id="{{$comercializador->id}}" data-cat="Comercializador" class="modificar btn btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
-                                          <button type="button" value="Actualizar" id="btn_guardar_{{$comercializador->id}}" disabled="disabled" data-id="{{$comercializador->id}}" data-cat="Comercializador" class="enviarG btn btn-success" ><span class="glyphicon glyphicon-">OK</span></button>
-                                          <button type="button" id="btn_Eliminar" value="Eliminar" data-id="{{$comercializador->id}}" data-cat="Comercializador" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
-                                        </td>
-                                      </tr>
-                                    </form>
-                                    @empty
-                                    
-                                    @endforelse
-                                </tbody>
-                              </table>
-                            </div>
-                          </div>
+                                </form>
+                                @forelse($comercializadores as $comercializador)
+                                <form>
+                                <tr id="tr_{{$comercializador->id}}">
+                                  <td><input type="text" id="nombre_{{$comercializador->id}}" name="nombre_{{$comercializador->id}}" value="{{$comercializador->nombre}}" disabled="disabled" class="form-control"></td>
+                                  <td>
+                                    <button type="button" value="Modificar" id="btn_mod" data-id="{{$comercializador->id}}" data-cat="Comercializador" class="modificar btn btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
+                                    <button type="button" value="Actualizar" id="btn_guardar_{{$comercializador->id}}" disabled="disabled" data-id="{{$comercializador->id}}" data-cat="Comercializador" class="enviarG btn btn-success" ><span class="glyphicon glyphicon-">OK</span></button>
+                                    <button type="button" id="btn_Eliminar" value="Eliminar" data-id="{{$comercializador->id}}" data-cat="Comercializador" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+                                  </td>
+                                </tr>
+                                </form>
+                                @empty
+                                
+                                @endforelse
+                            </tbody>
+                          </table>
+
                           <?php
                           break;
                        
                         case 'NivelDescuento':      ?>
                           <div class="col-md-8 col-sm-10 col-xs-12">
-                            <div class="table-responsive">
-                              <table class="table table-first-column-check" id="tablaResult">
-                                <thead>
-                                  <tr class="">
-                                    <th class="col-md-4 col-xs-5 col-sm-4">Descripcion</th>
-                                    <th class="col-md-2 col-xs-1 col-sm-2">Decuento</th>
-                                    <th class="col-md-2 col-xs-1 col-sm-2">Estatus</th>
-                                    <th class="col-md-4 col-xs-5 col-sm-4"></th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                    <form>
-                                      <tr class="">
-                                        <td class="col-md-4 col-xs-5 col-sm-4"><input type="text" id="descripcion_0"  value="" class="form-control"></td>
-                                        <td class="col-md-2 col-xs-1 col-sm-2"><input type="number" id="descuento_0" value="" class="form-control"></td>
-                                        <td class="col-md-2 col-xs-1 col-sm-2" style="text-align: center"><input type="checkbox" id="estatus_0" name="status" value checked="true" class="form-check" disabled></td>
-                                        <td class="col-md-4 col-xs-5 col-sm-4" style="text-align: center">
-                                           <!-- <input type="hidden" id="tipoMov_0" value="Guardar" name="">-->
-                                            <button type="button" id="btn_guardar" name="btn_guardar" value="Guardar" data-id="0" data-cat="NivelDescuento" class="enviarG btn btn-success"> <span class="glyphicon glyphicon-">OK</span> </button>
-                                        </td>
-                                      </tr>
-                                    </form>
-                                   @forelse($descuentos as $descuento)
-
-                                    <tr id="tr_{{$descuento->id}}" class="">
-                                      <td class="col-md-4 col-xs-5 col-sm-4"><input type="text" id="descripcion_{{$descuento->id}}" name="descripcion_{{$descuento->id}}" value="{{$descuento->descripcion}}" disabled class="form-control"></td>
-                                      <td class="col-md-2 col-xs-1 col-sm-2"><input type="number" id="descuento_{{$descuento->id}}" name="descuento_{{$descuento->id}}" value="{{$descuento->descuento}}" disabled class="form-control"></td>
-                                      <td class="col-md-2 col-xs-1 col-sm-2" style="text-align: center"> <input type="checkbox"  value=""  id="estatus_{{$descuento->id}}" disabled <<?php  if ($descuento->estatus==1) {?> checked <?php } ?> > </td>
+                            <table class="table table-first-column-check" id="tablaResult">
+                              <thead>
+                                <tr class="">
+                                  <th class="col-md-4 col-xs-5 col-sm-4">Descripcion</th>
+                                  <th class="col-md-2 col-xs-1 col-sm-2">Decuento</th>
+                                  <th class="col-md-2 col-xs-1 col-sm-2">Estatus</th>
+                                  <th class="col-md-4 col-xs-5 col-sm-4"></th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                  <form>
+                                    <tr class="">
+                                      <td class="col-md-4 col-xs-5 col-sm-4"><input type="text" id="descripcion_0"  value="" class="form-control"></td>
+                                      <td class="col-md-2 col-xs-1 col-sm-2"><input type="text" id="descuento_0"  pattern="[0-9]" value="" class="form-control"></td>
+                                      <td class="col-md-2 col-xs-1 col-sm-2" style="text-align: center"><input type="checkbox" id="estatus_0" name="status" value checked="true" class="form-check" disabled></td>
                                       <td class="col-md-4 col-xs-5 col-sm-4" style="text-align: center">
-                                        <button type="button" value="Modificar" id="btn_mod" data-id="{{$descuento->id}}" data-cat="NivelDescuento" class="modificar btn btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
-                                        <button type="button" value="Actualizar" id="btn_guardar_{{$descuento->id}}" disabled="disabled" data-id="{{$descuento->id}}" data-cat="NivelDescuento" class="enviarG btn btn-success" ><span class="glyphicon glyphicon-">OK</span></button>
-                                        <button type="button" id="btn_Eliminar" value="Eliminar" data-id="{{$descuento->id}}" data-cat="NivelDescuento" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+                                         <!-- <input type="hidden" id="tipoMov_0" value="Guardar" name="">-->
+                                          <button type="button" id="btn_guardar" name="btn_guardar" value="Guardar" data-id="0" data-cat="NivelDescuento" class="enviarG btn btn-success"> <span class="glyphicon glyphicon-">OK</span> </button>
                                       </td>
                                     </tr>
-                                    @empty
-                                    <tr>
-                                      <td>
-                                         <p>NO HAY DATOS PARA MOSTRAR</p>
-                                      </td>
-                                   
-                                    </tr>
-                                    @endforelse 
-                                </tbody>
-                              </table>
-                            </div>
+                                  </form>
+                                 @forelse($descuentos as $descuento)
+
+                                  <tr id="tr_{{$descuento->id}}" class="">
+                                    <td class="col-md-4 col-xs-5 col-sm-4"><input type="text" id="descripcion_{{$descuento->id}}" name="descripcion_{{$descuento->id}}" value="{{$descuento->descripcion}}" disabled class="form-control"></td>
+                                    <td class="col-md-2 col-xs-1 col-sm-2"><input type="text" id="descuento_{{$descuento->id}}" name="descuento_{{$descuento->id}}" value="{{$descuento->descuento}}" disabled class="form-control"></td>
+                                    <td class="col-md-2 col-xs-1 col-sm-2" style="text-align: center"> <input type="checkbox"  value=""  id="estatus_{{$descuento->id}}" disabled <<?php  if ($descuento->estatus==1) {?> checked <?php } ?> > </td>
+                                    <td class="col-md-4 col-xs-5 col-sm-4" style="text-align: center">
+                                      <button type="button" value="Modificar" id="btn_mod" data-id="{{$descuento->id}}" data-cat="NivelDescuento" class="modificar btn btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
+                                      <button type="button" value="Actualizar" id="btn_guardar_{{$descuento->id}}" disabled="disabled" data-id="{{$descuento->id}}" data-cat="NivelDescuento" class="enviarG btn btn-success" ><span class="glyphicon glyphicon-">OK</span></button>
+                                      <button type="button" id="btn_Eliminar" value="Eliminar" data-id="{{$descuento->id}}" data-cat="NivelDescuento" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+                                    </td>
+                                  </tr>
+                                  @empty
+                                  <tr>
+                                    <td>
+                                       <p>NO HAY DATOS PARA MOSTRAR</p>
+                                    </td>
+                                 
+                                  </tr>
+                                  @endforelse 
+                              </tbody>
+                            </table>
                           </div>
                       
                            <?php 
                           break; 
 
                         case 'FormaPago':  ?>
-                          <div class="row col-md-8 col-sm-12">
-                            <div class="table-respnsive">
-                              <table class="table table-first-column-check " id="tablaResult">
-                                <thead>
+                          <div class="col-md-8 col-sm-12">
+                          <table class="table table-first-column-check " id="tablaResult">
+                            <thead>
+                              <tr class="">
+                                <th class="col-md-6 col-sm-6">Descripción</th>
+                                <th class="col-md-6 col-sm-6"></th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                                <form>
                                   <tr class="">
-                                    <th class="col-md-6 col-sm-6">Descripción</th>
-                                    <th class="col-md-6 col-sm-6"></th>
+                                    <td class="col-md-6 col-sm-6"><input type="text" id="descripcion_0" name="" value="" class="form-control"></td>
+                                    <td class="col-md-6 col-sm-6" style="text-align: center;"><button type="button" id="btn_guardar" name="btn_guardar" value="Guardar" data-id="0" data-cat="FormaPago" class="enviarG btn btn-success"> <span class="glyphicon glyphicon-">OK</span></button></td>
                                   </tr>
-                                </thead>
-                                <tbody id="tbodyFormaPago">
-                                    <form>
-                                      <tr class="">
-                                        <td class="col-md-6 col-sm-6"><input type="text" id="descrFormaPago_0" name="" value="" class="form-control"></td>
-                                        <td class="col-md-6 col-sm-6" style="text-align: center;"><button type="button" id="btn_guardar" name="btn_guardar" value="Guardar" data-id="0" data-cat="FormaPago" class="enviarG btn btn-success"> <span class="glyphicon glyphicon-">OK</span></button></td>
-                                      </tr>
-                                    </form>
-                                   @foreach($formasPago as $formaPago)
-                                    <tr id="tr_{{$formaPago->id}}" class="" >
-                                      <td class="col-md-6 col-sm-6"><input type="text" id="descrFormaPago_{{$formaPago->id}}" name="" value="{{$formaPago->descripcion}}" disabled="disabled" class="form-control"></td>
-                                      <td class="col-md-6 col-sm-6" style="text-align: center;">
-                                        <button type="button" value="Modificar" id="btn_mod" data-id="{{$formaPago->id}}" data-cat="FormaPago" class="modificar btn btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
-                                        <button type="button" value="Actualizar" id="btn_guardar_{{$formaPago->id}}" disabled="disabled" data-id="{{$formaPago->id}}" data-cat="FormaPago" class="enviarG btn btn-success" ><span class="glyphicon glyphicon-">OK</span></button>
-                                        <button type="button" id="btn_Eliminar" value="Eliminar" data-id="{{$formaPago->id}}" data-cat="FormaPago" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
-                                      </td>
-                                    </tr>
-                                   @endforeach
-                                </tbody>
-                              </table>
-                            </div>
+                                </form>
+                               @foreach($formasPago as $formaPago)
+                                <tr id="tr_{{$formaPago->id}}" class="" >
+                                  <td class="col-md-6 col-sm-6"><input type="text" id="descripcion_{{$formaPago->id}}" name="" value="{{$formaPago->descripcion}}" disabled="disabled" class="form-control"></td>
+                                  <td class="col-md-6 col-sm-6" style="text-align: center;">
+                                    <button type="button" value="Modificar" id="btn_mod" data-id="{{$formaPago->id}}" data-cat="FormaPago" class="modificar btn btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
+                                    <button type="button" value="Actualizar" id="btn_guardar_{{$formaPago->id}}" disabled="disabled" data-id="{{$formaPago->id}}" data-cat="FormaPago" class="enviarG btn btn-success" ><span class="glyphicon glyphicon-">OK</span></button>
+                                    <button type="button" id="btn_Eliminar" value="Eliminar" data-id="{{$formaPago->id}}" data-cat="FormaPago" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+                                  </td>
+                                </tr>
+                               @endforeach
+                            </tbody>
+                          </table>
                           </div>
                           <?php
                           break; 
 
                         case 'UnidadMedida':  ?>
                           <div class="col-md-8 col-sm-10 col-xs-12">
-                            <div class="table-responsive">
-                              <table class="table table-first-column-check" id="tablaResult">
-                              <thead>
-                                <tr>
-                                  <th class="col-md-6 col-xs-6 col-sm-6">Descripcion</th>
-                                  <th class="col-md-3 col-xs-1 col-sm-3">Estatus</th>
-                                  <th class="col-md-3 col-xs-5 col-sm-3"></th>
-                                </tr>
-                              </thead>
-                                <tbody>
-                                    <form>
-                                      <tr>
-                                        <td class="col-md-6 col-xs-6 col-sm-6"><input type="text" id="descripcion_0" name="descripcion_0" value="" class="form-control"></td>
-                                        <td class="col-md-3 col-xs-1 col-sm-3" style="text-align: center"><input type="checkbox" id="estatus_0" name="status" value checked="true" class="form-check" disabled></td>
-                                        <td class="col-md-3 col-xs-5 col-sm-3" style="text-align: center">
-                                          <button type="button" id="btn_guardar" name="btn_guardar" value="Guardar" data-id="0" data-cat="UnidadMedida" class="enviarG btn btn-success"> <span class="glyphicon glyphicon-">OK</span> </button>
-                                        </td>
-                                      </tr>
-                                    </form>
-                                      @forelse($unidadMedida as $uMedida)
-
-                                    <tr id="tr_{{$uMedida->id}}">
-                                      <td class="col-md-6 col-xs-6 col-sm-6"><input type="text" id="descripcion_{{$uMedida->id}}"  value="{{$uMedida->descripcion}}" disabled class="form-control"></td>
-                                      <td class="col-md-3 col-xs-1 col-sm-3" style="text-align: center"> <input type="checkbox"  value="{{$uMedida->estatus}}"  id="estatus_{{$uMedida->id}}" disabled <<?php  if ($uMedida->estatus==1) {?> checked <?php } ?> > </td>
-                                      <td class="col-md-3 col-xs-5 col-sm-3" style="text-align: center">
-                                        <button type="button" value="Modificar" id="btn_mod" data-id="{{$uMedida->id}}" data-cat="UnidadMedida" class="modificar btn btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
-                                        <button type="button" value="Actualizar" id="btn_guardar_{{$uMedida->id}}" disabled="disabled" data-id="{{$uMedida->id}}" data-cat="UnidadMedida" class="enviarG btn btn-success" ><span class="glyphicon glyphicon-">OK</span></button>
-                                        <button type="button" id="btn_Eliminar" value="Eliminar" data-id="{{$uMedida->id}}" data-cat="UnidadMedida" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
-                                      </td>
-                                    </tr>
-                                    @empty
+                          <div class="table-responsive">
+                          <table class="table table-first-column-check" id="tablaResult">
+                            <thead>
+                              <tr>
+                                <th class="col-md-6 col-xs-6 col-sm-6">Descripcion</th>
+                                <th class="col-md-3 col-xs-1 col-sm-3">Estatus</th>
+                                <th class="col-md-3 col-xs-5 col-sm-3"></th>
+                              </tr>
+                            </thead>
+                              <tbody>
+                                  <form>
                                     <tr>
-                                      <td>
-                                         <p>NO HAY DATOS PARA MOSTRAR</p>
+                                      <td class="col-md-6 col-xs-6 col-sm-6"><input type="text" id="descripcion_0" name="descripcion_0" value="" class="form-control"></td>
+                                      <td class="col-md-3 col-xs-1 col-sm-3" style="text-align: center"><input type="checkbox" id="estatus_0" name="status" value checked="true" class="form-check" disabled></td>
+                                      <td class="col-md-3 col-xs-5 col-sm-3" style="text-align: center">
+                                        <button type="button" id="btn_guardar" name="btn_guardar" value="Guardar" data-id="0" data-cat="UnidadMedida" class="enviarG btn btn-success"> <span class="glyphicon glyphicon-">OK</span> </button>
                                       </td>
-                                   
                                     </tr>
-                                    @endforelse 
-                                   
-                                </tbody>
-                              </table>
-                            </div>
+                                  </form>
+                                    @forelse($unidadMedida as $uMedida)
+
+                                  <tr id="tr_{{$uMedida->id}}">
+                                    <td class="col-md-6 col-xs-6 col-sm-6"><input type="text" id="descripcion_{{$uMedida->id}}"  value="{{$uMedida->descripcion}}" disabled class="form-control"></td>
+                                    <td class="col-md-3 col-xs-1 col-sm-3" style="text-align: center"> <input type="checkbox"  value="{{$uMedida->estatus}}"  id="estatus_{{$uMedida->id}}" disabled <<?php  if ($uMedida->estatus==1) {?> checked <?php } ?> > </td>
+                                    <td class="col-md-3 col-xs-5 col-sm-3" style="text-align: center">
+                                      <button type="button" value="Modificar" id="btn_mod" data-id="{{$uMedida->id}}" data-cat="UnidadMedida" class="modificar btn btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
+                                      <button type="button" value="Actualizar" id="btn_guardar_{{$uMedida->id}}" disabled="disabled" data-id="{{$uMedida->id}}" data-cat="UnidadMedida" class="enviarG btn btn-success" ><span class="glyphicon glyphicon-">OK</span></button>
+                                      <button type="button" id="btn_Eliminar" value="Eliminar" data-id="{{$uMedida->id}}" data-cat="UnidadMedida" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+                                    </td>
+                                  </tr>
+                                  @empty
+                                  <tr>
+                                    <td>
+                                       <p>NO HAY DATOS PARA MOSTRAR</p>
+                                    </td>
+                                 
+                                  </tr>
+                                  @endforelse 
+                                 
+                              </tbody>
+                            </table>
+                          </div>
                           </div>
                           <?php
                           break; 
 
                         case 'Rol':  ?>
                           <div class="col-md-6 col-sm-8 col-xs-12">
-                            <div class="table-responsive">
-                              <table class="table table-first-column-check" id="tablaResult">
-                                <thead>
+                          <div class="table-responsive">
+                          <table class="table table-first-column-check" id="tablaResult">
+                            <thead>
+                              <tr>
+                                <th class="col-xs-6">Nombre</th>
+                                <th class="col-xs-6"></th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                                <form>
                                   <tr>
-                                    <th class="col-xs-6">Rol</th>
-                                    <th class="col-xs-6"></th>
+                                    <td class="col-xs-6"><input type="text" id="nombre_0" value="" class="form-control"></td>
+                                    <td class="col-xs-6" style="text-align: center">
+                                      <button type="button" id="btn_guardar" name="btn_guardar" value="Guardar" data-id="0" data-cat="Rol" class="enviarG btn btn-success"> <span class="glyphicon glyphicon-">OK</span> </button>    
+                                    </td>
                                   </tr>
-                                </thead>
-                                <tbody>
-                                    <form>
-                                      <tr>
-                                        <td class="col-xs-6"><input type="text" id="nombre_0" value="" class="form-control"></td>
-                                        <td class="col-xs-6" style="text-align: center">
-                                          <button type="button" id="btn_guardar" name="btn_guardar" value="Guardar" data-id="0" data-cat="Rol" class="enviarG btn btn-success"> <span class="glyphicon glyphicon-">OK</span> </button>    
-                                        </td>
-                                      </tr>
-                                    </form>
-                                      @forelse($rol as $rol)
+                                </form>
+                                  @forelse($rol as $rol)
 
-                                    <tr id="tr_{{$rol->id}}">
-                                      <td class="col-xs-6"><input type="text" id="nombre_{{$rol->id}}"  value="{{$rol->nombre}}" disabled class="form-control"></td>
-                                      <td class="col-xs-6" style="text-align: center">
-                                        <button type="button" value="Modificar" id="btn_mod" data-id="{{$rol->id}}" data-cat="Rol" class="modificar btn btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
-                                        <button type="button" value="Actualizar" id="btn_guardar_{{$rol->id}}" disabled="disabled" data-id="{{$rol->id}}" data-cat="Rol" class="enviarG btn btn-success" ><span class="glyphicon glyphicon-">OK</span></button>
-                                        <button type="button" id="btn_Eliminar" value="Eliminar" data-id="{{$rol->id}}" data-cat="Rol" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
-                                      </td>
-                                    </tr>
-                                    @empty
-                                    <tr>
-                                      <td>
-                                         <p>NO HAY DATOS PARA MOSTRAR</p>
-                                      </td>
-                                   
-                                    </tr>
-                                    @endforelse 
-                                   
-                                </tbody>
-                              </table>
-                            </div>
+                                <tr id="tr_{{$rol->id}}">
+                                  <td class="col-xs-6"><input type="text" id="nombre_{{$rol->id}}"  value="{{$rol->nombre}}" disabled class="form-control"></td>
+                                  <td class="col-xs-6" style="text-align: center">
+                                    <button type="button" value="Modificar" id="btn_mod" data-id="{{$rol->id}}" data-cat="Rol" class="modificar btn btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
+                                    <button type="button" value="Actualizar" id="btn_guardar_{{$rol->id}}" disabled="disabled" data-id="{{$rol->id}}" data-cat="Rol" class="enviarG btn btn-success" ><span class="glyphicon glyphicon-">OK</span></button>
+                                    <button type="button" id="btn_Eliminar" value="Eliminar" data-id="{{$rol->id}}" data-cat="Rol" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+                                  </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                  <td>
+                                     <p>NO HAY DATOS PARA MOSTRAR</p>
+                                  </td>
+                               
+                                </tr>
+                                @endforelse 
+                               
+                            </tbody>
+                          </table>
+                          </div>
                           </div>
                           <?php
                           break; 
@@ -342,38 +335,38 @@ $(document).ready(function(){
                             <button type="button" value="Nuevo" id="nuevo" class="editar btn btn-primary" data-info='' data-cat="Proveedor"><span class="glyphicon glyphicon-">NUEVO</span></button>
                           </div>
                           <div class="col-xs-12" style="padding: 10px;">
-                            <div class="table-responsive">
-                              <table class="table table-first-column-check" id="tablaResult">
-                                <thead>
-                                  <tr>
-                                    <th class="col-md-3 col-sm-3 col-xs-2">Nombre</th>
-                                    <th class="col-md-2 col-sm-2 col-xs-2">Nombre comercial</th>
-                                    <th class="col-md-2 col-sm-2 col-xs-2">Razon social</th>
-                                    <th class="col-md-2 col-sm-2 col-xs-1">Comercializador</th>
-                                    <th class="col-md-1 col-sm-1 col-xs-2">Estatus</th>
-                                    <th class="col-md-2 col-sm-2 col-xs-3">Acción</th>
-                                  </tr>
-                                </thead>
-                                <tbody>   
-                                   @forelse($proveedor as $proveedor)
+                          <div class="table-responsive">
+                            <table class="table table-first-column-check" id="tablaResult">
+                              <thead>
+                                <tr>
+                                  <th class="col-md-3 col-sm-2 col-xs-2">Nombre</th>
+                                  <th class="col-md-2 col-sm-2 col-xs-2">Nombre comercial</th>
+                                  <th class="col-md-2 col-sm-2 col-xs-2">Razon social</th>
+                                  <th class="col-md-1 col-sm-2 col-xs-1">Estatus</th>
+                                  <th class="col-md-2 col-sm-2 col-xs-2">Comercializador</th>
+                                  <th class="col-md-2 col-sm-2 col-xs-3">Acción</th>
+                                </tr>
+                              </thead>
+                              <tbody>   
+                                 @forelse($proveedor as $proveedor)
 
-                                    <tr id="tr_{{$proveedor->id}}">
-                                      <td class="col-md-3 col-sm-3 col-xs-2"><input type="text" id="nombre_{{$proveedor->id}}"  value="{{$proveedor->nombre}}" disabled="disabled" class="form-control"></td>
-                                      <td class="col-md-2 col-sm-2 col-xs-2"><input type="text" id="nombre_comercial_{{$proveedor->id}}"  value="{{$proveedor->nombre_comercial}}" disabled="disabled" class="form-control"></td>
-                                      <td class="col-md-2 col-sm-2 col-xs-2"><input type="text" id="razon_social_{{$proveedor->id}}"  value="{{$proveedor->razon_social}}" disabled="disabled" class="form-control"></td>
-                                      <td class="col-md-2 col-sm-2 col-xs-2"><input type="text" id="comercializador_{{$proveedor->id}}"  value="{{$proveedor->comercializador}}" disabled="disabled" class="form-control"></td>
-                                      <td class="col-md-1 col-sm-1 col-xs-1"><input type="checkbox" id="status_{{$proveedor->id}}" name="status" value  disabled <?php  if ($proveedor->estatus==1): ?> checked <?php endif ?>></td>
-                                      <td class="col-md-2 col-sm-2 col-xs-3">
-                                        <button type="button" value="Modificar" id="editarClienteProveedor" data-id="{{$proveedor->id}}" class="editar btn btn-primary" data-info='{{json_encode($proveedor,JSON_HEX_APOS)}}' data-cat="Proveedor"><span class="glyphicon glyphicon-edit"></span></button>
-                                      </td>
-                                    </tr>
-                                    @empty
-                                    
-                                    @endforelse 
-                                </tbody>
-                              </table> 
+                                  <tr id="tr_{{$proveedor->id}}">
+                                    <td class="col-md-3 col-sm-2 col-xs-2"><input type="text" id="nombre_{{$proveedor->id}}"  value="{{$proveedor->nombre}}" disabled="disabled" class="form-control"></td>
+                                    <td class="col-md-2 col-sm-2 col-xs-2"><input type="text" id="nombre_comercial_{{$proveedor->id}}"  value="{{$proveedor->nombre_comercial}}" disabled="disabled" class="form-control"></td>
+                                    <td class="col-md-2 col-sm-2 col-xs-2"><input type="text" id="razon_social_{{$proveedor->id}}"  value="{{$proveedor->razon_social}}" disabled="disabled" class="form-control"></td>
+                                    <td class="col-md-1 col-sm-2 col-xs-1"><input type="checkbox" id="status_{{$proveedor->id}}" name="status" value  disabled <?php  if ($proveedor->estatus==1): ?> checked <?php endif ?>></td>
+                                    <td class="col-md-2 col-sm-2 col-xs-2"><input type="text" id="comercializador_{{$proveedor->id}}"  value="{{$proveedor->comercializador}}" disabled="disabled" class="form-control"></td>
+                                    <td class="col-md-2 col-sm-2 col-xs-3">
+                                      <button type="button" value="Modificar" id="editarClienteProveedor" data-id="{{$proveedor->id}}" class="editar btn btn-primary" data-info='{{json_encode($proveedor,JSON_HEX_APOS)}}' data-cat="Proveedor"><span class="glyphicon glyphicon-edit"></span></button>
+                                    </td>
+                                  </tr>
+                                  @empty
+                                  
+                                  @endforelse 
+                              </tbody>
+                            </table> 
                             </div>
-                          </div>
+                            </div>
                           <?php
                           break;
                         
@@ -428,63 +421,63 @@ $(document).ready(function(){
 
                         case 'Estados': ?>
                           <div class="table-responsive">
-                            <table class="table table-first-column-check data-table display full table-condensed" id="tablaResult">
-                              <thead>
-                                <tr>
-                                  <th class="col-sm-4">Estado</th>
-                                  <th class="col-sm-4">País</th>
-                                  <th class="col-sm-1">Estatus</th>
-                                  <th class="col-sm-3"></th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                  <form>
-                                    <tr>
-                                      <td><input type="text" id="estado_0" name="estado_0" value="" class="form-control"></td>
-                                      <td><select id="pais_0" name="" class="form-control options " value="" required>
-                                            <option value="-1">Seleccione pais</option>
-                                            @foreach($paises as $pais)
-                                            <option value="{{$pais->id}}">{{$pais->pais}}</option>
-                                            @endforeach
-                                          </select>
-                                      </td>
-                                      <td><input type="checkbox" id="estatus_0" name="estatus" value=1 checked="true" class="checkbox" disabled></td>
-                                      <td>
-                                        <!--  <input type="hidden" id="tipoMov_0" value="Guardar" name=""> -->
-                                          <button type="button" id="btn_guardar" name="btn_guardar" value="Guardar" data-id="0" data-cat="Estados" class="enviarG btn btn-success"> <span class="glyphicon glyphicon-">OK</span> </button>
-                                      </td>
-                                    </tr>
-                                  </form>
-
-                                 
-                                  @forelse($estados as $estado)
-                                  <form class="form-group">
-                                    <tr id="tr_{{$estado->id}}">
-                                      <td><input type="text" id="estado_{{$estado->id}}" name="estado_{{$estado->id}}" value="{{$estado->estados}}" disabled="disabled" class="form-control"></td>
-                                      <td><select id="pais_{{$estado->id}}" name="" class="form-control default-option" data-option="2" required disabled>
-                                            @foreach($paises as $pais)
-                                              <option value="{{$pais->id}}" <?php if ($estado->pais_id===$pais->id): ?> selected <?php endif ?> >{{$pais->pais}}</option>
-                                            @endforeach
-                                          </select>
-                                      </td>
-                                      <td><input type="checkbox" id="estatus_{{$estado->id}}" name="" value="1" <?php if ($estado->estatus==1): ?> checked <?php endif ?>  class="checkbox" disabled></td>
-                                      <td>
-                                        <button type="button" value="Modificar" id="btn_mod" data-id="{{$estado->id}}" data-cat="Estados" class="modificar btn btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
-                                        <button type="button" value="Actualizar" id="btn_guardar_{{$estado->id}}" disabled="disabled" data-id="{{$estado->id}}" data-cat="Estados" class="enviarG btn btn-success" ><span class="glyphicon glyphicon-">OK</span></button>
-                                        <button type="button" id="btn_Eliminar" value="Eliminar" data-id="{{$estado->id}}" data-cat="Estados" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
-                                      </td>
-                                    </tr>
-                                  </form>
-                                  @empty
+                          <table class="table table-first-column-check data-table display full table-condensed" id="tablaResult">
+                            <thead>
+                              <tr>
+                                <th class="col-sm-4">Estado</th>
+                                <th class="col-sm-4">País</th>
+                                <th class="col-sm-1">Estatus</th>
+                                <th class="col-sm-3"></th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                                <form>
                                   <tr>
-                                    <td>
-                                       <p>NO HAY DATOS PARA MOSTRAR</p>
+                                    <td><input type="text" id="estado_0" name="estado_0" value="" class="form-control"></td>
+                                    <td><select id="pais_0" name="" class="form-control options " value="" required>
+                                          <option value="-1">Seleccione pais</option>
+                                          @foreach($paises as $pais)
+                                          <option value="{{$pais->id}}">{{$pais->pais}}</option>
+                                          @endforeach
+                                        </select>
                                     </td>
-                                 
+                                    <td><input type="checkbox" id="estatus_0" name="estatus" value=1 checked="true" class="checkbox" disabled></td>
+                                    <td>
+                                      <!--  <input type="hidden" id="tipoMov_0" value="Guardar" name=""> -->
+                                        <button type="button" id="btn_guardar" name="btn_guardar" value="Guardar" data-id="0" data-cat="Estados" class="enviarG btn btn-success"> <span class="glyphicon glyphicon-">OK</span> </button>
+                                    </td>
                                   </tr>
-                                  @endforelse
-                              </tbody>
-                            </table>
+                                </form>
+
+                               
+                                @forelse($estados as $estado)
+                                <form class="form-group">
+                                <tr id="tr_{{$estado->id}}">
+                                  <td><input type="text" id="estado_{{$estado->id}}" name="estado_{{$estado->id}}" value="{{$estado->estados}}" disabled="disabled" class="form-control"></td>
+                                  <td><select id="pais_{{$estado->id}}" name="" class="form-control default-option" data-option="2" required disabled>
+                                        @foreach($paises as $pais)
+                                          <option value="{{$pais->id}}" <?php if ($estado->pais_id===$pais->id): ?> selected <?php endif ?> >{{$pais->pais}}</option>
+                                        @endforeach
+                                      </select>
+                                  </td>
+                                  <td><input type="checkbox" id="estatus_{{$estado->id}}" name="" value="1" <?php if ($estado->estatus==1): ?> checked <?php endif ?>  class="checkbox" disabled></td>
+                                  <td>
+                                    <button type="button" value="Modificar" id="btn_mod" data-id="{{$estado->id}}" data-cat="Estados" class="modificar btn btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
+                                    <button type="button" value="Actualizar" id="btn_guardar_{{$estado->id}}" disabled="disabled" data-id="{{$estado->id}}" data-cat="Estados" class="enviarG btn btn-success" ><span class="glyphicon glyphicon-">OK</span></button>
+                                    <button type="button" id="btn_Eliminar" value="Eliminar" data-id="{{$estado->id}}" data-cat="Estados" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+                                  </td>
+                                </tr>
+                                </form>
+                                @empty
+                                <tr>
+                                  <td>
+                                     <p>NO HAY DATOS PARA MOSTRAR</p>
+                                  </td>
+                               
+                                </tr>
+                                @endforelse
+                            </tbody>
+                          </table>
                           </div>
                           <?php
                           break;
@@ -596,60 +589,31 @@ $(document).ready(function(){
                           break;
 
                         case 'Descuentos':  ?>
-                          <div class="row col-sm-12">
-                            <div class="table-responsive">
+                          <div class="col-sm-6">
+                            <div>
                               <table class="table table-first-column-check " id="tablaResult">
                                 
                                 <thead>
                                   <tr>
-                                    <th class="col-sm-2">Descripción</th>
-                                    <th class="col-sm-2">Familia</th>
-                                    <th class="col-sm-1">Descuento</th>
-                                    <th class="col-sm-2">Fecha Inicio</th>
-                                    <th class="col-sm-2">Fecha fin</th>
-                                    <th class="col-sm-1">Estatus</th>
-                                    <th class="col-sm-2"></th>
+                                    <th class="col-sm-4">Descripcion</th>
+                                    <th class="col-sm-2">Descuento</th>
+                                    <th class="col-sm-2">Estatus</th>
+                                    <th class="col-sm-4"></th>
                                   </tr>
                                 </thead>
-                                <tbody id="tbodyDesc">
+                                <tbody>
+                                    
                                       <tr>
-                                        <td class="col-sm-2"><input type="text" id="descrDesc_0" name="" value="" class="form-control"></td>
-                                        <td class="col-sm-2"><select id="familiaDesc_0" name="" class="form-control options" value="" required>
-                                            <option value="-1">Seleccione familia</option>
-                                            @foreach($familias as $familia)
-                                            <option value="{{$familia->id}}">{{$familia->descripcion}}</option>
-                                            @endforeach
-                                          </select> 
-                                        </td>
-                                        <td class="col-sm-1"><input type="number" id="descDesc_0" name="" class="form-control" value="" min="0" required></td>
-                                        <td class="col-sm-2"><input type="date" id="fechaInicioDesc_0" name="" value="" class="form-control"></td>
-                                        <td class="col-sm-2"><input type="date" id="fechaFinDesc_0" name="" value="" class="form-control"></td>
-                                        <td class="col-sm-1"><input type="checkbox" id="estatusDesc_0" name="" value="" checked="true" class="form-check" disabled></td>
-                                        <td class="col-sm-2">
-                                          <button type="button" id="btn_guardarDesc" name="" value="Guardar" data-id="0" data-cat="Descuentos" class="enviarG btn btn-success"> <span class="glyphicon glyphicon-">OK</span> </button>
+                                        <td class="col-sm-4"><input type="text" id="descrDesc_0" name="" value="" class="form-control"></td>
+                                        <td class="col-sm-2"><input type="number" id="descDesc_0" name="" class="form-control" value="" min="0" required></td>
+                                        <td class="col-sm-2"><input type="checkbox" id="estatusDesc_0" name="" value="" checked="true" class="checkbox" disabled></td>
+                                        <td class="col-sm-4">
+                                          <button type="button" id="btn_guardarDesc" name="" value="Guardar" data-id="0" data-cat="Familias" class="enviarG btn btn-success"> <span class="glyphicon glyphicon-">OK</span> </button>
                                         </td>
                                       </tr>
-                                  @foreach($descuentos as $descuento)
-                                    <tr id="tr_{{$descuento->id}}">
-                                        <td class="col-sm-2"><input type="text" id="descrDesc_{{$descuento->id}}" name="" value="{{$descuento->descripcion}}" class="form-control" disabled=""></td>
-                                        <td class="col-sm-2"><select id="familiaDesc_{{$descuento->id}}" name="" class="form-control options" value="" required disabled="">
-                                            <option value="-1">Seleccione familia</option>
-                                            @foreach($familias as $familia)
-                                            <option value="{{$familia->id}}"  <?php if ($familia->id===$descuento->familia_id): ?> selected <?php endif ?> >{{$familia->descripcion}}</option>
-                                            @endforeach
-                                          </select> 
-                                        </td>
-                                        <td class="col-sm-1"><input type="number" id="descDesc_{{$descuento->id}}" name="" class="form-control" value="{{$descuento->descuento}}" min="0" required disabled=""></td>
-                                        <td class="col-sm-2"><input type="date" id="fechaInicioDesc_{{$descuento->id}}" name="" value="{{$descuento->fecha_inicio}}" class="form-control" disabled=""></td>
-                                        <td class="col-sm-2"><input type="date" id="fechaFinDesc_{{$descuento->id}}" name="" value="{{$descuento->fecha_fin}}" class="form-control" disabled=""></td>
-                                        <td class="col-sm-1"><input type="checkbox" id="estatusDesc_{{$descuento->id}}" name="" value="" <?php if ($descuento->estatus === 1): ?> checked <?php endif ?> class="form-check" disabled></td>
-                                        <td class="col-sm-2">
-                                          <button type="button" value="Modificar" id="btn_mod" data-id="{{$descuento->id}}" data-cat="Descuentos" class="modificar btn btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
-                                          <button type="button" value="Actualizar" id="btn_guardar_{{$descuento->id}}" disabled="disabled" data-id="{{$descuento->id}}" data-cat="Descuentos" class="enviarG btn btn-success" ><span class="glyphicon glyphicon-">OK</span></button>
-                                          <button type="button" id="btn_Eliminar" value="Eliminar" data-id="{{$descuento->id}}" data-cat="Descuentos" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
-                                        </td>
-                                    </tr>
-                                  @endforeach
+                                    
+
+                                   
                                   
                                 </tbody>
                               </table>
@@ -701,109 +665,6 @@ $(document).ready(function(){
                           <?php
                           break;
 
-                        case 'Importador':  ?>
-                          <div class="row col-md-6 col-sm-8 col-xs-12">
-                            <div class="table-responsive">
-                              <table class="table table-first-column-check" id="tablaResult">
-                                <thead>
-                                  <tr>
-                                    <th class="col-xs-6">Nombre</th>
-                                    <th class="col-xs-6"></th>
-                                  </tr>
-                                </thead>
-                                <tbody id="tbodyImportador">
-                                    <form>
-                                      <tr>
-                                        <td class="col-xs-6"><input type="text" id="nomImportador_0" value="" class="form-control"></td>
-                                        <td class="col-xs-6" style="text-align: center">
-                                          <button type="button" id="btn_guardar" name="btn_guardar" value="Guardar" data-id="0" data-cat="Importador" class="enviarG btn btn-success"> <span class="glyphicon glyphicon-">OK</span> </button>    
-                                        </td>
-                                      </tr>
-                                    </form>
-                                      @forelse($importador as $importador)
-
-                                    <tr id="tr_{{$importador->id}}">
-                                      <td class="col-xs-6"><input type="text" id="nomImportador_{{$importador->id}}"  value="{{$importador->nombre}}" disabled class="form-control"></td>
-                                      <td class="col-xs-6" style="text-align: center">
-                                        <button type="button" value="Modificar" id="btn_mod" data-id="{{$importador->id}}" data-cat="Importador" class="modificar btn btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
-                                        <button type="button" value="Actualizar" id="btn_guardar_{{$importador->id}}" disabled="disabled" data-id="{{$importador->id}}" data-cat="Importador" class="enviarG btn btn-success" ><span class="glyphicon glyphicon-">OK</span></button>
-                                        <button type="button" id="btn_Eliminar" value="Eliminar" data-id="{{$importador->id}}" data-cat="Importador" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
-                                      </td>
-                                    </tr>
-                                    @empty
-                                    
-                                    @endforelse 
-                                   
-                                </tbody>
-                              </table>
-                            </div>
-                          </div>
-                          <?php
-                          break;
-
-                        case 'Usuario':  ?>
-                          <div class="row col-md-12 col-sm-10 col-xs-12">
-                            <div class="table-responsive">
-                              <table class="table table-first-column-check" id="tablaResult">
-                                <thead>
-                                  <tr>
-                                    <th class="col-xs-2">Usuario</th>
-                                    <th class="col-xs-2">Contraseña</th>
-                                    <th class="col-xs-3">E-mail</th>
-                                    <th class="col-xs-2">Rol</th>
-                                    <th class="col-xs-3"></th>
-                                  </tr>
-                                </thead>
-                                <tbody id="tbodyUsuario">
-                                    <form>
-                                      <tr id="trUsuario">
-                                        <td class="col-xs-2"><input type="text" id="usuario_0" value="" class="form-control"></td>
-                                        <td class="col-xs-2"><input type="password" id="contraseñaUsuario_0" value="" class="form-control"  maxlength="12"></td>
-                                        <td class="col-xs-3"><input type="email" id="emailUsuario_0" value="" class="form-control"></td>
-                                        <td class="col-xs-2"><select id="rolUsuario_0" name="" class="form-control options" value="" required>
-                                            <option value="-1">Seleccione rol</option>
-                                            <option value="2">Agente</option>
-                                            <option value="3">administrador</option>
-                                            <option value="4">Contabilidad</option>
-                                          </select>
-                                        </td>
-                                        <td class="col-xs-3" style="text-align: center">
-                                          <button type="button" id="btn_guardar" name="btn_guardar" value="Guardar" data-id="0" data-cat="Usuario" class="enviarG btn btn-success"> <span class="glyphicon glyphicon-">OK</span> </button>    
-                                        </td> 
-                                      </tr>
-                                    </form>
-                                    @forelse($usuario as $usuario)
-                                    <tr id="tr_{{$usuario->id}}">
-                                      <td class="col-xs-2"><input type="text" id="usuario_{{$usuario->id}}"  value="{{$usuario->usuario}}" disabled class="form-control"></td>
-                                      <td class="col-xs-2"><input type="password" id="contraseñaUsuario_{{$usuario->id}}" value="" placeholder="Ingrese nueva contraseña" disabled class="form-control"  maxlength="12"></td>
-                                      <td class="col-xs-3"><input type="email" id="emailUsuario_{{$usuario->id}}" value="{{$usuario->email}}" disabled class="form-control"></td>
-                                      <td class="col-xs-2"><select id="rolUsuario_{{$usuario->id}}" name="" class="form-control options" value="" required disabled="">
-                                            @if($usuario->rol_id===1)
-                                            <option value="1" <?php if ($usuario->rol_id===1): ?> selected <?php endif ?>>Cliente</option>
-                                            @endif
-                                            <option value="2" <?php if ($usuario->rol_id===2): ?> selected <?php endif ?>>Agente</option>
-                                            <option value="3" <?php if ($usuario->rol_id===3): ?> selected <?php endif ?>>administrador</option>
-                                            <option value="4" <?php if ($usuario->rol_id===4): ?> selected <?php endif ?>>Contabilidad</option>
-                                          </select>
-                                        </td>
-                                      <td class="col-xs-3" style="text-align: center">
-                                      @if($usuario->rol_id!==1)
-                                        <button type="button" value="Modificar" id="btn_mod" data-id="{{$usuario->id}}" data-cat="Usuario" class="modificar btn btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
-                                        <button type="button" value="Actualizar" id="btn_guardar_{{$usuario->id}}" disabled="disabled" data-id="{{$usuario->id}}" data-cat="Usuario" class="enviarG btn btn-success" ><span class="glyphicon glyphicon-">OK</span></button>
-                                        <button type="button" id="btn_Eliminar" value="Eliminar" data-id="{{$usuario->id}}" data-cat="Usuario" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
-                                      @endif
-                                      </td>
-                                    </tr>
-                                    @empty
-                                    
-                                    @endforelse 
-                                   
-                                </tbody>
-                              </table>
-                            </div>
-                          </div>
-                          <?php
-                          break;
                         default:
                           # code...
                           break;
@@ -866,16 +727,16 @@ $(document).ready(function(){
             <div class="tab-pane fade table-responsive" id="direccion">
                 <table id="tableDireccion" class="table table-first-column-check">
                   <thead>
-                    <th>Pais</th>
-                    <th>Estado</th>
-                    <th>municipio</th>
-                    <th>Delegacion</th>
-                    <th>Colonia</th>
-                    <th>Calle 1</th>
-                    <th>Calle 2</th>
-                    <th>C.P.</th>
-                    <th>Tipo</th>
-                    <th>estatus</th>
+                    <th><h3>Pais</h3></th>
+                    <th><h3>Estado</h3></th>
+                    <th><h3>municipio</h3></th>
+                    <th><h3>Delegacion</h3></th>
+                    <th><h3>Colonia</h3></th>
+                    <th><h3>Calle 1</h3></th>
+                    <th><h3>Calle 2</h3></th>
+                    <th><h3>C.P.</h3></th>
+                    <th><h3>Tipo</h3></th>
+                    <th><h3>estatus</h3></th>
                     <th>
                       <button type="button" class="btn btn-warning" data-accion="Guardar" data-toggle="modal" data-id="" value="Guardar" id="editDirCliente" data-cat="<?php if ($catalogo === "Cliente"): ?>TelefonoCliente<?php else: ?>TelefonoProveedor<?php endif ?>"><span class="glyphicon glyphicon-open"></span></button>
                     </th>
@@ -921,7 +782,7 @@ $(document).ready(function(){
         </div>
         <div id="detallesProducto" style="padding: 5px;">
           <form class="add" id="formProducto" enctype="multipart/form-data">
-            <div class="row" style="padding: 5px;">
+            <div class="row">
               <div class="col-sm-3 claveProd">
                 <label>Clave:</label>
                 <input type="text" id="claveProd" value="" class="form-control">
@@ -938,7 +799,7 @@ $(document).ready(function(){
             <div class="row">
               <div class="col-sm-3">
                 <label>Ean-code:</label>
-                <input type="text" id="eanCodeProd" value="" class="form-control">
+                <input type="number" id="eanCodeProd" value="" class="form-control">
               </div>
               <div class="col-sm-3">
                 <label>Color:</label>
@@ -960,8 +821,8 @@ $(document).ready(function(){
                 <input type="text" id="DimenProd" value="" class="form-control">
               </div>
               <div class="col-sm-3">
-                <label>Cantidad minima:</label>
-                <input type="number" id="cantMinProd" value="" class="form-control" >
+                <label>Foto:</label>
+                <input type="file" id="fotoProd" value="" class="" accept="image/*">
               </div>
               
             </div>
@@ -998,92 +859,82 @@ $(document).ready(function(){
               </div>
             </div>
             <div class="row">
-              <div class="col-sm-4">
-                <label>Foto:</label>
-                <input type="file" id="fotoProd" value="" class="" accept="image/*">
-              </div>
-              <div class="col-sm-2">
+              <div class="col-sm-3">
                 <label>Estatus web:</label>
                 <input type="checkbox" id="estatusWebProd" value="" class="form-control" disabled="" checked="">
               </div>
-              <div class="col-sm-1">
+              <div class="col-sm-3">
                 <label>Estatus:</label>
                 <input type="checkbox" id="estatusProd" value="" class="form-control" disabled="" checked="">
               </div>
-              <div class="col-sm-1">
-                <label>Iva 0:</label>
-                <input type="checkbox" id="iva" value="" class="form-control" >
+              <div class="col-sm-3">
+                
               </div>
             </div>
             <div class="row">
-              <div class="col-sm-2">
-                <button type="button" class="btn-link" id="verFotoProd">Ver foto</button>
+              <div class="col-sm-3">
+                <img src="C:\Users\Gerbacio\Pictures\Macetacerámicaparaparedantigua.png" id="imgProd" alt="Imagen no encontrada" >
               </div>
-              <div class="col-sm-offset-5">
+            </div>
+            <div class="row">
+              <div class="col-sm-offset-7">
                 <button type="button" id="btn_guardarProducto" name="btn_guardarProducto" value="Guardar" data-id="" data-info="" data-cat="Producto" class="btn btn-success"><span class="glyphicon glyphicon-">GUARDAR</span></button>
               </div>
             </div>
           </form>
         </div>
-        <div class="sidebar">
-          <div class="widget" id="tabProducto">
-            <h2>Producto</h2>
-            <ul class="cards list-group">
-              <li class="list-group-item">
-              <div class="table-responsive" id="tabPaneProdPrecio">
-                <table id="tableProdPrecio" class="table table-first-column-number ">
-                  <thead >
-                    <tr>
-                      <th class="col-xs-2">Precio</th>
-                      <th class="col-xs-2">Tipo precio</th>
-                      <th class="col-xs-1">Moneda</th>
-                      <th class="col-xs-2">Fecha inicio</th>
-                      <th class="col-xs-2">Fecha fin</th>
-                      <th class="col-xs-1">Estatus</th>
-                      <th class="col-xs-2"></th>
-                    </tr>
+        <div class="fancy-tab-container " id="tabProducto">
+          <ul id="myTabProducto" class="nav nav-tabs two-tabs fancy">
+            <li class="active"><a href="#tabPaneProdPrecio" data-toggle="tab">Producto</a></li>
+            <li><a href="#inventario" data-toggle="tab">Direccion</a></li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane fade in active table-responsive" id="tabPaneProdPrecio">
+              <table id="tableProdPrecio" class="table table-first-column-number ">
+                <thead >
+                  <tr>
+                    <th class="col-xs-2">Precio de compra</th>
+                    <th class="col-xs-2">Precio de venta</th>
+                    <th class="col-xs-2">Moneda</th>
+                    <th class="col-xs-2">Vigencia</th>
+                    <th class="col-xs-1">Estatus</th>
+                    <th class="col-xs-3"></th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyProdPrecio">
+                  <tr id="trProdPrecio_0">
+                    <td class="col-xs-2"><input type="number" onkeyup="" id="precioCompraProd_0"  value="" class="form-control" min="0" disabled=""> </td>
+                    <td class="col-xs-2"><input type="number" onkeyup="" id="precioVentaProd_0"  value="" class="form-control" min="0" disabled=""> </td>
+                    <td class="col-xs-2">
+                      <select id="monedaProd_0" name="" class="form-control   options " value="" required disabled="">
+                        <option value="-1">Seleccione tipo de moneda</option>
+                        <option value="Pesos">Pesos Mx</option>
+                        <option value="Dolar">Dolar</option>
+                        <option value="Otro">Otro</option>
+                      </select>
+                    </td>
+                    <td class="col-xs-2"><input type="date" onkeyup="" id="vigenciaPrecioProd_0"  value="" class="form-control" disabled=""> </td>
+                    <td class="col-xs-1"><input type="checkbox" id="estatusPrecioProd_0"  value="1"   checked disabled></td>
+                    <td class="col-xs-3">
+                      <input type="hidden" id="idProducto" value="" name="">
+                      <button type="button" id="btn_guardarPrecioProd" name="btn_guardarPrecioProd" value="Guardar" data-id="0" data-cat="ProductoPrecio" class="enviarG  btn btn-success" disabled="">OK</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="tab-pane fade table-responsive" id="inventario">
+                <table id="tableInventario" class="table table-first-column-check">
+                  <thead>
+                    
                   </thead>
-                  <tbody id="tbodyProdPrecio">
-                    <tr id="trProdPrecio_0">
-                      <td class="col-xs-2">
-                        <div class="precio input-group  " style="padding: 5px;">
-                          <span class="input-group-addon">
-                            <span class="text-info">$</span>
-                          </span>
-                          <input type="number" onkeyup="" id="precio_0"  value="" class="form-control" min="0" disabled="">
-                        </div>
-                      </td>
-                      <td class="col-xs-2">
-                        <select id="tipoPrecio_0" name="" class="form-control   options " value="" required disabled="">
-                          <option value="-1">Seleccione tipo precio</option>
-                          <option value="0">Compra</option>
-                          <option value="1">Retail</option>
-                          <option value="2">Mayorista</option>
-                          <option value="3">Distribuidor</option>
-                        </select>
-                      </td>
-                      <td class="col-xs-1">
-                        <select id="monedaProd_0" name="" class="form-control   options " value="" required disabled="">
-                          <option value="-1">Seleccione tipo de moneda</option>
-                          <option value="Pesos">Pesos Mx</option>
-                          <option value="Dolar">Dolar</option>
-                          <option value="Otro">Otro</option>
-                        </select>
-                      </td>
-                      <td class="col-xs-2"><input type="date" onkeyup="" id="fechaInicioProdPrecio_0"  value="" class="form-control" disabled=""> </td>
-                      <td class="col-xs-2"><input type="date" onkeyup="" id="fechaFinProdPrecio_0"  value="" class="form-control" disabled=""> </td>
-                      <td class="col-xs-1"><input type="checkbox" id="estatusPrecioProd_0"  value="1"   checked disabled></td>
-                      <td class="col-xs-2">
-                        <input type="hidden" id="idProducto" value="" name="">
-                        <button type="button" id="btn_guardarPrecioProd" name="btn_guardarPrecioProd" value="Guardar" data-id="0" data-cat="ProductoPrecio" class="enviarG  btn btn-success" disabled="">OK</button>
-                      </td>
-                    </tr>
+                  <tbody id="tbodyClienteDir">
+                  
                   </tbody>
                 </table>
-              </div> 
-              </li>
-            </ul>
-          </div>
+            </div> 
+                        
+          </div> 
         </div>
       </div>
     </div>
@@ -1202,38 +1053,17 @@ $(document).ready(function(){
 
 <!--::::::::::::: MODAL PARA LAS CONFIRMACIONES :::::::::::::::::::::::::::::::::::::::-->
 <div id="modalConfirmacion" class="modal fade" tabindex="-1"  data-backdrop="static" role="dialog" aria-labelledby="modalConfirmacionLabel" aria-hidden="true" >
-  <div class="modal-dialog xs-dialog" >
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 style="text-align: center;">CONFIRMACION</h3>
-      </div>
-      <form action="" method="" accept-charset="utf-8">
-        <div class="modal-body">
-          <h4 style="text-align: center;">¿Esta seguro de enviar los datos? </h4>
-        </div>
-        <div class="modal-footer" id="modalFooterDir">
-          <button type="button" class="btn btn-info" data-dismiss="modal" aria-hidden="true" id="btn_CancelEnviar">CANCELAR</button>
-          <button type="button" id="btn_enviar" name="" value="" data-id="" data-cat="" class="btn btn-success" >GUARDAR</button>  
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-<!--::::::::::::: MODAL PARA LAS CONFIRMACIONES DE LAS ELIMINACIONES :::::::::::::::::::::::::::::::::::::::-->
-<div id="modalConfirmEliminar" class="modal fade" tabindex="-1"  data-backdrop="static" role="dialog" aria-labelledby="modalConfirmEliminarLabel" aria-hidden="true" >
   <div class="modal-dialog" >
     <div class="modal-content">
       <div class="modal-header">
-        <h3 style="text-align: center;">CONFIRMACION</h3>
+        <h3>CONFIRMACION</h3>
       </div>
       <form action="" method="" accept-charset="utf-8">
         <div class="modal-body">
-          <h4 style="text-align: center;">¿Esta seguro de eliminar este registro? </h4>
+          
         </div>
         <div class="modal-footer" id="modalFooterDir">
-          <button type="button" class="btn btn-info" data-dismiss="modal" aria-hidden="true" id="btn_CancelEnviar">CANCELAR</button>
-          <button type="button" id="btn_enviarEliminar" name="" value="" data-id="" data-cat="" class="btn btn-success" >ELIMINAR</button>  
+
         </div>
       </form>
     </div>
@@ -1273,29 +1103,6 @@ $(document).ready(function(){
   </div>
 </div>
 
-<!--::::::::::: MODAL PARA VER LA FOTO DEL PRODUCTO   :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
-<div id="modalFotoProd" class="modal fade" tabindex="-1"   >
-      <div class="modal-dialog p-fotop">
-          <div class="modal-content content-f">
-              <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                  <h2 class="modal-title text-primary text-center title-fp">
-                  <span class="glyphicon glyphicon-picture "></span>
-                    Imagen del producto</h2>
-              </div>
-              <div class="modal-body body-foto">
-
-                  <div class="fp-foto">
-                    <img id="fotopro" class="foto-p-p" alt="Foto del producto">
-                  </div>
-
-              </div>
-              <div class="modal-footer modal-rest">
-                  <h4 class="text-center text-info t-foto"></h4>
-              </div>
-          </div>
-      </div>
-  </div>
 
 <script type="text/javascript">
   $(document).ready(function () {
@@ -1336,7 +1143,7 @@ $(document).ready(function(){
             break;
 
         case 'FormaPago':
-            $('#descrFormaPago_'+$(this).data('id')).prop('disabled',false);
+            $('#descripcion_'+$(this).data('id')).prop('disabled',false);
             $('#btn_guardar_'+$(this).data('id')).prop('disabled',false);
             break;
 
@@ -1399,41 +1206,10 @@ $(document).ready(function(){
           $('#btn_guardarContacto_'+$(this).data('id')).prop('disabled',false);
           break;
 
-        case 'Importador':
-          $('#nomImportador_'+$(this).data('id')).prop('disabled',false);
-          $('#btn_guardar_'+$(this).data('id')).prop('disabled',false);
-          break;
-
-        case 'ProductoPrecio':
-          $('#precio_'+$(this).data('id')).prop('disabled',false);
-          $('#tipoPrecio_'+$(this).data('id')).prop('disabled',false);
-          $('#monedaProd_'+$(this).data('id')).prop('disabled',false);
-          $('#vigenciaPrecioProd_'+$(this).data('id')).prop('disabled',false);
-          $('#estatusPrecioProd_'+$(this).data('id')).prop('disabled',false);
-          $('#btn_guardarPrecioProd_'+$(this).data('id')).prop('disabled',false);
-          break;
-
-        case 'Descuentos':
-          $('#descrDesc_'+$(this).data('id')).prop('disabled',false);
-          $('#familiaDesc_'+$(this).data('id')).prop('disabled',false);
-          $('#descDesc_'+$(this).data('id')).prop('disabled',false);
-          $('#fechaInicioDesc_'+$(this).data('id')).prop('disabled',false);
-          $('#fechaFinDesc_'+$(this).data('id')).prop('disabled',false);
-          $('#btn_guardar_'+$(this).data('id')).prop('disabled',false);
-          break;
-        case 'Usuario':
-          $('#usuario_'+$(this).data('id')).prop('disabled',false);
-          $('#contraseñaUsuario_'+$(this).data('id')).prop('disabled',false);
-          $('#rolUsuario_'+$(this).data('id')).prop('disabled',false);
-          $('#emailUsuario_'+$(this).data('id')).prop('disabled',false);
-          $('#btn_guardar_'+$(this).data('id')).prop('disabled',false);
-          break;
-
       }
     });
 
     function confirmar(){
-      //var respuesta = $('#modalConfirmacion').modal({erfalse});
       var respuesta=confirm('¿Estas seguro de guardar los datos? ');
       return respuesta;
     }
@@ -1447,7 +1223,7 @@ $(document).ready(function(){
 //::::::::---- FUNCION PARA ENVIAR LOS DATOS PARA ALMACENARLOS  ----:::::::::::::::::::::::::::\\
     $(document).on('click','.enviarG', function(){
         catalogo = $(this).data('cat');
-        //$(this).prop('disabled',true);
+        $(this).prop('disabled',true);
         //  alert(catalogo);
         var msg="";
         var validar = true;
@@ -1498,6 +1274,21 @@ $(document).ready(function(){
                   }else{
                     $('.rfc_'+$(this).data('id')).removeClass('has-error');
                   }
+                 /* if ($('#nombre_comercial_'+$(this).data('id')).val() === ""){
+                    msg += 'Ingrese el nombre comercial. \n';
+                    validar = false;
+                  }
+                  if ($('#razon_social_'+$(this).data('id')).val() === ""){
+                    msg += 'Ingrese razon social. \n';
+                    validar = false;
+                  }
+                  /*if ($(this).data('info')=== 'Actualizar') {
+                    if ($('#numeroCliente_'+$(this).data('id')).val() === ""){
+                      msg += 'Ingrese el numero de cliente. \n';
+                      validar = false;
+                    }
+                  }*/
+
                   if ($('#agenteCliente_'+$(this).data('id')).val().trim() === "-1"){
                     $('.agenteCliente_'+$(this).data('id')).addClass('has-error');
                     msg += ';Seleccione un agente.';
@@ -1541,25 +1332,15 @@ $(document).ready(function(){
             
             case 'Comercializador':
                 if ($('#nombre_'+$(this).data('id')).val().trim()==="") {
-                  $('#nombre_'+$(this).data('id')).focus();
-                  msg += 'Ingrese el nombre.';
+                  msg += 'Ingrese el nombre. \n';
                   validar = false;
                 };  
                 break;
 
-            case 'Importador':
-              if ($('#nomImportador_'+$(this).data('id')).val().trim()==="") {
-                  $('#nomImportador_'+$(this).data('id')).focus();
-                  msg += 'Ingrese importador.';
-                  validar = false;
-                };  
-              break;
-
             case 'FormaPago':
-                if ($('#descrFormaPago_'+$(this).data('id')).val().trim()==="") {
+                if ($('#descripcion_'+$(this).data('id')).val().trim()==="") {
                   msg += 'Ingrese descripción. \n';
                   validar = false;
-                  $('#descrFormaPago_'+$(this).data('id')).focus();
                 };  
                 break;
 
@@ -1798,111 +1579,10 @@ $(document).ready(function(){
                   }
               break;
 
-            case 'ProductoPrecio':
-              if ($('#precio_'+$(this).data('id')).val().trim() === ""){
-                    $('.precio_'+$(this).data('id')).addClass('has-error');
-                    msg += ';Ingrese precio.';
-                  validar = false;
-                  }else{
-                    $('.precio_'+$(this).data('id')).removeClass('has-error');
-                  }
-              if ($('#tipoPrecio_'+$(this).data('id')).val().trim() === "-1"){
-                    $('.tipoPrecio_'+$(this).data('id')).addClass('has-error');
-                    msg += ';Seleccione tipo.';
-                  validar = false;
-                  }else{
-                    $('.tipoPrecio_'+$(this).data('id')).removeClass('has-error');
-                  }
-              if ($('#monedaProd_'+$(this).data('id')).val().trim() === "-1"){
-                    $('.monedaProd_'+$(this).data('id')).addClass('has-error');
-                    msg += ';Seleccione moneda.';
-                  validar = false;
-                  }else{
-                    $('.monedaProd_'+$(this).data('id')).removeClass('has-error');
-                  }
-              if ($('#fechaInicioProdPrecio_'+$(this).data('id')).val().trim() === ""){
-                    $('.fechaInicioProdPrecio_'+$(this).data('id')).addClass('has-error');
-                    msg += ';Ingrese fecha de inicio.';
-                  validar = false;
-                  }else{
-                    $('.fechaInicioProdPrecio_'+$(this).data('id')).removeClass('has-error');
-                  }
-              if ($('#fechaFinProdPrecio_'+$(this).data('id')).val().trim() === ""){
-                    $('.fechaFinProdPrecio_'+$(this).data('id')).addClass('has-error');
-                    msg += ';Ingrese fecha fin.';
-                  validar = false;
-                  }else{
-                    $('.fechaFinProdPrecio_'+$(this).data('id')).removeClass('has-error');
-                  }
-              break;
-
-            case 'Descuentos':
-              if ($('#descrDesc_'+$(this).data('id')).val().trim()==="") {
-                  msg += ';Ingrese descripción.';
-                  validar = false;
-                  $('#descrDesc_'+$(this).data('id')).focus();
-                  break;
-                  };
-               if ($('#familiaDesc_'+$(this).data('id')).val().trim()==="-1") {
-                  msg += ';Seleccione familia.';
-                  validar = false;
-                  $('#familiaDesc_'+$(this).data('id')).focus();
-                  break;
-                };
-              if ($('#descDesc_'+$(this).data('id')).val().trim()==="") {
-                  msg += ';Ingrese descuento.';
-                  validar = false;
-                  $('#descDesc_'+$(this).data('id')).focus();
-                  break;
-                  };
-              if ($('#fechaInicioDesc_'+$(this).data('id')).val().trim()==="") {
-                  msg += ';Ingrese fecha inicio.';
-                  validar = false;
-                  $('#fechaInicioDesc_'+$(this).data('id')).focus();
-                  break;
-                  };
-              if ($('#fechaFinDesc_'+$(this).data('id')).val().trim()==="") {
-                  msg += ';Ingrese fecha fin.';
-                  validar = false;
-                  $('#fechaFinDesc_'+$(this).data('id')).focus();
-                  break;
-                  };
-              break;
-            case 'Usuario':
-              if ($('#usuario_'+$(this).data('id')).val().trim() === ""){
-                  msg += ';Ingrese usuario. ';
-                  validar = false;
-                }
-              if ($(this).val()==="Guardar"){
-                    if ($('#contraseñaUsuario_'+$(this).data('id')).val().trim() === "" ){
-                        $('.contraseñaUsuario_'+$(this).data('id')).addClass('has-error');
-                        msg += ';Ingrese contraseña.';
-                        validar = false;
-                    }else if($('#contraseñaUsuario_'+$(this).data('id')).val().trim().length < 6 ){
-                        $('.contraseñaUsuario_'+$(this).data('id')).addClass('has-error');
-                        msg += ';Contraseña muy corta.';
-                        validar = false;
-                    }else if($('#contraseñaUsuario_'+$(this).data('id')).val().trim().length > 12 ){
-                        $('.contraseñaUsuario_'+$(this).data('id')).addClass('has-error');
-                        msg += ';Contraseña muy larga.';
-                        validar = false;
-                    }else {
-                        $('.contraseñaUsuario_'+$(this).data('id')).removeClass('has-error');
-                  }
-                }
-              var regex = /[\w-\.]{2,}@([\w-]{2,}\.)*([\w-]{2,}\.)[\w-]{2,4}/;
-              if (!regex.test( $('#emailUsuario_'+$(this).data('id')).val().trim())) {
-                  $('.emailUsuario_'+$(this).data('id')).addClass('has-error');
-                  msg += ';Ingrese e-mail.';
-                  validar = false;
-                }else{
-                  $('.emailUsuario_'+$(this).data('id')).removeClass('has-error');
-                }
-              if ($('#rolUsuario_'+$(this).data('id')).val().trim() === "-1"){
-                  msg += ';Seleccione rol. ';
-                  validar = false;
-                }
-              break;
+           /* case 'Producto':
+              //alert($(this).data('id'));
+              
+              break;*/
 
             default:
                 msg += ';No se ha validado ningun dato.';
@@ -1921,9 +1601,9 @@ $(document).ready(function(){
           }
           $(this).prop('disabled',false);
         }else {  //-- SI LAS VALIDACIONES SON CORRECTAS SE PROCEDE A RECOGER LOS DATOS A ENVIAR ---//
-          //$('#modalConfirmacion').modal('show');
-
-          switch (catalogo){ //--- SIWTCH PARA RECOGER LOS VALORES DEPENDIENDO DE EL ALMACEN DEL QUE SE TRATE  ---//
+          if(confirmar()){
+              
+            switch (catalogo){ //--- SIWTCH PARA RECOGER LOS VALORES DEPENDIENDO DE EL ALMACEN DEL QUE SE TRATE  ---//
 
               case 'Almacen':
                 var datos={
@@ -1934,7 +1614,7 @@ $(document).ready(function(){
                     catalogo: catalogo,
                     tipoMov : $(this).val(),
                     id_upd  : $(this).data('id')
-                  };
+                };
                 //alert('datos cargados: \n ' +datos['clave']+'\n ' +datos['nombre']+'\n ' +datos['estatus']+ '\n ' +datos['catalogo']+ '\n ' +datos['tipoMov']+ '\n ' +datos['id_upd'])
                 break;
 
@@ -1968,17 +1648,10 @@ $(document).ready(function(){
                       id_upd  : $(this).data('id')
                   };
                   break;
-              case 'Importador':
-                var datos = {
-                      nomImportador  : $('#nomImportador_'+$(this).data('id')).val().trim(),
-                      catalogo: catalogo,
-                      tipoMov : $(this).val(),
-                      id_upd  : $(this).data('id')
-                  };
-                break;
+
               case 'FormaPago':
                   var datos = {
-                      descripcion  : $('#descrFormaPago_'+$(this).data('id')).val().trim(),
+                      descripcion  : $('#descripcion_'+$(this).data('id')).val().trim(),
                       catalogo: catalogo,
                       tipoMov : $(this).val(),
                       id_upd  : $(this).data('id')
@@ -2155,60 +1828,66 @@ $(document).ready(function(){
                   };
                 break;
 
-              case 'ProductoPrecio':
-                var datos={
-                    precio              : $('#precio_'+$(this).data('id')).val().trim(),
-                    tipoPrecio          : $('#tipoPrecio_'+$(this).data('id')).val().trim(),
-                    monedaProd          : $('#monedaProd_'+$(this).data('id')).val().trim(),
-                    fechaInicio         : $('#fechaInicioProdPrecio_'+$(this).data('id')).val(),
-                    fechaFin            : $('#fechaFinProdPrecio_'+$(this).data('id')).val(),
-                    idProducto          : $('#idProducto').val().trim(),
-                    estatus             : (($('#estatusPrecioProd_'+$(this).data('id')).is(':checked')) ? '1' : '0'),
-                    catalogo            : catalogo,
-                    tipoMov             : $(this).val(),
-                    id_upd              : $(this).data('id')
-                  };
+            /*  case 'Producto':
+               /* var datos={
+                    claveProd         : $('#claveProd').val().trim(),
+                    numArtProd        : $('#numArtProd').val().trim(),
+                    nomProd           : $('#nomProd').val().trim(),
+                    eanCodeProd       : $('#eanCodeProd').val().trim(),
+                    colorProd         : $('#colorProd').val().trim(),
+                    numColorProd      : $('#numColorProd').val().trim(),
+                    uMedidaProd       : $('#uMedidaProd').val().trim(),
+                    DimenProd         : $('#DimenProd').val().trim(),
+                    fotoProd          : $('#fotoProd')[0].files[0],
+                    piezasPaqProd     : $('#piezasPaqProd').val().trim(),
+                    piezasPalletProd  : $('#piezasPalletProd').val().trim(),
+                    totalPiezasProd   : $('#totalPiezasProd').val().trim(),
+                    importadorProd    : $('#importadorProd').val().trim(),
+                    almacenProd       : $('#almacenProd').val().trim(),
+                    familiaProd       : $('#familiaProd').val().trim(),
 
-              case 'Descuentos':
-                var datos={
-                    descrDesc           : $('#descrDesc_'+$(this).data('id')).val().trim(),
-                    familiaDesc         : $('#familiaDesc_'+$(this).data('id')).val().trim(),
-                    descDesc            : $('#descDesc_'+$(this).data('id')).val().trim(),
-                    fechaInicioDesc     : $('#fechaInicioDesc_'+$(this).data('id')).val(),
-                    fechaFinDesc        : $('#fechaFinDesc_'+$(this).data('id')).val(),
-                    estatusDesc         : (($('#estatusDesc_'+$(this).data('id')).is(':checked')) ? '1' : '0'),
-                    catalogo            : catalogo,
-                    tipoMov             : $(this).val(),
-                    id_upd              : $(this).data('id')
-                  };
-                break;
-              case 'Usuario':
-                var datos={
-                    usuario             : $('#usuario_'+$(this).data('id')).val().trim(),
-                    contraseña          : $('#contraseñaUsuario_'+$(this).data('id')).val().trim(),
-                    email               : $('#emailUsuario_'+$(this).data('id')).val().trim(),
-                    rol                 : $('#rolUsuario_'+$(this).data('id')).val(),
-                    catalogo            : catalogo,
-                    tipoMov             : $(this).val(),
-                    id_upd              : $(this).data('id')
-                  };
-                break;
+                    estatusWebProd    : (($('#estatusWebProd').is(':checked')) ? '1' : '0'),
+                    estatusProd       : (($('#estatusProd').is(':checked')) ? '1' : '0'),
+                    catalogo    : catalogo,
+                    tipoMov     : $(this).val(),
+                    id_upd      : $(this).data('id')
+                  }; 
+                  
+                var datos = new FormData();
+                datos.append('claveProd',$('#claveProd').val().trim());
+                datos.append('numArtProd',$('#numArtProd').val().trim());
+                datos.append('nomProd',$('#nomProd').val().trim());
+                datos.append('eanCodeProd',$('#eanCodeProd').val().trim());
+                datos.append('colorProd',$('#colorProd').val().trim());
+                datos.append('numColorProd',$('#numColorProd').val().trim());
+                datos.append('uMedidaProd',$('#uMedidaProd').val().trim());
+                datos.append('DimenProd',$('#DimenProd').val().trim());
+                datos.append('piezasPaqProd',$('#piezasPaqProd').val().trim());
+                datos.append('piezasPalletProd',$('#piezasPalletProd').val().trim());
+                datos.append('totalPiezasProd',$('#totalPiezasProd').val().trim());
+                datos.append('importadorProd',$('#importadorProd').val().trim());
+                datos.append('almacenProd',$('#almacenProd').val().trim());
+                datos.append('familiaProd',$('#familiaProd').val().trim());
+                datos.append('fotoProd',$('#fotoProd')[0].files[0]);
+                datos.append('estatusWebProd',(($('#estatusWebProd').is(':checked')) ? '1' : '0'));
+                datos.append('estatusProd',(($('#estatusProd').is(':checked')) ? '1' : '0'));
+                datos.append('catalogo',catalogo);
+                console.log(datos);
+                break;*/
 
               default:
                 break;
 
             }
-          $('#btn_enviar').val($(this).val());
-          $('#btn_enviar').data('id',$(this).data('id'));
-          $('#btn_enviar').data('info',datos);
-          $('#btn_enviar').data('function','1'); //hace referencia para saber que funcion abrira
-          $('#modalConfirmacion').modal('show');
-          /*if(confirmar()){
+            //alert($(this).val()
             if ($(this).val()==="Guardar") {
                 $.ajax({    //--- INICIA LA CONEXION MEDIANTE AJAX ---//  
                   url: "/catalogo/create",
                   type: "POST",
                   data: datos,
+                  //cache: false,
+                  //contentType: false,
+                  //processData: false,
                   success: function(respuesta){
                     console.log(respuesta);
 
@@ -2292,8 +1971,8 @@ $(document).ready(function(){
 
                       case 'Comercializador':
                           var fila =  '<tr id="tr_'+respuesta.id+'">' +
-                                        '<td class="col-xs-6"> <input type="text" name="nombre_'+respuesta.id+'" value="'+respuesta.nombre+'" id="nombre_'+respuesta.id+'" disabled="disabled" class="form-control" required>  </td>' +
-                                        '<td class="col-xs-6">'+
+                                        '<td> <input type="text" name="nombre_'+respuesta.id+'" value="'+respuesta.nombre+'" id="nombre_'+respuesta.id+'" disabled="disabled" class="form-control" required>  </td>' +
+                                        '<td>'+
                                             '<button type="button" value="Modificar" id="btn_mod" data-id="'+respuesta.id+'" class="modificar btn btn-primary" data-cat="Comercializador"><span class="glyphicon glyphicon-edit" ></span></button>'+
                                             '<button type="button" value="Actualizar" id="btn_guardar_'+respuesta.id+'" disabled="disabled" data-id="'+respuesta.id+'" class="enviarG btn btn-success" data-cat="Comercializador"><span class="glyphicon glyphicon-">OK</span></button>'+
                                             '<button type="button" id="btn_Eliminar" value="Eliminar" data-id="'+respuesta.id+'" data-cat="Comercializador" class="btn btn-danger"> <span class="glyphicon glyphicon-remove"></span></button>'+
@@ -2306,7 +1985,7 @@ $(document).ready(function(){
                       case 'NivelDescuento':
                           var fila =  '<tr id="tr_'+respuesta.id+'">' +
                                         '<td col-md-4 col-xs-5 col-sm-4> <input type="text" name="descripcion_'+respuesta.id+'" value="'+respuesta.descripcion+'" id="descripcion_'+respuesta.id+'" disabled class="form-control" required>  </td>' +
-                                        '<td col-md-2 col-xs-1 col-sm-2> <input type="number" name="descuento_'+respuesta.id+'" value="'+respuesta.descuento+'" id="descuento_'+respuesta.id+'" disabled class="form-control" required>  </td>' +
+                                        '<td col-md-2 col-xs-1 col-sm-2> <input type="text" name="descuento_'+respuesta.id+'" value="'+respuesta.descuento+'" id="descuento_'+respuesta.id+'" disabled class="form-control" required>  </td>' +
                                         '<td col-md-2 col-xs-1 col-sm-2 style="text-align: center"> <input type="checkbox" value="'+respuesta.estatus+'"  id="estatus_'+respuesta.id+'" disabled="disabled" '+ ((respuesta.estatus==1) ?  'checked ':'')+' > </td>' +
                                         '<td col-md-4 col-xs-5 col-sm-4 style="text-align: center">'+
                                           '<button type="button" value="Modificar" id="btn_mod" data-id="'+respuesta.id+'" class="modificar btn btn-primary" data-cat="NivelDescuento"><span class="glyphicon glyphicon-edit" ></span></button>'+
@@ -2482,134 +2161,12 @@ $(document).ready(function(){
                             $('#btn_guardarContacto').prop('disabled',false);
                           break;
 
-                      case 'ProductoPrecio':
-                        var fila =  '<tr id="trProdPrecio_'+respuesta.id+'">'+
-                                    '<td class="col-xs-2">'+
-                                      '<div class="precio input-group  " style="padding: 5px;">'+
-                                        '<span class="input-group-addon">'+
-                                          '<span class="text-info">$</span>'+
-                                        '</span>'+
-                                        '<input type="number" onkeyup="" id="precio_'+respuesta.id+'"  value="'+respuesta.precio+'" class="form-control" min="0" disabled="">'+
-                                      '</div>'+
-                                    '</td>'+
-                                    '<td class="col-xs-2">'+
-                                      '<select id="tipoPrecio_'+respuesta.id+'" name="" class="form-control   options " value="" required disabled="">'+
-                                        '<option value="-1">Seleccione tipo precio</option>'+
-                                        '<option value="0">Compra</option>'+
-                                        '<option value="1">Retail</option>'+
-                                        '<option value="2">Mayorista</option>'+
-                                        '<option value="3">Distribuidor</option>'+
-                                      '</select>'+
-                                    '</td>'+
-                                    '<td class="col-xs-1">'+
-                                      '<select id="monedaProd_'+respuesta.id+'" name="" class="form-control   options " value="" required disabled="">'+
-                                        '<option value="-1">Seleccione tipo de moneda</option>'+
-                                        '<option value="Pesos">Pesos Mx</option>'+
-                                        '<option value="Dolar">Dolar</option>'+
-                                        '<option value="Otro">Otro</option>'+
-                                      '</select>'+
-                                    '</td>'+
-                                    '<td class="col-xs-2"><input type="date" onkeyup="" id="fechaInicioProdPrecio_'+respuesta.id+'"  value="" class="form-control" disabled=""> </td>'+
-                                    '<td class="col-xs-2"><input type="date" onkeyup="" id="fechaFinProdPrecio_'+respuesta.id+'"  value="" class="form-control" disabled=""> </td>'+
-                                    '<td class="col-xs-1"><input type="checkbox" id="estatusPrecioProd_'+respuesta.id+'"  value="" disabled></td>'+
-                                    '<td class="col-xs-2">'+
-                                      '<button type="button" value="Modificar" id="btn_mod" data-id="'+respuesta.id+'" data-cat="ProductoPrecio" class="modificar btn btn-primary" ><span class="glyphicon glyphicon-edit"></span></button>'+
-                                      '<button type="button" value="Actualizar" id="btn_guardarPrecioProd_'+respuesta.id+'" disabled="disabled" data-id="'+respuesta.id+'" data-cat="ProductoPrecio" class="enviarG btn btn-success" ><span class="glyphicon glyphicon-">OK</span></button>'+
-                                      '<button type="button" id="btn_Eliminar" value="Eliminar" data-id="'+respuesta.id+'" data-cat="ProductoPrecio" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>'+
-                                    '</td>'+
-                                  '</tr>';
-                        $('#tbodyProdPrecio').append(fila);
-                        $('#precio_0').val('');
-                        $('#tipoPrecio_'+respuesta.id).val(respuesta.tipo);
-                        $('#tipoPrecio_0').val('-1');
-                        $('#monedaProd_'+respuesta.id).val(respuesta.moneda);
-                        $('#monedaProd_0').val('-1');
-                        $('#fechaInicioProdPrecio_'+respuesta.id).val(respuesta.fechaInicio);
-                        $('#fechaInicioProdPrecio_0').val('');
-                        $('#fechaFinProdPrecio_'+respuesta.id).val(respuesta.fechaFin);
-                        $('#fechaFinProdPrecio_0').val('');
-                        $('#estatusPrecioProd_'+respuesta.id).prop('checked',(respuesta.estatus===1 ? true : false));
-                        $('#btn_guardarPrecioProd').prop('disabled',false);
-                        break;
+                   /*   case 'Producto':
+                        $('#btn_guardarProducto').val('Actualizar');
+                        $('#btn_guardarProducto').prop('disabled',false);
+                        break;*/
 
-                      case 'Descuentos':
-                        var fila =  '<tr id="tr_'+respuesta['descuento'].id+'">'+
-                                        '<td class="col-sm-2"><input type="text" id="descrDesc_'+respuesta['descuento'].id+'" name="" value="'+respuesta['descuento'].descripcion+'" class="form-control" disabled=""></td>'+
-                                        '<td class="col-sm-2"><select id="familiaDesc_'+respuesta['descuento'].id+'" name="" class="form-control options" value="" required disabled="">'+
-                                          '</select> '+
-                                        '</td>'+
-                                        '<td class="col-sm-1"><input type="number" id="descDesc_'+respuesta['descuento'].id+'" name="" class="form-control" value="'+respuesta['descuento'].descuento+'" min="0" required disabled=""></td>'+
-                                        '<td class="col-sm-2"><input type="date" id="fechaInicioDesc_'+respuesta['descuento'].id+'" name="" value="'+respuesta['descuento'].fecha_inicio+'" class="form-control" disabled=""></td>'+
-                                        '<td class="col-sm-2"><input type="date" id="fechaFinDesc_'+respuesta['descuento'].id+'" name="" value="'+respuesta['descuento'].fecha_fin+'" class="form-control" disabled=""></td>'+
-                                        '<td class="col-sm-1"><input type="checkbox" id="estatusDesc_'+respuesta['descuento'].id+'" name="" value="" '+(respuesta['descuento'].estatus === 1 ? 'checked' :'')+' class="form-check" disabled></td>'+
-                                        '<td class="col-sm-2">'+
-                                          '<button type="button" value="Modificar" id="btn_mod" data-id="'+respuesta['descuento'].id+'" data-cat="Descuentos" class="modificar btn btn-primary"><span class="glyphicon glyphicon-edit"></span></button>'+
-                                          '<button type="button" value="Actualizar" id="btn_guardar_'+respuesta['descuento'].id+'" disabled="disabled" data-id="'+respuesta['descuento'].id+'" data-cat="Descuentos" class="enviarG btn btn-success" ><span class="glyphicon glyphicon-">OK</span></button>'+
-                                          '<button type="button" id="btn_Eliminar" value="Eliminar" data-id="'+respuesta['descuento'].id+'" data-cat="Descuentos" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>'+
-                                        '</td>'+
-                                    '</tr>';
-                        $('#tbodyDesc').append(fila);
-                        $.each(respuesta['familias'],function(index,familia){
-                          var optionsFam = '<option value="'+familia.id+'" '+(familia.id===respuesta['descuento'].familia_id ? 'selected': '')+' >'+familia.descripcion+'</option>';
-                          $('#familiaDesc_'+respuesta['descuento'].id).append(optionsFam);
-                        });
-                        $('#btn_guardarDesc').prop('disabled',false);
-                        $('#descrDesc_0').val('');
-                        $('#familiaDesc_0').val('-1');
-                        $('#descDesc_0').val('');
-                        $('#fechaInicioDesc_0').val('');
-                        $('#fechaFinDesc_0').val('');
-                        break;
 
-                      case 'FormaPago':
-                        var tr =  '<tr id="tr_'+respuesta.id+'" class="" >'+
-                                      '<td class="col-md-6 col-sm-6"><input type="text" id="descrFormaPago_'+respuesta.id+'" name="" value="'+respuesta.descripcion+'" disabled="disabled" class="form-control"></td>'+
-                                      '<td class="col-md-6 col-sm-6" style="text-align: center;">'+
-                                        '<button type="button" value="Modificar" id="btn_mod" data-id="'+respuesta.id+'" data-cat="FormaPago" class="modificar btn btn-primary"><span class="glyphicon glyphicon-edit"></span></button>'+
-                                        '<button type="button" value="Actualizar" id="btn_guardar_'+respuesta.id+'" disabled="disabled" data-id="'+respuesta.id+'" data-cat="FormaPago" class="enviarG btn btn-success" ><span class="glyphicon glyphicon-">OK</span></button>'+
-                                        '<button type="button" id="btn_Eliminar" value="Eliminar" data-id="'+respuesta.id+'" data-cat="FormaPago" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>'+
-                                      '</td>'+
-                                  '</tr>';
-                        $('#tbodyFormaPago').append(tr);
-                        $('#descrFormaPago_0').val('');
-                        break;
-                      case 'Importador':
-                        var tr =  '<tr id="tr_'+respuesta.id+'">'+
-                                      '<td class="col-xs-6"><input type="text" id="nomImportador_'+respuesta.id+'"  value="'+respuesta.nombre+'" disabled class="form-control"></td>'+
-                                      '<td class="col-xs-6" style="text-align: center">'+
-                                        '<button type="button" value="Modificar" id="btn_mod" data-id="'+respuesta.id+'" data-cat="Importador" class="modificar btn btn-primary"><span class="glyphicon glyphicon-edit"></span></button>'+
-                                        '<button type="button" value="Actualizar" id="btn_guardar_'+respuesta.id+'" disabled="disabled" data-id="'+respuesta.id+'" data-cat="Importador" class="enviarG btn btn-success" ><span class="glyphicon glyphicon-">OK</span></button>'+
-                                        '<button type="button" id="btn_Eliminar" value="Eliminar" data-id="'+respuesta.id+'" data-cat="Importador" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>'+
-                                      '</td>'+
-                                  '</tr>';
-                        $('#tbodyImportador').append(tr);
-                        $('#nomImportador_0').val('');
-                        break;
-                      case 'Usuario':
-                        var trUsuario = '<tr id="tr_'+respuesta.id+'">'+
-                                          '<td class="col-xs-2"><input type="text" id="usuario_'+respuesta.id+'"  value="'+respuesta.usuario+'" disabled class="form-control"></td>'+
-                                          '<td class="col-xs-2"><input type="password" id="contraseñaUsuario_'+respuesta.id+'" value="" placeholder="Ingrese nueva contraseña" disabled class="form-control"  maxlength="12"></td>'+
-                                          '<td class="col-xs-3"><input type="email" id="emailUsuario_'+respuesta.id+'" value="'+respuesta.email+'" disabled class="form-control"></td>'+
-                                          '<td class="col-xs-2"><select id="rolUsuario_'+respuesta.id+'" name="" class="form-control options" value="" required disabled="">'+
-                                                '<option value="2">Agente</option>'+
-                                                '<option value="3">administrador</option>'+
-                                                '<option value="4">Contabilidad</option>'+
-                                              '</select>'+
-                                            '</td>'+
-                                          '<td class="col-xs-3" style="text-align: center">'+
-                                            '<button type="button" value="Modificar" id="btn_mod" data-id="'+respuesta.id+'" data-cat="Usuario" class="modificar btn btn-primary"><span class="glyphicon glyphicon-edit"></span></button>'+
-                                            '<button type="button" value="Actualizar" id="btn_guardar_'+respuesta.id+'" disabled="disabled" data-id="'+respuesta.id+'" data-cat="Usuario" class="enviarG btn btn-success" ><span class="glyphicon glyphicon-">OK</span></button>'+
-                                            '<button type="button" id="btn_Eliminar" value="Eliminar" data-id="'+respuesta.id+'" data-cat="Usuario" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>'+
-                                          '</td>'+
-                                        '</tr>';
-                        $('#tbodyUsuario tr:first').after(trUsuario);
-                        $('#rolUsuario_'+respuesta.id).val(respuesta.rol_id);
-                        $('#usuario_0').val('');
-                        $('#contraseñaUsuario_0').val('');
-                        $('#emailUsuario_0').val('');
-                        $('#rolUsuario_0').val('-1');
-                        break;
-                  
                     }
                     alertas('success',"Datos almacenados correctamente");
                     $('#btn_guardar').prop('disabled',false);
@@ -2632,18 +2189,19 @@ $(document).ready(function(){
                       case 'TelefonoProveedor':
                           $('#btn_guardarTel').prop('disabled',false);
                         break;
+
                       case 'Contacto':
                           $('#btn_guardarContacto').prop('disabled',false);
                         break;
+
                       case 'DescuentoCliente':
                           $('#btn_guardarDescuento').prop('disabled',false);
                         break;
-                      case 'ProductoPrecio':
-                        $('#btn_guardarPrecioProd').prop('disabled',false);
-                        break;
-                      case 'Descuentos':
-                        $('#btn_guardarDesc').prop('disabled',false);
-                        break;
+
+                     /* case 'Producto':
+                        $('#btn_guardarProducto').prop('disabled',false);
+                        break;*/
+
                       default:
                         $('#btn_guardar').prop('disabled',false);
                         break;
@@ -2663,8 +2221,12 @@ $(document).ready(function(){
                       console.log(respuesta);
                       switch (catalogo){
                         case 'Almacen':
+                         //   if (respuesta.estatus==1) {var activar="checked"};
+                         //   $('#clave_'+respuesta.id).val(respuesta.clave);
+                         //   $('#nombre_'+respuesta.id).val(respuesta.nombre);
                             $('#clave_'+respuesta.id).prop('disabled',true);
                             $('#nombre_'+respuesta.id).prop('disabled',true);
+                         //   if (respuesta.estatus==1) { $('#status_'+respuesta.id).prop('checked',true); }else{ $('#status_'+respuesta.id).prop('checked',false); } 
                             $('#status_'+respuesta.id).prop('disabled',true);
                             $('#btn_guardar_'+respuesta.id).prop('disabled',true);
                           break;
@@ -2683,7 +2245,7 @@ $(document).ready(function(){
                             break;
 
                         case 'Comercializador':
-                            //$('#nombre_'+respuesta.id).val(respuesta.nombre);
+                            $('#nombre_'+respuesta.id).val(respuesta.nombre);
                             $('#nombre_'+respuesta.id).prop('disabled',true);
                             $('#btn_guardar_'+respuesta.id).prop('disabled',true);
                             break;
@@ -2691,7 +2253,7 @@ $(document).ready(function(){
                         case 'NivelDescuento':
                             $('#descripcion_'+id_upd).prop('disabled',true);
                             $('#descuento_'+id_upd).prop('disabled',true);
-                            $('#estatus_'+id_upd).prop('disabled',true);
+                            //$('#btn_guardar_'+id_upd).prop('disabled',true);
                             break;
 
                         case 'UnidadMedida':
@@ -2782,37 +2344,6 @@ $(document).ready(function(){
                           $('#btn_guardarContacto_'+id_upd).prop('disabled',true);
                           break;
 
-                        case 'ProductoPrecio':
-                          $('#precio_'+id_upd).prop('disabled',true);
-                          $('#tipoPrecio_'+id_upd).prop('disabled',true);
-                          $('#monedaProd_'+id_upd).prop('disabled',true);
-                          $('#fechaInicioProdPrecio_'+id_upd).prop('disabled',true);
-                          $('#fechaFinProdPrecio_'+id_upd).prop('disabled',true);
-                          $('#estatusPrecioProd_'+id_upd).prop('disabled',true);
-                          $('#btn_guardarPrecioProd_'+id_upd).prop('disabled',true);
-                          break;
-                        case 'Descuentos':
-                          $('#descrDesc_'+id_upd).prop('disabled',true);
-                          $('#familiaDesc_'+id_upd).prop('disabled',true);
-                          $('#descDesc_'+id_upd).prop('disabled',true);
-                          $('#fechaInicioDesc_'+id_upd).prop('disabled',true);
-                          $('#fechaFinDesc_'+id_upd).prop('disabled',true);
-                          $('#estatusDesc_'+id_upd).prop('disabled',true);
-                          $('#btn_guardarDesc'+id_upd).prop('disabled',true);
-                          break;
-                        case 'FormaPago':
-                          $('#descrFormaPago_'+id_upd).prop('disabled',true);
-                          break;
-                        case 'Importador':
-                          $('#nomImportador_'+id_upd).prop('disabled',true);
-                          break;
-                        case 'Usuario':
-                          $('#usuario_'+id_upd).prop('disabled',true);
-                          $('#contraseñaUsuario_'+id_upd).prop('disabled',true);
-                          $('#emailUsuario_'+id_upd).prop('disabled',true);
-                          $('#rolUsuario_'+id_upd).prop('disabled',true);
-                          break;
-
                       }
                       alertas('success',"Datos actualizados correctamente");
 
@@ -2839,9 +2370,7 @@ $(document).ready(function(){
                         case 'Contacto':
                             $('#btn_guardarContacto_'+id_upd).prop('disabled',false);
                           break;
-                        case 'Descuentos':
-                        $('#btn_guardarDesc').prop('disabled',false);
-                        break;
+
                       default:
                         $('#btn_guardar').prop('disabled',false);
                         $('#btn_guardar_'+id_upd).prop('disabled',false);
@@ -2852,683 +2381,18 @@ $(document).ready(function(){
                   });
             }
 
-          }else{$(this).prop('disabled',false);} */
+          }else{$(this).prop('disabled',false);} 
         }
 
     });
-    
-    $(document).on('click','#btn_enviar', function(){
-      var datos = $(this).data('info');
-      if ($(this).data('function')==='1') {
-        guardar1(datos);
-      }else if ($(this).data('function')==='Producto') {
-        guardarProducto(datos);
-      };
-      
-    })
-    // FUNCION QU HACE LA LLAMADA A ENVIAR LOS DATOS A GUARDAR
-    function guardar1(datos){
-            
-            if ($('#btn_enviar').val()==="Guardar") {
-                $.ajax({    //--- INICIA LA CONEXION MEDIANTE AJAX ---//  
-                  url: "/catalogo/create",
-                  type: "POST",
-                  data: datos,
-                  success: function(respuesta){
-                    console.log(respuesta);
-
-                    switch (catalogo){    //--- SWTICH PARA LAS DIFERENTES ACCIONES QUE REALIZARA CON LOS DATOS OBTENIDOS, DEPENDIENDO DEL CATALOGO  ----/
-                      case 'Almacen':
-                        if (respuesta.estatus==1) {var activar="checked"};
-                        var fila = '<tr id="tr_'+respuesta.id+'">' +
-                                      '<td> <input type="text" name="clave_'+respuesta.id+'" value="'+respuesta.clave + '" id="clave_'+respuesta.id+'" disabled="disabled" required class="form-control">  </td>' +
-                                      '<td> <input type="text" name="nombre_'+respuesta.id+'" value="'+respuesta.nombre+'" id="nombre_'+respuesta.id+'" disabled="disabled" required class="form-control">  </td>' +
-                                      '<td><input type="checkbox" name="status_'+respuesta.id+'" value="'+respuesta.estatus+'"  id="status_'+respuesta.id+'" disabled="disabled" '+ activar+' class="checkbox"> </td>' +
-                                      '<td>'+
-                                            '<button type="button" value="Modificar" id="btn_mod" data-id="'+respuesta.id+'" data-cat="Almacen" class="modificar btn btn-primary"><span class="glyphicon glyphicon-edit"></span></button>'+
-                                            '<button type="button" value="Actualizar" id="btn_guardar_'+respuesta.id+'" disabled="disabled" data-id="'+respuesta.id+'" data-cat="Almacen"class="enviarG btn btn-success"><span class="glyphicon glyphicon-">OK</span></button>'+
-                                            '<button type="button" id="btn_Eliminar" value="Eliminar" data-id="'+respuesta.id+'" data-cat="Almacen" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>'+
-                                          '</td>'+
-                                   '</tr>';
-                        $('#tablaResult').append(fila);  //--- AGREGA LOS DATOS EN UN NUEVO <tr> AL FINAL DE LA TABLA  ---//
-                        $('#clave_0').val('');
-                        $('#nombre_0').val('');
-                        
-                        break;
-                      
-                      case 'Cliente':
-                          vistaDetalles(respuesta,'Actualizar');
-                          //$("#contenido_esp").show();
-                          $('#telefono_0').prop('disabled',false);
-                          $('#tipo_0').prop('disabled',false);
-                          $('#btn_guardarTel').prop('disabled',false);
-                          $('#editDirCliente').prop('disabled',false);
-                          $('#id_Cliente').val(respuesta.id);
-                          break;
-
-                      case 'TelefonoCliente':
-                          var fila = '<tr id="tr_'+respuesta.id+'">' +
-                                      '<td class="col-md-1"> <input type="text" value="'+respuesta.numero + '" id="telefono_'+respuesta.id+'" disabled="disabled" required class="form-control col-md-1">  </td>' +
-                                      '<td class="col-md-1"> <select id="tipo_'+respuesta.id+'" name="" class="form-control options " value="" required disabled>' +
-                                                      '<option value="Celular">Celular</option>' +
-                                                      '<option value="Fijo">Fijo</option>' +
-                                                      '<option value="Otro">Otro</option>' +
-                                                    '</select></td>' +
-                                      '<td ><input type="checkbox" value="'+respuesta.estatus+'"  id="estatusTel_'+respuesta.id+'" disabled="disabled" '+(respuesta.estatus===1 ? 'checked':'') +' > </td>' +
-                                      '<td class="col-md-1">'+
-                                          '<button type="button" value="Modificar" id="btn_mod" data-id="'+respuesta.id+'" data-cat="TelefonoCliente" class="modificar btn btn-primary" ><span class="glyphicon glyphicon-edit"></span></button>'+
-                                          '<button type="button" value="Actualizar" id="btn_guardar_'+respuesta.id+'" disabled="disabled" data-id="'+respuesta.id+'" data-cat="TelefonoCliente" class="enviarG btn btn-success" ><span class="glyphicon glyphicon-">OK</span></button>'+
-                                          '<button type="button" id="btn_Eliminar" value="Eliminar" data-id="'+respuesta.id+'" data-cat="TelefonoCliente" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>'+
-                                        '</td>'+
-                                   '</tr>';
-                          $('#tbodyCliente').append(fila);  //--- AGREGA LOS DATOS EN UN NUEVO <tr> AL FINAL DE LA TABLA  ---//
-                          $('#telefono_0').val('');
-                          $('#tipo_0').val('');
-                          $('#tipo_'+respuesta.id).val(respuesta.tipo_tel); 
-                          $('#btn_guardarTel').prop('disabled',false);
-                          break;
-
-                      case 'DireccionCliente':
-                          var trDir = '<tr id="trDir_'+respuesta.idDir+'">'+
-                                             '<td >'+respuesta.pais+'</td>'+ 
-                                             '<td >'+respuesta.estados+'</td>'+ 
-                                             '<td >'+respuesta.municipio+'</td>'+ 
-                                             '<td >'+respuesta.delegacion+'</td>'+ 
-                                             '<td >'+respuesta.colonia+'</td>'+ 
-                                             '<td >'+respuesta.calle1+'</td>'+ 
-                                             '<td >'+respuesta.calle2+'</td>'+ 
-                                             '<td >'+respuesta.codigo_postal+'</td>'+ 
-                                             '<td >'+respuesta.tipo+'</td>'+ 
-                                             '<td id="tdDir_'+respuesta.idDir+'"><input type="checkbox" id="estatusDir_'+respuesta.idDir+'" disabled value="'+respuesta.estatus+'" '+(respuesta.estatus=== 1 ? 'checked':'')+' ></td>'+ 
-                                             '<td >'+
-                                              '<button type="button" class="btn btn-primary" data-accion="Modificar" data-toggle="modal" data-id="'+respuesta.idCliente+'" value="" data-cat="TelefonoCliente" data-info=\''+JSON.stringify(respuesta)+'\' id="editDirCliente"><span class="glyphicon glyphicon-edit"></span></button>'+
-                                             '</td>'+
-                                        '</tr>';
-                                  $('#tbodyClienteDir').append(trDir);
-                                  $('#myModal').modal('hide');
-
-                          break;
-
-                      case 'DescuentoCliente':
-
-                        $('#descuento_'+$('#btn_guardar').data('id')).append('<option value="'+respuesta.id+'" selected>'+respuesta.descripcion+'</option>');
-                        $('#modalDescuentos').modal('hide');
-                        break;
-
-                      case 'Comercializador':
-                          var fila =  '<tr id="tr_'+respuesta.id+'">' +
-                                        '<td class="col-xs-6"> <input type="text" name="nombre_'+respuesta.id+'" value="'+respuesta.nombre+'" id="nombre_'+respuesta.id+'" disabled="disabled" class="form-control" required>  </td>' +
-                                        '<td class="col-xs-6">'+
-                                            '<button type="button" value="Modificar" id="btn_mod" data-id="'+respuesta.id+'" class="modificar btn btn-primary" data-cat="Comercializador"><span class="glyphicon glyphicon-edit" ></span></button>'+
-                                            '<button type="button" value="Actualizar" id="btn_guardar_'+respuesta.id+'" disabled="disabled" data-id="'+respuesta.id+'" class="enviarG btn btn-success" data-cat="Comercializador"><span class="glyphicon glyphicon-">OK</span></button>'+
-                                            '<button type="button" id="btn_Eliminar" value="Eliminar" data-id="'+respuesta.id+'" data-cat="Comercializador" class="btn btn-danger"> <span class="glyphicon glyphicon-remove"></span></button>'+
-                                          '</td>'+
-                                      '</tr>';
-                          $('#tablaResult').append(fila);
-                          $('#nombre_0').val('');
-                          break;
-                      
-                      case 'NivelDescuento':
-                          var fila =  '<tr id="tr_'+respuesta.id+'">' +
-                                        '<td col-md-4 col-xs-5 col-sm-4> <input type="text" name="descripcion_'+respuesta.id+'" value="'+respuesta.descripcion+'" id="descripcion_'+respuesta.id+'" disabled class="form-control" required>  </td>' +
-                                        '<td col-md-2 col-xs-1 col-sm-2> <input type="number" name="descuento_'+respuesta.id+'" value="'+respuesta.descuento+'" id="descuento_'+respuesta.id+'" disabled class="form-control" required>  </td>' +
-                                        '<td col-md-2 col-xs-1 col-sm-2 style="text-align: center"> <input type="checkbox" value="'+respuesta.estatus+'"  id="estatus_'+respuesta.id+'" disabled="disabled" '+ ((respuesta.estatus==1) ?  'checked ':'')+' > </td>' +
-                                        '<td col-md-4 col-xs-5 col-sm-4 style="text-align: center">'+
-                                          '<button type="button" value="Modificar" id="btn_mod" data-id="'+respuesta.id+'" class="modificar btn btn-primary" data-cat="NivelDescuento"><span class="glyphicon glyphicon-edit" ></span></button>'+
-                                          '<button type="button" value="Actualizar" id="btn_guardar_'+respuesta.id+'" disabled="disabled" data-id="'+respuesta.id+'" class="enviarG btn btn-success" data-cat="NivelDescuento"><span class="glyphicon glyphicon-">OK</span></button>'+
-                                          '<button type="button" id="btn_Eliminar" value="Eliminar" data-id="'+respuesta.id+'" data-cat="NivelDescuento" class="btn btn-danger"> <span class="glyphicon glyphicon-remove"></span></button>'+    
-                                        '</td>'+
-                                      '</tr>';
-                          $('#tablaResult').append(fila);
-                          $('#descripcion_0').val('');
-                          $('#descuento_0').val('');
-                          break;
-
-                      case 'UnidadMedida':
-                       var fila = '<tr id="tr_'+respuesta.id+'">' +
-                                      '<td class="col-md-6 col-xs-6 col-sm-6"> <input type="text" value="'+respuesta.descripcion + '" id="descripcion_'+respuesta.id+'" disabled class="form-control" required>  </td>' +
-                                      '<td class="col-md-3 col-xs-1 col-sm-3" style="text-align: center"><input type="checkbox" value="'+respuesta.estatus+'"  id="estatus_'+respuesta.id+'" disabled="disabled" '+ ((respuesta.estatus==1) ?  'checked ':'')+' > </td>' +
-                                      '<td class="col-md-3 col-xs-5 col-sm-3" style="text-align: center">'+
-                                        '<button type="button" value="Modificar" id="btn_mod" data-id="'+respuesta.id+'" class="modificar btn btn-primary" data-cat="UnidadMedida"><span class="glyphicon glyphicon-edit" ></span></button>'+
-                                        '<button type="button" value="Actualizar" id="btn_guardar_'+respuesta.id+'" disabled="disabled" data-id="'+respuesta.id+'" class="enviarG btn btn-success" data-cat="UnidadMedida"><span class="glyphicon glyphicon-">OK</span></button>'+
-                                        '<button type="button" id="btn_Eliminar" value="Eliminar" data-id="'+respuesta.id+'" data-cat="UnidadMedida" class="btn btn-danger"> <span class="glyphicon glyphicon-remove"></span></button>'+          
-                                      '</td>'+
-                                   '</tr>';
-                        $('#tablaResult').append(fila);  //--- AGREGA LOS DATOS EN UN NUEVO <tr> AL FINAL DE LA TABLA  ---//
-                        $('#descripcion_0').val('');
-                        
-                        
-                        break;
-                      
-                      case 'Rol':
-                          var fila =  '<tr id="tr_'+respuesta.id+'">' +
-                                        '<td class="col-xs-6"> <input type="text" value="'+respuesta.nombre+'" id="nombre_'+respuesta.id+'" disabled class="form-control" required>  </td>' +
-                                        '<td class="col-xs-6" style="text-align: center;">'+
-                                          '<button type="button" value="Modificar" id="btn_mod" data-id="'+respuesta.id+'" class="modificar btn btn-primary" data-cat="Rol"><span class="glyphicon glyphicon-edit" ></span></button>'+
-                                          '<button type="button" value="Actualizar" id="btn_guardar_'+respuesta.id+'" disabled="disabled" data-id="'+respuesta.id+'" class="enviarG btn btn-success" data-cat="Rol"><span class="glyphicon glyphicon-">OK</span></button>'+
-                                          '<button type="button" id="btn_Eliminar" value="Eliminar" data-id="'+respuesta.id+'" data-cat="Rol" class="btn btn-danger"> <span class="glyphicon glyphicon-remove"></span></button>'+          
-                                        '</td>'+
-                                      '</tr>';
-                          $('#tablaResult').append(fila);
-                          $('#nombre_0').val('');
-                          break;
-
-                      case 'Pais':
-                          var fila =  '<tr id="tr_'+respuesta.id+'">'+
-                                        '<td><input type="text" id="pais_'+respuesta.id+'" name="nombre_'+respuesta.id+'" value="'+respuesta.pais+'" disabled="disabled" class="form-control"></td>'+
-                                        '<td><input type="checkbox" id="estatus_'+respuesta.id+'" name="" value="'+respuesta.estatus+'" '+ ((respuesta.estatus==1) ?  'checked ':'')+'  class="checkbox" disabled></td>'+
-                                        '<td>'+
-                                          '<button type="button" value="Modificar" id="btn_mod" data-id="'+respuesta.id+'" data-cat="Pais" class="modificar btn btn-primary"><span class="glyphicon glyphicon-edit"></span></button>'+
-                                          '<button type="button" value="Actualizar" id="btn_guardar_'+respuesta.id+'" disabled="disabled" data-id="'+respuesta.id+'" data-cat="Pais" class="enviarG btn btn-success" ><span class="glyphicon glyphicon-">OK</span></button>'+
-                                          '<button type="button" id="btn_Eliminar" value="Eliminar" data-id="'+respuesta.id+'" data-cat="Pais" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>'+
-                                        '</td>'+
-                                      '</tr> ';
-                          $('#tablaResult').append(fila);
-                          $('#pais_0').val('');
-                          break;
-
-                      case 'Estados':
-                          var fila =  '<tr id="tr_'+respuesta['estado'].id+'">'+
-                                        '<td><input type="text" id="estado_'+respuesta['estado'].id+'" name="" value="'+respuesta['estado'].estados+'" disabled="disabled" class="form-control"></td>'+
-                                        '<td><select id="pais_'+respuesta['estado'].id+'" name="" class="form-control" required disabled>'+
-                                             '</select>'+ 
-                                        '</td>'+
-                                        '<td><input type="checkbox" id="estatus_'+respuesta['estado'].id+'" name="" value="'+respuesta['estado'].estatus+'" '+ ((respuesta['estado'].estatus==1) ?  'checked ':'')+'  class="checkbox" disabled></td>'+
-                                        '<td>'+
-                                          '<button type="button" value="Modificar" id="btn_mod" data-id="'+respuesta['estado'].id+'" data-cat="Estados" class="modificar btn btn-primary"><span class="glyphicon glyphicon-edit"></span></button>'+
-                                          '<button type="button" value="Actualizar" id="btn_guardar_'+respuesta['estado'].id+'" disabled="disabled" data-id="'+respuesta['estado'].id+'" data-cat="Estados" class="enviarG btn btn-success" ><span class="glyphicon glyphicon-">OK</span></button>'+
-                                          '<button type="button" id="btn_Eliminar" value="Eliminar" data-id="'+respuesta['estado'].id+'" data-cat="Estados" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>'+
-                                        '</td>'+
-                                      '</tr> ';
-                          $('#tablaResult').append(fila);
-                          $('#estado_0').val('');
-                          $('#pais_0').val('-1');
-                          var option="";
-                          $.each(respuesta['paises'],function(index,pais){
-                             option += '<option value="'+pais.id+'" '+((estado.pais_id===pais.id) ? 'selected':'')+'>'+pais.pais+'</option>';
-                          })
-                          $('#pais_'+respuesta['estado'].id).html(option);
-                          $('#pais_'+respuesta['estado'].id).val(respuesta['estado'].pais_id);
-                          break; 
-
-                      case 'Municipios':
-                          var fila =  '<tr id="tr_'+respuesta['municipio'].id+'">'+
-                                        '<td><input type="text" id="municipio_'+respuesta['municipio'].id+'" name="" value="'+respuesta['municipio'].municipio+'" disabled="disabled" class="form-control"></td>'+
-                                        '<td><select id="estado_'+respuesta['municipio'].id+'" name="" class="form-control" required disabled>'+
-                                             '</select>'+ 
-                                        '</td>'+
-                                        '<td><input type="checkbox" id="estatus_'+respuesta['municipio'].id+'" name="" value="'+respuesta['municipio'].estatus+'" '+ ((respuesta['municipio'].estatus==1) ?  'checked ':'')+'  class="checkbox" disabled></td>'+
-                                        '<td>'+
-                                          '<button type="button" value="Modificar" id="btn_mod" data-id="'+respuesta['municipio'].id+'" data-cat="Municipios" class="modificar btn btn-primary"><span class="glyphicon glyphicon-edit"></span></button>'+
-                                          '<button type="button" value="Actualizar" id="btn_guardar_'+respuesta['municipio'].id+'" disabled="disabled" data-id="'+respuesta['municipio'].id+'" data-cat="Municipios" class="enviarG btn btn-success" ><span class="glyphicon glyphicon-">OK</span></button>'+
-                                          '<button type="button" id="btn_Eliminar" value="Eliminar" data-id="'+respuesta['municipio'].id+'" data-cat="Municipios" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>'+
-                                        '</td>'+
-                                      '</tr> ';
-                          $('#tablaResult').append(fila);
-                          $('#municipio_0').val('');
-                          $('#estado_0').val('-1'); 
-                          var option="";
-                          $.each(respuesta['estados'],function(index,estado){
-                            option += '<option value="'+estado.id+'" '+((municipio.estado_id === estado.id) ? 'selected':'')+'>'+estado.estados+'</option>';
-                          })
-                          $('#estado_'+respuesta['municipio'].id).html(option);
-                          $('#estado_'+respuesta['municipio'].id).val(respuesta['municipio'].estado_id);
-                          break; 
-
-                      case 'Proveedor':
-                          vistaDetalles(respuesta,'Actualizar');
-                          $('#telefono_0').prop('disabled',false);
-                          $('#tipo_0').prop('disabled',false);
-                          $('#btn_guardarTel').prop('disabled',false);
-                          $('#editDirCliente').prop('disabled',false);
-                          $('#id_Proveedor').val(respuesta.idProveedor);
-                          //$('#proveedor_0').prop('disabled',false);
-                          $('#nomProveedor_0').prop('disabled',false);
-                          $('#correoProveedor_0').prop('disabled',false);
-                          $('#btn_guardarContacto').prop('disabled',false);
-                          break;
-
-                      case 'TelefonoProveedor':
-                          var fila = '<tr id="tr_'+respuesta.id+'">' +
-                                      '<td class="col-md-1"> <input type="text" value="'+respuesta.numero + '" id="telefono_'+respuesta.id+'" disabled="disabled" required class="form-control col-md-1">  </td>' +
-                                      '<td class="col-md-1"> <select id="tipo_'+respuesta.id+'" name="" class="form-control options " value="" required disabled>' +
-                                                      '<option value="Celular">Celular</option>' +
-                                                      '<option value="Fijo">Fijo</option>' +
-                                                      '<option value="Otro">Otro</option>' +
-                                                    '</select></td>' +
-                                      '<td ><input type="checkbox" value="'+respuesta.estatus+'"  id="estatusTel_'+respuesta.id+'" disabled="disabled" '+(respuesta.estatus===1 ? 'checked':'') +' > </td>' +
-                                      '<td class="col-md-1">'+
-                                          '<button type="button" value="Modificar" id="btn_mod" data-id="'+respuesta.id+'" data-cat="TelefonoProveedor" class="modificar btn btn-primary" ><span class="glyphicon glyphicon-edit"></span></button>'+
-                                          '<button type="button" value="Actualizar" id="btn_guardar_'+respuesta.id+'" disabled="disabled" data-id="'+respuesta.id+'" data-cat="TelefonoProveedor" class="enviarG btn btn-success" ><span class="glyphicon glyphicon-">OK</span></button>'+
-                                          '<button type="button" id="btn_Eliminar" value="Eliminar" data-id="'+respuesta.id+'" data-cat="TelefonoProveedor" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>'+
-                                        '</td>'+
-                                   '</tr>';
-                          $('#tbodyCliente').append(fila);  //--- AGREGA LOS DATOS EN UN NUEVO <tr> AL FINAL DE LA TABLA  ---//
-                          $('#telefono_0').val('');
-                          $('#tipo_0').val('');
-                          $('#tipo_'+respuesta.id).val(respuesta.tipo_tel); 
-                          $('#btn_guardarTel').prop('disabled',false);
-                          break;
-
-                      case 'DireccionProveedor':
-                          var trDir = '<tr id="trDir_'+respuesta.idDir+'">'+
-                                             '<td >'+respuesta.pais+'</td>'+ 
-                                             '<td >'+respuesta.estados+'</td>'+ 
-                                             '<td >'+respuesta.municipio+'</td>'+ 
-                                             '<td >'+respuesta.delegacion+'</td>'+ 
-                                             '<td >'+respuesta.colonia+'</td>'+ 
-                                             '<td >'+respuesta.calle1+'</td>'+ 
-                                             '<td >'+respuesta.calle2+'</td>'+ 
-                                             '<td >'+respuesta.codigo_postal+'</td>'+ 
-                                             '<td >'+respuesta.tipo+'</td>'+ 
-                                             '<td id="tdDir_'+respuesta.idDir+'"><input type="checkbox" id="estatusDir_'+respuesta.idDir+'" disabled value="'+respuesta.estatus+'" '+(respuesta.estatus=== 1 ? 'checked':'')+' ></td>'+ 
-                                             '<td >'+
-                                              '<button type="button" class="btn btn-primary" data-accion="Modificar" data-toggle="modal" data-id="'+respuesta.idProveedor+'" value="" data-cat="TelefonoProveedor" data-info=\''+JSON.stringify(respuesta)+'\' id="editDirCliente"><span class="glyphicon glyphicon-edit"></span></button>'+
-                                             '</td>'+
-                                        '</tr>';
-                                  $('#tbodyClienteDir').append(trDir);
-                                  $('#myModal').modal('hide');
-                          break;
-
-                      case 'Contacto':
-                          var fila =  '<tr id="trContacto_'+respuesta.idContacto+'">'+
-                                        '<td class="col-xs-3"><input type="text" onkeyup="" id="nomProveedor_'+respuesta.idContacto+'"  value="'+respuesta.nombre+'" class="form-control" disabled> </td>'+
-                                        '<td class="col-xs-3"><input type="email" onkeyup="" id="correoProveedor_'+respuesta.idContacto+'"  value="'+respuesta.correo+'" class="form-control" disabled> </td>'+
-                                        '<td class="col-xs-1"><input type="checkbox" id="estatusContacto_'+respuesta.idContacto+'"  value=""  '+(respuesta.estatus===1 ? 'checked':'')+' disabled></td>'+
-                                        '<td class="col-xs-3">'+
-                                          '<button type="button" value="Modificar" id="btn_mod" data-id="'+respuesta.idContacto+'" data-cat="Contacto" class="modificar btn btn-primary" ><span class="glyphicon glyphicon-edit"></span></button>'+
-                                          '<button type="button" value="Actualizar" id="btn_guardarContacto_'+respuesta.idContacto+'" disabled="disabled" data-id="'+respuesta.idContacto+'" data-cat="Contacto" class="enviarG btn btn-success" ><span class="glyphicon glyphicon-">OK</span></button>'+
-                                          '<button type="button" id="btn_Eliminar" value="Eliminar" data-id="'+respuesta.idContacto+'" data-cat="Contacto" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>'+
-                                        '</td>'+
-                                      '</tr>';
-                            $('#tbodyContacto').append(fila);
-                            $('#nomProveedor_0').val('');
-                            $('#correoProveedor_0').val('');
-                            $('#btn_guardarContacto').prop('disabled',false);
-                          break;
-
-                      case 'ProductoPrecio':
-                        var fila =  '<tr id="trProdPrecio_'+respuesta.id+'">'+
-                                    '<td class="col-xs-2">'+
-                                      '<div class="precio input-group  " style="padding: 5px;">'+
-                                        '<span class="input-group-addon">'+
-                                          '<span class="text-info">$</span>'+
-                                        '</span>'+
-                                        '<input type="number" onkeyup="" id="precio_'+respuesta.id+'"  value="'+respuesta.precio+'" class="form-control" min="0" disabled="">'+
-                                      '</div>'+
-                                    '</td>'+
-                                    '<td class="col-xs-2">'+
-                                      '<select id="tipoPrecio_'+respuesta.id+'" name="" class="form-control   options " value="" required disabled="">'+
-                                        '<option value="-1">Seleccione tipo precio</option>'+
-                                        '<option value="0">Compra</option>'+
-                                        '<option value="1">Retail</option>'+
-                                        '<option value="2">Mayorista</option>'+
-                                        '<option value="3">Distribuidor</option>'+
-                                      '</select>'+
-                                    '</td>'+
-                                    '<td class="col-xs-1">'+
-                                      '<select id="monedaProd_'+respuesta.id+'" name="" class="form-control   options " value="" required disabled="">'+
-                                        '<option value="-1">Seleccione tipo de moneda</option>'+
-                                        '<option value="Pesos">Pesos Mx</option>'+
-                                        '<option value="Dolar">Dolar</option>'+
-                                        '<option value="Otro">Otro</option>'+
-                                      '</select>'+
-                                    '</td>'+
-                                    '<td class="col-xs-2"><input type="date" onkeyup="" id="fechaInicioProdPrecio_'+respuesta.id+'"  value="" class="form-control" disabled=""> </td>'+
-                                    '<td class="col-xs-2"><input type="date" onkeyup="" id="fechaFinProdPrecio_'+respuesta.id+'"  value="" class="form-control" disabled=""> </td>'+
-                                    '<td class="col-xs-1"><input type="checkbox" id="estatusPrecioProd_'+respuesta.id+'"  value="" disabled></td>'+
-                                    '<td class="col-xs-2">'+
-                                      '<button type="button" value="Modificar" id="btn_mod" data-id="'+respuesta.id+'" data-cat="ProductoPrecio" class="modificar btn btn-primary" ><span class="glyphicon glyphicon-edit"></span></button>'+
-                                      '<button type="button" value="Actualizar" id="btn_guardarPrecioProd_'+respuesta.id+'" disabled="disabled" data-id="'+respuesta.id+'" data-cat="ProductoPrecio" class="enviarG btn btn-success" ><span class="glyphicon glyphicon-">OK</span></button>'+
-                                      '<button type="button" id="btn_Eliminar" value="Eliminar" data-id="'+respuesta.id+'" data-cat="ProductoPrecio" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>'+
-                                    '</td>'+
-                                  '</tr>';
-                        $('#tbodyProdPrecio').append(fila);
-                        $('#precio_0').val('');
-                        $('#tipoPrecio_'+respuesta.id).val(respuesta.tipo);
-                        $('#tipoPrecio_0').val('-1');
-                        $('#monedaProd_'+respuesta.id).val(respuesta.moneda);
-                        $('#monedaProd_0').val('-1');
-                        $('#fechaInicioProdPrecio_'+respuesta.id).val(respuesta.fechaInicio);
-                        $('#fechaInicioProdPrecio_0').val('');
-                        $('#fechaFinProdPrecio_'+respuesta.id).val(respuesta.fechaFin);
-                        $('#fechaFinProdPrecio_0').val('');
-                        $('#estatusPrecioProd_'+respuesta.id).prop('checked',(respuesta.estatus===1 ? true : false));
-                        $('#btn_guardarPrecioProd').prop('disabled',false);
-                        break;
-
-                      case 'Descuentos':
-                        var fila =  '<tr id="tr_'+respuesta['descuento'].id+'">'+
-                                        '<td class="col-sm-2"><input type="text" id="descrDesc_'+respuesta['descuento'].id+'" name="" value="'+respuesta['descuento'].descripcion+'" class="form-control" disabled=""></td>'+
-                                        '<td class="col-sm-2"><select id="familiaDesc_'+respuesta['descuento'].id+'" name="" class="form-control options" value="" required disabled="">'+
-                                          '</select> '+
-                                        '</td>'+
-                                        '<td class="col-sm-1"><input type="number" id="descDesc_'+respuesta['descuento'].id+'" name="" class="form-control" value="'+respuesta['descuento'].descuento+'" min="0" required disabled=""></td>'+
-                                        '<td class="col-sm-2"><input type="date" id="fechaInicioDesc_'+respuesta['descuento'].id+'" name="" value="'+respuesta['descuento'].fecha_inicio+'" class="form-control" disabled=""></td>'+
-                                        '<td class="col-sm-2"><input type="date" id="fechaFinDesc_'+respuesta['descuento'].id+'" name="" value="'+respuesta['descuento'].fecha_fin+'" class="form-control" disabled=""></td>'+
-                                        '<td class="col-sm-1"><input type="checkbox" id="estatusDesc_'+respuesta['descuento'].id+'" name="" value="" '+(respuesta['descuento'].estatus === 1 ? 'checked' :'')+' class="form-check" disabled></td>'+
-                                        '<td class="col-sm-2">'+
-                                          '<button type="button" value="Modificar" id="btn_mod" data-id="'+respuesta['descuento'].id+'" data-cat="Descuentos" class="modificar btn btn-primary"><span class="glyphicon glyphicon-edit"></span></button>'+
-                                          '<button type="button" value="Actualizar" id="btn_guardar_'+respuesta['descuento'].id+'" disabled="disabled" data-id="'+respuesta['descuento'].id+'" data-cat="Descuentos" class="enviarG btn btn-success" ><span class="glyphicon glyphicon-">OK</span></button>'+
-                                          '<button type="button" id="btn_Eliminar" value="Eliminar" data-id="'+respuesta['descuento'].id+'" data-cat="Descuentos" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>'+
-                                        '</td>'+
-                                    '</tr>';
-                        $('#tbodyDesc').append(fila);
-                        $.each(respuesta['familias'],function(index,familia){
-                          var optionsFam = '<option value="'+familia.id+'" '+(familia.id===respuesta['descuento'].familia_id ? 'selected': '')+' >'+familia.descripcion+'</option>';
-                          $('#familiaDesc_'+respuesta['descuento'].id).append(optionsFam);
-                        });
-                        $('#btn_guardarDesc').prop('disabled',false);
-                        $('#descrDesc_0').val('');
-                        $('#familiaDesc_0').val('-1');
-                        $('#descDesc_0').val('');
-                        $('#fechaInicioDesc_0').val('');
-                        $('#fechaFinDesc_0').val('');
-                        break;
-
-                      case 'FormaPago':
-                        var tr =  '<tr id="tr_'+respuesta.id+'" class="" >'+
-                                      '<td class="col-md-6 col-sm-6"><input type="text" id="descrFormaPago_'+respuesta.id+'" name="" value="'+respuesta.descripcion+'" disabled="disabled" class="form-control"></td>'+
-                                      '<td class="col-md-6 col-sm-6" style="text-align: center;">'+
-                                        '<button type="button" value="Modificar" id="btn_mod" data-id="'+respuesta.id+'" data-cat="FormaPago" class="modificar btn btn-primary"><span class="glyphicon glyphicon-edit"></span></button>'+
-                                        '<button type="button" value="Actualizar" id="btn_guardar_'+respuesta.id+'" disabled="disabled" data-id="'+respuesta.id+'" data-cat="FormaPago" class="enviarG btn btn-success" ><span class="glyphicon glyphicon-">OK</span></button>'+
-                                        '<button type="button" id="btn_Eliminar" value="Eliminar" data-id="'+respuesta.id+'" data-cat="FormaPago" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>'+
-                                      '</td>'+
-                                  '</tr>';
-                        $('#tbodyFormaPago').append(tr);
-                        $('#descrFormaPago_0').val('');
-                        break;
-                      case 'Importador':
-                        var tr =  '<tr id="tr_'+respuesta.id+'">'+
-                                      '<td class="col-xs-6"><input type="text" id="nomImportador_'+respuesta.id+'"  value="'+respuesta.nombre+'" disabled class="form-control"></td>'+
-                                      '<td class="col-xs-6" style="text-align: center">'+
-                                        '<button type="button" value="Modificar" id="btn_mod" data-id="'+respuesta.id+'" data-cat="Importador" class="modificar btn btn-primary"><span class="glyphicon glyphicon-edit"></span></button>'+
-                                        '<button type="button" value="Actualizar" id="btn_guardar_'+respuesta.id+'" disabled="disabled" data-id="'+respuesta.id+'" data-cat="Importador" class="enviarG btn btn-success" ><span class="glyphicon glyphicon-">OK</span></button>'+
-                                        '<button type="button" id="btn_Eliminar" value="Eliminar" data-id="'+respuesta.id+'" data-cat="Importador" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>'+
-                                      '</td>'+
-                                  '</tr>';
-                        $('#tbodyImportador').append(tr);
-                        $('#nomImportador_0').val('');
-                        break;
-                      case 'Usuario':
-                        var trUsuario = '<tr id="tr_'+respuesta.id+'">'+
-                                          '<td class="col-xs-2"><input type="text" id="usuario_'+respuesta.id+'"  value="'+respuesta.usuario+'" disabled class="form-control"></td>'+
-                                          '<td class="col-xs-2"><input type="password" id="contraseñaUsuario_'+respuesta.id+'" value="" placeholder="Ingrese nueva contraseña" disabled class="form-control"  maxlength="12"></td>'+
-                                          '<td class="col-xs-3"><input type="email" id="emailUsuario_'+respuesta.id+'" value="'+respuesta.email+'" disabled class="form-control"></td>'+
-                                          '<td class="col-xs-2"><select id="rolUsuario_'+respuesta.id+'" name="" class="form-control options" value="" required disabled="">'+
-                                                '<option value="2">Agente</option>'+
-                                                '<option value="3">administrador</option>'+
-                                                '<option value="4">Contabilidad</option>'+
-                                              '</select>'+
-                                            '</td>'+
-                                          '<td class="col-xs-3" style="text-align: center">'+
-                                            '<button type="button" value="Modificar" id="btn_mod" data-id="'+respuesta.id+'" data-cat="Usuario" class="modificar btn btn-primary"><span class="glyphicon glyphicon-edit"></span></button>'+
-                                            '<button type="button" value="Actualizar" id="btn_guardar_'+respuesta.id+'" disabled="disabled" data-id="'+respuesta.id+'" data-cat="Usuario" class="enviarG btn btn-success" ><span class="glyphicon glyphicon-">OK</span></button>'+
-                                            '<button type="button" id="btn_Eliminar" value="Eliminar" data-id="'+respuesta.id+'" data-cat="Usuario" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>'+
-                                          '</td>'+
-                                        '</tr>';
-                        $('#tbodyUsuario tr:first').after(trUsuario);
-                        $('#rolUsuario_'+respuesta.id).val(respuesta.rol_id);
-                        $('#usuario_0').val('');
-                        $('#contraseñaUsuario_0').val('');
-                        $('#emailUsuario_0').val('');
-                        $('#rolUsuario_0').val('-1');
-                        break;
-                  
-                    }
-                    alertas('success',"Datos almacenados correctamente");
-                    $('#btn_guardar').prop('disabled',false);
-                    
-                  },
-                  error: function(msgError){
-                    console.log(msgError.responseText);
-
-                    var arreglo=msgError.responseText.split(';');
-                    for (var i=0; i<arreglo.length;i++){
-                      if(arreglo[i]!=='' && arreglo[i]!=="\""){
-                        alertas('error',arreglo[i]);
-                      }
-                    }
-                    //$('#btn_guardar').prop('disabled',false);
-                    switch (catalogo){
-                      case 'TelefonoCliente':
-                          $('#btn_guardarTel').prop('disabled',false);
-                        break;
-                      case 'TelefonoProveedor':
-                          $('#btn_guardarTel').prop('disabled',false);
-                        break;
-                      case 'Contacto':
-                          $('#btn_guardarContacto').prop('disabled',false);
-                        break;
-                      case 'DescuentoCliente':
-                          $('#btn_guardarDescuento').prop('disabled',false);
-                        break;
-                      case 'ProductoPrecio':
-                        $('#btn_guardarPrecioProd').prop('disabled',false);
-                        break;
-                      case 'Descuentos':
-                        $('#btn_guardarDesc').prop('disabled',false);
-                        break;
-                      default:
-                        $('#btn_guardar').prop('disabled',false);
-                        break;
-                    }
-                  }
-
-                });
-            }else if($('#btn_enviar').val()==="Actualizar"){
-                
-                var id_upd= $('#btn_enviar').data('id');
-               // alert($(this).val() + id_upd);
-                $.ajax({
-                    url:  "/catalogo/update/"+id_upd,
-                    type: "PUT",
-                    data: datos,
-                    success: function (respuesta){
-                      console.log(respuesta);
-                      switch (catalogo){
-                        case 'Almacen':
-                            $('#clave_'+respuesta.id).prop('disabled',true);
-                            $('#nombre_'+respuesta.id).prop('disabled',true);
-                            $('#status_'+respuesta.id).prop('disabled',true);
-                            $('#btn_guardar_'+respuesta.id).prop('disabled',true);
-                          break;
-
-                        case 'Cliente':
-                            //vistaDetalles(respuesta,'Actualizar');
-                            $('#btn_guardar').prop('disabled',false);
-                            //$("#contenido_esp").show();    
-                            break;
-
-                        case 'TelefonoCliente':
-                            $('#telefono_'+id_upd).prop('disabled',true);
-                            $('#tipo_'+id_upd).prop('disabled',true);
-                            $('#estatusTel_'+id_upd).prop('disabled',true);
-                            $('#btn_guardar_'+id_upd).prop('disabled',true);
-                            break;
-
-                        case 'Comercializador':
-                            //$('#nombre_'+respuesta.id).val(respuesta.nombre);
-                            $('#nombre_'+respuesta.id).prop('disabled',true);
-                            $('#btn_guardar_'+respuesta.id).prop('disabled',true);
-                            break;
-
-                        case 'NivelDescuento':
-                            $('#descripcion_'+id_upd).prop('disabled',true);
-                            $('#descuento_'+id_upd).prop('disabled',true);
-                            $('#estatus_'+id_upd).prop('disabled',true);
-                            break;
-
-                        case 'UnidadMedida':
-                            $('#descripcion_'+id_upd).prop('disabled',true);
-                            $('#estatus_'+id_upd).prop('disabled',true);
-                            //$('#btn_guardar_'+id_upd).prop('disabled',true);
-                            break;
-
-                        case 'Rol':
-                            $('#nombre_'+id_upd).prop('disabled',true);
-                           // $('#btn_guardar_'+respuesta.id).prop('disabled',true);
-                            break;
-
-                        case 'DireccionCliente':
-                          var trDir =   '<td >'+respuesta.pais+'</td>'+ 
-                                        '<td >'+respuesta.estados+'</td>'+ 
-                                        '<td >'+respuesta.municipio+'</td>'+ 
-                                        '<td >'+respuesta.delegacion+'</td>'+ 
-                                        '<td >'+respuesta.colonia+'</td>'+ 
-                                        '<td >'+respuesta.calle1+'</td>'+ 
-                                        '<td >'+respuesta.calle2+'</td>'+ 
-                                        '<td >'+respuesta.codigo_postal+'</td>'+ 
-                                        '<td >'+respuesta.tipo+'</td>'+ 
-                                        '<td ><input type="checkbox" id="estatusDir_'+respuesta.idDir+'" disabled value="'+respuesta.estatus+'" '+(respuesta.estatus=== 1 ? 'checked':'')+ ' ></td>'+ 
-                                        '<td >'+
-                                          '<button type="button" class="btn btn-primary" data-accion="Modificar" data-toggle="modal" data-id="'+respuesta.idCliente+'" value="" data-cat="TelefonoCliente" data-info=\''+JSON.stringify(respuesta)+'\' id="editDirCliente"><span class="glyphicon glyphicon-edit"></span></button>'+
-                                        '</td>';
-                                        
-                                  $('#trDir_'+respuesta.idDir).html(trDir);
-                                  $('#myModal').modal('hide');
-                          break;
-
-                        case 'Pais':
-                            $('#pais_'+id_upd).prop('disabled',true);
-                            $('#estatus_'+id_upd).prop('disabled',true);
-                            $('#btn_guardar_'+id_upd).prop('disabled',true);
-                            break;
-
-                        case 'Estados':
-                            $('#estado_'+id_upd).prop('disabled',true);
-                            $('#pais_'+id_upd).prop('disabled',true);
-                            $('#estatus_'+id_upd).prop('disabled',true);
-                            $('#btn_guardar_'+id_upd).prop('disabled',true);
-                            break;
-
-                        case 'Municipios':
-                            $('#municipio_'+id_upd).prop('disabled',true);
-                            $('#estado_'+id_upd).prop('disabled',true);
-                            $('#estatus_'+id_upd).prop('disabled',true);
-                            $('#btn_guardar_'+id_upd).prop('disabled',true);
-                            break;
-
-                        case 'Proveedor':
-                            //vistaDetalles(respuesta,'Actualizar');
-                            $('#btn_guardar').prop('disabled',false);
-                            break;
-
-                        case 'TelefonoProveedor':
-                            $('#telefono_'+id_upd).prop('disabled',true);
-                            $('#tipo_'+id_upd).prop('disabled',true);
-                            $('#estatusTel_'+id_upd).prop('disabled',true);
-                            $('#btn_guardar_'+id_upd).prop('disabled',true);
-                            break;
-
-                        case 'DireccionProveedor':
-                          var trDir = '<td >'+respuesta.pais+'</td>'+ 
-                                      '<td >'+respuesta.estados+'</td>'+ 
-                                      '<td >'+respuesta.municipio+'</td>'+ 
-                                      '<td >'+respuesta.delegacion+'</td>'+ 
-                                      '<td >'+respuesta.colonia+'</td>'+ 
-                                      '<td >'+respuesta.calle1+'</td>'+ 
-                                      '<td >'+respuesta.calle2+'</td>'+ 
-                                      '<td >'+respuesta.codigo_postal+'</td>'+ 
-                                      '<td >'+respuesta.tipo+'</td>'+ 
-                                      '<td ><input type="checkbox" id="estatusDir_'+respuesta.idDir+'" disabled value="'+respuesta.estatus+'" '+(respuesta.estatus=== 1 ? 'checked':'')+' ></td>'+ 
-                                      '<td >'+
-                                        '<button type="button" class="btn btn-primary" data-accion="Modificar" data-toggle="modal" data-id="'+respuesta.idProveedor+'" value="" data-cat="TelefonoProveedor" data-info=\''+JSON.stringify(respuesta)+'\' id="editDirCliente"><span class="glyphicon glyphicon-edit"></span></button>'+
-                                      '</td>';
-                                       // '</tr>';
-                                  $('#trDir_'+respuesta.idDir).html(trDir);
-                                  $('#myModal').modal('hide');
-                          break;
-
-                        case 'Contacto':
-                          $('#nomProveedor_'+id_upd).prop('disabled',true);
-                          $('#correoProveedor_'+id_upd).prop('disabled',true);
-                          $('#estatusContacto_'+id_upd).prop('disabled',true);
-                          $('#btn_guardarContacto_'+id_upd).prop('disabled',true);
-                          break;
-
-                        case 'ProductoPrecio':
-                          $('#precio_'+id_upd).prop('disabled',true);
-                          $('#tipoPrecio_'+id_upd).prop('disabled',true);
-                          $('#monedaProd_'+id_upd).prop('disabled',true);
-                          $('#fechaInicioProdPrecio_'+id_upd).prop('disabled',true);
-                          $('#fechaFinProdPrecio_'+id_upd).prop('disabled',true);
-                          $('#estatusPrecioProd_'+id_upd).prop('disabled',true);
-                          $('#btn_guardarPrecioProd_'+id_upd).prop('disabled',true);
-                          break;
-                        case 'Descuentos':
-                          $('#descrDesc_'+id_upd).prop('disabled',true);
-                          $('#familiaDesc_'+id_upd).prop('disabled',true);
-                          $('#descDesc_'+id_upd).prop('disabled',true);
-                          $('#fechaInicioDesc_'+id_upd).prop('disabled',true);
-                          $('#fechaFinDesc_'+id_upd).prop('disabled',true);
-                          $('#estatusDesc_'+id_upd).prop('disabled',true);
-                          $('#btn_guardarDesc'+id_upd).prop('disabled',true);
-                          break;
-                        case 'FormaPago':
-                          $('#descrFormaPago_'+id_upd).prop('disabled',true);
-                          break;
-                        case 'Importador':
-                          $('#nomImportador_'+id_upd).prop('disabled',true);
-                          break;
-                        case 'Usuario':
-                          $('#usuario_'+id_upd).prop('disabled',true);
-                          $('#contraseñaUsuario_'+id_upd).prop('disabled',true);
-                          $('#emailUsuario_'+id_upd).prop('disabled',true);
-                          $('#rolUsuario_'+id_upd).prop('disabled',true);
-                          break;
-
-                      }
-                      alertas('success',"Datos actualizados correctamente");
-
-                    },
-                    error: function(msgError){
-                      console.log(msgError);
-                     
-                       var arreglo=msgError.responseText.split(';');
-                      for (var i=0; i<arreglo.length;i++){
-                        if(arreglo[i]!=='' && arreglo[i]!=="\""){
-                          alertas('error',arreglo[i]);
-                        }
-                      }
-                      //$(this).prop('disabled',false);
-                      
-                      switch (catalogo){
-                        case 'TelefonoCliente':
-                            $('#btn_guardarTel').prop('disabled',false);
-                          break;
-                        case 'TelefonoProveedor':
-                            $('#btn_guardarTel').prop('disabled',false);
-                          break;
-
-                        case 'Contacto':
-                            $('#btn_guardarContacto_'+id_upd).prop('disabled',false);
-                          break;
-                        case 'Descuentos':
-                        $('#btn_guardarDesc').prop('disabled',false);
-                        break;
-                      default:
-                        $('#btn_guardar').prop('disabled',false);
-                        $('#btn_guardar_'+id_upd).prop('disabled',false);
-                        break;
-                    }
-                    }
-
-                  });
-            }
-             $('#modalConfirmacion').modal('hide');
-         
-    }
 
 
 //::::::::::::::::::::::-----  ELIMINAR  ----::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::://   
     $(document).on('click','#btn_Eliminar', function(){ 
-      $('#btn_enviarEliminar').data('cat',$(this).data('cat'));
-      $('#btn_enviarEliminar').data('id',$(this).data('id'));
-       $('#modalConfirmEliminar').modal('show');
-      //$('#btn_enviarEliminar').data('cat')
+      catalogo = $(this).data('cat');
+      var id_Elim= $(this).data('id');
     //  alert(id_Elim+ " " + catalogo);
-     /* if(confirmarEliminar()){
+      if(confirmarEliminar()){
           $.ajax({
             url: "/catalogo/destroy/" + id_Elim,
             type: "DELETE",
@@ -3545,9 +2409,6 @@ $(document).ready(function(){
                     $('#trContacto_'+id_Elim).remove(); 
                     break;
 
-                  case 'ProductoPrecio':
-                    $('#trProdPrecio_'+id_Elim).remove(); 
-                    break;
                   default:
                     $('#tr_'+id_Elim).remove(); 
                     break;
@@ -3559,46 +2420,8 @@ $(document).ready(function(){
               //alert('no eliminado \n ' + respuesta.responseText);
             }
           });
-        }*/
+        }
     });
-    
-    //:::-- FUNCION PARA HACER LA LLAMADA AJAX PARA ELIMINAR UN REGISTRO --::
-    $(document).on('click','#btn_enviarEliminar', function(){
-      catalogo = $(this).data('cat');
-      var id_Elim= $(this).data('id');
-      $.ajax({
-            url: "/catalogo/destroy/" + id_Elim,
-            type: "DELETE",
-            data: {catalogo: catalogo},
-            success: function(respuesta){
-              alertas('success',"Registro eliminado");
-              
-              switch (catalogo){
-                  case 'DireccionCliente':
-                      $('#estatusDir_'+id_Elim).prop('checked',(datos.estatus===1 ? 'checked' : ''));
-                    break;
-
-                  case 'Contacto':
-                    $('#trContacto_'+id_Elim).remove(); 
-                    break;
-
-                  case 'ProductoPrecio':
-                    $('#trProdPrecio_'+id_Elim).remove(); 
-                    break;
-                  default:
-                    $('#tr_'+id_Elim).remove(); 
-                    break;
-              }
-            },
-            error: function(respuesta){
-              console.log(respuesta);
-              alertas('error',"Registro no eliminado");
-              //alert('no eliminado \n ' + respuesta.responseText);
-            }
-          });
-      $('#modalConfirmEliminar').modal('hide');
-    });
-      
 
 //::::::::::::::::::---     FUNCION PARA MOSTRAR LA FORMA EDITAR DE CLIENTE Y PROVEEDOR ----::::::::::::::::::::::::::::::::::::::::::::::::::::://
     $(document).on('click', '#editarClienteProveedor', function () {
@@ -4106,7 +2929,6 @@ $(document).ready(function(){
       $('#uMedidaProd').val(detProd.unidad_medida_id);
       $('#piezasPaqProd').val(detProd.piezas_paquete);
       $('#DimenProd').val(detProd.dimensiones);
-      $('#cantMinProd').val(detProd.cantidad_minima);
       $('#piezasPalletProd').val(detProd.piezas_pallet);
       $('#totalPiezasProd').val(detProd.total_piezas);
       $('#fotoProd').val();
@@ -4114,82 +2936,17 @@ $(document).ready(function(){
       $('#almacenProd').val(detProd.almacen_id);
       $('#familiaProd').val(detProd.familia_id);
       $('#estatusWebProd').prop('checked',(detProd.estatus_web===1 ? true : false));
-      $('#estatusWebProd').prop('disabled',false);
       $('#estatusProd').prop('checked',(detProd.estatus===1 ? true : false));
+      $('#estatusWebProd').prop('disabled',false);
       $('#estatusProd').prop('disabled',false);
-      $('#iva').prop('checked',(detProd.iva===1 ? true : false));
-      $('#iva').prop('disabled',false);
       $('#btn_guardarProducto').data('id',detProd.idProd);
       $('#btn_guardarProducto').val('Actualizar')
-      $('#precio_0').prop('disabled',false);
-      $('#tipoPrecio_0').prop('disabled',false);
+      $('#precioCompraProd_0').prop('disabled',false);
+      $('#precioVentaProd_0').prop('disabled',false);
       $('#monedaProd_0').prop('disabled',false);
       $('#btn_guardarPrecioProd').prop('disabled',false);
-      $('#fechaInicioProdPrecio_0').prop('disabled',false);
-      $('#fechaFinProdPrecio_0').prop('disabled',false);
+      $('#vigenciaPrecioProd_0').prop('disabled',false);
       $('#idProducto').val(detProd.idProd);
-      $('#verFotoProd').data('id',detProd.foto);
-      $('#verFotoProd').val(detProd.nomProd); 
-
-      var preciosProducto = obtenerElementos('ProductoPrecio',detProd.idProd);
-      preciosProducto.done(function(respuesta){
-        console.log(respuesta);
-        $.each(respuesta,function(index,precios){
-          var fila = '<tr id="trProdPrecio_'+precios.id+'">'+
-                    '<td class="col-xs-2">'+
-                      '<div class="precio input-group  " style="padding: 5px;">'+
-                        '<span class="input-group-addon">'+
-                          '<span class="text-info">$</span>'+
-                        '</span>'+
-                        '<input type="number" onkeyup="" id="precio_'+precios.id+'"  value="'+precios.precio+'" class="form-control" min="0" disabled="">'+
-                      '</div>'+
-                    '</td>'+
-                    '<td class="col-xs-2">'+
-                      '<select id="tipoPrecio_'+precios.id+'" name="" class="form-control   options " value="" required disabled="">'+
-                        '<option value="-1">Seleccione tipo precio</option>'+
-                        '<option value="0">Compra</option>'+
-                        '<option value="1">Retail</option>'+
-                        '<option value="2">Mayorista</option>'+
-                        '<option value="3">Distribuidor</option>'+
-                      '</select>'+
-                    '</td>'+
-                    '<td class="col-xs-1">'+
-                      '<select id="monedaProd_'+precios.id+'" name="" class="form-control   options " value="" required disabled="">'+
-                        '<option value="-1">Seleccione tipo de moneda</option>'+
-                        '<option value="Pesos">Pesos Mx</option>'+
-                        '<option value="Dolar">Dolar</option>'+
-                        '<option value="Otro">Otro</option>'+
-                      '</select>'+
-                    '</td>'+
-                    '<td class="col-xs-2"><input type="date" onkeyup="" id="fechaInicioProdPrecio_'+precios.id+'"  value="" class="form-control" disabled=""> </td>'+
-                    '<td class="col-xs-2"><input type="date" onkeyup="" id="fechaFinProdPrecio_'+precios.id+'"  value="" class="form-control" disabled=""> </td>'+
-                    '<td class="col-xs-1"><input type="checkbox" id="estatusPrecioProd_'+precios.id+'"  value="" disabled></td>'+
-                    '<td class="col-xs-2">'+
-                      '<button type="button" value="Modificar" id="btn_mod" data-id="'+precios.id+'" data-cat="ProductoPrecio" class="modificar btn btn-primary" ><span class="glyphicon glyphicon-edit"></span></button>'+
-                      '<button type="button" value="Actualizar" id="btn_guardarPrecioProd_'+precios.id+'" disabled="disabled" data-id="'+precios.id+'" data-cat="ProductoPrecio" class="enviarG btn btn-success" ><span class="glyphicon glyphicon-">OK</span></button>'+
-                      '<button type="button" id="btn_Eliminar" value="Eliminar" data-id="'+precios.id+'" data-cat="ProductoPrecio" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>'+
-                    '</td>'+
-                  '</tr>';
-          $('#tbodyProdPrecio').append(fila);
-          $('#tipoPrecio_'+precios.id).val(precios.tipo);
-          $('#monedaProd_'+precios.id).val(precios.moneda);
-          $('#fechaInicioProdPrecio_'+precios.id).val(precios.fechaInicio);
-          $('#fechaFinProdPrecio_'+precios.id).val(precios.fechaFin);
-          $('#estatusPrecioProd_'+precios.id).prop('checked',(precios.estatus===1 ? true : false));
-        });
-      });
-
-    });
-
-    //:::::--   FUNCION PARA ABRIR EL MODAL Y VER LA FOTO DEL PRODUCTO
-    $(document).on('click','#verFotoProd',function(){
-      foto = $(this).data('id');
-      nombre = $(this).val();
-      $('#fotopro').prop('src','\\img\\productos\\'+foto);
-      $('.t-foto').text(nombre);
-      $('#modalFotoProd').modal({
-              show: 'false'
-       });
     });
 
     //::-- FUNCION PARA GUARDAR UN PRODUCTO --:://
@@ -4197,7 +2954,7 @@ $(document).ready(function(){
       $(this).prop('disabled',true);
       var msg="";
       var validar = true;
-        if ($('#claveProd').val().trim() === ""){
+      if ($('#claveProd').val().trim() === ""){
                     //$('.claveProd'+$(this).data('id')).addClass('has-error');
                     msg += ';Ingrese clave del producto.';
                   validar = false;
@@ -4245,13 +3002,6 @@ $(document).ready(function(){
                   validar = false;
                   }else{
                     $('.DimenProd'+$(this).data('id')).removeClass('has-error');
-                  }
-              if ($('#cantMinProd').val().trim() === ""){
-                    $('.cantMinProd'+$(this).data('id')).addClass('has-error');
-                    msg += ';Ingrese cantidad minima.';
-                  validar = false;
-                  }else{
-                    $('.cantMinProd'+$(this).data('id')).removeClass('has-error');
                   }
               if ($('#piezasPaqProd').val().trim() === ""){
                     $('.piezasPaqProd'+$(this).data('id')).addClass('has-error');
@@ -4302,15 +3052,6 @@ $(document).ready(function(){
                   }else{
                     $('.familiaProd'+$(this).data('id')).removeClass('has-error');
                   }
-              if ($(this).val()==="Guardar") {
-                if ($('#fotoProd').val().trim() === ""){
-                    $('.fotoProd'+$(this).data('id')).addClass('has-error');
-                    msg += ';Elija una foto.';
-                    validar = false;
-                  }else{
-                    $('.fotoProd'+$(this).data('id')).removeClass('has-error');
-                  }
-              };
       if(!validar){//------- PREGUNTA SI LAS VALIDACIONES SON INCORRECTAS MUESTRA UNA ADVERTENCIA CON LOS ERRORES ------------------//
          // alert(msg);
           var arreglo=msg.split(';'); //::- SEPARA LA CADENA DE TEXTO CADA QUE ENCUENTRA ";" 
@@ -4330,7 +3071,6 @@ $(document).ready(function(){
                 datos.append('numColorProd',$('#numColorProd').val().trim());
                 datos.append('uMedidaProd',$('#uMedidaProd').val().trim());
                 datos.append('DimenProd',$('#DimenProd').val().trim());
-                datos.append('cantMinProd',$('#cantMinProd').val().trim());
                 datos.append('piezasPaqProd',$('#piezasPaqProd').val().trim());
                 datos.append('piezasPalletProd',$('#piezasPalletProd').val().trim());
                 datos.append('totalPiezasProd',$('#totalPiezasProd').val().trim());
@@ -4340,15 +3080,8 @@ $(document).ready(function(){
                 datos.append('fotoProd',$('#fotoProd')[0].files[0]);
                 datos.append('estatusWebProd',(($('#estatusWebProd').is(':checked')) ? '1' : '0'));
                 datos.append('estatusProd',(($('#estatusProd').is(':checked')) ? '1' : '0'));
-                datos.append('iva',(($('#iva').is(':checked')) ? '1' : '0'));
                 datos.append('catalogo','Producto');
-                datos.append('tipoMov',$(this).val());
-          $('#btn_enviar').val($(this).val());
-          $('#btn_enviar').data('id',$(this).data('id'));
-          $('#btn_enviar').data('info',datos);
-          $('#btn_enviar').data('function','Producto'); //hace referencia para saber que funcion abrira
-          $('#modalConfirmacion').modal('show');
-         /* if(confirmar()){
+          if(confirmar()){
             
             if ($(this).val()==="Guardar") {
                 $.ajax({    //--- INICIA LA CONEXION MEDIANTE AJAX ---//  
@@ -4364,11 +3097,10 @@ $(document).ready(function(){
                     $('#btn_guardarProducto').val('Actualizar');
                     $('#btn_guardarProducto').data('id',respuesta.idProd);
                     $('#btn_guardarProducto').prop('disabled',false);
-                    $('#precio_0').prop('disabled',false);
-                    $('#tipoPrecio_0').prop('disabled',false);
+                    $('#precioCompraProd_0').prop('disabled',false);
+                    $('#precioVentaProd_0').prop('disabled',false);
                     $('#monedaProd_0').prop('disabled',false);
-                    $('#fechaInicioProdPrecio_0').prop('disabled',false);
-                    $('#fechaFinProdPrecio_0').prop('disabled',false);
+                    $('#vigenciaPrecioProd_0').prop('disabled',false);
                     $('#btn_guardarPrecioProd').prop('disabled',false);
                     $('#idProducto').val(respuesta.idProd);
                   },
@@ -4399,8 +3131,6 @@ $(document).ready(function(){
                     success: function (respuesta){
                       console.log(respuesta);
                       alertas('success',"Datos actualizados correctamente");
-                      $('#btn_guardarProducto').prop('disabled',false);
-
                     },
                     error: function(msgError){
                       console.log(msgError);
@@ -4417,79 +3147,9 @@ $(document).ready(function(){
             }
           }else{
             $(this).prop('disabled',false);
-          }*/
+          }
       }
     });
-
-    function guardarProducto(datos){
-      if ($('#btn_enviar').val()==="Guardar") {
-                $.ajax({    //--- INICIA LA CONEXION MEDIANTE AJAX ---//  
-                  url: "/catalogo/create",
-                  type: "POST",
-                  data: datos,
-                  cache: false,
-                  contentType: false,
-                  processData: false,
-                  success: function(respuesta){
-                    console.log(respuesta);
-                    alertas('success',"Datos almacenados correctamente");
-                    $('#btn_guardarProducto').val('Actualizar');
-                    $('#btn_guardarProducto').data('id',respuesta.idProd);
-                    $('#btn_guardarProducto').prop('disabled',false);
-                    $('#precio_0').prop('disabled',false);
-                    $('#tipoPrecio_0').prop('disabled',false);
-                    $('#monedaProd_0').prop('disabled',false);
-                    $('#fechaInicioProdPrecio_0').prop('disabled',false);
-                    $('#fechaFinProdPrecio_0').prop('disabled',false);
-                    $('#btn_guardarPrecioProd').prop('disabled',false);
-                    $('#idProducto').val(respuesta.idProd);
-                  },
-                  error: function(msgError){
-                    console.log(msgError.responseText);
-
-                    var arreglo=msgError.responseText.split(';');
-                    for (var i=0; i<arreglo.length;i++){
-                      if(arreglo[i]!=='' && arreglo[i]!=="\""){
-                        alertas('error',arreglo[i]);
-                      }
-                    }
-                    $('#btn_guardarProducto').prop('disabled',false);
-                  }
-                });
-            }else if($('#btn_enviar').val()==="Actualizar"){
-                
-                var id_upd = $('#btn_enviar').data('id');
-                datos.append('id_upd',id_upd);
-                console.log(datos, id_upd);
-                $.ajax({
-                    url:  "/catalogo/update/"+id_upd,
-                    type: "POST",
-                    data: datos,
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    success: function (respuesta){
-                      console.log(respuesta);
-                      alertas('success',"Datos actualizados correctamente");
-                      $('#btn_guardarProducto').prop('disabled',false);
-
-                    },
-                    error: function(msgError){
-                      console.log(msgError);
-                     
-                       var arreglo=msgError.responseText.split(';');
-                      for (var i=0; i<arreglo.length;i++){
-                        if(arreglo[i]!=='' && arreglo[i]!=="\""){
-                          alertas('error',arreglo[i]);
-                        }
-                      }
-                      $('#btn_guardarProducto').prop('disabled',false);
-                    }
-                });
-            }
-      $('#modalConfirmacion').modal('hide');
-    }
-
     $(function(){
        $('table.data-table.sort').dataTable( {
             "bPaginate": false,

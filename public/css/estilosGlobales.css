@@ -49,6 +49,11 @@ img {
 hr {
   border-top: 1px solid #dddde2;
 }
+
+.glyphicon{
+  position:static;
+}
+
 /*Navbar*/
 .brand,
 .navbar .navbar-brand,
@@ -2295,7 +2300,30 @@ div.users{
 
 /*---- Tipo de envió ----*/
 .tipoEnvio{
-  margin-top:.8em;
+  padding-top:.5em;
+  margin-top:1em;
+  width:100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack:justify;
+  -webkit-justify-content:space-between;
+      -ms-flex-pack:justify;
+          justify-content:space-between;
+}
+
+.list-n li{
+  font-size:.9em;
+}
+
+.list-n li span{
+  color:black;
+  font-style:italic;
+}
+
+.text-cotizar{
+  margin-top:0;
 }
 
 .select-tipo{
@@ -2314,6 +2342,7 @@ div.users{
 .g-tipo{
   margin-top:.5em;
   width:150px;
+  display:none;
 }
 
 
@@ -3368,7 +3397,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f74a00', end
 }
 
 .c-msjs{
-  margin:0 .5em .5em .5em;
+  margin:0 .5em 0em .5em;
   background:white;
   padding:.5em;
   display: -webkit-box;
@@ -3376,6 +3405,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f74a00', end
   display: -ms-flexbox;
   display: flex;
   box-shadow:0px 0px 3px grey inset;
+}
+
+.c-msjs:last-child{
+  margin-bottom:.5em;
 }
 
 .msj-icon{
@@ -3841,7 +3874,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f74a00', end
 /*--- Modal detalle del producto ---*/
 
 .content-inventario{
-    width:715px;
+    width:705px;
 }
 
 .body-totales-i{
@@ -3879,8 +3912,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f74a00', end
   border:1px solid #c4c4cd;
   border-radius:2px;
   margin: .5em;
-  width: 120px;
-  height: 60px;
+  width: 150px;
+  height: 80px;
   text-align: center;
   display: -webkit-box;
   display: -webkit-flex;
@@ -3903,13 +3936,20 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f74a00', end
 
 .txt-total-inv{
   margin:0;
-  margin-bottom:.3em;
+  margin-bottom:.1em;
   font-size:1.2em;
 }
 
 .num-pedimento{
   margin:0;
+  margin-bottom:.1em;
   font-size:.9em;
+  font-weight:normal;
+}
+
+.pedi-fecha{
+  font-size:.8em;
+  margin:0;
 }
 
 #cerrar-m{
@@ -4031,7 +4071,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f74a00', end
   text-align:center;
 }
 
-/*-----Vista entrada detalle-------*/
+/*-----Vista Agregar nueva entrada admin-------*/
 .contenedor_e{
   padding:1em 1.5em;
 }
@@ -4181,6 +4221,82 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f74a00', end
             justify-content:space-between;
 }
 
+/*--Modal agregar productos*/
+#agregar-p{
+  width:100%;
+}
+
+.modal-products{
+  width:100%;
+}
+
+.content-products{
+  width:910px;
+  margin:0 auto;
+}
+
+.t-products{
+  width:100%;
+}
+
+.t-products tbody{
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient:horizontal;
+  -webkit-box-direction:normal;
+  -webkit-flex-direction:row;
+      -ms-flex-direction:row;
+          flex-direction:row;
+          -webkit-flex-wrap:wrap;
+     -ms-flex-wrap:wrap;
+         flex-wrap:wrap;
+}
+
+.t-products tbody tr{
+  margin:.5em;
+  width:150px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+   -webkit-box-orient:vertical;
+  -webkit-box-direction:normal;
+  -webkit-flex-direction:column;
+      -ms-flex-direction:column;
+          flex-direction:column;
+}
+
+.txt-n-pro{
+  text-align:center;
+}
+
+.txt-nom, .txt-n-id, .txt-col, .txt-pre{
+  display:none;
+}
+
+
+#cant-pro{
+  text-align:left;
+  border-radius:3px;
+}
+
+.foot-env{
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack:justify;
+  -webkit-justify-content:space-between;
+      -ms-flex-pack:justify;
+          justify-content:space-between;
+
+}
+
+#c-env, #env-pro{
+  width:130px;
+}
 
 /*---Vista Admin--- Paginas*/
 .row-paginas{
@@ -4286,6 +4402,26 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f74a00', end
   width:25%;
 }
 
+
+.checkbox-activ{
+  width:100%;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack:end;
+  -webkit-justify-content:flex-end;
+      -ms-flex-pack:end;
+          justify-content:flex-end;
+}
+
+.checkbox-activ .txt-activ{
+  width:20%;
+}
+
+.checkbox-activ .txt-activ input{
+  margin-left:1em;
+}
 
 /*------ Mis puntos de corte ------*/
 @media(min-width:420px){

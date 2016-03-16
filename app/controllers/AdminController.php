@@ -176,7 +176,8 @@ class AdminController extends \BaseController {
 		$i = DB::table('inventario_detalle')
 		        ->join('producto', 'inventario_detalle.producto_id', '=', 'producto.id')
 				->where('producto_id', $id)
-				->select('producto_id', 'clave', 'nombre','num_pedimento', 'cantidad')
+				->select('producto_id', 'clave', 'nombre','num_pedimento', 'cantidad', 'inventario_detalle.created_at')
+				->orderBy('inventario_detalle.created_at', 'desc')
 				->get();
 
 		return Response::json(array('i' => $i));
@@ -420,54 +421,31 @@ class AdminController extends \BaseController {
 	}
 
 	public function agregar(){
-		return View::make('admin/agregar');
-	}
-
-	public function proveedores(){
+		
 		$proveedor = DB::table('proveedor')
 		->select('id','nombre')
 		->get();
-		return response::json(array('proveedor' => $proveedor));
-	}
-
-	public function buscar(){
-		$clave = Input::get('clave');
-		$resp = DB::table('producto')
-						->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-						->join('familia', 'producto.familia_id', '=', 'familia.id')
-						->Join('descuento', 'familia.id', "=", 'descuento.familia_id')
-
-						->select('producto.id','nombre','color','foto','piezas_paquete','clave','precio', 'descuento')
-						->where('clave', $clave)
-						->where('tipo', 3)
-						->first();
-		if(count($resp)==0){
-				$resp = array('indefinido' => 'El producto no existe. ');
-				return Response::json($resp);
-
-		} else {
-				return Response::json($resp);
-		}
+		//return response::json(array('proveedor' => $proveedor));
+		 return View::make('admin/agregar',
+                      compact(
+                        'proveedor'
+                        
+                        ));
 	}
 
 
-	public function addproducto() {
-		$clave = Input::get('clave');
-		$resp = DB::table('producto')
-						->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-						->join('familia', 'producto.familia_id', '=', 'familia.id')
-						->Join('descuento', 'familia.id', "=", 'descuento.familia_id')
-						->select('producto.id','nombre','color','foto','piezas_paquete','clave','precio', 'descuento')
-						->where('clave', $clave)
-						->where('tipo', 3)
-						->get();
-		if(count($resp)==0){
-				$resp = array('indefinido' => 'El producto no existe. ');
-				return Response::json($resp);
 
-		} else {
-				return Response::json(array('resp' => $resp));
-		}
+
+	public function listproducto(){
+
+		$producto = DB::table('producto')
+			->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
+			->select('producto.id','nombre','color','clave','precio')
+			->orderBy('clave', 'asc')
+			->where('tipo', 0)
+			->get();
+
+		return Response::json(array('producto' => $producto));
 	}
 
 	/**
@@ -555,6 +533,40 @@ public function entradas(){
 				        $inventario->cantidad += $idpro[$i]->cant;
 				        $inventario->save();
 		      	  	}
+
+		      	  		//comprobamos si hay alertas con dicho producto
+						 $x_pro = DB::table('producto')
+				                    ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
+				                    ->orderBy('producto.cantidad_minima', 'asc')
+				                    ->where('producto.id', $idpro[$i]->idp)
+				                    ->pluck('cantidad_minima');
+
+				        $x_inv = DB::table('producto')
+				                ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
+				                ->orderBy('producto.cantidad_minima', 'asc')
+				                ->where('producto.id', $idpro[$i]->idp)
+				                ->pluck('cantidad');
+
+				        //Comparamos la cantidad actual del producto del inventario con la cantidad minima del producto
+                        if($x_inv  > $x_pro){
+                        	//Sies mayor la cantidad del inv eliminamos el alert
+                        	
+                        	$id_a = DB::table('alertas')
+                        				->where('producto_id', $idpro[$i]->idp)
+                        				->pluck('id');
+
+                        	//verificamos si existe un producto con ese id en los alerts
+                        	if($id_a != ""){
+                        		//si existe lo eliminamos
+	                            $alert = Alerta::find($id_a);
+	                            $alert->delete();
+                        	}
+                        	
+                            
+                            //Si es menor no pasa nada
+                        } else {
+                        	
+                        }
 	      	 }
 
 	      	 //Insertamos en el inventario detalle
@@ -565,7 +577,9 @@ public function entradas(){
 				$inventario_d->num_pedimento = $numeroPedimento;
 				$inventario_d->save();
 			 }
+
 	    }
+
 
 
       } //END for verificar
@@ -675,6 +689,39 @@ public function entradas(){
 		      	  		$inventario = Inventario::find($id_i);
 				        $inventario->cantidad += $cantidad;
 				        $inventario->save();
+
+				        //comprobamos si hay alertas con dicho producto
+						 $x_pro = DB::table('producto')
+				                    ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
+				                    ->orderBy('producto.cantidad_minima', 'asc')
+				                    ->where('producto.id', $producto)
+				                    ->pluck('cantidad_minima');
+
+				        $x_inv = DB::table('producto')
+				                ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
+				                ->orderBy('producto.cantidad_minima', 'asc')
+				                ->where('producto.id', $producto)
+				                ->pluck('cantidad');
+
+				        //Comparamos la cantidad actual del producto del inventario con la cantidad minima del producto
+                        if($x_inv  > $x_pro){
+                        	//Sies mayor la cantidad del inv eliminamos el alert
+                        	
+                        	$id_a = DB::table('alertas')
+                        				->where('producto_id', $producto)
+                        				->pluck('id');
+                        	
+                            //verificamos si existe un producto con ese id en los alerts
+                        	if($id_a != ""){
+                        		//si existe lo eliminamos
+	                            $alert = Alerta::find($id_a);
+	                            $alert->delete();
+                        	}
+                            
+                            //Si es menor no pasa nada
+                        } else {
+                        	
+                        }
 			    }
 
 			    //Insertamos en el inventario detalle
@@ -914,12 +961,6 @@ public function entradas(){
 		$nota = Input::get('nota');
 		$contenido = Input::get('contenido');
 
-	    $nota_antigua = DB::table('notas')
-						->where('estatus', 1)
-						->where('sección', $seccion)
-						->pluck('id'); 
-
-		if(count($nota_antigua) == 0 ){
 
 			$new_nota = new Nota;
 			$new_nota->sección = $seccion;
@@ -935,32 +976,7 @@ public function entradas(){
 					->where('estatus', 1)
 					->get(); 
 
-			return Response::json(array('c' => $consulta, 'o' => 'vacio'));
-
-		} else {
-
-			$old_n = Nota::find($nota_antigua);
-			$old_n->estatus = 0;
-			$old_n->save(); 
-
-
-			$new_nota = new Nota;
-			$new_nota->sección = $seccion;
-			$new_nota->nombre = $nota;
-			$new_nota->texto = $contenido;
-			$new_nota->estatus = 1;
-			$new_nota->save();
-
-			$consulta = DB::table('notas')
-					->where('sección', $seccion)
-					->where('nombre', $nota)
-					->where('texto', $contenido)
-					->where('estatus', 1)
-					->get(); 
-
-			return Response::json(array('c' => $consulta, 'o' => $old_n));
-		}
-
+			return Response::json(array('c' => $consulta));
 
 		
 	}
@@ -971,13 +987,8 @@ public function entradas(){
 		$p = Input::get('p');
 
 		if($p == 1){
-			//publicar nota
-			$nota_antigua = DB::table('notas')
-							->where('estatus', 1)
-							->where('sección', $seccion)
-							->pluck('id');
 
-			if(count($nota_antigua) == 0 ){
+			    //publicar nota
 				$new_nota = Nota::find($id);
 				$new_nota->estatus = 1;
 				$new_nota->save();
@@ -987,25 +998,8 @@ public function entradas(){
 						->where('id', $id)
 						->get(); 
 
-				return Response::json(array('c' => $consulta, 'o' => 'vacio')); 
+				return Response::json(array('c' => $consulta)); 
 
-			} else {
-				
-				$old_n = Nota::find($nota_antigua);
-				$old_n->estatus = 0;
-				$old_n->save(); 
-
-				$new_nota = Nota::find($id);
-				$new_nota->estatus = 1;
-				$new_nota->save();
-
-				$consulta = DB::table('notas')
-						->where('id', $id)
-						->get();  
-
-				return Response::json(array('c' => $consulta, 'o' => $old_n)); 
-
-			}
 
 		} else {
 				//Despublicar
@@ -1051,18 +1045,39 @@ public function entradas(){
 		$seccion = Input::get('seccion');
 		$nota = Input::get('nota');
 		$contenido = Input::get('contenido');
+		$activo = Input::get('activo');
 
-		$ac_nota = Nota::find($id);
-		$ac_nota->sección = $seccion;
-		$ac_nota->nombre = $nota;
-		$ac_nota->texto = $contenido;
-		$ac_nota->save();
+		if($activo == 0){
+			$ac_nota = Nota::find($id);
+			$ac_nota->sección = $seccion;
+			$ac_nota->nombre = $nota;
+			$ac_nota->texto = $contenido;
+			$ac_nota->estatus = $activo;
+			$ac_nota->save();
 
-		$new = DB::table('notas')
-					->where('id', $id)
-					->first();
+			$new = DB::table('notas')
+						->where('id', $id)
+						->first();
 
-		return Response::json($new);
+			return Response::json($new);
+
+		} else {
+
+			$ac_nota = Nota::find($id);
+			$ac_nota->sección = $seccion;
+			$ac_nota->nombre = $nota;
+			$ac_nota->texto = $contenido;
+			$ac_nota->estatus = $activo;
+			$ac_nota->save();
+
+			$new = DB::table('notas')
+						->where('id', $id)
+						->first();
+
+			return Response::json($new);
+
+		}
+
 	}
 
 

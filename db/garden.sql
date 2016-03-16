@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost:3306
--- Tiempo de generación: 14-03-2016 a las 00:08:09
+-- Tiempo de generación: 14-03-2016 a las 22:44:37
 -- Versión del servidor: 5.6.26
 -- Versión de PHP: 5.5.30
 
@@ -42,8 +42,8 @@ CREATE TABLE IF NOT EXISTS `alertas` (
 --
 
 INSERT INTO `alertas` (`id`, `producto_id`, `created_at`, `updated_at`, `estatus`) VALUES
-(1, 19, '2016-03-14 05:51:24', '2016-03-14 06:58:20', 1),
-(2, 29, '2016-03-14 07:04:01', '2016-03-14 07:06:36', 1);
+(1, 4, '2016-03-14 05:51:24', '2016-03-14 06:58:20', 1),
+(2, 9, '2016-03-14 07:04:01', '2016-03-14 07:06:36', 1);
 
 -- --------------------------------------------------------
 
@@ -161,7 +161,7 @@ CREATE TABLE IF NOT EXISTS `cliente_forma_pago` (
   `forma_pago_id` int(10) unsigned NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB AUTO_INCREMENT=812 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=822 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `cliente_forma_pago`
@@ -563,7 +563,17 @@ INSERT INTO `cliente_forma_pago` (`id`, `cliente_id`, `forma_pago_id`, `created_
 (808, 84, 2, '2016-03-14 05:53:29', '2016-03-14 05:53:29'),
 (809, 97, 4, '2016-03-14 05:54:48', '2016-03-14 05:54:48'),
 (810, 98, 2, '2016-03-14 05:56:57', '2016-03-14 05:56:57'),
-(811, 84, 2, '2016-03-14 07:04:01', '2016-03-14 07:04:01');
+(811, 84, 2, '2016-03-14 07:04:01', '2016-03-14 07:04:01'),
+(812, 84, 2, '2016-03-15 01:04:40', '2016-03-15 01:04:40'),
+(813, 84, 2, '2016-03-15 01:05:46', '2016-03-15 01:05:46'),
+(814, 84, 2, '2016-03-15 01:13:54', '2016-03-15 01:13:54'),
+(815, 84, 2, '2016-03-15 01:16:15', '2016-03-15 01:16:15'),
+(816, 84, 2, '2016-03-15 01:17:13', '2016-03-15 01:17:13'),
+(817, 84, 2, '2016-03-15 01:19:14', '2016-03-15 01:19:14'),
+(818, 84, 2, '2016-03-15 01:20:48', '2016-03-15 01:20:48'),
+(819, 84, 2, '2016-03-15 01:22:25', '2016-03-15 01:22:25'),
+(820, 84, 2, '2016-03-15 01:23:15', '2016-03-15 01:23:15'),
+(821, 84, 2, '2016-03-15 01:26:42', '2016-03-15 01:26:42');
 
 -- --------------------------------------------------------
 
@@ -1039,13 +1049,13 @@ CREATE TABLE IF NOT EXISTS `inventario` (
 --
 
 INSERT INTO `inventario` (`id`, `producto_id`, `cantidad`, `created_at`, `updated_at`) VALUES
-(1, 13, 1879, '2016-03-09 18:21:57', '2016-03-14 05:56:57'),
-(2, 25, 691, '2016-03-09 18:21:57', '2016-03-13 01:28:11'),
-(3, 29, 0, '2016-03-09 18:21:57', '2016-03-14 07:04:01'),
-(4, 15, 640, '2016-03-09 18:21:57', '2016-03-13 01:28:11'),
-(5, 19, 37, '2016-03-09 18:21:57', '2016-03-14 05:56:57'),
-(6, 17, 498, '2016-03-09 18:30:56', '2016-03-12 21:20:58'),
-(7, 27, 487, '2016-03-09 18:35:21', '2016-03-12 21:58:18');
+(1, 1, 1861, '2016-03-09 18:21:57', '2016-03-15 01:23:15'),
+(2, 7, 691, '2016-03-09 18:21:57', '2016-03-13 01:28:11'),
+(3, 9, 0, '2016-03-09 18:21:57', '2016-03-14 07:04:01'),
+(4, 2, 640, '2016-03-09 18:21:57', '2016-03-13 01:28:11'),
+(5, 4, 37, '2016-03-09 18:21:57', '2016-03-14 05:56:57'),
+(6, 3, 498, '2016-03-09 18:30:56', '2016-03-12 21:20:58'),
+(7, 8, 487, '2016-03-09 18:35:21', '2016-03-12 21:58:18');
 
 -- --------------------------------------------------------
 
@@ -1067,23 +1077,22 @@ CREATE TABLE IF NOT EXISTS `inventario_detalle` (
 --
 
 INSERT INTO `inventario_detalle` (`id`, `producto_id`, `cantidad`, `num_pedimento`, `created_at`, `updated_at`) VALUES
-(7, 25, 291, '2804-1002', '2016-03-09 18:25:32', '2016-03-12 21:59:42'),
-(9, 15, 240, '2804-1002', '2016-03-09 18:25:33', '2016-03-12 21:58:18'),
-(11, 17, 118, '2804-1003', '2016-03-09 18:30:56', '2016-03-12 21:20:58'),
-(12, 13, 429, '2804-1003', '2016-03-09 18:30:56', '2016-03-14 05:56:58'),
-(13, 17, 20, '2804-004', '2016-03-09 18:35:21', '2016-03-09 18:35:21'),
-(14, 27, 487, '2804-004', '2016-03-09 18:35:22', '2016-03-12 21:58:18'),
-(15, 25, 100, '2804-004', '2016-03-09 18:35:22', '2016-03-09 18:35:22'),
-(16, 13, 300, '2804-1005', '2016-03-09 18:39:13', '2016-03-09 18:39:13'),
-(17, 17, 180, '5443534', '2016-03-09 18:44:46', '2016-03-09 18:44:46'),
-(18, 13, 500, '5443534', '2016-03-09 18:44:46', '2016-03-09 18:44:46'),
-(19, 17, 180, '2804-1007', '2016-03-09 18:48:43', '2016-03-09 18:48:43'),
-(20, 13, 500, '2804-1007', '2016-03-09 18:48:43', '2016-03-09 18:48:43'),
-(21, 13, 150, '667788', '2016-03-13 01:28:11', '2016-03-13 01:28:11'),
-(22, 25, 300, '667788', '2016-03-13 01:28:11', '2016-03-13 01:28:11'),
-(23, 29, 0, '667788', '2016-03-13 01:28:11', '2016-03-14 07:04:01'),
-(24, 15, 400, '667788', '2016-03-13 01:28:12', '2016-03-13 01:28:12'),
-(25, 19, 37, '667788', '2016-03-13 01:28:12', '2016-03-14 05:56:57');
+(7, 7, 291, '2804-1002', '2016-03-09 18:25:32', '2016-03-12 21:59:42'),
+(9, 2, 240, '2804-1002', '2016-03-09 18:25:33', '2016-03-12 21:58:18'),
+(11, 3, 118, '2804-1003', '2016-03-09 18:30:56', '2016-03-12 21:20:58'),
+(12, 1, 411, '2804-1003', '2016-03-09 18:30:56', '2016-03-15 01:23:15'),
+(13, 3, 20, '2804-004', '2016-03-09 18:35:21', '2016-03-09 18:35:21'),
+(14, 8, 487, '2804-004', '2016-03-09 18:35:22', '2016-03-12 21:58:18'),
+(15, 7, 100, '2804-004', '2016-03-09 18:35:22', '2016-03-09 18:35:22'),
+(16, 1, 300, '2804-1005', '2016-03-09 18:39:13', '2016-03-09 18:39:13'),
+(17, 3, 180, '5443534', '2016-03-09 18:44:46', '2016-03-09 18:44:46'),
+(18, 1, 500, '5443534', '2016-03-09 18:44:46', '2016-03-09 18:44:46'),
+(19, 3, 180, '2804-1007', '2016-03-09 18:48:43', '2016-03-09 18:48:43'),
+(20, 1, 500, '2804-1007', '2016-03-09 18:48:43', '2016-03-09 18:48:43'),
+(21, 1, 150, '667788', '2016-03-13 01:28:11', '2016-03-13 01:28:11'),
+(22, 7, 300, '667788', '2016-03-13 01:28:11', '2016-03-13 01:28:11'),
+(24, 2, 400, '667788', '2016-03-13 01:28:12', '2016-03-13 01:28:12'),
+(25, 4, 37, '667788', '2016-03-13 01:28:12', '2016-03-14 05:56:57');
 
 -- --------------------------------------------------------
 
@@ -1221,7 +1230,7 @@ CREATE TABLE IF NOT EXISTS `mensajeria` (
   `nombre` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB AUTO_INCREMENT=787 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=797 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `mensajeria`
@@ -1588,7 +1597,17 @@ INSERT INTO `mensajeria` (`id`, `nombre`, `created_at`, `updated_at`) VALUES
 (783, 'Tarjeta de debito', '2016-03-14 05:53:29', '2016-03-14 05:53:29'),
 (784, 'Transferencia', '2016-03-14 05:54:48', '2016-03-14 05:54:48'),
 (785, 'Tarjeta de debito', '2016-03-14 05:56:57', '2016-03-14 05:56:57'),
-(786, 'Tarjeta de debito', '2016-03-14 07:04:01', '2016-03-14 07:04:01');
+(786, 'Tarjeta de debito', '2016-03-14 07:04:01', '2016-03-14 07:04:01'),
+(787, 'Tarjeta de debito', '2016-03-15 01:04:40', '2016-03-15 01:04:40'),
+(788, 'Tarjeta de debito', '2016-03-15 01:05:46', '2016-03-15 01:05:46'),
+(789, 'Tarjeta de debito', '2016-03-15 01:13:54', '2016-03-15 01:13:54'),
+(790, 'Tarjeta de debito', '2016-03-15 01:16:15', '2016-03-15 01:16:15'),
+(791, 'Tarjeta de debito', '2016-03-15 01:17:13', '2016-03-15 01:17:13'),
+(792, 'Tarjeta de debito', '2016-03-15 01:19:14', '2016-03-15 01:19:14'),
+(793, 'Tarjeta de debito', '2016-03-15 01:20:48', '2016-03-15 01:20:48'),
+(794, 'Tarjeta de debito', '2016-03-15 01:22:25', '2016-03-15 01:22:25'),
+(795, 'Tarjeta de debito', '2016-03-15 01:23:15', '2016-03-15 01:23:15'),
+(796, 'Tarjeta de debito', '2016-03-15 01:26:42', '2016-03-15 01:26:42');
 
 -- --------------------------------------------------------
 
@@ -1871,7 +1890,7 @@ CREATE TABLE IF NOT EXISTS `pedido` (
   `cotizar_envio` tinyint(1) NOT NULL,
   `observaciones` text COLLATE utf8_unicode_ci NOT NULL,
   `estatus` tinyint(1) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=743 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=753 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `pedido`
@@ -2218,7 +2237,17 @@ INSERT INTO `pedido` (`id`, `cliente_id`, `mensajeria_id`, `direccion_cliente_id
 (739, 84, 783, 399, 2, '2016031384783', '2016-03-13', '2016-03-14 05:53:29', '2016-03-14 05:53:29', '0000-00-00 00:00:00', 1, 'XD', 0),
 (740, 97, 784, 0, 4, '2016031397784', '2016-03-13', '2016-03-14 05:54:48', '2016-03-14 05:54:48', '0000-00-00 00:00:00', 0, ' ', 0),
 (741, 98, 785, 400, 2, '2016031398785', '2016-03-13', '2016-03-14 05:56:57', '2016-03-14 05:56:57', '0000-00-00 00:00:00', 1, 'XD', 0),
-(742, 84, 786, 399, 2, '2016031478684', '2016-03-14', '2016-03-14 07:04:01', '2016-03-14 07:04:01', '0000-00-00 00:00:00', 1, ' ', 0);
+(742, 84, 786, 399, 2, '2016031478684', '2016-03-14', '2016-03-14 07:04:01', '2016-03-14 07:04:01', '0000-00-00 00:00:00', 1, ' ', 0),
+(743, 84, 787, 0, 2, '2016031484787', '2016-03-14', '2016-03-15 01:04:40', '2016-03-15 01:04:40', '0000-00-00 00:00:00', 0, ' ', 0),
+(744, 84, 788, 0, 2, '2016031484788', '2016-03-14', '2016-03-15 01:05:46', '2016-03-15 01:05:46', '0000-00-00 00:00:00', 0, ' ', 0),
+(745, 84, 789, 0, 2, '2016031484789', '2016-03-14', '2016-03-15 01:13:54', '2016-03-15 01:13:54', '0000-00-00 00:00:00', 0, ' ', 0),
+(746, 84, 790, 0, 2, '2016031484790', '2016-03-14', '2016-03-15 01:16:15', '2016-03-15 01:16:15', '0000-00-00 00:00:00', 0, ' ', 0),
+(747, 84, 791, 0, 2, '2016031484791', '2016-03-14', '2016-03-15 01:17:13', '2016-03-15 01:17:13', '0000-00-00 00:00:00', 0, ' ', 0),
+(748, 84, 792, 0, 2, '2016031484792', '2016-03-14', '2016-03-15 01:19:14', '2016-03-15 01:19:14', '0000-00-00 00:00:00', 0, ' ', 0),
+(749, 84, 793, 0, 2, '2016031484793', '2016-03-14', '2016-03-15 01:20:48', '2016-03-15 01:20:48', '0000-00-00 00:00:00', 0, ' ', 0),
+(750, 84, 794, 0, 2, '2016031484794', '2016-03-14', '2016-03-15 01:22:25', '2016-03-15 01:22:25', '0000-00-00 00:00:00', 0, ' ', 0),
+(751, 84, 795, 0, 2, '2016031484795', '2016-03-14', '2016-03-15 01:23:15', '2016-03-15 01:23:15', '0000-00-00 00:00:00', 0, ' ', 0),
+(752, 84, 796, 0, 2, '2016031484796', '2016-03-14', '2016-03-15 01:26:42', '2016-03-15 01:26:42', '0000-00-00 00:00:00', 0, ' ', 0);
 
 -- --------------------------------------------------------
 
@@ -2234,7 +2263,7 @@ CREATE TABLE IF NOT EXISTS `pedido_detalle` (
   `cantidad` double NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB AUTO_INCREMENT=717 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=722 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `pedido_detalle`
@@ -2904,7 +2933,12 @@ INSERT INTO `pedido_detalle` (`id`, `pedido_id`, `producto_id`, `num_pedimento`,
 (713, 741, 19, '667788', 3, '2016-03-14 05:56:57', '2016-03-14 05:56:57'),
 (714, 741, 13, '2804-1003', 8, '2016-03-14 05:56:58', '2016-03-14 05:56:58'),
 (715, 742, 9, '2804-1002', 170, '2016-03-14 07:04:01', '2016-03-14 07:04:01'),
-(716, 742, 9, '667788', 200, '2016-03-14 07:04:01', '2016-03-14 07:04:01');
+(716, 742, 9, '667788', 200, '2016-03-14 07:04:01', '2016-03-14 07:04:01'),
+(717, 743, 1, '2804-1003', 4, '2016-03-15 01:04:41', '2016-03-15 01:04:41'),
+(718, 744, 1, '2804-1003', 5, '2016-03-15 01:05:46', '2016-03-15 01:05:46'),
+(719, 747, 1, '2804-1003', 3, '2016-03-15 01:17:13', '2016-03-15 01:17:13'),
+(720, 750, 1, '2804-1003', 3, '2016-03-15 01:22:26', '2016-03-15 01:22:26'),
+(721, 751, 1, '2804-1003', 3, '2016-03-15 01:23:15', '2016-03-15 01:23:15');
 
 -- --------------------------------------------------------
 
@@ -2954,7 +2988,7 @@ CREATE TABLE IF NOT EXISTS `producto` (
   `estatus` tinyint(1) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `producto`
@@ -2971,25 +3005,7 @@ INSERT INTO `producto` (`id`, `clave`, `numero_articulo`, `nombre`, `ean_code`, 
 (8, 'AC15', 'C9056', 'Porta vela cerámica con vidrio', '8810415002976', 'white', 56, 1, 12, '260x260x395', 60, 1920, 'Portavelaceramicaconvidrio.png', 1, 1, 2, 0, 50, 1, 1, '2016-02-14 06:00:00', '0000-00-00 00:00:00'),
 (9, 'AC29', 'C6032', 'Maceta cerámica rectangular para balcón con diseño decorativo antiguo', '3710415002955', 'pearl', 78, 1, 12, '260x260x395', 60, 11920, 'Macetaceramicarectangularparabalcondecorativoantiguo.png', 1, 1, 1, 0, 30, 1, 1, '2016-02-14 06:00:00', '0000-00-00 00:00:00'),
 (10, 'AH001', 'C6044', 'Planta de Tomillo en maceta terracota (CH)', '3710415002999', 'grey', 47, 1, 4, '260x260x395', 60, 11920, 'PlantadeTomilloenmacetaterracota.png', 1, 1, 1, 1, 23, 1, 1, '2016-02-23 06:00:00', '0000-00-00 00:00:00'),
-(11, 'AH003', 'C6088', 'Planta de Menta en maceta terracota (CH)', '3710415002761', 'grey', 47, 1, 2, '260x260x395', 60, 11920, 'PlantadeMentaenmacetaterracota(CH).png', 1, 1, 1, 1, 70, 1, 1, '2016-02-23 06:00:00', '0000-00-00 00:00:00'),
-(12, 'AC01', 'C3031', 'Maceta cerámica antiguas para plantas. Juego de 3 piezas cuadradas', '8714982046483', 'anthracit', 24, 1, 2, '260x260x395', 60, 190, 'Macetacerámicaantiguas.png', 1, 1, 1, 0, 50, 1, 1, '2016-03-05 06:00:00', '0000-00-00 00:00:00'),
-(13, 'AC01', 'C3031', 'Maceta cerámica antiguas para plantas. Juego de 3 piezas cuadradas', '8714982046483', 'anthracit', 24, 1, 2, '260x260x395', 60, 190, 'Macetacerámicaantiguas.png', 1, 1, 1, 0, 50, 1, 1, '2016-03-05 06:00:00', '0000-00-00 00:00:00'),
-(14, 'AC03', 'C3089', 'Flower pot Perla ø 11', '8590415002963', 'purple pearl', 41, 1, 32, '260x260x395', 60, 1920, 'Macetacerámicacolganteantigua.png', 2, 1, 2, 0, 50, 1, 1, '2016-02-05 06:00:00', '0000-00-00 00:00:00'),
-(15, 'AC03', 'C3089', 'Flower pot Perla ø 11', '8590415002963', 'purple pearl', 41, 1, 32, '260x260x395', 60, 1920, 'Macetacerámicacolganteantigua.png', 2, 1, 2, 0, 50, 1, 1, '2016-02-05 06:00:00', '0000-00-00 00:00:00'),
-(16, 'AC04', 'c2345', 'Maceta cerámica para pared antigua para plantas', '8590415002970', 'pearl', 54, 1, 32, '260x260x395', 60, 1920, 'Macetacerámicaparaparedantigua.png', 1, 1, 3, 0, 30, 1, 1, '2016-02-05 06:00:00', '0000-00-00 00:00:00'),
-(17, 'AC04', 'c2345', 'Maceta cerámica para pared antigua para plantas', '8590415002970', 'pearl', 54, 1, 32, '260x260x395', 60, 1920, 'Macetacerámicaparaparedantigua.png', 1, 1, 3, 0, 30, 1, 1, '2016-02-05 06:00:00', '0000-00-00 00:00:00'),
-(18, 'AC10', 'C5069', 'Bebedero para pájaros cerámico con diseño decorativo antiguo  ', '5560415004470', 'pearl', 54, 1, 12, '260x260x395', 60, 1920, 'Bebederoparapájaros.png', 1, 1, 2, 0, 50, 1, 1, '2016-02-14 06:00:00', '0000-00-00 00:00:00'),
-(19, 'AC10', 'C5069', 'Bebedero para pájaros cerámico con diseño decorativo antiguo  ', '5560415004470', 'pearl', 54, 1, 12, '260x260x395', 60, 1920, 'Bebederoparapájaros.png', 1, 1, 2, 0, 50, 1, 1, '2016-02-14 06:00:00', '0000-00-00 00:00:00'),
-(20, 'AC134', 'C8089', 'Velas decorativas. Tamaño Grande ', '8590415002963', 'white', 23, 1, 23, '260x260x395', 60, 1920, 'velasdecorativastamanogrande.png', 1, 1, 3, 0, 40, 1, 1, '2016-02-14 06:00:00', '0000-00-00 00:00:00'),
-(21, 'AC134', 'C8089', 'Velas decorativas. Tamaño Grande ', '8590415002963', 'white', 23, 1, 23, '260x260x395', 60, 1920, 'velasdecorativastamanogrande.png', 1, 1, 3, 0, 40, 1, 1, '2016-02-14 06:00:00', '0000-00-00 00:00:00'),
-(22, 'AC133', 'C5066', 'Velas decorativas. Tamaño Chico', '1110415002963', 'white', 23, 1, 12, '260x260x395', 60, 1920, 'VelasdecorativasChico.png', 1, 1, 1, 0, 30, 1, 1, '2016-02-14 06:00:00', '0000-00-00 00:00:00'),
-(23, 'AC133', 'C5066', 'Velas decorativas. Tamaño Chico', '1110415002963', 'white', 23, 1, 12, '260x260x395', 60, 1920, 'VelasdecorativasChico.png', 1, 1, 1, 0, 30, 1, 1, '2016-02-14 06:00:00', '0000-00-00 00:00:00'),
-(24, 'AC135', 'C7066', 'Maceta cerámica para plantas con diseño decorativo antiguo', '9910415002988', 'blue', 89, 1, 4, '260x260x395', 60, 1920, 'Macetacerámicaparaplantasdecorativoantiguo.png', 1, 1, 3, 0, 20, 1, 1, '2016-02-14 06:00:00', '0000-00-00 00:00:00'),
-(25, 'AC135', 'C7066', 'Maceta cerámica para plantas con diseño decorativo antiguo', '9910415002988', 'blue', 89, 1, 4, '260x260x395', 60, 1920, 'Macetacerámicaparaplantasdecorativoantiguo.png', 1, 1, 3, 0, 20, 1, 1, '2016-02-14 06:00:00', '0000-00-00 00:00:00'),
-(26, 'AC15', 'C9056', 'Porta vela cerámica con vidrio', '8810415002976', 'white', 56, 1, 12, '260x260x395', 60, 1920, 'Portavelaceramicaconvidrio.png', 1, 1, 2, 0, 50, 1, 1, '2016-02-14 06:00:00', '0000-00-00 00:00:00'),
-(27, 'AC15', 'C9056', 'Porta vela cerámica con vidrio', '8810415002976', 'white', 56, 1, 12, '260x260x395', 60, 1920, 'Portavelaceramicaconvidrio.png', 1, 1, 2, 0, 50, 1, 1, '2016-02-14 06:00:00', '0000-00-00 00:00:00'),
-(28, 'AC29', 'C6032', 'Maceta cerámica rectangular para balcón con diseño decorativo antiguo', '3710415002955', 'pearl', 78, 1, 12, '260x260x395', 60, 11920, 'Macetaceramicarectangularparabalcondecorativoantiguo.png', 1, 1, 1, 0, 30, 1, 1, '2016-02-14 06:00:00', '0000-00-00 00:00:00'),
-(29, 'AC29', 'C6032', 'Maceta cerámica rectangular para balcón con diseño decorativo antiguo', '3710415002955', 'pearl', 78, 1, 12, '260x260x395', 60, 11920, 'Macetaceramicarectangularparabalcondecorativoantiguo.png', 1, 1, 1, 0, 30, 1, 1, '2016-02-14 06:00:00', '0000-00-00 00:00:00');
+(11, 'AH003', 'C6088', 'Planta de Menta en maceta terracota (CH)', '3710415002761', 'grey', 47, 1, 2, '260x260x395', 60, 11920, 'PlantadeMentaenmacetaterracota(CH).png', 1, 1, 1, 1, 70, 1, 1, '2016-02-23 06:00:00', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -3005,42 +3021,49 @@ CREATE TABLE IF NOT EXISTS `producto_precio` (
   `moneda` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `vigencia` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `estatus` tinyint(1) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `producto_precio`
 --
 
 INSERT INTO `producto_precio` (`id`, `producto_id`, `precio`, `tipo`, `moneda`, `vigencia`, `estatus`) VALUES
-(1, 1, 80, 1, '$', '2015-11-30 06:00:00', 1),
-(2, 2, 90, 1, '$', '2015-11-30 06:00:00', 1),
-(3, 3, 89, 1, '$', '2015-12-08 06:00:00', 1),
-(5, 4, 120, 1, '$', '2015-12-08 06:00:00', 1),
-(6, 5, 79, 1, '$', '2015-12-08 06:00:00', 1),
-(7, 6, 95, 1, '$', '2016-02-14 06:00:00', 1),
-(8, 7, 68, 1, '$', '2016-02-14 06:00:00', 1),
-(9, 8, 108, 1, '$', '2016-02-14 06:00:00', 1),
-(10, 9, 150, 1, '$', '2016-02-14 06:00:00', 1),
-(11, 10, 80, 1, '$', '2016-02-23 06:00:00', 1),
-(12, 11, 99, 1, '$', '2016-02-23 06:00:00', 1),
-(13, 12, 60, 2, '$', '2016-03-05 06:00:00', 1),
-(14, 13, 40, 3, '$', '2016-03-05 06:00:00', 1),
-(15, 14, 70, 2, '$', '2016-03-07 06:00:00', 1),
-(16, 15, 50, 3, '$', '2016-03-07 06:00:00', 1),
-(17, 16, 79, 2, '$', '2016-03-07 06:00:00', 1),
-(18, 17, 69, 3, '$', '2016-03-07 06:00:00', 1),
-(19, 18, 110, 2, '$', '2016-03-07 06:00:00', 1),
-(20, 19, 100, 3, '$', '2016-03-07 06:00:00', 1),
-(21, 20, 70, 2, '$', '2016-03-07 06:00:00', 1),
-(22, 21, 61, 3, '$', '2016-03-07 06:00:00', 1),
-(23, 22, 89, 2, '$', '2016-03-07 06:00:00', 1),
-(24, 23, 83, 3, '$', '2016-03-07 06:00:00', 1),
-(25, 24, 60, 2, '$', '2016-03-07 06:00:00', 1),
-(26, 25, 52, 3, '$', '2016-03-07 06:00:00', 1),
-(27, 26, 98, 2, '$', '2016-03-07 06:00:00', 1),
-(28, 27, 88, 3, '$', '2016-03-07 06:00:00', 1),
-(29, 28, 140, 2, '$', '2016-03-07 06:00:00', 1),
-(30, 29, 130, 3, '$', '2016-03-07 06:00:00', 1);
+(1, 1, 80, 0, '$', '2015-11-30 06:00:00', 1),
+(2, 2, 90, 0, '$', '2015-11-30 06:00:00', 1),
+(3, 3, 89, 0, '$', '2015-12-08 06:00:00', 1),
+(5, 4, 120, 0, '$', '2015-12-08 06:00:00', 1),
+(6, 5, 79, 0, '$', '2015-12-08 06:00:00', 1),
+(7, 6, 95, 0, '$', '2016-02-14 06:00:00', 1),
+(8, 7, 68, 0, '$', '2016-02-14 06:00:00', 1),
+(9, 8, 108, 0, '$', '2016-02-14 06:00:00', 1),
+(31, 9, 120, 0, '$', '2016-03-14 06:00:00', 1),
+(32, 1, 120, 1, '$', '2016-03-14 06:00:00', 1),
+(33, 2, 130, 1, '$', '2016-03-14 06:00:00', 1),
+(34, 3, 129, 1, '$', '2016-03-14 06:00:00', 1),
+(35, 4, 160, 1, '$', '2016-03-14 06:00:00', 1),
+(36, 5, 119, 1, '$', '2016-03-14 06:00:00', 1),
+(37, 6, 135, 1, '$', '2016-03-14 06:00:00', 1),
+(38, 7, 108, 1, '$', '2016-03-14 06:00:00', 1),
+(39, 8, 148, 1, '$', '2016-03-14 06:00:00', 1),
+(40, 9, 160, 1, '$', '2016-03-14 06:00:00', 1),
+(41, 1, 110, 2, '$', '2016-03-14 06:00:00', 1),
+(42, 2, 120, 2, '$', '2016-03-14 06:00:00', 1),
+(43, 3, 119, 2, '$', '2016-03-14 06:00:00', 1),
+(44, 4, 150, 2, '$', '2016-03-14 06:00:00', 1),
+(45, 5, 109, 2, '$', '2016-03-14 06:00:00', 1),
+(46, 6, 125, 2, '$', '2016-03-14 06:00:00', 1),
+(47, 7, 98, 2, '$', '2016-03-14 06:00:00', 1),
+(48, 8, 138, 2, '$', '2016-03-14 06:00:00', 1),
+(49, 9, 150, 2, '$', '2016-03-14 06:00:00', 1),
+(50, 1, 100, 3, '$', '2016-03-14 06:00:00', 1),
+(51, 2, 110, 3, '$', '2016-03-14 06:00:00', 1),
+(52, 3, 109, 3, '$', '2016-03-14 06:00:00', 1),
+(53, 4, 140, 3, '$', '2016-03-14 06:00:00', 1),
+(54, 5, 99, 3, '$', '2016-03-14 06:00:00', 1),
+(55, 6, 115, 3, '$', '2016-03-14 06:00:00', 1),
+(56, 7, 88, 3, '$', '2016-03-14 06:00:00', 1),
+(57, 8, 128, 3, '$', '2016-03-14 06:00:00', 1),
+(58, 9, 140, 3, '$', '2016-03-14 06:00:00', 1);
 
 -- --------------------------------------------------------
 
@@ -3252,7 +3275,7 @@ CREATE TABLE IF NOT EXISTS `total_producto` (
   `cantidad` double NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -3356,7 +3379,7 @@ INSERT INTO `usuario` (`id`, `rol_id`, `usuario`, `password`, `email`, `remember
 (141, 1, 'Brolyn99', '$2y$10$yszudqW67OmCIcBvKU1VTe.4Nz2qIJK/RJ8tV0n7gRq2y7TCFfT1y', 'broly@gmail.com', 'N2fUCaE6s7wVzAd16fdaLgBQeWoWwh0W6UUfo2VB5e77ITp7G8JY3N8x3O68', '2016-02-04 17:15:17', '2016-02-11 08:22:29'),
 (142, 1, 'Sepala99', '$2y$10$hlsH6qny6Ued4cRv1ehw.eVx907B1JNaZsHvW51pxvN9x/hM/ZJve', 'sepala@live.com', 'ker3rmxq8joVCQROxIjXQ2XiYyY7wXvsN5qSeSfFPZhktcbRJaleiAzHeum0', '2016-02-05 21:00:09', '2016-02-14 17:59:32'),
 (143, 1, 'MajinBoo99', '$2y$10$czkzKExdYC7uOzRm7uD6AOUuOY5ZOs5WwBqLqQV53pmMWMeef0VS.', 'majon@outlook.es', '', '2016-02-10 00:39:00', '2016-02-10 00:39:00'),
-(144, 1, 'Cell99', '$2y$10$TRtBXWz6Ob8otIzT/.HKzeHrruVpnWLjMs.QWuDZlkaJCIOd8XSz.', 'cell@hotmail.com', 'PgjtFwBhx8pykEPHbMG5PGLyF2NwXJzX1cIMuaY7ejIdivmMBAHCumLOW9Lw', '2016-02-10 00:57:01', '2016-03-14 07:04:19'),
+(144, 1, 'Cell99', '$2y$10$TRtBXWz6Ob8otIzT/.HKzeHrruVpnWLjMs.QWuDZlkaJCIOd8XSz.', 'cell@hotmail.com', 'gC0IRw4dcP16yhRBbhWKsGWlTlSvKvnyegwT855vJt23SIanx5iHC7hbjnVO', '2016-02-10 00:57:01', '2016-03-15 01:00:09'),
 (145, 1, 'Frezeer99', '$2y$10$52U3//Wuu/y/Dy81kk0N1eNN.TmEDkvGTnfZ6xssrMU7JAopEEpm6', 'fre@live.com', 'DXiRK88s9YT1BjnEwKqMOedty3QgoclnFEvpbR4zMgHvp0LXyxUPLXQ3dF08', '2016-02-10 03:38:24', '2016-02-14 20:36:13'),
 (146, 1, 'Yeins99', '$2y$10$1LL16XJyZBN18vdM0gNMQOcbJewpaXMSFoBBKS.aseUgL/RhVUlwW', 'ye@live.com', '8wgifYFFHUpGKzmDC3omTMNPRsnEAzcc0U5K7s3A9uFYc4FZahBdP68OCcnt', '2016-02-11 03:42:25', '2016-02-11 04:09:47'),
 (147, 1, 'Tapion99', '$2y$10$lIoC7p2RR4foGyCtz0vnGO.BEuIjvgLW5Ou1ELVXOwOQmLBpqjRnq', 'Tapion@live.com', 'sUvwADaRVjwAGQ6CK6aHtCpUafMAfDS0LzOtBLx3Ik67WlFlLC1GvhOhTShk', '2016-02-14 16:12:31', '2016-02-14 17:42:25'),
@@ -3369,8 +3392,8 @@ INSERT INTO `usuario` (`id`, `rol_id`, `usuario`, `password`, `email`, `remember
 (154, 4, 'Homero99', '$2y$10$qPziejqMjlaoNeilnlIrpOvVBspaXkZgU25m3islf290KRseB1PZW', 'homero@hotmail.com', 'OpEQ0cg65pTd3etdVYS7lDvPA1qfHFYmDdZP71QqQOFYPwJN0Hvmevay2jQg', '2016-02-23 21:29:13', '2016-03-13 01:10:34'),
 (155, 1, 'Barck99', '$2y$10$B8IPPEysvO14X7YwVubJ2eR/A3z5tBvUmgDqLem2l0q5ZAgLG92gq', 'barck@live.com', 'JjH7vVDHZbl2t7Eu8NxwmvRPrYzuzip2sYI9TWhcAMJl4HJCBiPmjRmEGOIR', '2016-02-25 05:16:08', '2016-03-02 03:32:28'),
 (156, 1, 'Prueba99', '$2y$10$2QBGBZZPCpm3JLKv5zIzX.UfDV3utaNOCF0MhsS8ORdzBxvi1vkra', 'prueba@outlook.es', '', '2016-02-28 20:59:46', '2016-02-28 20:59:46'),
-(157, 1, 'Mayorista99', '$2y$10$inONR0qzyV/P1hyfwdB1d.g/m3ZJpoRaIt1k3egq3rz8XLPzMSmaC', 'mayorista@live.com', 'XziZoYOlnpoJO6o5cF096h62iaNgoec92EDr7DNLe22xLx6Q3qSO77cz8oSy', '2016-03-05 16:57:36', '2016-03-14 05:55:01'),
-(158, 1, 'Distribuidor99', '$2y$10$azGL.hGUrSXZ.UDU9y8UnOm7m9LgbNenJf2rOxrrNifz4b4NJNQYG', 'Distribuidor@outlook.es', 'qSzzxK5lE9W8MJaqtEp1QqScKKgsnM0creYuvnqwTG5wEBDomnJOaCy27TFS', '2016-03-05 16:58:32', '2016-03-14 05:57:19'),
+(157, 1, 'Mayorista99', '$2y$10$inONR0qzyV/P1hyfwdB1d.g/m3ZJpoRaIt1k3egq3rz8XLPzMSmaC', 'mayorista@live.com', 'C2atxQVkTaWUCQlK2DgrlZDc9w24zt4RX4fVREFMoIsb6Qm7gROc8L36j9zH', '2016-03-05 16:57:36', '2016-03-15 01:01:32'),
+(158, 1, 'Distribuidor99', '$2y$10$azGL.hGUrSXZ.UDU9y8UnOm7m9LgbNenJf2rOxrrNifz4b4NJNQYG', 'Distribuidor@outlook.es', 'c0rTx2FPaM53tYtk53RYi70lybzunzN6xz7fr2tGVQ6zk0Gwe1G5G4GfmQIF', '2016-03-05 16:58:32', '2016-03-15 01:03:39'),
 (159, 1, 'Happy99', '$2y$10$NZjCdR6juLWYCqIadohMn.MtaBQsMpHvwky7Js4OYhSheSzhktdRS', 'hapy@hotmail.com', 'HtI8VvKLtms7X09iAc6mNgz2y85A3J0eZ0UqPr7xPimuVU8sYXBEBSAoLogv', '2016-03-10 02:11:39', '2016-03-13 01:23:52');
 
 -- --------------------------------------------------------
@@ -3684,7 +3707,7 @@ ALTER TABLE `cliente`
 -- AUTO_INCREMENT de la tabla `cliente_forma_pago`
 --
 ALTER TABLE `cliente_forma_pago`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=812;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=822;
 --
 -- AUTO_INCREMENT de la tabla `comercializador`
 --
@@ -3759,7 +3782,7 @@ ALTER TABLE `log`
 -- AUTO_INCREMENT de la tabla `mensajeria`
 --
 ALTER TABLE `mensajeria`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=787;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=797;
 --
 -- AUTO_INCREMENT de la tabla `municipio`
 --
@@ -3789,12 +3812,12 @@ ALTER TABLE `pais`
 -- AUTO_INCREMENT de la tabla `pedido`
 --
 ALTER TABLE `pedido`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=743;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=753;
 --
 -- AUTO_INCREMENT de la tabla `pedido_detalle`
 --
 ALTER TABLE `pedido_detalle`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=717;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=722;
 --
 -- AUTO_INCREMENT de la tabla `precio`
 --
@@ -3804,12 +3827,12 @@ ALTER TABLE `precio`
 -- AUTO_INCREMENT de la tabla `producto`
 --
 ALTER TABLE `producto`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=30;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT de la tabla `producto_precio`
 --
 ALTER TABLE `producto_precio`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=31;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=59;
 --
 -- AUTO_INCREMENT de la tabla `proveedor`
 --
@@ -3834,7 +3857,7 @@ ALTER TABLE `telefono_proveedor`
 -- AUTO_INCREMENT de la tabla `total_producto`
 --
 ALTER TABLE `total_producto`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT de la tabla `unidad_medida`
 --

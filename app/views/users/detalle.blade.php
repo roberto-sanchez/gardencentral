@@ -19,12 +19,18 @@
   -webkit-justify-content:flex-start;
       -ms-flex-pack:start;
           justify-content:flex-start;
+    margin-top:.2em;
   }
 
   .alert-n_d{
     display:none;
     margin-left:.8em;
   }
+
+  .l_vaciar{
+    cursor:pointer;
+  }
+
 
 </style>
 @stop
@@ -167,11 +173,13 @@
                 <th>Color</th>
                 <th>Precio</th>
                 <th>Iva</th>
-                <th>Piezas por paquete</th>
                 <th>Cantidad</th>
+                <!--<th>Pedimento</th>-->
                 <th>Total producto</th>
               </tr>
               </thead>
+                
+
               @foreach($producto as $item)
                <tr class="c-pedido">
                  <td>{{ $item->clave }}</td>
@@ -179,8 +187,12 @@
                  <td>{{ $item->color }}</td>
                 <td><?php $des = $item->precio * $item->descuento ?>${{ number_format($tpro = $item->precio - $des, 2) }}</td>
                  <td>16%</td>
-                 <td>{{ $item->piezas_paquete }}</td>
                  <td>{{ $item->quantity }}</td>
+                <!-- @foreach($pedimento as $pedi)
+                 <td>
+                   {{ $pedi->num_pedimento }} - {{ $pedi->cantidad }}
+                 </td>
+                 @endforeach-->
                  <td>${{ number_format($sub = $tpro * $item->quantity, 2) }}</td>
                </tr>
               @endforeach
@@ -212,13 +224,15 @@
                   </td>
                 </tr>
               </table>
-
-              <div class="notas_a">
-                <div class="alert alert-desc alert-n_d">
-                 <strong id="nota_detalle"></strong>
-              </div>
-   
-             </div>
+            @if(count($direc))
+             @else
+                <div class="notas_a">
+                   <div class="alert alert-desc">
+                      <strong>Recoger sus productos en la tienda.</strong>
+                   </div>
+               </div>
+             @endif
+                <div class="list-n" style="margin-top: .5em"></div>
               
           </div>
         </div>
@@ -274,21 +288,24 @@
 
   $(document).ready(function(){
 
-    //Listar notas aclaratorias
+     //Listar notas aclaratorias
+    contenedor = $('.list-n');
+            seccion = 'Detalle del pedido';
           $.ajax({
                 type: "GET",
-                url: "/productos/notasdetalle",
-                success: function (nota) {
+                url: "/productos/listnotas",
+                data:{seccion: seccion},
+                success: function (n) {
+                    console.log(n);
+                    no = "";
+                    for(datos in n.nota){
 
-                   if(nota.texto == undefined){
-
-                   } else {
+                    no += '<li class="text-info"><span>'+n.nota[datos].texto+'</span></li>';
+                 }
                 
+                   contenedor.append(no);
 
-                   $('.alert-n_d').show();
-                   $('#nota_detalle').text(nota.texto);
-
-                   }
+                   
 
 
         },
@@ -296,6 +313,27 @@
         error: function () {
             alert("failure");
         }
+    });
+
+
+    $('.logout').attr('class', 'l_vaciar');
+
+    $(document).on('click', '.l_vaciar', function(){
+
+
+      $.ajax({
+            type: "POST",
+            url: "/productos/vaciar",
+            success: function (v) {
+                //$('.panel-datos').hide();
+                //$("#t-pedidoc").load(location.href+" #t-pedidoc>*","");
+                window.location = window.location.href = '/logout';
+            },
+            error: function () {
+                alert('failure');
+            }
+        });
+
     });
 
   });

@@ -64,7 +64,7 @@
   <div class="row row-dashboard">
 
     <div class="cont-sidebar">
-
+    
 
       <div class="content-pedidos">
 
@@ -186,12 +186,7 @@
             <button class="btn-c btn btn-default">Cerrar</button>
             <h3 class="n-a"></h3>
             <div class="content-msjs">
-              <div class="c-msjs">
-                <div class="msj-icon">
-                  <span class="glyphicon glyphicon-envelope"></span>
-                </div>
-                <div class="txt-msj"></div>
-              </div>
+              
             </div>
           </div>
                 
@@ -390,17 +385,15 @@ function graficar() {
 */
 
 
-
 //Alertas de productos con cantidad minima
-  alerta_p = $('.txt-msj');
+  alerta_p = $('.content-msjs');
 
   $.ajax({
     type: "GET",
     url: "/pedidos/alertaproducto",
     success: function (a) {
       $('.num-a').text(a.t_alerts);
-      $('.c-msjs').attr('id','div_'+a.alert[0].id);
-
+      console.log(a);
       if(a.t_alerts == 0){
 
         $('.n-a').text('No hay alertas');
@@ -415,9 +408,18 @@ function graficar() {
       div = "";
       for(datos in a.alert){
 
-              div += '<p>'+a.alert[datos].nombre+'<span class="text-info">Stock actual: '+a.alert[datos].cantidad+'</span></p>'+
-              '<div class="txt-d"><small>'+a.alert[datos].created_at+'</small>'+
-              '<span class="borrar-alert" value='+a.alert[datos].id+'>Borrar</span></div>';
+              div += '<div class="c-msjs" id="div_'+a.alert[datos].id+'">'+
+                '<div class="msj-icon">'+
+                  '<span class="glyphicon glyphicon-envelope"></span>'+
+                '</div>'+
+                '<div class="txt-msj">'+
+                  '<p>'+a.alert[datos].nombre+'<span class="text-info"> Stock actual: '+a.alert[datos].cantidad+'</span></p>'+
+                  '<div class="txt-d">'+
+                    '<small>'+a.alert[datos].created_at+'</small>'+
+                    '<span class="borrar-alert" value="'+a.alert[datos].id+'">Borrar</span>'+
+                  '</div>'+
+                '</div>'+
+              '</div>';
            }
 
           alerta_p.append(div); 
@@ -553,7 +555,12 @@ $.ajax({
       div = "";
       for(datos in d.i){
 
-              div += '<div class="caja-pedimento"><div class="cont-pedimento"><h4 class="text-info txt-total-inv">'+d.i[datos].cantidad+'</h4><h3 class="num-pedimento">'+d.i[datos].num_pedimento+'</h3></div></div>';
+              div += '<div class="caja-pedimento">'+
+              '<div class="cont-pedimento">'+
+              '<h4 class="text-info txt-total-inv">'+d.i[datos].cantidad+'</h4>'+
+              '<h3 class="num-pedimento">'+d.i[datos].num_pedimento+'</h3>'+
+              '<h3 class="text-info pedi-fecha">'+d.i[datos].created_at+'</h3>'+
+              '</div></div>';
            }
 
           caja.append(div); 

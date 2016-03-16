@@ -73,7 +73,7 @@
               <select class="form-control" id="seccion">
                 <option value="Pedidos">Pedidos</option>
                 <option value="Detalle del pedido">Detalle del pedido</option>
-                <option value="Términos y condiciones">Términos y condiciones</option>
+               <!-- <option value="Términos y condiciones">Términos y condiciones</option>-->
               </select>
             </div>
             
@@ -145,7 +145,7 @@
               <select class="form-control" id="seccionedit">
                 <option value="Pedidos">Pedidos</option>
                 <option value="Detalle del pedido">Detalle del pedido</option>
-                <option value="Términos y condiciones">Términos y condiciones</option>
+              <!--  <option value="Términos y condiciones">Términos y condiciones</option>-->
               </select>
             </div>
             
@@ -161,6 +161,10 @@
               <textarea class="form-control" rows="5" id="contenidoedit" placeholder="Contenido de la nota..."></textarea>
               <span class="icon-c"></span>
             </div>
+
+              <div class="checkbox checkbox-activ">
+                 <label class="txt-activ text-primary">Activo<input id="inp-check" type="checkbox" value=""></label>
+              </div>
                 
           </div>
           <div class="modal-footer modal-confirmar-pass">
@@ -367,17 +371,6 @@
 
             alertas('success',"Nota publicada satisfactoriamente.");
 
-            //Remplazamos los datos en la fila antigua
-            $('#not_'+nota.o.id).removeClass('usar_1');
-            $('#not_'+nota.o.id).removeClass('glyphicon glyphicon-ok');
-            $('#not_'+nota.o.id).removeClass('btn-success');
-            $('#not_'+nota.o.id).removeClass('no-usar');
-
-            $('#not_'+nota.o.id).addClass('usar_0');
-            $('#not_'+nota.o.id).addClass('glyphicon glyphicon-off');
-            $('#not_'+nota.o.id).attr('title', 'Publicar esta nota');
-            $('#not_'+nota.o.id).addClass('btn-default');
-            $('#not_'+nota.o.id).addClass('usar-n');
 
 
              $('#nota').val(" ");
@@ -447,6 +440,15 @@
             $('#seccionedit').val(e.sección);
             $('#notaedit').val(e.nombre);
             $('#contenidoedit').val(e.texto);
+
+            activo = e.estatus;
+            if(activo == 1){
+              $('#inp-check').prop("checked", true);
+              $('#inp-check').attr('value', '1');
+            } else {
+              $('#inp-check').prop("checked", false);
+              $('#inp-check').attr('value', '0');
+            }
             
         },
         error: function(){
@@ -487,6 +489,14 @@
         $('.icon-c').removeClass('glyphicon glyphicon-remove form-control-feedback');
     });
 
+    $(document).on('click', '#inp-check', function(){
+      if($(this).prop("checked") == true){
+        $('#inp-check').attr('value', '1');
+      } else {
+        $('#inp-check').attr('value', '0');
+      }
+    });
+
     //Actualizar nota
     $(document).on('click', '#actualizar-nota', function(){
 
@@ -495,11 +505,12 @@
       seccion = $('#seccionedit').val();
       nota = $('#notaedit').val();
       contenido = $('#contenidoedit').val();
+      activo = $('#inp-check').val();
 
       $.ajax({
         url: '/notas/actualizarnota',
         type: 'GET',
-         data: {id: id, seccion: seccion, nota: nota, contenido: contenido},
+         data: {id: id, seccion: seccion, nota: nota, contenido: contenido, activo: activo},
         success: function(a){
 
             $('#tr_'+id).replaceWith('<tr id="tr_'+a.id+'">'+
@@ -564,17 +575,6 @@
             $('#not_'+nota.c[0].id).addClass('btn-success');
             $('#not_'+nota.c[0].id).addClass('no-usar');
 
-            //Remplazamos los datos en la fila antigua
-            $('#not_'+nota.o.id).removeClass('usar_1');
-            $('#not_'+nota.o.id).removeClass('glyphicon glyphicon-ok');
-            $('#not_'+nota.o.id).removeClass('btn-success');
-            $('#not_'+nota.o.id).removeClass('no-usar');
-
-            $('#not_'+nota.o.id).addClass('usar_0');
-            $('#not_'+nota.o.id).addClass('glyphicon glyphicon-off');
-            $('#not_'+nota.o.id).attr('title', 'Publicar esta nota');
-            $('#not_'+nota.o.id).addClass('btn-default');
-            $('#not_'+nota.o.id).addClass('usar-n');
 
             alertas('success',"Nota publicada satisfactoriamente.");
             

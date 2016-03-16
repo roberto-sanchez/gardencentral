@@ -48,13 +48,10 @@
           justify-content:flex-start;
   }
 
-  .alert-n_p{
-    display:none;
-    margin-left:.8em;
+
+  .l_vaciar{
+    cursor:pointer;
   }
-
-
-
 
 
 </style>
@@ -111,8 +108,8 @@
                      Precio: <span id="precioProd" class="text-info"></span>
                      <hr class="separador">
                      Descuento: <span id="descProd" class="text-info"></span>
-                     <hr class="separador">
-                     Piezas por paquete: <span id="piezasProd" class="text-info"></span>
+                 <!--    <hr class="separador">
+                     Piezas por paquete: <span id="piezasProd" class="text-info"></span>-->
                    </h2>
                  <!--  <buttom id="idProd" value="" class="btn btn-primary add-car">Añadir al carrito.</buttom> -->
                 </div>
@@ -122,7 +119,7 @@
           <div class="panel-footer footer-producto">
             <div class="agregar-producto input-group has-feedback" title="Ingrese la cantidad de paquetes">
 
-               {{ Form::number('agregarproducto',null,array('class' => 'form-control idProd', 'id' => 'agregarproducto', 'min' => '1', 'max' => '100', 'placeholder' => 'Nº de paquetes', 'title' => 'Ingrese la cantidad de paquetes', 'required')) }}
+               {{ Form::number('agregarproducto',null,array('class' => 'form-control idProd', 'id' => 'agregarproducto', 'min' => '1', 'max' => '100', 'placeholder' => 'Cantidad', 'title' => 'Ingrese la cantidad', 'required')) }}
               <span class="ingresar-p">
                 <a href="" class="btn input-group-addon claveProd btn-update-sum idProd2 disabled" id="" title="Ingrese la cantidad de paquetes">
                   Agregar
@@ -170,14 +167,14 @@
                    <tr class="tr-car filap_{{ $item->id }}" id="{{ $item->id }}">
                       <td>Iva: 16%</td>
                    </tr>
-                   <tr class="tr-car filap_{{ $item->id }}" id="{{ $item->id }}">
+                 <!--  <tr class="tr-car filap_{{ $item->id }}" id="{{ $item->id }}">
                       <td>Piezas paquete: {{ $item->piezas_paquete }}</td>
-                   </tr>
+                   </tr>-->
                    <tr class="tr-car filap_{{ $item->id }}" id="{{ $item->id }}">
                       <td class="td-cpa">
                         <div class="c-paxs">
                           <input type="number" data-id="p_{{ $item -> id }}" class="form-control cant_{{ $item -> id }}" min="1" max="100" value="{{ $totalp = $item->quantity }}" id="productxs_{{$item->id }}">
-                          <a href="{{ URL::to('productos/update', $item->clave) }}" class="btn btn-info btn-update-pxs" id="{{ $item -> id }}" title="Actualizar la cantidad de paquetes">
+                          <a href="{{ URL::to('productos/update', $item->clave) }}" class="btn btn-info btn-update-pxs" id="{{ $item -> id }}" title="Actualizar la cantidad">
                             <span class="glyphicon glyphicon-refresh"></span>
                           </a>
                         </div>
@@ -241,8 +238,8 @@
                       <th>Color</th>
                       <th>Precio</th>
                       <th>Iva</th>
-                      <th>Piezas por paquete</th>
-                      <th>Cantidad de paquetes</th>
+                     <!-- <th>Piezas por paquete</th>-->
+                      <th>Cantidad</th>
                       <th>Foto</th>
                       <th>Total producto</th>
                       <th>Quitar</th>
@@ -256,7 +253,7 @@
                         <td>{{ $item->color }}</td>
                         <td><?php $des = $item->precio * $item->descuento ?>${{ number_format($tpro = $item->precio - $des, 2) }}</td>
                         <td>16%</td>
-                        <td>{{ $item->piezas_paquete }}</td>
+                       <!-- <td>{{ $item->piezas_paquete }}</td>-->
                         <td class="td-cpa">
                           <div class="c-pa">
                             <input type="number" data-id="p_{{ $item -> id }}" class="form-control cant_{{ $item -> id }}" min="1" max="100" value="{{ $totalp = $item->quantity }}" id="product_{{$item->id }}">
@@ -311,17 +308,18 @@
                     <div class="alert alert-desc">
                     <strong>Descuento incluido.</strong>
                   </div>
-                  <div class="alert alert-desc alert-n_p">
-                    <strong id="nota_pedidos"></strong>
-                  </div>
                 </div>
+    
+
               </div>
             </div>
 
 
               <div class="tipoEnvio">
+                <!--Lista de notas aclaratorias-->
+                <div class="list-n"></div>
                 <div class="select-tipo">
-                  <h3 class="text-info">Cotizar Envío.</h3>
+                  <h3 class="text-info text-cotizar">Cotizar Envío.</h3>
                   <select class="selectTipo btn-group">
                       <option value="nada" disabled selected>-- Seleccione --</option>
                       <option value="tienda">Recoger en tienda</option>
@@ -333,13 +331,10 @@
 
           </div>
 
-         <div class="g-p-tipo">
-            <span id="g-tipo" href="#confirmpedido" data-toggle="modal" class="g-tipo btn btn-primary">
-              Generar pedido
-            </span>
-         </div>
-
             <div class="panel-elegir">
+              <span id="g-tipo" href="#confirmpedido" data-toggle="modal" class="g-tipo btn btn-primary">
+                Generar pedido
+              </span>
               <div class="alert alert-info alert-v alert-pago">
                 <strong>Elige un domiclio.!</strong>
               </div>
@@ -1017,6 +1012,9 @@ $(document).ready(function(){
 
 
 });
+
+
+
 
 
 

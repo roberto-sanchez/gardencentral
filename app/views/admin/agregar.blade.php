@@ -7,9 +7,12 @@
 @section('scripts')
 @parent
 @include('layouts/inc/lib')
-{{ HTML::style('css/calendario.css') }}
-{{ HTML::script('js/calendario.js') }}
+{{ HTML::style('css/bootstrap-select.min.css') }}
+{{ HTML::style('css/bootstrap-datepicker.min.css') }}
 {{ HTML::script('js/bootstrap-filestyle.min.js') }}
+{{ HTML::script('js/bootstrap-select.min.js') }}
+{{ HTML::script('js/i18n/defaults-es_CL.min.js') }}
+{{ HTML::script('js/bootstrap-datepicker.min.js') }}
 <script>
   $(document).ready(function(){
     $('.addentrada').addClass('active');
@@ -50,11 +53,14 @@
             <div class="form-add-entrada">
               <div class="inputE date form-group">
                  <label for="ejemplo_email_1">Fecha</label>
-                 <input type="text" name="fecha" class="form-control" id="fecha">
+                 <input type="text" name="fecha" class="form-control fecha">
               </div>
               <div class="inputE prov input-group infopago">
                 <label>PROVEEDOR</label>
-                 <select class="btn btn-default form-control" name="proveedor" id="idproveedor">
+                 <select class="selectpicker form-control" name="proveedor" id="idproveedor" data-live-search="true" data-size="5">
+                 @foreach($proveedor as $prov)
+                  <option value="{{ $prov->id }}" data-tokens="{{ $prov->nombre }}">{{ $prov->nombre }}</option>
+                 @endforeach
                  </select>
               </div>
               <div class="inputE fa form-group">
@@ -63,7 +69,8 @@
               </div>
               <div class="inputE ffa form-group">
                  <label for="ejemplo_email_1">FECHA FACTURA</label>
-                 <input type="text" name="fechaFactura" class="form-control" id="fechaFactura">
+                 
+                 <input type="text" name="fechaFactura" class="form-control fechaFactura">
               </div>
             </div>
               <div class="form-add-s">
@@ -84,56 +91,9 @@
             </div>
             <div>
           </form>
-              {{ Form::open(['id'=>'searchE','method' => 'POST', 'class' => 'b-entrada input-group has-feedback']) }}
-
-         {{ Form::text('input',null,array('class' => 'form-control', 'id' => 'clave','placeholder' => 'Clave del producto')) }}
-
-              <button id="btn_search" type="submit" class="btn buscar input-group-addon">
-                   Buscar
-                   <span class="glyphicon glyphicon-search"></span>
-             </button>
-
-         {{ Form::close() }}
+              <button id="add-p" class="btn btn-default">Agregar productos</button>
             </div>
         </div>
-    </div>
-
-    <div id="productoPanel" class="panel">
-        <div class="panel-heading">
-          <h2 id="nombreProd" class="text-center text-info"></h2>
-        </div>
-        <div class="panel-body panel-producto">
-
-              <img id="imagenProd" src="" alt="Imagen del producto" class="imagenproducto img-responsive img-circle" />
-
-            <div class="datos">
-               <h2 class="text-center text-primary txt-info">
-                 Color: <span id="colorProd" class="text-info"></span>
-                 <hr class="separador">
-                 Precio: <span id="precioProd" class="text-info"></span>
-                 <span class="claveProducto"></span>
-                 <span class="productoId"></span>
-                 <span class="precioHiden"></span>
-               </h2>
-             <!--  <buttom id="idProd" value="" class="btn btn-primary add-car">Añadir al carrito.</buttom> -->
-            </div>
-
-      </div>
-
-      <div class="panel-footer footer-producto">
-        <div id="agregarP" class="agregar-pedido input-group has-feedback">
-
-           {{ Form::number('agregarproducto',null,array('class' => 'form-control', 'min' => '1', 'max' => '100', 'placeholder' => 'Cantidad', 'required', 'id' => 'prodE')) }}
-          <span class="ingresar-p">
-            <button id="addP" class="btn input-group-addon" title="Agregar">
-              Agregar
-               <span class="glyphicon glyphicon-plus"></span>
-            </button>
-          </span>
-        </div>
-
-      </div>
-
     </div>
 
     <table class="t-p-entrada">
@@ -189,138 +149,143 @@
       </div>
     </div>
 
+<!--Modal para agregar productos-->
+  <div id="agregar-p" class="modal fade" data-keyboard="false" data-backdrop="static">
+      <div class="modal-dialog modal-products">
+        <div class="modal-content content-products">
+          <div class="modal-header header-nota">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title text-info text-center">
+              Agregar productos
+            </h4>
+          </div>
+          <div class="modal-body body-totales-i">
+            <h2 id="nombre-i" class="text-info text-center"></h2>
+
+            <div class="totales-p">
+              <table class="t-products">
+                <tbody id="cont-products"></tbody>
+              </table>
+            </div>
+                
+          </div>
+          <div class="modal-footer foot-env">
+
+              <button id="c-env" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+               <span id="env-pro" class="btn btn-primary" data-dismiss="modal" >Enviar</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
 {{ HTML::script('js/accounting.min.js') }}
   <script>
- selectp = $('#idproveedor');
-  //Listar proveedores
-  $.ajax({
-      type: "POST",
-      url: "/entradas/proveedores",
-      success: function (prove) {
-        idp = "";
-                idp += '<option value="select" disabled selected>Seleccione</option>';
-        for(datos in prove.proveedor){
-                idp += '<option value="'+prove.proveedor[datos].id+'">'+prove.proveedor[datos].nombre+'</option>';
-             }
-
-             selectp.append(idp);
-
-
-      },
-      error: function (noexiste) {
-          alert("failure");
-      }
-  });
-
 
 $(document).ready(function(){
 
-      $('#searchE').on('submit', function () {
-          return false;
-      });
 
+      $('.fecha').datepicker({
+                format: "dd/mm/yyyy",
+                autoclose: true
+        });
 
-      $('#btn_search').click(function () {
-          if ($('#clave').val() == '' || $('#clave').val() == 'Clave del producto') {
+      $('.fechaFactura').datepicker({
+                format: "dd/mm/yyyy",
+                autoclose: true
+        });
 
-          } else {
-            $('.enviar_e').attr('id', 'gE');
-            $('.enviar_e').removeClass('enviar_f');
-            $('#browse-p input[type=text]').val('');
-            $('#prodE').val('');
-              $.ajax({
+      $(document).on('click', '#add-p', function(){
+        $('#agregar-p').modal({
+          show:'false',
+        });
+        caja = $('#cont-products');
+            $.ajax({
                   type: "POST",
-                  url: "/entradas/buscar",
+                  url: "/entradas/listproducto",
                   data: {clave: $('#clave').val()},
-                  success: function (prod) {
-                      ver = prod.id;
-                      if (ver === undefined) {
-                          $('#productoPanel').hide();
+                  success: function (p) {
+                    console.log(p);
+                    div = "";
+                    for(datos in p.producto){
 
+                      div += ' <tr>'+
+                        '<td class="text-info txt-n-pro">'+p.producto[datos].clave+'</td>'+
+                        '<td class="text-info txt-n-id">'+p.producto[datos].id+'</td>'+
+                        '<td class="txt-nom">'+p.producto[datos].nombre+'</td>'+
+                        '<td class="txt-col">'+p.producto[datos].color+'</td>'+
+                        '<td class="txt-pre">'+p.producto[datos].precio+'</td>'+
+                        '<td>'+
+                          '<input id="cant-pro" type="number" class="form-control cant-p" value="0">'+
+                        '</td>'+
+                       '</tr>';
 
-                          $('#noexiste').html(prod.indefinido);
-                      } else {
-                          $('#productoPanel').slideDown(1000);
-                          $('.productoId').attr('id',prod.id);
-                          $('.idProd').attr('id', 'product_' + prod.id);
-                          $('.idProd2').attr('id', +prod.id);
-                          $('.claveProducto').attr('id',prod.clave);
-                          $('#nombreProd').html(prod.nombre);
-                          $('#imagenProd').prop('src', '/img/productos/' + prod.foto); //la imagen
-                          $('#colorProd').html(prod.color);
-                          $('#precioProd').html(accounting.formatMoney(prod.precio));
-                          $('.precioHiden').attr('id', prod.precio);
-                      }
+                         }
 
+                    caja.append(div); 
                   },
-                  error: function (noexiste) {
+                  error: function () {
                       alert("failure");
                   }
-              });
-          }
+              });     
 
       });
 
-    $(document).on('click','#addP', function(){
-      $("#clave").val('');
-      //$('#prodE').val('');
-      cantidad =  $('#prodE').val();
 
-      if(cantidad == ""){
+      $(document).on('click', '#c-env', function(){
 
-      } else {
-        idP = $('.productoId').attr('id');
-        precio = $('.precioHiden').attr('id');
-        clave = $('.claveProducto').attr('id');
-         exixst = $('.clave_'+clave).attr('value');
+        $("#cont-products").load(location.href+" #cont-products>*","");
 
-         if(exixst == undefined){
-           $('#productoPanel').hide();
-
-           tablep = $('#nEntrada');
-           $.ajax({
-               type: "POST",
-               url: "/entradas/addproducto",
-               data: {clave: clave},
-               success: function (addp) {
-                 console.log(addp);
-                 d = "";
-                 if(addp.length){
-
-                 } else {
-                    $('#gE').removeClass('disabled');
-                 }
-
-                     for(datos in addp.resp){
-                             d += '<tr class="clave_'+addp.resp[datos].clave+'" value="clave_'+addp.resp[datos].clave+'" id="fila_'+addp.resp[datos].id+'"><td class="clavepro" >'+addp.resp[datos].clave+'</td>';
-                             d += '<td class="idpro" value="'+addp.resp[datos].id+'">'+addp.resp[datos].nombre+'</td>';
-                             d += '<td>'+addp.resp[datos].color+'</td>';
-                             d += '<td class="p_c">'+accounting.formatMoney(addp.resp[datos].precio)+'</td>';
-                             d += '<td><div class="c-pa"><input id="v_'+addp.resp[datos].id+'" type="number" class="form-control cant" data-id="'+addp.resp[datos].precio+'" value="'+cantidad+'"><button value="'+addp.resp[datos].id+'" class="btn btn-primary btn_'+addp.resp[datos].clave+'" data-id="'+cantidad+'" id="actC"><span class="glyphicon glyphicon-refresh"></span></button></div></td>';
-                             d += '<td id="canti_'+addp.resp[datos].id+'">'+accounting.formatMoney(addp.resp[datos].precio * cantidad)+'</td>';
-                             d += '<td><button id="q-t" value="'+addp.resp[datos].id+'" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></button></td>';
-                          }
-
-                          tablep.append(d);
-
-               },
-               error: function (noexiste) {
-                   alert("failure");
-               }
-           });
-         } else{
-           sumar = $('#prodE').val();
-           a = parseInt($('.btn_'+clave).attr('data-id'));
-           console.log(a += parseInt(sumar));
-           $('#productoPanel').hide();
-           $('#v_'+idP).val(a);
-           $('.btn_'+clave).attr('data-id',a);
-           $('#canti_'+idP).text(accounting.formatMoney(precio * a));
-         }
+      });
 
 
-      }
-    });
+      $(document).on('click', '#env-pro', function(){
+
+        $("#cont-products").load(location.href+" #cont-products>*","");
+
+         var DATA = [];
+
+        $('.t-products tbody tr').each(function(){
+            clavepro = $(this).find("td[class*='txt-n-pro']").text();
+            id = $(this).find("td[class*='txt-n-id']").text();
+            pro = $(this).find("td[class*='txt-nom']").text();
+            color = $(this).find("td[class*='txt-col']").text();
+            precio = $(this).find("td[class*='txt-pre']").text();
+            cant = $(this).find("input[class*='cant-p']").val();
+
+            item = {clavepro, pro, color, precio};
+
+            DATA.push(item);
+
+            if(cant <= 0){
+
+            } else{
+
+              tablep = $('#nEntrada');
+              d= "";
+
+               d += '<tr class="clave_'+clavepro+'" value="clave_'+clavepro+'" id="fila_'+id+'"><td class="clavepro" >'+clavepro+'</td>';
+               d += '<td class="idpro" value="'+id+'">'+pro+'</td>';
+               d += '<td>'+color+'</td>';
+               d += '<td class="p_c">'+accounting.formatMoney(precio)+'</td>';
+               d += '<td><div class="c-pa"><input id="v_'+id+'" type="number" class="form-control cant" data-id="'+precio+'" value="'+cant+'"><button value="'+id+'" class="btn btn-primary btn_'+clavepro+'" data-id="'+cant+'" id="actC"><span class="glyphicon glyphicon-refresh"></span></button></div></td>';
+               d += '<td id="canti_'+id+'">'+accounting.formatMoney(precio * cant)+'</td>';
+               d += '<td><button id="q-t" value="'+id+'" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></button></td>';
+                        
+
+              tablep.append(d);
+
+              //Limpiamos el buscador de textos
+              $('#browse-p input[type=text]').val('');
+            }
+
+            $('#gE').removeClass('disabled');
+
+
+        })
+
+      });
+
+
 
     //Actualizar cantidad
     $(document).on('click', '#actC', function(){
@@ -346,7 +311,7 @@ $(document).ready(function(){
     //Validaciones para los campos del formularios
     $("#gE").click(function () {
 
-    if($("#fecha").val().length == 0){
+    if($(".fecha").val().length == 0){
             $('.date').addClass('has-error');
             return false;
 
@@ -358,7 +323,7 @@ $(document).ready(function(){
             $('.fa').addClass('has-error');
             return false;
 
-    } else if($("#fechaFactura").val().length == 0){
+    } else if($(".fechaFactura").val().length == 0){
             $('.ffa').addClass('has-error');
             return false;
 
@@ -369,7 +334,7 @@ $(document).ready(function(){
 
     $("#enviar_f").click(function () {
 
-    if($("#fecha").val().length == 0){
+    if($(".fecha").val().length == 0){
             $('.date').addClass('has-error');
             return false;
 
@@ -381,7 +346,7 @@ $(document).ready(function(){
             $('.fa').addClass('has-error');
             return false;
 
-    } else if($("#fechaFactura").val().length == 0){
+    } else if($(".fechaFactura").val().length == 0){
             $('.ffa').addClass('has-error');
             return false;
 
@@ -398,10 +363,10 @@ $(document).ready(function(){
     });
 
     $(document).on('click', '#guardar-entrada', function(){
-      fecha = $('#fecha').val();
+      fecha = $('.fecha').val();
       proveedor = $('#idproveedor').val();
       factura = $('#factura').val();
-      fechaFactura = $('#fechaFactura').val();
+      fechaFactura = $('.fechaFactura').val();
       numeroPedimento = $('#numeroPedimento').val();
       obc = $('#obc').val();
       tipo = 1;
@@ -413,7 +378,6 @@ $(document).ready(function(){
             idp = $(this).find("td[class*='idpro']").attr('value');
             cant  = $(this).find("input[class*='cant']").val();
             pc  = $(this).find("td[class*='p_c']").text();
-
             item = {clavepro, idp, cant, pc};
 
             DATA.push(item);
@@ -430,10 +394,10 @@ $(document).ready(function(){
                 console.log(e);
                 alertas('success',"Entrada guardada correctamente.");
                 $("#nEntrada").load(location.href+" #nEntrada>*","");                 
-                $("#fecha").val('');
+                $(".fecha").val('');
                 $('#idproveedor').prop('selectedIndex',0);
                 $("#factura").val('');
-                $("#fechaFactura").val('');
+                $(".fechaFactura").val('');
                 $('#numeroPedimento').val('');
                 $("#obc").val('');
                 $('#browse-p input[type=text]').val('');
@@ -501,10 +465,10 @@ $(document).ready(function(){
 
                   alertas('success',"Entrada guardada correctamente.");
                   $("#nEntrada").load(location.href+" #nEntrada>*","");                 
-                  $("#fecha").val('');
+                  $(".fecha").val('');
                   $('#idproveedor').prop('selectedIndex',0);
                   $("#factura").val('');
-                  $("#fechaFactura").val('');
+                  $(".fechaFactura").val('');
                   $('#numeroPedimento').val('');
                   $("#obc").val('');
                   $('#browse-p input[type=text]').val('');
