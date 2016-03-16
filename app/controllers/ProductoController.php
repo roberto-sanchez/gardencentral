@@ -169,14 +169,49 @@ class ProductoController extends \BaseController {
             ->join('pedido','cliente.id', '=','pedido.cliente_id')
             ->where('pedido.id', $id)->get();
 
+        $id_user = Auth::user()->id;
+
+        $nivel = DB::table('cliente')
+            ->join('nivel_descuento', 'cliente.nivel_descuento_id', '=', 'nivel_descuento.id')
+            ->select('descripcion')
+            ->where('cliente.usuario_id', $id_user)
+            ->pluck('descripcion');
+
+        if($nivel == 'Retail'){
 
         $pro = DB::table('producto')
                     ->join('familia', 'producto.familia_id', '=', 'familia.id')
                     ->Join('descuento', 'familia.id', "=", 'descuento.familia_id')
                     ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
-                    ->join('producto_precio','producto.id', '=','producto_precio.producto_id')
-                    //->select('producto.created_at','precio_venta','clave','nombre','color','piezas_paquete')
-                    ->where('pedido_detalle.pedido_id', $id)->get();
+                    ->join('producto_precio','pedido_detalle.producto_id', '=','producto_precio.producto_id')
+                    ->where('pedido_detalle.pedido_id', $id)
+                    ->where('tipo', 1)
+                    ->get();
+
+        } else if($nivel == 'Mayorista') {
+
+            $pro = DB::table('producto')
+                    ->join('familia', 'producto.familia_id', '=', 'familia.id')
+                    ->Join('descuento', 'familia.id', "=", 'descuento.familia_id')
+                    ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
+                    ->join('producto_precio','pedido_detalle.producto_id', '=','producto_precio.producto_id')
+                    ->where('pedido_detalle.pedido_id', $id)
+                    ->where('tipo', 2)
+                    ->get();
+
+        } else if($nivel == 'Distribuidor'){
+
+            $pro = DB::table('producto')
+                    ->join('familia', 'producto.familia_id', '=', 'familia.id')
+                    ->Join('descuento', 'familia.id', "=", 'descuento.familia_id')
+                    ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
+                    ->join('producto_precio','pedido_detalle.producto_id', '=','producto_precio.producto_id')
+                    ->where('pedido_detalle.pedido_id', $id)
+                    ->where('tipo', 3)
+                    ->get();
+        }
+
+
 
         $dpro = DB::table('pedido_detalle')
                     ->join('producto','pedido_detalle.producto_id', '=','producto.id')
@@ -2012,6 +2047,12 @@ public function getProducto(){
                     ->join('direccion_cliente','pedido.direccion_cliente_id', '=','direccion_cliente.id')
                     ->where('pedido.id', $id)
                     ->pluck('pedido.direccion_cliente_id');
+                    
+             $nivel = DB::table('cliente')
+                ->join('nivel_descuento', 'cliente.nivel_descuento_id', '=', 'nivel_descuento.id')
+                ->select('descripcion')
+                ->where('cliente.usuario_id', $iduser)
+                ->pluck('descripcion');
 
             if($iddi == NULL){
                 $pedido = DB::table('pedido')
@@ -2037,14 +2078,41 @@ public function getProducto(){
                     ->get();
 
 
-                $pro = DB::table('producto')
-                            ->join('familia', 'producto.familia_id', '=', 'familia.id')
-                            ->Join('descuento', 'familia.id', "=", 'descuento.familia_id')
-                            ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
-                            ->join('producto_precio','producto.id', '=','producto_precio.producto_id')
-                            ->where('pedido_detalle.pedido_id', $id)
-                            ->where('producto.id', $idd )
-                            ->get();
+                    if($nivel == 'Retail'){
+
+                        $pro = DB::table('producto')
+                                    ->join('familia', 'producto.familia_id', '=', 'familia.id')
+                                    ->Join('descuento', 'familia.id', "=", 'descuento.familia_id')
+                                    ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
+                                    ->join('producto_precio','producto.id', '=','producto_precio.producto_id')
+                                    ->where('pedido_detalle.pedido_id', $id)
+                                    ->where('tipo', 1)
+                                    ->get();
+
+                    } else if($nivel == 'Mayorista') {
+
+                        $pro = DB::table('producto')
+                                    ->join('familia', 'producto.familia_id', '=', 'familia.id')
+                                    ->Join('descuento', 'familia.id', "=", 'descuento.familia_id')
+                                    ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
+                                    ->join('producto_precio','producto.id', '=','producto_precio.producto_id')
+                                    ->where('pedido_detalle.pedido_id', $id)
+                                    ->where('tipo', 2)
+                                    ->get();
+
+                    } else if($nivel == 'Distribuidor'){
+
+                        $pro = DB::table('producto')
+                                    ->join('familia', 'producto.familia_id', '=', 'familia.id')
+                                    ->Join('descuento', 'familia.id', "=", 'descuento.familia_id')
+                                    ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
+                                    ->join('producto_precio','producto.id', '=','producto_precio.producto_id')
+                                    ->where('pedido_detalle.pedido_id', $id)
+                                    ->where('tipo', 3)
+                                    ->get();
+
+                    }
+
 
                 $pedimento = DB::table('pedido_detalle')
                         ->join('producto', 'pedido_detalle.producto_id', '=', 'producto.id')
@@ -2104,13 +2172,40 @@ public function getProducto(){
                         ->get();
 
 
-                    $pro = DB::table('producto')
-                                ->join('familia', 'producto.familia_id', '=', 'familia.id')
-                                ->Join('descuento', 'familia.id', "=", 'descuento.familia_id')
-                                ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
-                                ->join('producto_precio','producto.id', '=','producto_precio.producto_id')
-                                ->where('pedido_detalle.pedido_id', $id)
-                                ->get();
+                    if($nivel == 'Retail'){
+
+                        $pro = DB::table('producto')
+                                    ->join('familia', 'producto.familia_id', '=', 'familia.id')
+                                    ->Join('descuento', 'familia.id', "=", 'descuento.familia_id')
+                                    ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
+                                    ->join('producto_precio','producto.id', '=','producto_precio.producto_id')
+                                    ->where('pedido_detalle.pedido_id', $id)
+                                    ->where('tipo', 1)
+                                    ->get();
+
+                    } else if($nivel == 'Mayorista') {
+
+                        $pro = DB::table('producto')
+                                    ->join('familia', 'producto.familia_id', '=', 'familia.id')
+                                    ->Join('descuento', 'familia.id', "=", 'descuento.familia_id')
+                                    ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
+                                    ->join('producto_precio','producto.id', '=','producto_precio.producto_id')
+                                    ->where('pedido_detalle.pedido_id', $id)
+                                    ->where('tipo', 2)
+                                    ->get();
+
+                    } else if($nivel == 'Distribuidor'){
+
+                        $pro = DB::table('producto')
+                                    ->join('familia', 'producto.familia_id', '=', 'familia.id')
+                                    ->Join('descuento', 'familia.id', "=", 'descuento.familia_id')
+                                    ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
+                                    ->join('producto_precio','producto.id', '=','producto_precio.producto_id')
+                                    ->where('pedido_detalle.pedido_id', $id)
+                                    ->where('tipo', 3)
+                                    ->get();
+
+                    }
 
                     $pedimento = DB::table('pedido_detalle')
                         ->join('producto', 'pedido_detalle.producto_id', '=', 'producto.id')
