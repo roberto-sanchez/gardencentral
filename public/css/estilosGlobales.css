@@ -4268,6 +4268,15 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f74a00', end
           flex-direction:column;
 }
 
+.c-cant{
+  width:100%;
+}
+
+.btn-total{
+  border-radius:3px 0px 0px 3px;
+  cursor: auto;
+}
+
 .txt-n-pro{
   text-align:center;
 }
@@ -4279,7 +4288,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f74a00', end
 
 #cant-pro{
   text-align:left;
-  border-radius:3px;
+  border-radius:0 3px 3px 0;
 }
 
 .foot-env{

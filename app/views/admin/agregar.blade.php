@@ -214,9 +214,10 @@ $(document).ready(function(){
                         '<td class="txt-nom">'+p.producto[datos].nombre+'</td>'+
                         '<td class="txt-col">'+p.producto[datos].color+'</td>'+
                         '<td class="txt-pre">'+p.producto[datos].precio+'</td>'+
-                        '<td>'+
+                        '<td><div class="c-paxs c-cant">'+
+                           '<span class="btn btn-success btn-total">'+p.producto[datos].cantidad+'</span>'+
                           '<input id="cant-pro" type="number" class="form-control cant-p" value="0">'+
-                        '</td>'+
+                        '</div></td>'+
                        '</tr>';
 
                          }

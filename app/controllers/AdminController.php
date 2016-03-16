@@ -440,12 +440,15 @@ class AdminController extends \BaseController {
 
 		$producto = DB::table('producto')
 			->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-			->select('producto.id','nombre','color','clave','precio')
+			->join('inventario', 'producto.id', '=', 'inventario.producto_id')
+			->select('producto.id','nombre','color','clave','precio', 'cantidad')
 			->orderBy('clave', 'asc')
 			->where('tipo', 0)
 			->get();
 
-		return Response::json(array('producto' => $producto));
+		return Response::json(array(
+			'producto' => $producto
+		));
 	}
 
 	/**
