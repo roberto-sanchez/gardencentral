@@ -95,8 +95,8 @@
                     <th>Nombre</th>
                     <th>Color</th>
                     <th>Precio</th>
-                    <th>Piezas por paquete</th>
-                    <th>Cantidad de paquetes</th>
+                    <th>Iva</th>
+                    <th>Cantidad</th>
                     <th>Foto</th>
                     <th>Total producto</th>
                   </tr>
@@ -569,19 +569,20 @@
 
 		                pro = "";
              		for(datos in p.pro){
-                  des = p.pro[datos].precio * p.pro[datos].descuento;
-                  e = accounting.formatMoney(p.pro[datos].precio - des);
-                  f = (p.pro[datos].precio - des) * p.pro[datos].cantidad;
-                  t = accounting.formatMoney(p.pro[datos].precio);
+                  f = (p.pro[datos].precio) * p.pro[datos].cantidad;
 
 	                    pro += '<tr><td>'+p.pro[datos].clave+'</td>';
-	                    pro += '<td>'+p.pro[datos].nombre+'</td>';
-	                    pro += '<td>'+p.pro[datos].color+'</td>';
-	                    pro += '<td>'+e+'</td>';
-	                    pro += '<td>'+p.pro[datos].piezas_paquete+'</td>';
-	                    pro += '<td>'+p.pro[datos].cantidad+'</td>';
-	                    pro += '<td><span class="img-p" id="'+p.pro[datos].nombre+'" data-id="'+p.pro[datos].foto+'" href="#verfotop" data-toggle="modal" alt="Foto del producto" title="Ver Foto del prodcto">Ver foto</span></td>';
-	                     pro += '<td class="t-pro" value="'+f+'">'+accounting.formatMoney(f)+'</td></tr>';
+                      pro += '<td>'+p.pro[datos].nombre+'</td>';
+                      pro += '<td>'+p.pro[datos].color+'</td>';
+                      pro += '<td>'+accounting.formatMoney(p.pro[datos].precio)+'</td>';
+                      pro += '<td>16%</td>';
+                      pro += '<td>'+p.pro[datos].cantidad+'</td>';
+                      //pro += '<td>pedimento</td>';
+                    /*  pro += '<td>'+
+                      '<small>'+p.pedimento[datos].num_pedimento+' - '+p.pro[datos].cantidad+'</small>'+
+                      '</td>';*/
+                      pro += '<td><span class="img-p" id="'+p.pro[datos].nombre+'" data-id="'+p.pro[datos].foto+'" href="#verfotop" data-toggle="modal" alt="Foto del producto" title="Ver Foto del prodcto">Ver foto</span></td>';
+                      pro += '<td class="t-pro" value="'+f+'">'+accounting.formatMoney(f)+'</td></tr>';
                     }
 
                  	tabla_d.append(pro);

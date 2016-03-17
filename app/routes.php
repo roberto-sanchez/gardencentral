@@ -125,7 +125,7 @@ Route::bind('producto', function($clave){
 			return Producto::join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
 						->join('familia', 'producto.familia_id', '=', 'familia.id')
 						->Join('descuento', 'familia.id', "=", 'descuento.familia_id')
-						->select('producto.id','iva0','nombre','color','foto','piezas_paquete','clave','precio', 'familia.descripcion', 'descuento')
+						->select('producto.id','iva0','nombre','color','foto','piezas_paquete','clave','precio', 'familia.descripcion', 'descuento', 'tipo')
 						->where('clave', $clave)
 						->where('tipo', 1)
 						->first();
@@ -134,7 +134,7 @@ Route::bind('producto', function($clave){
          	return Producto::join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
 						->join('familia', 'producto.familia_id', '=', 'familia.id')
 						->Join('descuento', 'familia.id', "=", 'descuento.familia_id')
-						->select('producto.id','iva0','nombre','color','foto','piezas_paquete','clave','precio', 'familia.descripcion', 'descuento')
+						->select('producto.id','iva0','nombre','color','foto','piezas_paquete','clave','precio', 'familia.descripcion', 'descuento', 'tipo')
 						->where('clave', $clave)
 						->where('tipo', 2)
 						->first();
@@ -143,7 +143,7 @@ Route::bind('producto', function($clave){
          	return Producto::join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
 						->join('familia', 'producto.familia_id', '=', 'familia.id')
 						->Join('descuento', 'familia.id', "=", 'descuento.familia_id')
-						->select('producto.id','iva0','nombre','color','foto','piezas_paquete','clave','precio', 'familia.descripcion', 'descuento')
+						->select('producto.id','iva0','nombre','color','foto','piezas_paquete','clave','precio', 'familia.descripcion', 'descuento', 'tipo')
 						->where('clave', $clave)
 						->where('tipo', 3)
 						->first();

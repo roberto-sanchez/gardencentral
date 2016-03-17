@@ -10,6 +10,10 @@
 @include('layouts/inc/lib')
 <style>
 
+/*.glyphicon{
+  position:static;
+}*/
+
   #list_p__length{
     display:none;
   }
@@ -250,8 +254,9 @@
                       <tr class="tr-car filap_{{ $item->id }}" id="{{ $item->id }}">
                         <td class="clave_pro" value="{{ $item->clave }}">{{ $item->clave }}</td>
                         <td class="p-nom">{{ $item->nombre }}</td>
-                        <td>{{ $item->color }}</td>
-                        <td><?php $des = $item->precio * $item->descuento ?>${{ number_format($tpro = $item->precio - $des, 2) }}</td>
+                        <td class="tipo_precio" value="{{ $item->tipo }}">{{ $item->color }}</td>
+                        <?php $des = $item->precio * $item->descuento ?>
+                        <td class="precio_pro" value="{{ $tpro = number_format($item->precio - $des, 2) }}">${{ number_format($tpro = $item->precio - $des, 2) }}</td>
                         <td>16%</td>
                        <!-- <td>{{ $item->piezas_paquete }}</td>-->
                         <td class="td-cpa">

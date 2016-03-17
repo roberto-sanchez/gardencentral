@@ -18,7 +18,7 @@ $(document).ready(function () {
                 url: "/productos/detalledelpedido",
                 data: {id: id},
                 success: function (p) {
-                  //console.log(p);
+                  console.log(p);
                   if(p.t == 'tienda'){
                       $('#sindomi').addClass('sindomi');
                       $('.pc_domiclio').hide();
@@ -60,17 +60,22 @@ $(document).ready(function () {
 
                 pro = "";
                 for(datos in p.pro){
-                  des = p.pro[datos].precio * p.pro[datos].descuento;
-                  e = accounting.formatMoney(p.pro[datos].precio - des);
-                  f = (p.pro[datos].precio- des) * p.pro[datos].cantidad;
-                  t = accounting.formatMoney(p.pro[datos].precio);
-
+                 // des = p.pro[datos].precio * p.pro[datos].descuento;
+                 // e = accounting.formatMoney(p.pro[datos].precio - des);
+                  f = (p.pro[datos].precio) * p.pro[datos].cantidad;
+                 // t = accounting.formatMoney(p.pro[datos].precio);
+                      if(p.pro[datos].clave){
+                        console.log('solo hay un productp');
+                      } else {
+                        console.log('hay mas de un producto con esa clave');
+                      }
                       pro += '<tr><td>'+p.pro[datos].clave+'</td>';
                       pro += '<td>'+p.pro[datos].nombre+'</td>';
                       pro += '<td>'+p.pro[datos].color+'</td>';
-                      pro += '<td>'+e+'</td>';
+                      pro += '<td>'+accounting.formatMoney(p.pro[datos].precio)+'</td>';
                       pro += '<td>16%</td>';
                       pro += '<td>'+p.pro[datos].cantidad+'</td>';
+                      pro += '<td>pedimento</td>';
                     /*  pro += '<td>'+
                       '<small>'+p.pedimento[datos].num_pedimento+' - '+p.pro[datos].cantidad+'</small>'+
                       '</td>';*/
@@ -193,6 +198,7 @@ $(document).ready(function () {
                 url: "productos/getProducto",
                 data: {clave: $('#clave').val()},
                 success: function (prod) {
+                  console.log(prod);
                     ver = prod.producto.indefinido;
                     if(ver === 'vacio'){
                         alertas('error',"El producto no existe.");
@@ -1615,8 +1621,10 @@ $('#p-s-dom').click(function(){
             idp = $(this).attr('id');
             clave  = $(this).find("[class*='clave_pro']").attr('value');
             cant  = $(this).find("input[class*='cant']").val();
+            tipoprecio  = $(this).find("td[class*='tipo_precio']").attr('value');
+            preciop  = $(this).find("td[class*='precio_pro']").attr('value');
 
-            item = {idp, clave, cant};
+            item = {idp, clave, cant, tipoprecio, preciop};
 
             DATA.push(item);
         })
@@ -1657,9 +1665,11 @@ $('#p-s-dom').click(function(){
             idp = $(this).attr('id');
             clave  = $(this).find("[class*='clave_pro']").attr('value');
             cant  = $(this).find("input[class*='cant']").val();
+            tipoprecio  = $(this).find("td[class*='tipo_precio']").attr('value');
+            preciop  = $(this).find("td[class*='precio_pro']").attr('value');
 
             //declaramos un array para guardar estos datos
-            item = {idp, clave, cant};
+            item = {idp, clave, cant, tipoprecio, preciop};
 
             // hacemos un .push() para agregarlos a nuestro array principal "DATA".
             DATA.push(item);
@@ -1700,9 +1710,11 @@ $('#p-s-dom').click(function(){
             idp = $(this).attr('id');
             clave  = $(this).find("[class*='clave_pro']").attr('value');
             cant  = $(this).find("input[class*='cant']").val();
+            tipoprecio  = $(this).find("td[class*='tipo_precio']").attr('value');
+            preciop  = $(this).find("td[class*='precio_pro']").attr('value');
 
             //declaramos un array para guardar estos datos
-            item = {idp, clave, cant};
+            item = {idp, clave, cant, tipoprecio, preciop};
 
             // hacemos un .push() para agregarlos a nuestro array principal "DATA".
             DATA.push(item);
@@ -1753,9 +1765,11 @@ $('#p-s-dom').click(function(){
             idp = $(this).attr('id');
             clave  = $(this).find("[class*='clave_pro']").attr('value');
             cant  = $(this).find("input[class*='cant']").val();
+            tipoprecio  = $(this).find("td[class*='tipo_precio']").attr('value');
+            preciop  = $(this).find("td[class*='precio_pro']").attr('value');
 
             //declaramos un array para guardar estos datos
-            item = {idp, clave, cant};
+            item = {idp, clave, cant, tipoprecio, preciop};
 
             // hacemos un .push() para agregarlos a nuestro array principal "DATA".
             DATA.push(item);
@@ -1765,38 +1779,38 @@ $('#p-s-dom').click(function(){
         aInfo   = JSON.stringify(DATA);
 
         id = 0;
-        alert(id);
+        //alert(id);
         //obtenemos los valores de los campos del form
         cotizar = $('#inpEnvio').val();
-        alert(cotizar);
+        //alert(cotizar);
         pais = $('#pais').val();
-        alert(pais);
+       // alert(pais);
         estado = $('#estado').val();
-        alert(estado);
+        //alert(estado);
         municipio = $('#municipio').val();
-        alert(municipio);
+        //alert(municipio);
         calle1 = $('#calle1').val();
-        alert(calle1);
+        //alert(calle1);
         calle2 = $('#calle2').val();
-        alert(calle1);
+       // alert(calle1);
         colonia = $('#colonia').val();
-        alert(colonia);
+       // alert(colonia);
         delegacion = $('#delegacion').val();
-        alert(delegacion);
+        //alert(delegacion);
         cp = $('#cp').val();
-        alert(cp);
+        //alert(cp);
         tipodom = $('.d-domicilio').val();
-        alert(tipodom);
+        //alert(tipodom);
         tel = $('.requerido').val();
-        alert(tel);
+        //alert(tel);
         tipotel = $('.t-tipo').val();
-        alert(tipotel);
+        //alert(tipotel);
         formapago = $('#formapago').val();
-        alert(formapago);
+        //alert(formapago);
         msjeria = $('#pago').val();
-        alert(msjeria);
+        //alert(msjeria);
         coment = $('#coment').val();
-        alert(coment);
+        //alert(coment);
 
 
 

@@ -149,7 +149,6 @@ class ProductoController extends \BaseController {
             $t = 'tienda';
             $domi = DB::table('cliente')
             ->join('pedido', 'cliente.id', '=', 'pedido.cliente_id')
-            //->join('telefono_cliente', 'cliente.id', '=', 'telefono_cliente.cliente_id')
             ->where("pedido.id", $id)
             ->get();
         } else {
@@ -169,47 +168,12 @@ class ProductoController extends \BaseController {
             ->join('pedido','cliente.id', '=','pedido.cliente_id')
             ->where('pedido.id', $id)->get();
 
-        $id_user = Auth::user()->id;
-
-        $nivel = DB::table('cliente')
-            ->join('nivel_descuento', 'cliente.nivel_descuento_id', '=', 'nivel_descuento.id')
-            ->select('descripcion')
-            ->where('cliente.usuario_id', $id_user)
-            ->pluck('descripcion');
-
-        if($nivel == 'Retail'){
 
         $pro = DB::table('producto')
-                    ->join('familia', 'producto.familia_id', '=', 'familia.id')
-                    ->Join('descuento', 'familia.id', "=", 'descuento.familia_id')
                     ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
-                    ->join('producto_precio','pedido_detalle.producto_id', '=','producto_precio.producto_id')
                     ->where('pedido_detalle.pedido_id', $id)
-                    ->where('tipo', 1)
+                    ->select('clave', 'nombre', 'color', 'precio','iva0', 'cantidad', 'foto', 'num_pedimento')
                     ->get();
-
-        } else if($nivel == 'Mayorista') {
-
-            $pro = DB::table('producto')
-                    ->join('familia', 'producto.familia_id', '=', 'familia.id')
-                    ->Join('descuento', 'familia.id', "=", 'descuento.familia_id')
-                    ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
-                    ->join('producto_precio','pedido_detalle.producto_id', '=','producto_precio.producto_id')
-                    ->where('pedido_detalle.pedido_id', $id)
-                    ->where('tipo', 2)
-                    ->get();
-
-        } else if($nivel == 'Distribuidor'){
-
-            $pro = DB::table('producto')
-                    ->join('familia', 'producto.familia_id', '=', 'familia.id')
-                    ->Join('descuento', 'familia.id', "=", 'descuento.familia_id')
-                    ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
-                    ->join('producto_precio','pedido_detalle.producto_id', '=','producto_precio.producto_id')
-                    ->where('pedido_detalle.pedido_id', $id)
-                    ->where('tipo', 3)
-                    ->get();
-        }
 
 
 
@@ -347,7 +311,7 @@ public function getProducto(){
 
         $producto = DB::table('producto')
                 ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-                ->select('producto.id', 'nombre', 'color', 'foto', 'piezas_paquete', 'clave', 'precio')
+                ->select('producto.id', 'nombre', 'color', 'foto', 'piezas_paquete', 'clave', 'precio', 'tipo')
                 ->where('clave', $clave)
                 ->where('tipo', 1)
                 ->get();
@@ -374,7 +338,7 @@ public function getProducto(){
 
         $producto = DB::table('producto')
                  ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-                ->select('producto.id', 'nombre', 'color', 'foto', 'piezas_paquete', 'clave', 'precio')
+                ->select('producto.id', 'nombre', 'color', 'foto', 'piezas_paquete', 'clave', 'precio', 'tipo')
                 ->where('clave', $clave)
                 ->where('tipo', 2)
                 ->get();
@@ -401,7 +365,7 @@ public function getProducto(){
 
         $producto = DB::table('producto')
                  ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-                ->select('producto.id', 'nombre', 'color', 'foto', 'piezas_paquete', 'clave', 'precio')
+                ->select('producto.id', 'nombre', 'color', 'foto', 'piezas_paquete', 'clave', 'precio', 'tipo')
                 ->where('clave', $clave)
                 ->where('tipo', 3)
                 ->get();
@@ -693,10 +657,18 @@ public function getProducto(){
                                 ->where('num_pedimento', $num_p)
                                 ->pluck('id');
 
+                        //Consulta a la tabla precio
+                        $pre_id = DB::table('producto_precio')
+                                    ->where('producto_id', $idpro[$i]->idp)
+                                    ->where('tipo', $idpro[$i]->tipoprecio)
+                                    ->pluck('id');
+
                          //registramos en pedido detalle
                         $p_detalle = new PedidoDetalle;
                         $p_detalle->pedido_id = $pedido['id'];
                         $p_detalle->producto_id = $idpro[$i]->idp;
+                        $p_detalle->producto_precio_id = $pre_id;
+                        $p_detalle->precio = $idpro[$i]->preciop;
                         $p_detalle->num_pedimento = $num_p;
                         $p_detalle->cantidad = $y1;
                         $p_detalle->save();
@@ -787,18 +759,27 @@ public function getProducto(){
                                 ->where('num_pedimento', $num_p)
                                 ->pluck('id');
 
+                        //Consulta a la tabla precio
+                        $pre_id = DB::table('producto_precio')
+                                    ->where('producto_id', $idpro[$i]->idp)
+                                    ->where('tipo', $idpro[$i]->tipoprecio)
+                                    ->pluck('id');
+
+                         //registramos en pedido detalle
+                        $p_detalle = new PedidoDetalle;
+                        $p_detalle->pedido_id = $pedido['id'];
+                        $p_detalle->producto_id = $idpro[$i]->idp;
+                        $p_detalle->producto_precio_id = $pre_id;
+                        $p_detalle->precio = $idpro[$i]->preciop;
+                        $p_detalle->num_pedimento = $num_p;
+                        $p_detalle->cantidad = $y1;
+                        $p_detalle->save();
+
                         //descontamos la cantidad del inventario_detalle
                         $inv_d = InventarioDetalle::find($id_i_d);
                         $inv_d->cantidad -= $y_m;
                         $inv_d->save();
 
-                        //registramos en pedido detalle
-                        $p_detalle = new PedidoDetalle;
-                        $p_detalle->pedido_id = $pedido['id'];
-                        $p_detalle->producto_id = $idpro[$i]->idp;
-                        $p_detalle->num_pedimento = $num_p;
-                        $p_detalle->cantidad = $cant;
-                        $p_detalle->save();
 
                         //Borramos el producto
                         $inv_d = InventarioDetalle::find($id_i_d);
@@ -976,10 +957,18 @@ public function getProducto(){
                                 ->where('num_pedimento', $num_p)
                                 ->pluck('id');
 
+                         //Consulta a la tabla precio
+                        $pre_id = DB::table('producto_precio')
+                                    ->where('producto_id', $idpro[$i]->idp)
+                                    ->where('tipo', $idpro[$i]->tipoprecio)
+                                    ->pluck('id');
+
                          //registramos en pedido detalle
                         $p_detalle = new PedidoDetalle;
                         $p_detalle->pedido_id = $pedido['id'];
                         $p_detalle->producto_id = $idpro[$i]->idp;
+                        $p_detalle->producto_precio_id = $pre_id;
+                        $p_detalle->precio = $idpro[$i]->preciop;
                         $p_detalle->num_pedimento = $num_p;
                         $p_detalle->cantidad = $y1;
                         $p_detalle->save();
@@ -1070,18 +1059,27 @@ public function getProducto(){
                                 ->where('num_pedimento', $num_p)
                                 ->pluck('id');
 
+                        //Consulta a la tabla precio
+                        $pre_id = DB::table('producto_precio')
+                                    ->where('producto_id', $idpro[$i]->idp)
+                                    ->where('tipo', $idpro[$i]->tipoprecio)
+                                    ->pluck('id');
+
+                         //registramos en pedido detalle
+                        $p_detalle = new PedidoDetalle;
+                        $p_detalle->pedido_id = $pedido['id'];
+                        $p_detalle->producto_id = $idpro[$i]->idp;
+                        $p_detalle->producto_precio_id = $pre_id;
+                        $p_detalle->precio = $idpro[$i]->preciop;
+                        $p_detalle->num_pedimento = $num_p;
+                        $p_detalle->cantidad = $y1;
+                        $p_detalle->save();
+
                         //descontamos la cantidad del inventario_detalle
                         $inv_d = InventarioDetalle::find($id_i_d);
                         $inv_d->cantidad -= $y_m;
                         $inv_d->save();
 
-                        //registramos en pedido detalle
-                        $p_detalle = new PedidoDetalle;
-                        $p_detalle->pedido_id = $pedido['id'];
-                        $p_detalle->producto_id = $idpro[$i]->idp;
-                        $p_detalle->num_pedimento = $num_p;
-                        $p_detalle->cantidad = $cant;
-                        $p_detalle->save();
 
                         //Borramos el producto
                         $inv_d = InventarioDetalle::find($id_i_d);
@@ -1264,10 +1262,18 @@ public function getProducto(){
                                 ->where('num_pedimento', $num_p)
                                 ->pluck('id');
 
+                          //Consulta a la tabla precio
+                        $pre_id = DB::table('producto_precio')
+                                    ->where('producto_id', $idpro[$i]->idp)
+                                    ->where('tipo', $idpro[$i]->tipoprecio)
+                                    ->pluck('id');
+
                          //registramos en pedido detalle
                         $p_detalle = new PedidoDetalle;
                         $p_detalle->pedido_id = $pedido['id'];
                         $p_detalle->producto_id = $idpro[$i]->idp;
+                        $p_detalle->producto_precio_id = $pre_id;
+                        $p_detalle->precio = $idpro[$i]->preciop;
                         $p_detalle->num_pedimento = $num_p;
                         $p_detalle->cantidad = $y1;
                         $p_detalle->save();
@@ -1363,12 +1369,20 @@ public function getProducto(){
                         $inv_d->cantidad -= $y_m;
                         $inv_d->save();
 
-                        //registramos en pedido detalle
+                          //Consulta a la tabla precio
+                        $pre_id = DB::table('producto_precio')
+                                    ->where('producto_id', $idpro[$i]->idp)
+                                    ->where('tipo', $idpro[$i]->tipoprecio)
+                                    ->pluck('id');
+
+                         //registramos en pedido detalle
                         $p_detalle = new PedidoDetalle;
                         $p_detalle->pedido_id = $pedido['id'];
                         $p_detalle->producto_id = $idpro[$i]->idp;
+                        $p_detalle->producto_precio_id = $pre_id;
+                        $p_detalle->precio = $idpro[$i]->preciop;
                         $p_detalle->num_pedimento = $num_p;
-                        $p_detalle->cantidad = $cant;
+                        $p_detalle->cantidad = $y1;
                         $p_detalle->save();
 
                         //Borramos el producto
@@ -1534,10 +1548,18 @@ public function getProducto(){
                                 ->where('num_pedimento', $num_p)
                                 ->pluck('id');
 
+                          //Consulta a la tabla precio
+                        $pre_id = DB::table('producto_precio')
+                                    ->where('producto_id', $idpro[$i]->idp)
+                                    ->where('tipo', $idpro[$i]->tipoprecio)
+                                    ->pluck('id');
+
                          //registramos en pedido detalle
                         $p_detalle = new PedidoDetalle;
                         $p_detalle->pedido_id = $pedido['id'];
                         $p_detalle->producto_id = $idpro[$i]->idp;
+                        $p_detalle->producto_precio_id = $pre_id;
+                        $p_detalle->precio = $idpro[$i]->preciop;
                         $p_detalle->num_pedimento = $num_p;
                         $p_detalle->cantidad = $y1;
                         $p_detalle->save();
@@ -1633,12 +1655,20 @@ public function getProducto(){
                         $inv_d->cantidad -= $y_m;
                         $inv_d->save();
 
-                        //registramos en pedido detalle
+                          //Consulta a la tabla precio
+                        $pre_id = DB::table('producto_precio')
+                                    ->where('producto_id', $idpro[$i]->idp)
+                                    ->where('tipo', $idpro[$i]->tipoprecio)
+                                    ->pluck('id');
+
+                         //registramos en pedido detalle
                         $p_detalle = new PedidoDetalle;
                         $p_detalle->pedido_id = $pedido['id'];
                         $p_detalle->producto_id = $idpro[$i]->idp;
+                        $p_detalle->producto_precio_id = $pre_id;
+                        $p_detalle->precio = $idpro[$i]->preciop;
                         $p_detalle->num_pedimento = $num_p;
-                        $p_detalle->cantidad = $cant;
+                        $p_detalle->cantidad = $y1;
                         $p_detalle->save();
 
                         //Borramos el producto
@@ -2047,7 +2077,7 @@ public function getProducto(){
                     ->join('direccion_cliente','pedido.direccion_cliente_id', '=','direccion_cliente.id')
                     ->where('pedido.id', $id)
                     ->pluck('pedido.direccion_cliente_id');
-                    
+
              $nivel = DB::table('cliente')
                 ->join('nivel_descuento', 'cliente.nivel_descuento_id', '=', 'nivel_descuento.id')
                 ->select('descripcion')
@@ -2078,40 +2108,12 @@ public function getProducto(){
                     ->get();
 
 
-                    if($nivel == 'Retail'){
-
-                        $pro = DB::table('producto')
-                                    ->join('familia', 'producto.familia_id', '=', 'familia.id')
-                                    ->Join('descuento', 'familia.id', "=", 'descuento.familia_id')
-                                    ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
-                                    ->join('producto_precio','producto.id', '=','producto_precio.producto_id')
+                      $pro = DB::table('producto')
+                                  ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
                                     ->where('pedido_detalle.pedido_id', $id)
-                                    ->where('tipo', 1)
+                                    ->select('clave', 'nombre', 'color', 'pedido_detalle.precio','iva0', 'cantidad')
                                     ->get();
-
-                    } else if($nivel == 'Mayorista') {
-
-                        $pro = DB::table('producto')
-                                    ->join('familia', 'producto.familia_id', '=', 'familia.id')
-                                    ->Join('descuento', 'familia.id', "=", 'descuento.familia_id')
-                                    ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
-                                    ->join('producto_precio','producto.id', '=','producto_precio.producto_id')
-                                    ->where('pedido_detalle.pedido_id', $id)
-                                    ->where('tipo', 2)
-                                    ->get();
-
-                    } else if($nivel == 'Distribuidor'){
-
-                        $pro = DB::table('producto')
-                                    ->join('familia', 'producto.familia_id', '=', 'familia.id')
-                                    ->Join('descuento', 'familia.id', "=", 'descuento.familia_id')
-                                    ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
-                                    ->join('producto_precio','producto.id', '=','producto_precio.producto_id')
-                                    ->where('pedido_detalle.pedido_id', $id)
-                                    ->where('tipo', 3)
-                                    ->get();
-
-                    }
+ 
 
 
                 $pedimento = DB::table('pedido_detalle')
@@ -2126,11 +2128,11 @@ public function getProducto(){
                             ->get();
 
                 //Sacamos el total
-                $total = 0;
-                foreach($pro as $item){
-                    $m = $item->precio * $item->descuento;
-                    $total += ($item->precio - $m) * $item -> cantidad;
-                }
+               $total = 0;
+                    foreach($pro as $item){
+                       // $m = $item->precio * $item->descuento;
+                        $total += $item->precio * $item -> cantidad;
+                    }
 
 
 
@@ -2172,40 +2174,12 @@ public function getProducto(){
                         ->get();
 
 
-                    if($nivel == 'Retail'){
-
                         $pro = DB::table('producto')
-                                    ->join('familia', 'producto.familia_id', '=', 'familia.id')
-                                    ->Join('descuento', 'familia.id', "=", 'descuento.familia_id')
-                                    ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
-                                    ->join('producto_precio','producto.id', '=','producto_precio.producto_id')
+                                  ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
                                     ->where('pedido_detalle.pedido_id', $id)
-                                    ->where('tipo', 1)
+                                    ->select('clave', 'nombre', 'color', 'pedido_detalle.precio','iva0', 'cantidad')
                                     ->get();
 
-                    } else if($nivel == 'Mayorista') {
-
-                        $pro = DB::table('producto')
-                                    ->join('familia', 'producto.familia_id', '=', 'familia.id')
-                                    ->Join('descuento', 'familia.id', "=", 'descuento.familia_id')
-                                    ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
-                                    ->join('producto_precio','producto.id', '=','producto_precio.producto_id')
-                                    ->where('pedido_detalle.pedido_id', $id)
-                                    ->where('tipo', 2)
-                                    ->get();
-
-                    } else if($nivel == 'Distribuidor'){
-
-                        $pro = DB::table('producto')
-                                    ->join('familia', 'producto.familia_id', '=', 'familia.id')
-                                    ->Join('descuento', 'familia.id', "=", 'descuento.familia_id')
-                                    ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
-                                    ->join('producto_precio','producto.id', '=','producto_precio.producto_id')
-                                    ->where('pedido_detalle.pedido_id', $id)
-                                    ->where('tipo', 3)
-                                    ->get();
-
-                    }
 
                     $pedimento = DB::table('pedido_detalle')
                         ->join('producto', 'pedido_detalle.producto_id', '=', 'producto.id')
@@ -2221,8 +2195,8 @@ public function getProducto(){
                     //Sacamos el total
                     $total = 0;
                     foreach($pro as $item){
-                        $m = $item->precio * $item->descuento;
-                        $total += ($item->precio - $m) * $item -> cantidad;
+                       // $m = $item->precio * $item->descuento;
+                        $total += $item->precio * $item -> cantidad;
                     }
 
 

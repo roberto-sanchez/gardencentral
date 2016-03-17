@@ -353,7 +353,7 @@
                     <th>Precio</th>
                     <th>Iva</th>
                     <th>Cantidad</th>
-                  <!--  <th>Pedimento</th>-->
+                    <th>Pedimento</th>
                     <th>Foto</th>
                     <th>Total producto</th>
                   </tr>

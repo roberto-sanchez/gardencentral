@@ -97,8 +97,8 @@
                     <th>Nombre</th>
                     <th>Color</th>
                     <th>Precio</th>
-                    <th>Piezas por paquete</th>
-                    <th>Cantidad de paquetes</th>
+                    <th>Iva</th>
+                    <th>Cantidad</th>
                     <th>Foto</th>
                     <th>Total producto</th>
                   </tr>
@@ -532,17 +532,16 @@ $.ajax({
 
       pro = "";
   for(datos in p.pro){
-    e = accounting.formatMoney(p.pro[datos].precio_venta);
-    t = accounting.formatMoney(p.pro[datos].precio_venta);
+    f = (p.pro[datos].precio) * p.pro[datos].cantidad;
 
         pro += '<tr><td>'+p.pro[datos].clave+'</td>';
         pro += '<td>'+p.pro[datos].nombre+'</td>';
         pro += '<td>'+p.pro[datos].color+'</td>';
-        pro += '<td>'+e+'</td>';
-        pro += '<td>'+p.pro[datos].piezas_paquete+'</td>';
+        pro += '<td>'+accounting.formatMoney(p.pro[datos].precio)+'</td>';
+        pro += '<td>16%</td>';
         pro += '<td>'+p.pro[datos].cantidad+'</td>';
         pro += '<td><span class="img-p" id="'+p.pro[datos].nombre+'" data-id="'+p.pro[datos].foto+'" href="#verfotop" data-toggle="modal" alt="Foto del producto" title="Ver Foto del prodcto">Ver foto</span></td>';
-        pro += '<td class="t-pro" value="'+p.pro[datos].precio_venta * p.pro[datos].cantidad+'">'+accounting.formatMoney(p.pro[datos].precio_venta * p.pro[datos].cantidad)+'</td></tr>';
+        pro += '<td class="t-pro" value="'+f+'">'+accounting.formatMoney(f)+'</td></tr>';
       }
 
     tabla_d.append(pro);

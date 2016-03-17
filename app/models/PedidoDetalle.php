@@ -10,4 +10,8 @@ class PedidoDetalle extends Eloquent{
 	public function producto(){
 		return $this->belongsTo('Producto');
 	}
+
+	public function precioProducto(){
+		return $this->belongsTo('PrecioProducto');
+	}
 }

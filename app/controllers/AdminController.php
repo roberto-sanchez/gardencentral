@@ -279,10 +279,10 @@ class AdminController extends \BaseController {
 
 
     	$pro = DB::table('producto')
-    	            ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
-    	            ->join('producto_precio','producto.id', '=','producto_precio.producto_id')
-    	            //->select('producto.created_at','precio_venta','clave','nombre','color','piezas_paquete')
-    				->where('pedido_detalle.pedido_id', $id)->get();
+                    ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
+                    ->where('pedido_detalle.pedido_id', $id)
+                    ->select('clave', 'nombre', 'color', 'precio','iva0', 'cantidad', 'foto', 'num_pedimento')
+                    ->get();
 
     	$dpro = DB::table('pedido_detalle')
     	            ->join('producto','pedido_detalle.producto_id', '=','producto.id')

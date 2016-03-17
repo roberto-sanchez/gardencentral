@@ -76,7 +76,6 @@
                   <th>Color</th>
                   <th>Precio</th>
                   <th>Iva</th>
-                  <th>Piezas por paquete</th>
                   <th>Cantidad</th>
                   <th>Total producto</th>
                  </tr>
@@ -87,11 +86,10 @@
                    <td>{{ $item->clave }}</td>
                    <td>{{ $item->nombre }}</td>
                    <td>{{ $item->color }}</td>
-                   <td><?php $des = $item->precio * $item->descuento ?>${{ number_format($tpro = $item->precio - $des, 2) }}</td>
+                   <td>${{ number_format($item->precio, 2) }}</td>
                    <td>16%</td>
-                   <td>{{ $item->piezas_paquete }}</td>
                    <td>{{ $item->cantidad }}</td>
-                   <td>${{ number_format($sub = $tpro * $item->cantidad, 2) }}</td>
+                   <td>${{ number_format($item->precio * $item->cantidad, 2) }}</td>
                   </tr>
                </tbody>
               @endforeach
