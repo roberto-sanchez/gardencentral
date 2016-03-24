@@ -1089,7 +1089,6 @@ $(document).ready(function(){
     </div>
     
 </div>
-<div class='notifications top-right' data-html="true"></div>
 <!--::::::::::::::::::::::::::::: MODAL PARA LAS DIRECCIONES  :::::::::::::::::::::::::::::-->
 <div id="myModal" class="modal fade" tabindex="-1"  data-backdrop="static" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
   <div class="modal-dialog" >

@@ -2012,6 +2012,45 @@ label {
 
 /*------ Mis estilos--------------*/
 /***************************/
+/*-Modal cambiar la contraseña-*/
+
+.modal-c-pass{
+  margin:1em 1em .5em 1em;
+}
+
+.txt-act, .txt-nuv{
+  margin:0;
+  font-size:1.1em;
+}
+
+.input-pass{
+  margin-bottom:.2em;
+}
+
+.div-formPass1, .div-formPass2{
+  margin-bottom:.5em;
+}
+
+#password0, #formPass1, #formPass2{
+  border-radius:2px;
+}
+
+.spanPass1, .spanPass2{
+  margin:0;
+}
+
+.password-ac, .spanPass1Text, .spanPass2Text{
+  font-size:.9em;
+}
+
+.spanPass1, .spanPass2 {
+  margin-top:0;
+}
+
+.hi-ac, .hi-p1, .hi-p2{
+  visibility:hidden;
+}
+
 .alert-desc {
   border:1px solid white;
   border-radius:3px;
@@ -2040,12 +2079,101 @@ label {
   border:0;
 }
 
+
+/*-Texto que se muestra cuando el cliente no tiene ningun pedido*/
+.t-p-clientes{
+  margin:1em 0;
+}
+
+/*Tabla de los extras del pedido*/
+#add-extras{
+  font-size:12px;
+}
+
+.tab-extra{
+  display:none;
+}
+
+.ta-extra{
+  width:50%;
+}
+
+  .ta-extra thead tr{
+      font-size: .7em;
+  }
+
+
+  .ta-extra thead tr th{
+      text-align:center;
+
+  }
+
+  .add-ext{
+    display:none;
+  }
+
+/*-- Modal para agregar extras al pedido ---*/
+.body-extras{
+  margin:1em 2em;
+}
+
+.label-ext{
+  margin-bottom:0;
+}
+
+.agregar-ex{
+  width:70%;
+  display:block;
+}
+
+
+.thead-ext tr th{
+  font-size: .8em;
+  text-align:center;
+}
+
+.t-ext{
+  display:none;
+  width:70%!important;
+}
+
+#b-extra{
+ 
+}
+
+#b-extra tr{
+  text-align:center;
+  font-size: .7em;
+}
+
+#b-extra tr td{
+  padding:.5em 0;
+
+}
+
+.td-btn{
+  
+}
+
+
+
 /*---Estilos alerts flotantes---*/
 .b-exists{
   width:20%;
   margin:0 auto;
   float:left;
 }
+
+#body-extras tr{
+  font-size:.9em;
+}
+
+.extra-detalle{
+  margin-top:.8em;
+  margin-bottom:0;
+  font-weight: normal;
+}
+
 
 .alert-danger{
   background:#f9f2f4;
@@ -2073,6 +2201,7 @@ div.users{
 .container{
   width:100%;
 }
+
 
 
  /*---Modal ver foto del producto----*/
@@ -2380,9 +2509,14 @@ div.users{
 }
 
 /*---Panel para elegir domicilio----*/
+.infopago{
+  width:200px;
+}
+
 .infopago #formapago{
   text-align:center;
 }
+
 
 .alert-info{
     display:none;
@@ -2731,21 +2865,6 @@ footer p{
 }
 
 
-.content-ped{
-  width:100%;
-  margin-bottom:.5em;
-}
-
-.div_p_d{
-  width:30%;
-}
-
-.txt-ped-d{
-  margin:0;
-  font-size:1em;
-}
-
-
 /********Estilo para los enlaces activados*****************/
 .enlace-active{
   color:#64A9F7!important;
@@ -3048,7 +3167,44 @@ margin-bottom:.5em;
       .d-detallep .content-navp .navegacion-p li a:hover {
         color: #58A2F6; }
 .d-detallep .table-pd {
-  padding: 0 .3em 1em .3em; }
+  padding: 0 .3em 1em .3em; 
+  overflow-y:scroll;
+  max-height: 310px;
+}
+
+  .t-extra thead tr{
+      font-size: .7em;
+  }
+
+  .t-extra{
+    display:none;
+  }
+
+  .t-extra thead tr th{
+      text-align:center;
+
+  }
+
+  .ext-d{
+    margin:0;
+    font-weight:normal;
+    display:none;
+  }
+
+  .add-ext{
+    margin-top:.5em;
+    margin-bottom:.5em;
+  }
+
+  #body-extras tr {
+      font-size: .7em;
+      text-align:center;
+  }
+
+  .t-pre{
+    width:50%;
+  }
+
   .d-detallep .table-pd .td-pedido {
     width: 100%;
     margin: 0;
@@ -3264,14 +3420,6 @@ margin-bottom:.5em;
   .img-p:hover {
     color: #58A2F6; }
 
-/*----Modal para cambiar la contraseña del cliente----*/
-.modal-c-pass form{
-  padding:0 1em;
-}
-
-.modal-c-pass form input{
-  border-radius:3px;
-}
 
 
 /*-----***----terminos y condiciones----*********/
@@ -3867,6 +4015,54 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f74a00', end
   margin:0 auto;
   margin-bottom: 1em;
 }
+
+
+.data-inv table tbody tr{
+  text-align: center;
+  font-size: .9em;
+}
+
+.pro-foto{
+  cursor: pointer;
+  color: #337ab7;
+}
+
+/*--- Vista Movimientos -----*/
+.row-mov{
+  padding-top:1em;
+}
+
+.cantidades{
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-justify-content:space-around;
+      -ms-flex-pack:distribute;
+          justify-content:space-around;
+}
+
+.b-cant{
+  margin-top:.8em;
+}
+
+.actual-anterior{
+}
+
+.txt-ac-ant{
+  margin-bottom:0;
+}
+
+.spn-ac-ant, .spn-nueva{
+  font-size:1em;
+}
+
+.tex-produ{
+  margin:0;
+  margin-bottom: .5em;
+  font-size:1.1em;
+}
+
 
 /*--- Modal detalle del producto ---*/
 

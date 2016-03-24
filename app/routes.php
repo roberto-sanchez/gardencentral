@@ -35,6 +35,7 @@ Route::controller('agentes','AgentesController');
 
 //listar pedidos
 Route::get('pedidos/listarpedidos', 'AgentesController@listarpedidos');
+Route::get('pedidos/cantidadpedidos', 'AgentesController@cantidadpedidos');
 
 Route::delete('pedidos/eliminarpedido/{id}', 'AgentesController@destroy');
 
@@ -44,7 +45,10 @@ Route::get('pedidos/cambiarestatus', 'AgentesController@cambiarestatus');
 Route::POST('pedidos/infopedidos', 'AgentesController@infopedidos');
 Route::POST('contabilidad/verificarpassconta', 'AgentesController@verificarpassconta');
 Route::POST('pedidos/registrarlog', 'AgentesController@registrarlog'); 
-
+Route::get('pedidos/verextra', 'AgentesController@verextra');
+Route::POST('pedidos/actualizarextra', 'AgentesController@actualizarextra');
+Route::POST('pedidos/agregarextra', 'AgentesController@agregarextra');
+Route::POST('pedidos/eliminarextra', 'AgentesController@eliminarextra');
 
 
 //ruta para resetear la contraseña
@@ -65,6 +69,7 @@ Route::get('pedidos/vergrafica','AdminController@vergrafica');
 
 Route::get('consultas/inventario', 'AdminController@inventario');
 Route::get('consultas/pedidos', 'AdminController@pedidos');
+Route::get('consultas/movimientos', 'AdminController@movimientos');
 Route::get('consultas/listapedidos', 'AdminController@listapedidos');
 Route::get('consultas/listaagentes', 'AdminController@listaagentes');
 Route::get('consultas/listp', 'AdminController@listp');
@@ -76,7 +81,8 @@ Route::GET('consultas/verestatusadmin', 'AdminController@verestatusadmin');
 Route::GET('consultas/cambiarestatusadmin', 'AdminController@cambiarestatusadmin');
 Route::POST('consultas/verificarpassadmin', 'AdminController@verificarpassadmin');
 Route::GET('inventario/listarinventario', 'AdminController@listarinventario'); 
-Route::GET('paginas/agregarpagina', 'AdminController@agregarpagina'); 
+Route::GET('paginas/agregarpagina', 'AdminController@agregarpagina');
+Route::GET('movimientos/agregarmovimiento', 'AdminController@agregarmovimiento'); 
 Route::GET('notas/notas', 'AdminController@notas');
 Route::GET('notas/listarnotas', 'AdminController@listarnotas');
 Route::POST('notas/agregarnota', 'AdminController@agregarnota');
@@ -92,6 +98,12 @@ Route::GET('paginas/eliminarpagina', 'AdminController@eliminarpagina');
 Route::GET('paginas/editarpagina', 'AdminController@editarpagina');
 Route::POST('paginas/actualizarpagina', 'AdminController@actualizarpagina');
 Route::POST('paginas/usarpagina', 'AdminController@usarpagina'); 
+
+
+Route::GET('movimientos/listarm', 'AdminController@listarm');
+Route::GET('movimientos/verm', 'AdminController@verm');
+Route::POST('movimientos/nuevomovimiento', 'AdminController@nuevomovimiento'); 
+Route::GET('movimientos/vermovimientos', 'AdminController@vermovimientos');
 
 //Listar notas dependiendo de la vista
 Route::GET('notas/listnotas', 'AdminController@listnotas'); 
@@ -154,7 +166,6 @@ Route::bind('producto', function($clave){
 
 });
 
-
 //Agregar producto al carrito con sus paquetes
 Route::get('productos/add/{producto}/{quantity}','ProductoController@add');
 
@@ -166,6 +177,7 @@ Route::post('productos/delete/{producto}', 'ProductoController@delete');
 
 //Vaciar todo el contenido de el carrito
 Route::post('productos/vaciar', 'ProductoController@vaciar');
+
 
 //Rutas para verificar datos
 Route::post('verificar/getLoginUser','LoginController@getLoginUser');

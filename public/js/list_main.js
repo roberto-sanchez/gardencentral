@@ -1,6 +1,4 @@
 $(document).ready(function(){
-
-
     //Listar domicilios
      dom = $('#dom_c');
 
@@ -139,7 +137,6 @@ $(document).ready(function(){
                 url: "/productos/listnotas",
                 data:{seccion: seccion},
                 success: function (n) {
-                    console.log(n);
                     no = "";
                     for(datos in n.nota){
 
@@ -179,6 +176,106 @@ $(document).ready(function(){
         });
 
     });
+
+
+  //Validaciones al agregar un extra
+  $("#env-extras").click(function () {
+
+      if($("#txt-extra").val().length == 0){
+              $('.error-c').addClass('has-error has-feedback');
+              $('.icon-c').addClass('glyphicon glyphicon-remove form-control-feedback');
+              return false;
+
+      } else {
+          return true;
+      }
+});
+
+  $("#txt-extra").focus(function(){
+    $('.error-c').removeClass('has-error has-feedback');
+    $('.icon-c').removeClass('glyphicon glyphicon-remove form-control-feedback');
+
+  });
+
+
+$(document).on('click', '#can-extras', function(){
+  $("#txt-extra").val('');
+  $('.error-c').removeClass('has-error has-feedback');
+  $('.icon-c').removeClass('glyphicon glyphicon-remove form-control-feedback');
+
+});
+
+
+
+//Agregar extras
+$(document).on('click', '#env-extras', function(){
+  $('#add-extras').hide();
+  $('#add-extras').attr('data-id', '1');
+
+  extra = $('#txt-extra').val();
+  extrafila = extra.length;
+
+  clave = $('#inp-extras').val();
+  body = $('#b-extra');
+  fila = "";
+
+  fila += ' <tr id="fila_'+extrafila+'">'+
+            '<td class="text-clave">'+clave+'</td>'+
+            '<td class="text-contenido" id="cam_'+extrafila+'">'+extra+'</td>'+
+            '<td class="td-btn">'+
+               '<span id="'+extrafila+'" class="edit-extra btn btn-xs btn-info glyphicon glyphicon-edit" value="'+extra+'"></span>'
+            +'</td>'+
+            '<td>'+
+              '<span class="quitarextra btn btn-xs btn-danger glyphicon glyphicon-remove" value="'+extrafila+'"></span>'
+            '</td>'+
+           '</tr>';
+
+  body.append(fila);
+
+  $('.t-ext').show();
+
+  $('#txt-extra').val('');
+
+
+});
+
+
+//Eliminar extra
+$(document).on('click', '.quitarextra', function(){
+  $('#add-extras').attr('data-id', '0');
+  nombre = $(this).attr('value');
+  $('#add-extras').show();
+  $('.t-ext').hide();
+  $('#fila_'+nombre).remove();
+
+
+});
+
+//Editar extra
+$(document).on('click', '.edit-extra', function(){
+
+  extra = $(this).attr('value');
+  id = $(this).attr('id');
+  
+   $('#modalextraedit').modal({
+      show:'false',
+    });
+
+   $('#txt-extra-edit').text(extra);
+
+   $('#env-extras-act').attr('data-id', id);
+
+});
+
+
+$(document).on('click', '#env-extras-act', function(){
+  extraedit = $('#txt-extra-edit').val();
+  id = $(this).attr('data-id');
+  $('#cam_'+id).text(extraedit);
+});
+
+
+
 
 
 });/*Function ready*/

@@ -197,9 +197,10 @@ class AdminController extends \BaseController {
 
 	 public function listarinventario(){
 	       $i = DB::table('producto')
- 					->join('inventario','producto.id','=','inventario.producto_id')
-					->select('producto.id','clave','nombre','cantidad')
+ 					->join('inventario_detalle','producto.id','=','inventario_detalle.producto_id')
+					->select('producto.id','clave','nombre','cantidad', 'num_pedimento', 'inventario_detalle.created_at', 'foto')
 					 ->get();
+
 		 echo json_encode($i);
 	 }
 
@@ -212,7 +213,7 @@ class AdminController extends \BaseController {
 		    $p = DB::table('cliente')
 							->join('usuario','cliente.usuario_id','=','usuario.id')
 							->join('pedido','cliente.id','=','pedido.cliente_id')
-							->select('pedido.id','numero_cliente','nombre_cliente','paterno','agente_id', 'num_pedido','pedido.created_at','pedido.estatus')
+							->select('pedido.id','numero_cliente','nombre_cliente','paterno','agente_id', 'num_pedido','pedido.created_at','pedido.estatus', 'rol_id')
 							->orderBy('created_at','desc')
 							 ->get();
 
@@ -230,12 +231,21 @@ class AdminController extends \BaseController {
 	 }
 
 	 public function listaagentes(){
-		 $id = Input::get('id');
-		 $agente = DB::table('usuario')
-		 					->select('usuario')
-		 					->where('id',$id)
-							->get();
-		 	return Response::json(array('agente' => $agente));
+		 $id = Input::get('ida');
+
+		 
+
+		    $agente = DB::table('usuario')
+		    			 //->join('cliente', 'usuario.id', '=', 'cliente.agente_id')
+	 					 ->select('usuario.id', 'usuario')
+	 					->where('usuario.id',$id)
+						->get();
+
+		 	 return Response::json(array(
+		 	 	'agente' => $agente
+		 	 	));
+		 
+
 	 }
 
 	 public function dpedidos(){
@@ -942,6 +952,131 @@ public function entradas(){
 
 	}
 
+
+	public function agregarmovimiento(){
+		return View::make('admin/movimientos');
+	}
+
+	public function listarm(){
+		$m = DB::table('producto')
+			->join('inventario_detalle', 'producto.id', '=', 'inventario_detalle.producto_id')
+			->select('clave', 'nombre', 'num_pedimento', 'cantidad', 'inventario_detalle.created_at', 'inventario_detalle.id', 'inventario_detalle.producto_id')
+			->get();
+
+		echo json_encode($m);
+	}
+
+
+	public function verm(){
+		$id = Input::get('id');
+
+        $movimientos = DB::table('movimientos')
+                ->where('producto_id', $id)
+                ->get();
+
+        if(count($movimientos) == 0){
+            $movimientos = $id;
+
+            $n = 0;
+
+            return Response::json(array(
+                'n' => $n,
+                'movimientos' => $movimientos
+                ));
+
+        } else{
+            $n = 1;
+         return Response::json(array(
+            'n' => $n,
+            'movimientos' => $movimientos
+         ));
+
+        }
+	}
+
+
+	public function nuevomovimiento(){
+		$id = Input::get('id');
+		$pedimento = Input::get('pedimento');
+		$anterior = Input::get('anterior');
+		$nueva = Input::get('nueva');
+		$motivo = Input::get('motivo');
+
+		$user = Auth::user()->id;
+
+		//Registramos el movimiento
+		$mov = new Movimiento;
+		$mov->producto_id = $id;
+		$mov->usuario_id = $user;
+		$mov->num_pedimento = $pedimento;
+		$mov->cantidad_anterior = $anterior;
+		$mov->cantidad_nueva = $nueva;
+		$mov->comentarios = $motivo;
+		$mov->save();
+
+		//Actualizamos la cantidad del producto del inventario_detalle
+		$inv_d = DB::table('inventario_detalle')
+				->where('producto_id', $id)
+				->where('num_pedimento', $pedimento)
+				->pluck('cantidad');
+
+		$inv_id = DB::table('inventario_detalle')
+				->where('producto_id', $id)
+				->where('num_pedimento', $pedimento)
+				->pluck('id');
+
+		$inv = DB::table('inventario')
+				->where('producto_id', $id)
+				->pluck('id');
+
+		//comparamos las cantidades
+		if($inv_d < $nueva){
+			$diferencia = $nueva - $inv_d;
+			$new_inv_d = InventarioDetalle::find($inv_id);
+		    $new_inv_d->cantidad = $nueva;
+		    $new_inv_d->save();
+
+		    //le sumamos la diferencia al inventario
+		    $new_inv = Inventario::find($inv);
+		    $new_inv->cantidad += $diferencia;
+		    $new_inv->save();
+
+		} else if($inv_d > $nueva) {
+			$diferencia = $inv_d - $nueva;
+			$new_inv_d = InventarioDetalle::find($inv_id);
+		    $new_inv_d->cantidad = $nueva;
+		    $new_inv_d->save();
+
+		    //le restamos la diferencia al inventario
+		    $new_inv = Inventario::find($inv);
+		    $new_inv->cantidad -= $diferencia;
+		    $new_inv->save();
+		}
+
+		$i = DB::table('inventario_detalle')
+		    ->where('producto_id', $id)
+				->where('num_pedimento', $pedimento)
+			->select('id', 'producto_id', 'cantidad')
+			->first();
+
+
+		return Response::json($i);
+	}
+
+
+	public function movimientos(){
+		return View::make('admin/vermovimientos');
+	}
+
+	public function vermovimientos(){
+		$mo = DB::table('producto')
+			->join('movimientos', 'producto.id', '=', 'movimientos.producto_id')
+			->join('usuario', 'movimientos.usuario_id', '=', 'usuario.id')
+			->select('usuario', 'nombre', 'num_pedimento', 'cantidad_anterior', 'cantidad_nueva', 'comentarios', 'movimientos.created_at')
+			->get();
+
+		echo json_encode($mo);
+	}
 
 
 	public function notas(){

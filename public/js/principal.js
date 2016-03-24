@@ -1,6 +1,5 @@
 $(document).ready(function () {
 
-      
 
       //Detalle del pedido del cliente
     $(document).on('click', '#c-estatus', function(){
@@ -18,7 +17,6 @@ $(document).ready(function () {
                 url: "/productos/detalledelpedido",
                 data: {id: id},
                 success: function (p) {
-                  console.log(p);
                   if(p.t == 'tienda'){
                       $('#sindomi').addClass('sindomi');
                       $('.pc_domiclio').hide();
@@ -56,34 +54,28 @@ $(document).ready(function () {
                         $('.c_observaciones').text(p.ped[0].observaciones);
                    }
                   }
-
-
+                  
+                  idp = p.ped[0].id;
                 pro = "";
                 for(datos in p.pro){
                  // des = p.pro[datos].precio * p.pro[datos].descuento;
                  // e = accounting.formatMoney(p.pro[datos].precio - des);
                   f = (p.pro[datos].precio) * p.pro[datos].cantidad;
                  // t = accounting.formatMoney(p.pro[datos].precio);
-                      if(p.pro[datos].clave){
-                        console.log('solo hay un productp');
-                      } else {
-                        console.log('hay mas de un producto con esa clave');
-                      }
                       pro += '<tr><td>'+p.pro[datos].clave+'</td>';
                       pro += '<td>'+p.pro[datos].nombre+'</td>';
                       pro += '<td>'+p.pro[datos].color+'</td>';
                       pro += '<td>'+accounting.formatMoney(p.pro[datos].precio)+'</td>';
                       pro += '<td>16%</td>';
-                      pro += '<td>'+p.pro[datos].cantidad+'</td>';
-                      pro += '<td>pedimento</td>';
-                    /*  pro += '<td>'+
-                      '<small>'+p.pedimento[datos].num_pedimento+' - '+p.pro[datos].cantidad+'</small>'+
-                      '</td>';*/
+                      pro += '<td id="cant_'+p.pro[datos].pedido_id+'">'+p.pro[datos].cantidad+'</td>';
+                      pro += '<td>'+p.pro[datos].num_pedimento+'</td>';
                       pro += '<td><span class="img-p" id="'+p.pro[datos].nombre+'" data-id="'+p.pro[datos].foto+'" href="#verfotop" data-toggle="modal" alt="Foto del producto" title="Ver Foto del prodcto">Ver foto</span></td>';
                       pro += '<td class="t-pro" value="'+f+'">'+accounting.formatMoney(f)+'</td></tr>';
+
                     }
 
                   t_deatelle.append(pro);
+
 
                   resultado=0;
                   $('.detail-t tbody tr').each(function(){
@@ -97,18 +89,6 @@ $(document).ready(function () {
                   $('.sub-iva').html(accounting.formatMoney(iva = resultado * 0.16));
                   $('.total-p').html(accounting.formatMoney(resultado += iva));
 
-                  //Listamos los pedimentos
-                   pedimento = $('#body-ped');
-                   ped = "";
-
-                for(datos in p.pedimento){
-
-                      ped += '<tr><td>'+p.pedimento[datos].clave+'</td>';
-                      ped += '<td>'+p.pedimento[datos].num_pedimento+'</td>';
-                      ped += '<td>'+p.pedimento[datos].cantidad+'</td></tr>';
-                    }
-
-                  pedimento .append(ped);
 
                 },
 
@@ -118,6 +98,45 @@ $(document).ready(function () {
            });
    
        });
+
+
+    $(document).on('click', '#c-estatus', function(){
+      idp = $(this).attr('data-id');
+
+      //Extras
+        $.ajax({
+          type: "GET",
+          url: "/pedidos/verextra",
+          data: {idp: idp},
+          success: function( e ){
+                    if(e.n == 0){
+
+                  } else {
+                    $('.tab-extra').show();
+                    body = $('#body-extras');
+                    fila = "";
+                    for(datos in e.extra){
+
+                      fila += '<tr><td>'+e.extra[datos].clave+'</td>';
+                      fila += '<td>'+e.extra[datos].descripcion+'</td>';
+                      fila += '<td class="total_'+e.extra[datos].total+'">'+accounting.formatMoney(e.extra[datos].total)+'</td></tr>';
+                    }
+
+                    body.append(fila);
+                    
+                  $('.total_0').text('Pendiente');
+                  $('.total_0').addClass('text-warning');
+
+                  }
+
+               }
+
+       });
+
+
+    });
+
+
 
     $('.table-cli').hide();
 
@@ -151,20 +170,19 @@ $(document).ready(function () {
 
       //Actualizaciones de contenidos de la pagina
     $(document).on('click', '#con-pd', function(){
+         $("#detail-dp").html('');
+         $('.tab-extra').hide();
+         $('#body-extras').html('');
          $('.table-cli').hide();
-         $(".table-detail").load(location.href+" .table-detail>*",""); 
 
     });
 
     $(document).on('click', '.close-mp', function(){
+      $("#detail-dp").html('');
+      $('.tab-extra').hide(); 
+      $('#body-extras').html('');
       $('.table-cli').hide();
-       $(".table-detail").load(location.href+" .table-detail>*","");  
     });
-
-
-
-
-
 
 
 
@@ -277,7 +295,7 @@ $(document).on('click', '.idProd2', function(){
 
         if ($('.idProd').val() == '') {
 
-            alertas('error',"Ingrese la cantidad de paquetes.");
+            alertas('error',"Ingrese la cantidad de productos.");
             return false;
 
         }
@@ -489,12 +507,11 @@ $(document).on('click', '.verfotop', function(){
             error: function () {
                 alert("failure");
             }
-          });
+          }); 
 
 
         });
 
-      $('.t-no-c').hide();
       //SEleccionar el tipo de envio
       $('.selectTipo', this).click(function(){
           tipo = $(this).val();
@@ -528,18 +545,79 @@ $(document).on('click', '.verfotop', function(){
           }    
       });
 
+
+
+    //comprobamos que el cliente seleccione la forma de pago
+    if($('#formapago').val() == null){
+        $('.text-pago').show();
+        $('.confirm-p').addClass('disabled');
+
+    } else {
+        $('.confirm-p').removeClass('disabled');
+    }
+
+    $('#formapago').click(function(){
+        id = $(this).val();
+        forma = $('#text_'+id).text();
+        $('.f-p').attr('value',id);
+        $('.f-t').attr('value',forma);
+
+    });
+
+
+
+      //Generar pedido para recoger en la tienda
       $(document).on('click', '#generar-tienda', function(){
-           if($('.formapago').val() != null){
-              $('#p-s-dom').removeClass('disabled');
-              $('.t-error-pago').hide();
-              $('.t-exsts').show();
-              $('.t-cancel').hide();
-              $('.t-no-c').show();
+           if($('#formapago').val() != null){
+             $('#confirmpedido').modal({
+              show:'false',
+             });
+          } else {
+            
+            alertas('error',"Seleccione la forma de pago.");
+
           }
 
       });
 
    
+        //generar pedido con domicilio existente
+        $('#conf-p1').click(function(){
+            if($('#formapago').val() != null){
+                //$('.confirm-d').removeClass('disabled');
+                //$('.text-exito').show();
+                //$('.text-pago').hide();
+            $('#confirmarpedido').modal({
+              show:'false',
+             });
+            } else {
+              alertas('error',"Seleccione la forma de pago.");
+            }
+        });
+
+
+  $('.btn-conf-1').hide();
+
+  $('#gen-c').click(function(){
+
+
+    alertab('error',"Elige un domicilio!");
+
+
+  });
+
+
+  $('#conf-p').click(function(){
+
+    if($('#formapago').val() == null){
+
+    alertas('error',"Seleccione la forma de pago.");
+    return false;
+
+    }
+
+
+  });
 
     //Cargar municipios de el estado a editar
     $("#listestados").change(function (event) {
@@ -681,9 +759,6 @@ $(document).on('click', '.verfotop', function(){
 
 
 
-
-
-
 /*Verificar disponibilidaddeñ telefono*/
  /*$('#teledit').keyup( function(){
     if($('#teledit').val() != ""){
@@ -782,43 +857,6 @@ $(document).on('click', '.verfotop', function(){
 
 
 
-    //comprobamos que el cliente seleccione la forma de pago
-    if($('.formapago').val() == null){
-        $('.text-exito').hide();
-        $('.text-pago').show();
-        $('.confirm-p').addClass('disabled');
-        $('.confirm-d').addClass('disabled');
-        $('.c-no').hide();
-        $('.c-pe').show();
-        $('.regis-exixts-t').addClass('disabled');
-        $('#p-s-dom').addClass('disabled');
-        $('.t-exsts').hide();
-
-    } else {
-        $('.regis-exixts-t').removeClass('disabled');
-        $('.confirm-p').removeClass('disabled');
-    }
-
-    $('.formapago').click(function(){
-        id = $(this).val();
-        forma = $('#text_'+id).text();
-        $('.f-p').attr('value',id);
-        $('.f-t').attr('value',forma);
-
-    });
-
-        //comprobamos que se seleccione la forma de pago al generar el pedido
-        $('#conf-p1').click(function(){
-            if($('.formapago').val() != null){
-                $('.confirm-d').removeClass('disabled');
-                $('.text-exito').show();
-                $('.text-pago').hide();
-            }
-        });
-
-
-
-
     //Eliminar domicilio
   $(document).on('click','#btn_Delete', function(){
 
@@ -847,24 +885,10 @@ $(document).on('click', '.verfotop', function(){
 
 });
 
-  $('.btn-conf-1').hide();
-
-  $('#gen-c').click(function(){
-     noexiste = [[ 'top-right', 'danger',  "Elige un domicilio!" ]];
-    message = noexiste[Math.floor(Math.random() * noexiste.length)];
-
-    $('.' + message[0]).notify({
-        message: { text: message[2] },
-        type: message[1]
-    }).show();
-
-
-
-  });
 
   $('.cerrar-divalert').click(function(){
     $('.mialert4').hide();
-  });
+  }); 
 
    //Usar un domicilio existente
   $(document).on('click','.usar-d', function(){
@@ -1614,6 +1638,7 @@ $('#p-s-dom').click(function(){
   cotizar = $('#inpEnvio').val();
   formapago = $('#formapago').val();
   msjeria = $('#pago').val();
+  r_extra = $('#add-extras').attr('data-id');
 
    var DATA = [];
 
@@ -1631,14 +1656,27 @@ $('#p-s-dom').click(function(){
 
         aInfo   = JSON.stringify(DATA);
 
+        //Extras
+        var DATA2 = [];
+
+        $('.t-ext tbody tr').each(function(){
+
+            claveextra  = $(this).find("td[class*='text-clave']").text();
+            contenido  = $(this).find("td[class*='text-contenido']").text();
+            extra = {claveextra, contenido};
+
+            DATA2.push(extra);
+        })
+
+        nExtra = JSON.stringify(DATA2);
+
         id = 0;
-        //formapago = $('#formapago').val();
-       // msjeria = $('#pago').val();
+        
 
         $.ajax({
             type: "POST",
             url: "productos/pedidoexistente/"+id,
-            data: {aInfo: aInfo, formapago: formapago, msjeria: msjeria, cotizar: cotizar},
+            data: {aInfo: aInfo, nExtra: nExtra, formapago: formapago, msjeria: msjeria, cotizar: cotizar, r_extra: r_extra},
             success: function (iddom) {
                 console.log(iddom);
                 window.location.href = 'productos/datosdelpedido/' + iddom;
@@ -1678,15 +1716,30 @@ $('#p-s-dom').click(function(){
         //convertiremos el array en json para evitar cualquier incidente con compativilidades.
         aInfo   = JSON.stringify(DATA);
 
+        //Extras
+        var DATA2 = [];
+
+        $('.t-ext tbody tr').each(function(){
+
+            claveextra  = $(this).find("td[class*='text-clave']").text();
+            contenido  = $(this).find("td[class*='text-contenido']").text();
+            extra = {claveextra, contenido};
+
+            DATA2.push(extra);
+        })
+
+        nExtra = JSON.stringify(DATA2);
+
         id = $(this).attr('id');
         cotizar = $('#inpEnvio').val();
         formapago = $('#formapago').val();
         msjeria = $('#pago').val();
+        r_extra = $('#add-extras').attr('data-id');
 
         $.ajax({
             type: "POST", //metodo
             url: "productos/pedidoexistente/"+id,
-            data: {aInfo: aInfo, formapago: formapago, msjeria: msjeria, cotizar: cotizar},
+            data: {aInfo: aInfo, nExtra: nExtra, formapago: formapago, msjeria: msjeria, cotizar: cotizar, r_extra: r_extra},
             success: function (iddom) {
 
                 //redirigimosa¿ al detalle del pedido y le pasamos el id del domi
@@ -1720,6 +1773,21 @@ $('#p-s-dom').click(function(){
             DATA.push(item);
         })
 
+
+        //Extras
+        var DATA2 = [];
+
+        $('.t-ext tbody tr').each(function(){
+
+            claveextra  = $(this).find("td[class*='text-clave']").text();
+            contenido  = $(this).find("td[class*='text-contenido']").text();
+            extra = {claveextra, contenido};
+
+            DATA2.push(extra);
+        })
+
+        nExtra = JSON.stringify(DATA2);
+
         //convertiremos el array en json para evitar cualquier incidente con compativilidades.
         aInfo   = JSON.stringify(DATA);
         cotizar = $('#inpEnvio').val();
@@ -1736,11 +1804,12 @@ $('#p-s-dom').click(function(){
         formapago = $('#formapago').val();
         msjeria = $('#pago').val();
         coment = $('#coment').val();
+        r_extra = $('#add-extras').attr('data-id');
 
        $.ajax({
             type: "POST", //metodo
             url: "productos/nuevopedido/"+id,
-            data: {aInfo: aInfo, cotizar: cotizar, pais: pais, estado: estado, municipio: municipio, calle1: calle1, calle2: calle2, colonia: colonia, delegacion: delegacion, cp: cp, tipodom: tipodom, formapago: formapago, msjeria: msjeria, coment: coment},
+            data: {aInfo: aInfo, nExtra: nExtra, cotizar: cotizar, pais: pais, estado: estado, municipio: municipio, calle1: calle1, calle2: calle2, colonia: colonia, delegacion: delegacion, cp: cp, tipodom: tipodom, formapago: formapago, msjeria: msjeria, coment: coment, r_extra: r_extra},
             success: function (iddom) {
 
                 //redirigimosa¿ al detalle del pedido y le pasamos el id del domi
@@ -1774,6 +1843,20 @@ $('#p-s-dom').click(function(){
             // hacemos un .push() para agregarlos a nuestro array principal "DATA".
             DATA.push(item);
         })
+
+        //Extras
+        var DATA2 = [];
+
+        $('.t-ext tbody tr').each(function(){
+
+            claveextra  = $(this).find("td[class*='text-clave']").text();
+            contenido  = $(this).find("td[class*='text-contenido']").text();
+            extra = {claveextra, contenido};
+
+            DATA2.push(extra);
+        })
+
+        nExtra = JSON.stringify(DATA2);
 
         //convertiremos el array en json para evitar cualquier incidente con compativilidades.
         aInfo   = JSON.stringify(DATA);
@@ -1811,13 +1894,13 @@ $('#p-s-dom').click(function(){
         //alert(msjeria);
         coment = $('#coment').val();
         //alert(coment);
-
+        r_extra = $('#add-extras').attr('data-id');
 
 
         $.ajax({
             type: "POST", //metodo
             url: "productos/nuevopedido/"+id,
-            data: {aInfo: aInfo, cotizar: cotizar, pais: pais, estado: estado, municipio: municipio, calle1: calle1, calle2: calle2, colonia: colonia, delegacion: delegacion, cp: cp, tipodom: tipodom, tel: tel, tipotel: tipotel, formapago: formapago, msjeria: msjeria, coment: coment},
+            data: {aInfo: aInfo, nExtra: nExtra, cotizar: cotizar, pais: pais, estado: estado, municipio: municipio, calle1: calle1, calle2: calle2, colonia: colonia, delegacion: delegacion, cp: cp, tipodom: tipodom, tel: tel, tipotel: tipotel, formapago: formapago, msjeria: msjeria, coment: coment, r_extra: r_extra},
             success: function (iddom) {
 
                 //redirigimosa¿ al detalle del pedido y le pasamos el id del domi
@@ -1843,3 +1926,14 @@ function alertas(tipo,mensaje){
       type: tipo
     }).show();
   }
+
+
+function alertab(tipo,mensaje){
+    $('.bottom-right').notify({
+      message: {text: decodeURIComponent(mensaje)},
+      type: tipo
+    }).show();
+  }
+
+
+//alertas('error',"Seleccione la forma de pago.");

@@ -44,7 +44,8 @@ header .info {
   text-align: center;
   color: #6b6252;
   margin-top: 1em;
-  margin-bottom: .5em; }
+  margin-bottom: .5em;
+  font-size: 1.2em; }
 
 .datos {
   border: 1px solid #DDDDDD;
@@ -59,9 +60,10 @@ header .info {
     color: black;
     font-weight: normal; }
   .datos tbody tr td {
+    padding: .4em .5em;
     background: #fff;
     text-align: center;
-    font-size: .9em;
+    font-size: .8em;
     font-weight: normal;
     border: 0;
     margin: 0; }
@@ -79,9 +81,10 @@ header .info {
     font-weight: normal;
     text-align: center; }
   .table tbody tr td {
+    padding: .2em .5em;
     background: #fff;
     text-align: center;
-    font-size: .9em;
+    font-size: .8em;
     font-weight: normal;
     border: 0;
     margin: 0; }
@@ -98,8 +101,9 @@ header .info {
     padding: .2em .2em .1em .2em;
     text-align: right; }
     .div-total .t-total tr td {
+      padding: .2em .5em;
       background: #fff;
-      font-size: .9em;
+      font-size: .8em;
       padding: 0 .6em; }
 
 .num_p_d {
@@ -119,5 +123,14 @@ header .info {
       color: #6b6252;
       margin-top: 1em;
       margin-bottom: .1em; }
+
+.text-extra {
+  color: #6b6252;
+  margin-top: 3em;
+  margin-bottom: .5em;
+  font-size: 1.2em; }
+
+.t-extra {
+  width: 70%; }
 
 /*# sourceMappingURL=pdf.css.map */

@@ -196,6 +196,7 @@
             <h3 class="t-pedidos"><span class="glyphicon glyphicon-search"></span>Consultas</h3>
             <ul>
                 <li><a href="{{ URL::to('/consultas/pedidos') }}">Pedidos</a></li>
+                <li><a href="{{ URL::to('/consultas/movimientos') }}">Movimientos</a></li>
             </ul>
         </li>
         <li class="paginas">
@@ -205,11 +206,10 @@
                 <li><a href="{{ URL::to('/notas/notas') }}">Notas</a></li>
             </ul>
         </li>
-        <li>
-            <h3><span class="glyphicon glyphicon-random"></span>Movimientos</h3>
+        <li class="movimientos">
+            <h3 class="t-movimientos"><span class="glyphicon glyphicon-random"></span>Movimientos</h3>
             <ul>
-                <li><a href="#">Enlace 2</a></li>
-                <li><a href="#">Enlace 4</a></li>
+                <li><a href="{{ URL::to('/movimientos/agregarmovimiento') }}">Agregar</a></li>
             </ul>
         </li>
         <li class="addentrada">
@@ -252,37 +252,6 @@
       </p>
    </footer>
 
-   <!-- Modal para cambiar la contraseña -->
-   <div id="cambiarpass" class="modal fade">
-       <div class="modal-dialog">
-           <div class="modal-content">
-               <div class="modal-header">
-                   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                   <h2 class="modal-title text-danger"><span class="glyphicon glyphicon-lock"></span> Cambia tu contraseña</h2>
-               </div>
-               <div class="modal-body modal-c-pass">
-                   {{ Form::open(array('url' => 'users/cambiarpass')) }}
-                  <h4 class="text-info">Contraseña Actual</h4>
-                  <div class=" form-group">
-                     {{ Form::password('password0', array('class' => 'form-control', 'placeholder' => 'Contraseña actual', 'required')) }}
-                   </div>
-                   <h4 class="text-info">Nueva Contraseña</h4>
-                   <div class=" form-group">
-                     {{ Form::password('password1', array('class' => 'form-control', 'placeholder' => 'Nueva contraseña', 'required')) }}
-                   </div>
-                   <div class=" form-group">
-                     {{ Form::password('password2', array('class' => 'form-control', 'placeholder' => 'Repetir la nueva contraseña', 'required')) }}
-                   </div>
-               </div>
-               <div class="modal-footer">
-                   <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                   {{ Form::submit('Guardar', array('class' => 'btn btn-primary', 'id' => 'registrar')) }}
-
-                 {{ Form::close() }}
-               </div>
-           </div>
-       </div>
-   </div>
 
   <!--Modal para listar los pedidos del usuario-->
     <div id="pedidos" class=" modal fade" data-keyboard="false" data-backdrop="static">
@@ -293,7 +262,7 @@
             <h2 class="modal-title text-center txt-p"><span class="glyphicon glyphicon-shopping-cart"></span> Pedidos</h2>
           </div>
           <div class="modal-body body-d-cli">
-          <h2 class="t-p-clientes"></h2>
+          <h2 class="t-p-clientes text-info"</h2>
             <div class="pedidosCliente">
                 <div class="table-pd">
                   <table id="list_p_" class="table table-striped table-hover">
@@ -390,26 +359,20 @@
                     </td>
                   </tr>
                 </table>
-             </div>
-              
-      <div class="content-ped">      
-
-        <div class="div_p_d">
-          <h2 class="text-center text-info txt-ped-d">Pedimentos</h2>
-          <table class="table table-striped table-condensed table-hover table-bordered table-detalle">
-           <thead>
-             <tr>
+             </div>  
+            <h3 class="text-info ext-d">Extras: </h3>
+            <table class="table ta-extra tab-extra">
+             <thead>
+               <th>Clave</th>
                <th>Producto</th>
-               <th>Pedimento</th>
-               <th>Cantidad</th>
-             </tr>
-           </thead>
-            <tbody id="body-ped"></tbody>
-          </table>
-        </div>
-      </div>
+               <th>Total</th>  
+             </thead>
+             <tbody id="body-extras"></tbody>
+           </table>
 
            </div>
+
+
 
 
            <div class="table-cli">
@@ -449,6 +412,9 @@
       </div>
     </div>
 
+
+  <div class="notifications top-right" data-html="true"></div>
+
             <!--Modal para ver la foto del pedido-->
     <div id="verfotop" class="modal fade">
       <div class="modal-dialog">
@@ -472,25 +438,62 @@
       </div>
     </div>
 
+
+   <!-- Modal para cambiar la contraseña -->
+   <div id="cambiarpass" class="modal fade">
+       <div class="modal-dialog">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                   <h2 class="modal-title text-danger"><span class="glyphicon glyphicon-lock"></span> Cambia tu contraseña</h2>
+               </div>
+               <div class="modal-body modal-c-pass">
+                  <h4 class="text-info txt-act">Contraseña Actual</h4>
+                  <div class="form-group input-pass has-feedback">
+                     {{ Form::password('password0', array('class' => 'form-control', 'placeholder' => 'Contraseña actual', 'required', 'id' => 'password0')) }}
+                     <span class="add-gly"></span>
+                     <span class="text-success password-ac hi-ac" id="msgPassB">verificando...</span>
+                   </div>
+                   <h4 class="text-info txt-nuv">Nueva Contraseña</h4>
+                   <div class=" form-group div-formPass1 has-feedback">
+                     {{ Form::password('password1', array('class' => 'form-control formPass1', 'placeholder' => 'Nueva contraseña', 'required', 'id' => 'formPass1')) }}
+                     <span class=" spanPass1 help-block" ></span>
+                     <span class=" spanPass1Text text-danger hi-p1" >Hola1</span>
+                   </div>
+                   <div class=" form-group div-formPass2 has-feedback">
+                     {{ Form::password('password2', array('class' => 'form-control formPass2', 'placeholder' => 'Repite la nueva contraseña', 'required', 'id' => 'formPass2')) }}
+                     <span class=" spanPass2 help-block" ></span>
+                     <span class="r_pass spanPass2Text text-danger hi-p2" >Hola2</span>
+                   </div>
+               </div>
+               <div class="modal-footer">
+                   <button type="button" class="btn btn-danger" id="n-registrar" data-dismiss="modal">Cancelar</button>
+                   <span class="btn btn-primary" id="registrar" data-dismiss="modal">Guardar</span>
+
+               </div>
+           </div>
+       </div>
+   </div>
+
+
   <!-- Modal II  para confirmar cambio de contraseña -->
-<!--  <div id="confirmarpass" class="modal fade">
+<div id="confirmarpass" class="modal fade">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header ">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title text-danger">Confirmar</h4>
+        <h4 class="modal-title text-danger text-center">Confirmar cambio de contraseña.</h4>
       </div>
       <div class="modal-body">
-        <p class="text-primary">¿Esta seguro que desea cambiar su contraseña?</p>
-      <span class="label label-danger esta center"></span>
+        <h2 class="text-primary text-center t-exsts">¿Esta seguro que desea cambiar su contraseña?</h2>
       </div>
-      <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-          <a href="javascript:compararPasswords();" class="btn btn-primary">Guardar</a>
+      <div class="modal-footer modal-confirmar">
+          <button id="no-savep" type="button" class="btn btn-danger confirm" data-dismiss="modal">No</button>
+          <span id="save-nuevap" class="btn btn-primary confirm" data-dismiss="modal">Si</span>
       </div>
     </div>
   </div>
-</div> -->
+</div> 
 
 
 
@@ -502,6 +505,232 @@
         $(function() {
             $('.demo-cancel-click').click(function(){return false;});
         });
+
+
+$(document).ready(function(){
+
+
+
+  //Validamos los campos de la contraseña
+  $("#registrar").click(function () {
+
+    if($("#password0").val().length == 0){
+            $('.input-pass').addClass('has-error');
+            $('.add-gly').addClass('glyphicon glyphicon-remove form-control-feedback');
+            return false;
+
+    }  else if($("#formPass1").val() <= 5){
+            $('.div-formPass1').addClass('has-error');
+            $('.spanPass1').addClass('glyphicon glyphicon-remove form-control-feedback');
+            return false;
+
+    } else if($("#formPass2").val() <= 5){
+            $('.tel1').addClass('has-error');
+            $('.div-formPass2').addClass('has-error');
+            $('.spanPass2').addClass('glyphicon glyphicon-remove form-control-feedback');
+            return false;
+    } else {
+        return true;
+    }
+
+});
+
+
+  $('#password0').keyup( function(){
+    if($('#password0').val()!= ""){
+         pass = $('#password0').val().trim();
+
+        $.ajax({
+            type: "POST",
+            url: "/consultas/verificarpassadmin",
+             data: {pass: pass },
+             beforeSend: function(){
+              $('#msgPassB').removeClass('hi-ac');
+            },
+            success: function( u ){
+                 if (u == "No coinciden") {
+                     $('.add-gly').addClass('glyphicon glyphicon-remove form-control-feedback');
+                     $('.input-pass').addClass('has-error');
+                     $('#msgPassB').removeClass('text-success');
+                     $('#msgPassB').addClass('text-danger');
+                     $('#msgPassB').html("Tu contraseña es incorrecta.");
+                     $('#registrar').addClass('disabled');
+                    } else {
+                      $('.input-pass ').removeClass('has-error');
+                      $('.add-gly').removeClass('glyphicon-remove');
+                      $('.input-pass ').addClass('has-success');
+                      $('.add-gly').addClass('glyphicon glyphicon-ok form-control-feedback');
+                      $('#msgPassB').addClass('password-ac');
+                      $('#c-pass').removeClass('disabled');
+                      $('#msgPassB').addClass('hi-ac');
+                      $('#registrar').removeClass('disabled');
+                }
+                    
+
+            }
+        });
+     }
+});
+
+
+
+    //validamos la primer contraseña
+    $('.formPass1').keyup(function(){
+        valor1 = $('#formPass1').val();
+        valor2 = $('#formPass2').val();
+
+    if(valor1.indexOf(' ') >= 0){
+          $('.div-formPass1').addClass('has-error');
+          $('.spanPass1').addClass('glyphicon glyphicon-remove form-control-feedback');
+          $('.spanPass1Text').removeClass('hi-p1');
+          $('.spanPass1Text').text('No puedes dejar espacios en blanco');
+         }
+      else if(valor1.length <= 5 ){
+          $('.div-formPass1').addClass('has-error');
+          $('.spanPass1').addClass('glyphicon glyphicon-remove form-control-feedback');
+          $('.spanPass1Text').removeClass('hi-p1');
+          $('.spanPass1Text').text('Debe tener mas de 5 caracteres');
+         }
+
+     else {
+      $('.div-formPass1').removeClass('has-error');
+      $('.spanPass1').removeClass('glyphicon-remove');
+      $('.spanPass1').addClass('glyphicon glyphicon-ok form-control-feedback');
+      $('.div-formPass1').addClass('has-success');
+      $('.spanPass1Text').addClass('hi-p1');
+      }
+
+    });
+
+
+      //validamos la segunda contraseña
+  $('.formPass2').keyup(function(){
+
+        valor1 = $('#formPass1').val();
+        valor2 = $('#formPass2').val();
+    if(valor1 != valor2 ){
+      $('.div-formPass2').addClass('has-error');
+      $('.spanPass2').addClass('glyphicon glyphicon-remove form-control-feedback');
+      $('.spanPass2Text').removeClass('hi-p2');
+      $('.spanPass2Text').text('Las contraseñas no coinciden');
+      $('#registrar').addClass('disabled');
+         } else {
+          $('.div-formPass2').removeClass('has-error');
+          $('.spanPass2').removeClass('glyphicon-remove');
+          $('.spanPass2Text').removeClass('r_pass');
+          $('.spanPass2').addClass('glyphicon glyphicon-ok form-control-feedback');
+          $('.div-formPass2').addClass('has-success');
+          $('.spanPass2Text').addClass('hi-p2');
+          $('#registrar').removeClass('disabled');
+          $('#registrar').addClass('cambiar-pss');
+
+         }
+    });
+
+
+  $(document).on('click', '.cambiar-pss', function(){
+    $('#confirmarpass').modal({
+      show: 'false',
+    });
+  });
+
+  //Actualizar la contraseña
+  $(document).on('click', '#save-nuevap', function(){
+    nueva = $('#formPass2').val();
+
+    $.ajax({
+            type: "POST",
+            url: "/users/cambiarpass",
+            data: {nueva: nueva },
+            success: function( n ){
+                    alertas('success',"Tu contraseña ha sido cambiada correctamente.");
+                    $('#password0').val('')
+                    $('.add-gly').removeClass('glyphicon glyphicon-ok form-control-feedback');
+                    $('#formPass1').val('');
+                    $('.spanPass1').removeClass('glyphicon glyphicon-ok form-control-feedback');
+                    $('#formPass2').val('');
+                    $('.spanPass2').removeClass('glyphicon glyphicon-ok form-control-feedback');
+                    $('.input-pass').removeClass('has-success');
+                    $('.div-formPass1').removeClass('has-success');
+                    $('.div-formPass2').removeClass('has-success');
+
+            }
+        });
+
+
+
+  });
+
+    $(document).on('click', '#n-registrar', function(){
+
+          $('.input-pass').removeClass('has-success');
+          $('.input-pass').removeClass('has-error');
+          $('#password0').val('')
+          $('.add-gly').removeClass('glyphicon glyphicon-ok form-control-feedback');
+          $('.add-gly').removeClass('glyphicon glyphicon-remove form-control-feedback');
+
+          $('.div-formPass1').removeClass('has-success');
+          $('.div-formPass1').removeClass('has-error');
+          $('#formPass1').val('');
+          $('.spanPass1').removeClass('glyphicon glyphicon-ok form-control-feedback');
+          $('.spanPass1').removeClass('glyphicon glyphicon-remove form-control-feedback');
+
+          $('.div-formPass2').removeClass('has-success');
+          $('.div-formPass2').removeClass('has-error');
+          $('#formPass2').val('');
+          $('.spanPass2').removeClass('glyphicon glyphicon-ok form-control-feedback');
+          $('.spanPass2').removeClass('glyphicon glyphicon-remove form-control-feedback');
+
+          $('#msgPassB').addClass('hi-ac');
+          $('.spanPass1Text').addClass('hi-p1');
+          $('.spanPass2Text').addClass('hi-p2');
+
+
+            
+  });
+
+
+
+      $(document).on('click', '#no-savep', function(){
+
+          $('.input-pass').removeClass('has-success');
+          $('#password0').val('')
+          $('.add-gly').removeClass('glyphicon glyphicon-ok form-control-feedback');
+
+          $('.div-formPass1').removeClass('has-success');
+          $('#formPass1').val('');
+          $('.spanPass1').removeClass('glyphicon glyphicon-ok form-control-feedback');
+
+          $('.div-formPass2').removeClass('has-success');
+          $('#formPass2').val('');
+          $('.spanPass2').removeClass('glyphicon glyphicon-ok form-control-feedback');
+
+          $('#msgPassB').addClass('hi-ac');
+          $('.spanPass1Text').addClass('hi-p1');
+          $('.spanPass2Text').addClass('hi-p2');
+
+
+            
+  });
+
+
+
+
+
+
+
+});
+
+
+function alertas(tipo,mensaje){
+    $('.top-right').notify({
+      message: {text: decodeURIComponent(mensaje)},
+      type: tipo
+    }).show();
+  }
+
+
+
 
     </script>
 

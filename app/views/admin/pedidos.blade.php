@@ -51,6 +51,7 @@
             <th>N° Cliente</th>
             <th>Fecha de registro</th>
             <th>Cliente</th>
+            <th>Total pedido</th>
             <th>Agente</th>
             <th>Estatus</th>
           </tr>
@@ -324,14 +325,14 @@ $(document).ready(function(){
     $('.ver-list').slideUp(500);
   });
 
+          
 
 
-  //Listar pedidos
-              $.ajax({
+            //Listar pedidos
+            $.ajax({
                 dataType: 'json',
                 url: "/consultas/listapedidos",
                 success: function (p) {
-                console.log(p);
                 tabla_a = $('#list_p_').DataTable({
                   "oLanguage": { 
                       "oPaginate": { 
@@ -378,14 +379,113 @@ $(document).ready(function(){
                     tabla_a.fnClearTable();
 
                       for(var i = 0; i < p.length; i++) {
+                             idp = p[i].id,
+                             ida = p[i].agente_id, 
                              tabla_a.fnAddData([
                                        '<a id="c-estatus" class="'+p[i].estatus+' v_'+p[i].razon_social+'" data-id="'+p[i].id+'" value="'+p[i].razon_social+'" href="#modalpedido" data-toggle="modal">'+p[i].num_pedido+'</a>',
                                         p[i].numero_cliente,
                                         p[i].created_at,
                                         p[i].nombre_cliente+" "+p[i].paterno,
-                                        '<span class="a_'+p[i].agente_id+'">'+p[i].agente_id+'</span>',
+                                        '<span id="idp_'+p[i].id+'" class="text-success '+p[i].id+'"></span>',
+                                        '<span id="ida_'+p[i].id+'" class="a_'+p[i].agente_id+' text-primary"></span>',
                                         '<span class="estatus_'+p[i].estatus+'"></span>',
                                       ]);
+
+                                 $.ajax({
+                                    type: "GET",
+                                    url: "/pedidos/cantidadpedidos",
+                                    data: {idp: idp},
+                                    success: function( n ){
+                                                campo = $('#idp_'+n.cant[0].pedido_id);
+                                                c = "";
+                                                t = n.total * 0.16;
+                                                total = parseFloat(n.total + t);
+                                                c +=  total.toFixed(2);
+                                                campo.text(accounting.formatMoney(c));
+
+
+                                                $(document).on('click','.fancy > li, a',function(){
+                                                  campo = $('#idp_'+n.cant[0].pedido_id);
+                                                  c = "";
+                                                  t = n.total * 0.16;
+                                                  total = parseFloat(n.total + t);
+                                                  c +=  total.toFixed(2);
+                                                  campo.text(accounting.formatMoney(c));
+
+                                                }); 
+
+                                                $(document).on('keyup', '#list_p__filter', function(){
+                                                  campo = $('#idp_'+n.cant[0].pedido_id);
+                                                  c = "";
+                                                  t = n.total * 0.16;
+                                                  total = parseFloat(n.total + t);
+                                                  c +=  total.toFixed(2);
+                                                  campo.text(accounting.formatMoney(c));
+
+                                                });
+
+                                                $(document).on('click', '#list_p__length', function(){
+
+                                                  campo = $('#idp_'+n.cant[0].pedido_id);
+                                                  c = "";
+                                                  t = n.total * 0.16;
+                                                  total = parseFloat(n.total + t);
+                                                  c +=  total.toFixed(2);
+                                                  campo.text(accounting.formatMoney(c));
+
+                                                });
+
+                                                     
+
+                                         }
+
+                                 });
+
+
+                                if(ida == 0){
+
+                                } else {
+                                  //console.log(ida);
+                                 $.ajax({
+                                    type: "GET",
+                                    url: "/consultas/listaagentes",
+                                    data: {ida: ida},
+                                    success: function( a ){
+                                            campo = $('.a_'+a.agente[0].id);
+                                            c = "";
+                                            c += a.agente[0].usuario;
+                                            campo.text(c);
+
+                                            $(document).on('click','.fancy > li, a',function(){
+                                                  campo = $('.a_'+a.agente[0].id);
+                                                  c = "";
+                                                  c += a.agente[0].usuario;
+                                                  campo.text(c);
+
+                                                }); 
+
+                                                $(document).on('keyup', '#list_p__filter', function(){
+                                                  campo = $('.a_'+a.agente[0].id);
+                                                  c = "";
+                                                  c += a.agente[0].usuario;
+                                                  campo.text(c);
+
+                                                });
+
+                                                $(document).on('click', '#list_p__length', function(){  
+                                                    campo = $('.a_'+a.agente[0].id);
+                                                    c = "";
+                                                    c += a.agente[0].usuario;
+                                                    campo.text(c);
+                                                });
+
+                                                     
+
+                                         }
+
+                                 });
+                                }
+
 
 
                               }
@@ -551,12 +651,11 @@ $.ajax({
 resultado=0;
 $('.td-pedido-a tbody tr').each(function(){
     cant  = $(this).find("[class*='t-pro']").attr('value');
-
-    resultado += parseInt(cant);
+    resultado += parseFloat(cant);
+    $('.sub-p').text(accounting.formatMoney(resultado));
 
   });
 
-$('.sub-p').html(accounting.formatMoney(resultado));
 $('.sub-iva').html(accounting.formatMoney(iva = resultado * 0.16));
 $('.total-p').html(accounting.formatMoney(resultado += iva));
 
@@ -578,6 +677,10 @@ $('.total-p').html(accounting.formatMoney(resultado += iva));
       $('.cancel-r').attr('data-id',estatus);
 
       es_i = $(this).attr('class');
+      total = $('#idp_'+id).text();
+      agente = $('#ida_'+id).text();
+      $('#c-pass').attr('data-total', total);
+      $('#c-pass').attr('data-agente', agente);
       $('.header-e').attr('id', es_i);
 
       $.ajax({
@@ -757,6 +860,8 @@ $(document).on('click','.img-p',function(){
   $(document).on('click', '#c-pass', function(){
     estatus = $(this).attr('data-id');
     id = $(this).attr('value');
+    total = $(this).attr('data-total');
+    agente = $(this).attr('data-agente');
     $('#campo-pass').val('');
     $('.input-pass').removeClass('has-success');
     $('.add-gly').removeClass('glyphicon-ok');
@@ -780,7 +885,8 @@ $(document).on('click','.img-p',function(){
                 +'<td>'+ed.numero_cliente+'</td>'
                 +'<td>'+ed.created_at+'</td>'
                 +'<td>'+ed.nombre_cliente+' '+ed.paterno+'</td>'
-                +'<td>'+ed.agente_id+'</td>'
+                +'<td id="idp_'+ed.id+'" class="text-success">'+total+'</td>'
+                +'<td id="ida_'+ed.id+'" class="text-primary">'+agente+'</td>'
                 +'<td><span class="estatus_'+ed.estatus+'"></span></td>'
                 +'<tr/>');
 

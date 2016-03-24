@@ -119,8 +119,6 @@
 
   </div><!--  Secierra el contenedor-->
 
-    <!--Alertas-->
-    <div class="notifications top-right" data-html="true"></div>
 
   </div>
 </div>
@@ -461,7 +459,7 @@ $(document).ready(function(){
                 } else {
 
                   if(data == 'error'){
-                      alertas('error',"Error, la clave esta vacía oh no existe.");
+                      alertas('error',"Error, la clave está vacía o no existe.");
                   } else {
 
                   alertas('success',"Entrada guardada correctamente.");

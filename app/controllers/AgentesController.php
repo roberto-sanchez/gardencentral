@@ -15,7 +15,18 @@ class AgentesController extends \BaseController {
 	$rol = Auth::user()->rol_id;
 	//si accede el agente
      if($rol == 2 || $rol == 4){
-		return View::make('agentes/index');
+
+        //Extras
+       $p = DB::table('producto')
+                ->where('nombre', 'Extras')
+                ->select('clave')
+                ->get();
+
+		return View::make('agentes/index',
+                        compact(
+                            'p'
+                        ));
+
     //si intenta acceder un admin ala vista de agentes
 	 } elseif($rol == 3){
 	    return Redirect::to('admin');
@@ -30,6 +41,7 @@ class AgentesController extends \BaseController {
 
    //Pedidos
    public function listarpedidos() {
+
    		$idagente = Auth::user()->id;
 
         $rol_id = Auth::user()->rol_id;
@@ -37,14 +49,16 @@ class AgentesController extends \BaseController {
         if($rol_id == 4){
             $cliente = DB::table('cliente')
                     ->join('pedido','cliente.id', '=','pedido.cliente_id')
-                    ->select('pedido.id', 'num_pedido','nombre_cliente', 'paterno','razon_social','numero_cliente','pedido.created_at','estatus')
+                    ->select('pedido.id', 'num_pedido','nombre_cliente', 'paterno','razon_social','numero_cliente','pedido.created_at','estatus', 'extra_pedido')
                     ->OrderBy('created_at', 'DESC')
                     ->get();
+
+
 
         } else {
        		$cliente = DB::table('cliente')
                     ->join('pedido','cliente.id', '=','pedido.cliente_id')
-       				->select('pedido.id', 'num_pedido','nombre_cliente', 'paterno','razon_social','numero_cliente','pedido.created_at','estatus')
+       				->select('pedido.id', 'num_pedido','nombre_cliente', 'paterno','razon_social','numero_cliente','pedido.created_at','estatus', 'extra_pedido')
        				->OrderBy('created_at', 'DESC')
        				->where('cliente.agente_id', $idagente)
        				->get();
@@ -52,23 +66,158 @@ class AgentesController extends \BaseController {
         }
 
 
+       echo json_encode($cliente);
+    
 
-        //return Response::json($cliente);
-        echo json_encode($cliente);
+    }
+
+
+  public function cantidadpedidos(){
+        $id = Input::get('id');
+        $cant = DB::table('pedido_detalle')
+                    ->where('pedido_id', $id)
+                    ->select('pedido_id','precio', 'cantidad')
+                    ->get();
+
+        //Multiplicamos el total de la cantidad del pructo por el precio
+        $total = 0;
+        foreach($cant as $item){
+            $total += $item->cantidad * $item ->precio;
+        }
+
+
+        if(count($cant) == 0){
+            $extra = $id;
+
+            $n = 0;
+
+            return Response::json(array(
+                'n' => $n,
+                'cant' =>$cant
+                ));
+
+        } else{
+
+            $n = 1;
+         return Response::json(array(
+              'n' => $n,
+              'cant' =>$cant, 
+              'total' => $total
+              ));
+
+        }
 
 
     }
 
 
+    public function verextra(){
+        $id = Input::get('idp');
+        $extra = DB::table('extra_pedido')
+                ->where('pedido_id', $id)
+                ->get();
+
+        if(count($extra) == 0){
+            $extra = $id;
+
+            $n = 0;
+
+            return Response::json(array(
+                'n' => $n,
+                'extra' => $extra
+                ));
+
+        } else{
+            $n = 1;
+         return Response::json(array(
+            'n' => $n,
+            'extra' => $extra
+         ));
+
+        }
+    }
+
+
+public function agregarextra(){
+    $pedido = Input::get('pedidoid');
+    $clave = Input::get('clave');
+    $extra = Input::get('extra');
+    $total = Input::get('total');
+
+    $ex = new ExtraPedido;
+    $ex->pedido_id = $pedido;
+    $ex->clave = $clave;
+    $ex->descripcion = $extra;
+    $ex->total = $total;
+    $ex->save();
+
+    //Actualizamos en el pedido
+    $p = Pedido::find($pedido);
+    $p->extra_pedido = 1;
+    $p->save();
+
+    $new_ex = DB::table('extra_pedido')
+            ->where('pedido_id', $pedido)
+            ->get();
+
+    return Response::json(array('new_ex' => $new_ex));
+}
+
+
+    public function actualizarextra(){
+        $id = Input::get('id');
+        $des = Input::get('des');
+        $total = Input::get('total');
+
+        $extra = ExtraPedido::find($id);
+        $extra->descripcion = $des;    
+        $extra->total = $total;
+        $extra->save();
+
+        $ex = DB::table('extra_pedido')
+                ->where('id', $id)
+                ->first();        
+
+        return Response::json($ex);
+    }
+
+
+    public function eliminarextra(){
+
+        $id = Input::get('id');
+        $idp = Input::get('idp');
+
+        $extra = ExtraPedido::find($id);
+        $extra->delete();
+
+        //Actualizamos en el pedido
+        $p = Pedido::find($idp);
+        $p->extra_pedido = 0;
+        $p->save();
+
+        return Response::json($idp);
+
+    }
+
+
+
+
+
     public function detallepedido($id){
 
     	$producto = DB::table('producto')
-    			->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')->get();
+    			->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
+                ->get();
 
     	$pedido = DB::table('pedido')
-    			->where('id',$id)->get();
+    			->where('id',$id)
+                ->get();
 
-    	return View::make('agentes/datospedido', compact('producto', 'pedido'));
+    	return View::make('agentes/datospedido', 
+            compact(
+                'producto', 
+                'pedido'
+            ));
     	//return Response::json($id);
     }
 

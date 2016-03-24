@@ -10,8 +10,8 @@
 
 <script>
   $(document).ready(function(){
-    $('.inventario').addClass('active');
-    $('.t-inventario').addClass('en-admin');
+    $('.pedidos').addClass('active');
+    $('.t-pedidos').addClass('en-admin');
   });
 </script>
 @stop
@@ -25,20 +25,18 @@
 
 @section('content')
 <div class="content">
-  <div class="row row-inv">
-    <div class="menu-p">
-      <a href="{{ URL::to('consultas/excel') }}" class="btn btn-success">Exportar a Excel</a>
-    </div>
+  <div class="row row-inv row-mov">
     <div class="data-inv">
       <table id="list_p_" class="table table-condensed table-hover">
         <thead>
           <tr>
-            <th>Clave</th>
-            <th style="width: 250px!important">Producto</th>
-            <th>Foto</th>
+            <th>Usuario</th>
+            <th style="width:200px">Producto</th>
             <th>Pedimento</th>
-            <th>Cantidad</th>
-            <th>Fecha de registro</th>
+            <th style="width:150px">Cantidad anterior</th>
+            <th style="width:150px">Cantidad nueva</th>
+            <th style="width:200px">Motivo</th>
+            <th style="width:200px">Fecha</th>
           </tr>
         </thead>
 
@@ -48,38 +46,13 @@
   </div>
 </div>
 
-<!--Modal para ver la foto del producto-->
-<div id="verfotop" class="modal fade">
-<div class="modal-dialog">
-  <div class="modal-content c-fotope">
-    <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      <h4 class="modal-title title-f text-info text-center">
-      <span class="glyphicon glyphicon-picture"></span>
-
-       </h4>
-    </div>
-    <div class="modal-body m-foto">
-      <div class="v-foto">
-          <img class="f-p-p" alt="Foto del producto">
-      </div>
-    </div>
-    <div class="modal-footer f-foto modal-confirmar">
-
-    </div>
-  </div>
-</div>
-</div>
 
   <script>
 
-
-            $.ajax({
+  	          $.ajax({
                 dataType: 'json',
-                url: "/inventario/listarinventario",
+                url: "/movimientos/vermovimientos",
                 success: function (p) {
-                  console.log(p);
-
                 tabla_a = $('#list_p_').DataTable({
                   "oLanguage": { 
                       "oPaginate": { 
@@ -107,7 +80,7 @@
 
                }, //end o
 
-                "aaSorting": [[ 3, "desc" ]], 
+                "aaSorting": [[ 6, "desc" ]], 
 
                 "sPaginationType": "simple_numbers",
                  "sPaginationType": "bootstrap",
@@ -120,17 +93,23 @@
                     tabla_a.fnClearTable();
 
                       for(var i = 0; i < p.length; i++) {
+                              id = p[i].id,
+
                              tabla_a.fnAddData([
-                                        p[i].clave,
+                                        p[i].usuario,
                                         p[i].nombre,
-                                        '<span title="Ver foto del producto" class="pro-foto" id="'+p[i].foto+'" data-id="'+p[i].nombre+'">Ver Foto</span>',
-                                        '<span class="hidden">'+p[i].created_at+'</span>' + p[i].num_pedimento,
-                                        p[i].cantidad,
+                                        p[i].num_pedimento,
+                                        p[i].cantidad_anterior,
+                                        p[i].cantidad_nueva,
+                                        p[i].comentarios,
                                         p[i].created_at,
                                       ]);
 
 
+
                               } //End for
+
+
 
                         $('.dataTables_paginate .prev a').text('Anterior');
                         $('.dataTables_paginate .next a').text('Siguiente');
@@ -142,25 +121,7 @@
                 error: function () {
                     alert("failure");
                 } //end error
-            }); 
-
-
-        //Ver foto del producto del pedido
-        $(document).on('click', '.pro-foto', function(){
-
-            foto = $(this).attr('id');
-            nf = $(this).attr('data-id');
-            $('.f-p-p').prop('src', '/img/productos/'+foto);
-            $('.title-f').html(nf)
-
-            $('#verfotop').modal({
-                    show: 'false'
-             });
-
-        });
-
-
-
+            });
 
 
 

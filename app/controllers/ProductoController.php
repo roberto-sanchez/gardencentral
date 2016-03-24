@@ -42,8 +42,24 @@ class ProductoController extends \BaseController {
            $cart = \Session::get('cart');
 
            $total = $this->total();
+
+           //Extras
+           $p = DB::table('producto')
+                    ->where('nombre', 'Extras')
+                    ->select('clave')
+                    ->get();
+
                    return View::make('users/index',
-                        compact('cart', 'total','pago','direccion', 'estado', 'telcliente','direcfiscal'));
+                        compact(
+                            'cart', 
+                            'total',
+                            'pago',
+                            'direccion', 
+                            'estado', 
+                            'telcliente',
+                            'direcfiscal',
+                            'p'
+                        ));
         } else {
 
             return Redirect::to('login');
@@ -166,20 +182,23 @@ class ProductoController extends \BaseController {
 
          $ped = DB::table('cliente')
             ->join('pedido','cliente.id', '=','pedido.cliente_id')
-            ->where('pedido.id', $id)->get();
+            ->where('pedido.id', $id)
+            ->get();
 
 
         $pro = DB::table('producto')
                     ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
                     ->where('pedido_detalle.pedido_id', $id)
-                    ->select('clave', 'nombre', 'color', 'precio','iva0', 'cantidad', 'foto', 'num_pedimento')
+                    ->select('pedido_id','clave', 'nombre', 'color', 'precio','iva0', 'foto', 'producto.id', 'cantidad', 'num_pedimento')
+                    //->distinct()
                     ->get();
 
 
 
         $dpro = DB::table('pedido_detalle')
                     ->join('producto','pedido_detalle.producto_id', '=','producto.id')
-                    ->where('pedido_detalle.id', $d)->get();
+                    ->where('pedido_detalle.id', $d)
+                    ->get();
 
 
         return Response::json(array(
@@ -191,6 +210,11 @@ class ProductoController extends \BaseController {
                     'pedimento' => $pedimento
                 ));
     }
+
+
+//Extras
+
+
 
 
     //Listar domiclios
@@ -518,6 +542,7 @@ public function getProducto(){
 
         //Recibimos el Array y lo decodificamos desde json, para poder utilizarlo como objeto
         $idpro = json_decode(Input::get('aInfo'));
+        $data_extra = json_decode(Input::get('nExtra'));
         $cotizar = Input::get('cotizar');
         $pais = Input::get('pais');
         $estado = Input::get('estado');
@@ -533,6 +558,7 @@ public function getProducto(){
         $formapago = Input::get('formapago');
         $msjeria = Input::get('msjeria');
         $coment = Input::get('coment');
+        $r_extra = Input::get('r_extra');
     if (Request::ajax()) {
         if($id == 0){
 
@@ -580,8 +606,20 @@ public function getProducto(){
             $pedido->num_pedido = date('Y').date('m').date("d").$resp.$mensajeria['id'];
             $pedido->fecha_registro = date('Y-m-d');
             $pedido->cotizar_envio = $cotizar;
+            $pedido->extra_pedido = $r_extra;
             $pedido->observaciones =  $coment;
             $pedido->save();
+
+            //Registramos los extras
+            for ($i=0; $i < count($data_extra); $i++) {
+                    
+                $extra = new ExtraPedido;
+                $extra->pedido_id = $pedido['id'];
+                $extra->clave = $data_extra[$i]->claveextra;
+                $extra->descripcion = $data_extra[$i]->contenido;
+                $extra->save();
+
+            }
 
             //por cada uo de estos arrays vamos a crear una query para poder hacer un insert en la base de datos. y para eso necesitamos recorrer el array por cada uno de sus posiciones
             for ($i=0; $i < count($idpro); $i++) {
@@ -759,27 +797,26 @@ public function getProducto(){
                                 ->where('num_pedimento', $num_p)
                                 ->pluck('id');
 
+                        //descontamos la cantidad del inventario_detalle
+                        $inv_d = InventarioDetalle::find($id_i_d);
+                        $inv_d->cantidad -= $y_m;
+                        $inv_d->save();
+
                         //Consulta a la tabla precio
                         $pre_id = DB::table('producto_precio')
                                     ->where('producto_id', $idpro[$i]->idp)
                                     ->where('tipo', $idpro[$i]->tipoprecio)
                                     ->pluck('id');
 
-                         //registramos en pedido detalle
+
                         $p_detalle = new PedidoDetalle;
                         $p_detalle->pedido_id = $pedido['id'];
                         $p_detalle->producto_id = $idpro[$i]->idp;
                         $p_detalle->producto_precio_id = $pre_id;
                         $p_detalle->precio = $idpro[$i]->preciop;
                         $p_detalle->num_pedimento = $num_p;
-                        $p_detalle->cantidad = $y1;
+                        $p_detalle->cantidad = $cant;
                         $p_detalle->save();
-
-                        //descontamos la cantidad del inventario_detalle
-                        $inv_d = InventarioDetalle::find($id_i_d);
-                        $inv_d->cantidad -= $y_m;
-                        $inv_d->save();
-
 
                         //Borramos el producto
                         $inv_d = InventarioDetalle::find($id_i_d);
@@ -880,8 +917,20 @@ public function getProducto(){
             $pedido->num_pedido = date('Y').date('m').date("d").$resp.$mensajeria['id'];
             $pedido->fecha_registro = date('Y-m-d');
             $pedido->cotizar_envio = $cotizar;
+            $pedido->extra_pedido = $r_extra;
             $pedido->observaciones =  $coment;
             $pedido->save();
+
+            //Registramos los extras
+            for ($i=0; $i < count($data_extra); $i++) {
+                    
+                $extra = new ExtraPedido;
+                $extra->pedido_id = $pedido['id'];
+                $extra->clave = $data_extra[$i]->claveextra;
+                $extra->descripcion = $data_extra[$i]->contenido;
+                $extra->save();
+
+            }
 
             //por cada uo de estos arrays vamos a crear una query para poder hacer un insert en la base de datos. y para eso necesitamos recorrer el array por cada uno de sus posiciones
             for ($i=0; $i < count($idpro); $i++) {
@@ -1059,27 +1108,26 @@ public function getProducto(){
                                 ->where('num_pedimento', $num_p)
                                 ->pluck('id');
 
+                        //descontamos la cantidad del inventario_detalle
+                        $inv_d = InventarioDetalle::find($id_i_d);
+                        $inv_d->cantidad -= $y_m;
+                        $inv_d->save();
+
                         //Consulta a la tabla precio
                         $pre_id = DB::table('producto_precio')
                                     ->where('producto_id', $idpro[$i]->idp)
                                     ->where('tipo', $idpro[$i]->tipoprecio)
                                     ->pluck('id');
 
-                         //registramos en pedido detalle
+
                         $p_detalle = new PedidoDetalle;
                         $p_detalle->pedido_id = $pedido['id'];
                         $p_detalle->producto_id = $idpro[$i]->idp;
                         $p_detalle->producto_precio_id = $pre_id;
                         $p_detalle->precio = $idpro[$i]->preciop;
                         $p_detalle->num_pedimento = $num_p;
-                        $p_detalle->cantidad = $y1;
+                        $p_detalle->cantidad = $cant;
                         $p_detalle->save();
-
-                        //descontamos la cantidad del inventario_detalle
-                        $inv_d = InventarioDetalle::find($id_i_d);
-                        $inv_d->cantidad -= $y_m;
-                        $inv_d->save();
-
 
                         //Borramos el producto
                         $inv_d = InventarioDetalle::find($id_i_d);
@@ -1155,8 +1203,9 @@ public function getProducto(){
         $msjeria = Input::get('msjeria');
         $cotizar = Input::get('cotizar');
         $idpro = json_decode(Input::get('aInfo'));
-
+        $data_extra = json_decode(Input::get('nExtra'));
         $idusuario = Auth::user()->id;
+        $r_extra = Input::get('r_extra');
 
         $resp = DB::table('cliente')
             ->where('usuario_id', $idusuario)->pluck('id');
@@ -1182,8 +1231,20 @@ public function getProducto(){
             $pedido->num_pedido = date('Y').date('m').date("d").$resp.$mensajeria['id'];
             $pedido->fecha_registro = date('Y-m-d');
             $pedido->cotizar_envio = $cotizar;
+            $pedido->extra_pedido = $r_extra;
             $pedido->observaciones =  " ";
             $pedido->save(); 
+
+                //Registramos los extras
+                for ($i=0; $i < count($data_extra); $i++) {
+                        
+                    $extra = new ExtraPedido;
+                    $extra->pedido_id = $pedido['id'];
+                    $extra->clave = $data_extra[$i]->claveextra;
+                    $extra->descripcion = $data_extra[$i]->contenido;
+                    $extra->save();
+
+                }
 
 
                 for ($i=0; $i < count($idpro); $i++) {
@@ -1262,7 +1323,7 @@ public function getProducto(){
                                 ->where('num_pedimento', $num_p)
                                 ->pluck('id');
 
-                          //Consulta a la tabla precio
+                         //Consulta a la tabla precio
                         $pre_id = DB::table('producto_precio')
                                     ->where('producto_id', $idpro[$i]->idp)
                                     ->where('tipo', $idpro[$i]->tipoprecio)
@@ -1277,6 +1338,7 @@ public function getProducto(){
                         $p_detalle->num_pedimento = $num_p;
                         $p_detalle->cantidad = $y1;
                         $p_detalle->save();
+
 
                         //descontamos la cantidad del inventario_detalle
                         $inv_d = InventarioDetalle::find($id_i_d);
@@ -1369,20 +1431,20 @@ public function getProducto(){
                         $inv_d->cantidad -= $y_m;
                         $inv_d->save();
 
-                          //Consulta a la tabla precio
+                        //Consulta a la tabla precio
                         $pre_id = DB::table('producto_precio')
                                     ->where('producto_id', $idpro[$i]->idp)
                                     ->where('tipo', $idpro[$i]->tipoprecio)
                                     ->pluck('id');
 
-                         //registramos en pedido detalle
+
                         $p_detalle = new PedidoDetalle;
                         $p_detalle->pedido_id = $pedido['id'];
                         $p_detalle->producto_id = $idpro[$i]->idp;
                         $p_detalle->producto_precio_id = $pre_id;
                         $p_detalle->precio = $idpro[$i]->preciop;
                         $p_detalle->num_pedimento = $num_p;
-                        $p_detalle->cantidad = $y1;
+                        $p_detalle->cantidad = $cant;
                         $p_detalle->save();
 
                         //Borramos el producto
@@ -1470,8 +1532,20 @@ public function getProducto(){
         $pedido->num_pedido = date('Y').date('m').date("d").$mensajeria['id'].$resp;
         $pedido->fecha_registro = date('Y-m-d');
         $pedido->cotizar_envio = $cotizar;
+        $pedido->extra_pedido = $r_extra;
         $pedido->observaciones =  " ";
         $pedido->save();
+
+            //Registramos los extras
+        for ($i=0; $i < count($data_extra); $i++) {
+                
+            $extra = new ExtraPedido;
+            $extra->pedido_id = $pedido['id'];
+            $extra->clave = $data_extra[$i]->claveextra;
+            $extra->descripcion = $data_extra[$i]->contenido;
+            $extra->save();
+
+        }
 
 
             for ($i=0; $i < count($idpro); $i++) {
@@ -1547,14 +1621,19 @@ public function getProducto(){
                                 ->where('producto_id', $p1)
                                 ->where('num_pedimento', $num_p)
                                 ->pluck('id');
-
-                          //Consulta a la tabla precio
+                        //Consulta a la tabla precio
                         $pre_id = DB::table('producto_precio')
                                     ->where('producto_id', $idpro[$i]->idp)
                                     ->where('tipo', $idpro[$i]->tipoprecio)
                                     ->pluck('id');
 
-                         //registramos en pedido detalle
+                        //Consulta a la tabla precio
+                        $pre_id = DB::table('producto_precio')
+                                ->where('producto_id', $idpro[$i]->idp)
+                                ->where('tipo', $idpro[$i]->tipoprecio)
+                                ->pluck('id');
+
+                        //registramos en pedido detalle
                         $p_detalle = new PedidoDetalle;
                         $p_detalle->pedido_id = $pedido['id'];
                         $p_detalle->producto_id = $idpro[$i]->idp;
@@ -1655,20 +1734,26 @@ public function getProducto(){
                         $inv_d->cantidad -= $y_m;
                         $inv_d->save();
 
-                          //Consulta a la tabla precio
+                         //Consulta a la tabla precio
                         $pre_id = DB::table('producto_precio')
                                     ->where('producto_id', $idpro[$i]->idp)
                                     ->where('tipo', $idpro[$i]->tipoprecio)
                                     ->pluck('id');
 
-                         //registramos en pedido detalle
+                        //Consulta a la tabla precio
+                        $pre_id = DB::table('producto_precio')
+                                    ->where('producto_id', $idpro[$i]->idp)
+                                    ->where('tipo', $idpro[$i]->tipoprecio)
+                                    ->pluck('id');
+
+
                         $p_detalle = new PedidoDetalle;
                         $p_detalle->pedido_id = $pedido['id'];
                         $p_detalle->producto_id = $idpro[$i]->idp;
                         $p_detalle->producto_precio_id = $pre_id;
                         $p_detalle->precio = $idpro[$i]->preciop;
                         $p_detalle->num_pedimento = $num_p;
-                        $p_detalle->cantidad = $y1;
+                        $p_detalle->cantidad = $cant;
                         $p_detalle->save();
 
                         //Borramos el producto
@@ -1915,7 +2000,7 @@ public function getProducto(){
 
 
     //detalle del producto
-    public function datosdelpedido($iddom){
+public function datosdelpedido($iddom){
 
     if (Auth::check()) {
 
@@ -1953,19 +2038,24 @@ public function getProducto(){
                 ->take(1)
                 ->get();
 
-            $pedimento = DB::table('pedido_detalle')
-                        ->join('producto', 'pedido_detalle.producto_id', '=', 'producto.id')
-                        ->where('pedido_detalle.pedido_id', $iddom)
-                        ->select('clave', 'num_pedimento', 'cantidad')
-                        ->get();
 
             $cli = DB::table('cliente')
                     ->where('id', $idcliente)
                     ->get();
 
+            $producto = DB::table('producto')
+                      ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
+                        ->where('pedido_detalle.pedido_id', $iddom)
+                        ->select('clave', 'nombre', 'color', 'pedido_detalle.precio','iva0', 'cantidad', 'num_pedimento')
+                        ->get();
+
+            $extra = DB::table('extra_pedido')
+                ->where('pedido_id', $iddom)
+                ->get();
+
 
             if(count(\Session::get('cart')) <= 0) return Redirect::to('users');
-            $producto = \Session::get('cart');
+
             $total = $this->total();
 
             //Retornamos la vista y vaciamos el pedido actual
@@ -1980,7 +2070,7 @@ public function getProducto(){
                         'iddom',
                         'pedido', 
                         'vaciar',
-                        'pedimento'
+                        'extra'
                         ));
             } else {
 
@@ -2002,15 +2092,20 @@ public function getProducto(){
                         ->take(1)
                         ->get();
 
-                    $pedimento = DB::table('pedido_detalle')
-                        ->join('producto', 'pedido_detalle.producto_id', '=', 'producto.id')
-                        ->where('pedido_detalle.pedido_id', $iddom)
-                        ->select('clave', 'num_pedimento', 'cantidad')
+
+                    $producto = DB::table('producto')
+                              ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
+                                ->where('pedido_detalle.pedido_id', $iddom)
+                                ->select('clave', 'nombre', 'color', 'pedido_detalle.precio','iva0', 'cantidad', 'num_pedimento')
+                                ->get();
+
+                    $extra = DB::table('extra_pedido')
+                        ->where('pedido_id', $iddom)
                         ->get();
 
+                        
 
                     if(count(\Session::get('cart')) <= 0) return Redirect::to('users');
-                    $producto = \Session::get('cart');
                     $total = $this->total();
 
                     //Retornamos la vista y vaciamos el pedido actual
@@ -2024,7 +2119,7 @@ public function getProducto(){
                                 'iddom',
                                 'pedido', 
                                 'vaciar',
-                                'pedimento'
+                                'extra'
                                 ));
 
                     } else {
@@ -2108,19 +2203,16 @@ public function getProducto(){
                     ->get();
 
 
-                      $pro = DB::table('producto')
-                                  ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
-                                    ->where('pedido_detalle.pedido_id', $id)
-                                    ->select('clave', 'nombre', 'color', 'pedido_detalle.precio','iva0', 'cantidad')
-                                    ->get();
- 
+                  $pro = DB::table('producto')
+                              ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
+                                ->where('pedido_detalle.pedido_id', $id)
+                                ->select('clave', 'nombre', 'color', 'pedido_detalle.precio','iva0', 'cantidad', 'num_pedimento')
+                                ->get();
 
-
-                $pedimento = DB::table('pedido_detalle')
-                        ->join('producto', 'pedido_detalle.producto_id', '=', 'producto.id')
-                        ->where('pedido_detalle.pedido_id', $id)
-                        ->select('clave', 'num_pedimento', 'cantidad')
+                $extra = DB::table('extra_pedido')
+                        ->where('pedido_id', $id)
                         ->get();
+ 
 
                 $dpro = DB::table('pedido_detalle')
                             ->join('producto','pedido_detalle.producto_id', '=','producto.id')
@@ -2145,7 +2237,7 @@ public function getProducto(){
                             'pedido', 
                             'total', 
                             'cli',
-                            'pedimento'
+                            'extra'
                             ));
                    
                     return PDF::load($pdf, 'A4', 'portrait')->show();
@@ -2177,15 +2269,14 @@ public function getProducto(){
                         $pro = DB::table('producto')
                                   ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
                                     ->where('pedido_detalle.pedido_id', $id)
-                                    ->select('clave', 'nombre', 'color', 'pedido_detalle.precio','iva0', 'cantidad')
+                                    ->select('clave', 'nombre', 'color', 'pedido_detalle.precio','iva0', 'cantidad', 'num_pedimento')
                                     ->get();
 
-
-                    $pedimento = DB::table('pedido_detalle')
-                        ->join('producto', 'pedido_detalle.producto_id', '=', 'producto.id')
-                        ->where('pedido_detalle.pedido_id', $id)
-                        ->select('clave', 'num_pedimento', 'cantidad')
+                        $extra = DB::table('extra_pedido')
+                        ->where('pedido_id', $id)
                         ->get();
+
+
 
                     $dpro = DB::table('pedido_detalle')
                                 ->join('producto','pedido_detalle.producto_id', '=','producto.id')
@@ -2208,7 +2299,7 @@ public function getProducto(){
                                 'ped', 
                                 'pedido', 
                                 'total',
-                                'pedimento'
+                                'extra'
                                 ));
                        
                         return PDF::load($pdf, 'A4', 'portrait')->show();

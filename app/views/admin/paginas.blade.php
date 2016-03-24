@@ -133,9 +133,6 @@
   </div>
 </div>
 
-<!--Alertas-->
-<div class="notifications top-right" data-html="true"></div>
-
     <!--  Modal para confirmar guardar Terminos y condiciones  -->
 <div id="guardart" class="modal fade" data-keyboard="false" data-backdrop="static">
       <div class="modal-dialog">

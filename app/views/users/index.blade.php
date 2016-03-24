@@ -7,39 +7,23 @@
 @section('scripts')
 @parent
 {{ HTML::style('css/select2.min.css') }}
-@include('layouts/inc/lib')
+{{ HTML::style('css/bootstrap-select.min.css') }}
+{{ HTML::script('js/bootstrap-select.min.js') }}
+{{ HTML::script('js/i18n/defaults-es_CL.min.js') }}
 <style>
 
 /*.glyphicon{
   position:static;
+}
+
+.btn-group{
+  position:static;
 }*/
 
-  #list_p__length{
+  .t-extra{
     display:none;
   }
-  #list_p__filter{
-    float:left;
-    margin:.5em 0;
-  }
-
-  .pedidosCliente{
-    margin:0;
-    padding:0 .5em;
-  }
-
-  .t-p-clientes{
-    margin:0;
-    padding:0;
-  }
-  #list_p_{
-    margin-bottom:0;
-  }
-
-  .dataTables_paginate{
-    margin-bottom:.5em;
-    margin-top:.3em;
-  }
-
+  
   .notas_a{
     width:70%;
     display: -webkit-box;
@@ -79,7 +63,7 @@
   <section class="container">
      @include('layouts/inc/estatus')
      
-     <div class="notifications top-right" data-html="true"></div>
+     <div class="notifications bottom-right" data-html="true"></div>
 
       <div class="buscador">
          {{ Form::open(['id'=>'searchForm','method' => 'POST', 'class' => 'buscador input-group has-feedback']) }}
@@ -318,7 +302,21 @@
 
               </div>
             </div>
-
+    
+            <div class="agregar-ex">
+              <button data-id="0" class="btn btn-primary btn-md" id="add-extras">Agregar extras</button>
+              <table class="table t-ext">
+                <thead class="thead-ext">
+                  <tr>
+                    <th>Clave</th>
+                    <th>Producto</th>
+                    <th>Editar</th>
+                    <th>Quitar</th>
+                  </tr>
+                </thead>
+                <tbody id="b-extra"></tbody>
+              </table>
+            </div>
 
               <div class="tipoEnvio">
                 <!--Lista de notas aclaratorias-->
@@ -337,7 +335,7 @@
           </div>
 
             <div class="panel-elegir">
-              <span id="g-tipo" href="#confirmpedido" data-toggle="modal" class="g-tipo btn btn-primary">
+              <span id="g-tipo" data-toggle="modal" class="g-tipo btn btn-primary">
                 Generar pedido
               </span>
               <div class="alert alert-info alert-v alert-pago">
@@ -370,6 +368,60 @@
              </section><!--selecTipoEnvio-->
         </div>  <!--Panel productos-->
       </div>
+
+
+      <!--Modal para agregar extras-->
+        <div id="modalextras" class="modal fade">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title text-primary text-center">
+                  <span class="glyphicon glyphicon-plus"></span>
+                  Agregar extras
+                </h4>
+              </div>
+              <div class="modal-body body-extras">
+                <div class="area-nota error-c">
+                  <label class="text-info label-ext">Extras: </label>
+                  <textarea id="txt-extra" class="form-control" rows="5"></textarea>
+                  <span class="icon-c"></span>
+                </div>
+                @foreach($p as $extra)
+                 <input type="text" class="hidden" id="inp-extras" value="{{ $extra->clave }}">
+                @endforeach
+              </div>
+              <div class="modal-footer modal-confirmar">
+                <button id="can-extras" type="button" class="btn btn-danger confirm" data-dismiss="modal">Cancelar</button>
+                <button id="env-extras" class="btn btn-primary confirm" data-dismiss="modal">Agregar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+  <!--Modal para editar extras-->
+        <div id="modalextraedit" class="modal fade">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title text-primary text-center">
+                  <span class="glyphicon glyphicon-edit"></span>
+                  Editar extras
+                </h4>
+              </div>
+              <div class="modal-body body-extras">
+                <label class="text-info label-ext">Extras: </label>
+                <textarea id="txt-extra-edit" class="form-control" rows="5"></textarea>
+              </div>
+              <div class="modal-footer modal-confirmar">
+                <button id="can-extras" type="button" class="btn btn-danger confirm" data-dismiss="modal">Cancelar</button>
+                <button id="env-extras-act" class="btn btn-primary confirm" data-dismiss="modal">Actualizar</button>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <!--Modal para ver la foto del producto-->
   <div id="verfoto-p" class="modal fade">
@@ -404,12 +456,10 @@
                     <h4 class="modal-title text-danger text-center">Confirmar pedido</h4>
                   </div>
                   <div class="modal-body">
-                  <h2 class="text-danger text-center t-error-pago">Debe seleccionar la forma de pago.</h2>
                     <h2 class="text-primary text-center t-exsts">¿Están correctos sus datos?</h2>
                   </div>
                   <div class="modal-footer modal-confirmar">
                       <button type="button" class="btn btn-danger confirm t-no-c" data-dismiss="modal">No</button>
-                      <button type="button" class="btn btn-danger t-cancel confirm" data-dismiss="modal">Cancelar</button>
                      <a id="p-s-dom" class="btn btn-primary confirm " data-dismiss="modal" >Si</a>
                      <span id="" class="btn btn-primary confirm regis-exixts-t" data-dismiss="modal" >Si</span>
                   </div>
@@ -638,15 +688,17 @@
 
 
             <div class="panel-footer footer-formpago">
-            <a id="conf-p1" href="#confirmarpedido" class="btn btn-primary btn-conf-1 disabled" data-toggle="modal"> <!--   -->
+            <span id="conf-p1" class="btn btn-primary btn-conf-1 disabled"> <!--   -->
               Generar pedido
-            </a>
+            </span>
             <span id="gen-c"  class="btn btn-primary">
               Generar pedido
             </span>
             <a id="conf-p" href="#confirmarpedido" class="btn btn-primary hidden ge-p" data-toggle="modal"> <!--   -->
               Generar pedido
             </a>
+
+
 
 
             <!-- Modal para eliminar el domicilio -->
@@ -686,14 +738,12 @@
                   </div>
                   <div class="modal-body">
                     <h2 class="text-primary text-center text-exito">¿Están correctos sus datos?</h2>
-                    <h2 class="text-danger text-center text-pago">Debe seleccionar la forma de pago.</h2>
                     <h2 class="text-danger text-center text-selectdom">Seleccione un domicilio.</h2>
                   <span class="label label-danger esta center"></span>
                   </div>
                   <div class="modal-footer modal-confirmar">
                  <!--    <a href="{{ URL::to('productos/datosdelpedido') }}" class="btn btn-primary confirm">Si</a> -->
-                      <button type="button" class="btn btn-danger confirm c-no" data-dismiss="modal">No</button>
-                      <button type="button" class="btn btn-danger confirm c-pe" data-dismiss="modal">Cancelar</button>
+                      <button type="button" class="btn btn-danger confirm" data-dismiss="modal">No</button>
                       <button href="#" id="regispedido" class="btn btn-primary confirm confirm-p disabled" data-dismiss="modal"> <!--   -->
                         Si
                       </button>
@@ -729,6 +779,7 @@
 
 
               {{ Form::close() }}
+
 
 
 
@@ -1015,12 +1066,16 @@ $(document).ready(function(){
     });
 
 
+  // Agregar extras
+  $(document).on('click', '#add-extras', function(){
+    $('#modalextras').modal({
+      show:'false',
+    });
+  });
 
-});
 
 
-
-
+}); //ready
 
 
 </script>

@@ -139,36 +139,16 @@ class UsersController extends \BaseController {
 
   public function postCambiarpass() {
 
-    //almacenamos el contenido del formulario con el metodo all
-    $input = Input::all();
+    $id = Auth::user()->id;
+    $n_pass = Input::get('nueva');
 
-    try {
-      if(Auth::attempt(array('usuario' => Auth::user()->usuario, 'password' => $input['password0'])))
-      {
-        if($input['password1'] == $input['password2'])
-        {
-          Auth::user()->password = Hash::make($input['password1']);
-          Auth::user()->update();
-        } else {
-          Session::flash('messageDangerp', 'Las contraseñas no coinciden.');
+    $pass = Usuario::find($id);
+    $pass->password = Hash::make($n_pass);
+    $pass->save();
 
-          return Redirect::back();
-        }
+    return Response::json($n_pass);
 
-      } else {
-        Session::flash('messageDangerp', 'Tu contraseña actual es incorrecta.');
 
-        return Redirect::back();
-      }
-
-    } catch (Exception $e) {
-
-      return Redirect::back();
-    }
-
-    Session::flash('messageOKp', 'Contraseña cambiada con éxito.');
-
-    return Redirect::back();
   }
 
 

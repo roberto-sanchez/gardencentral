@@ -77,6 +77,7 @@
                   <th>Precio</th>
                   <th>Iva</th>
                   <th>Cantidad</th>
+                  <th>Pedimento</th>
                   <th>Total producto</th>
                  </tr>
               </thead>
@@ -89,6 +90,7 @@
                    <td>${{ number_format($item->precio, 2) }}</td>
                    <td>16%</td>
                    <td>{{ $item->cantidad }}</td>
+                   <td>{{ $item->num_pedimento }}</td>
                    <td>${{ number_format($item->precio * $item->cantidad, 2) }}</td>
                   </tr>
                </tbody>
@@ -126,35 +128,34 @@
 
     </div>
 
-        <div class="num_p_d">
-          <div class="w-txt">
-            <h2 class=" txt-ped">Pedimentos</h2>
-          </div>
-          <table class="table table-striped table-condensed table-hover table-bordered table-detalle table-ped">
-           <thead>
-             <tr>
-               <th>Producto</th>
-               <th>Pedimento</th>
-               <th>Cantidad</th>
-             </tr>
-           </thead>
-           @foreach($pedimento as $pedi)
-            <tbody>
-              <tr>
-              <td>
-                {{ $pedi->clave }}
-              </td>
-              <td>
-                {{ $pedi->num_pedimento }}
-              </td>
-              <td>
-                {{ $pedi->cantidad }}
-              </td>
-            </tr>
-            </tbody>
-           @endforeach
-          </table>
-        </div>
+
+          @if(count($extra))
+            <h3 class="text-extra">Extras: </h3>
+            <table class="table t-extra">
+             <thead>
+               <tr>
+                 <th>Clave</th>
+                 <th>Producto</th>
+                 <th>Total</th> 
+               </tr> 
+             </thead>
+             <tbody id="body-extras">
+               <tr>
+                 @foreach($extra as $e)
+                   <td>{{ $e->clave }}</td>
+                   <td>{{ $e->descripcion }}</td>
+                   @if($e->total == 0)
+                    <td class="text-warning">Pendiente</td>
+                  @else
+                    <td class="text-warning">${{ number_format($e->total, 2) }}</td>
+                  @endif
+                 @endforeach
+               </tr>
+             </tbody>
+           </table>
+          @else
+          @endif
+
 
    </section>
 

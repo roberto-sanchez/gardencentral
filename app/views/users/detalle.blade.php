@@ -117,19 +117,16 @@
                    <td>Color: {{ $item->color }}</td>
                 </tr>
                 <tr>
-                   <td><?php $des = $item->precio * $item->descuento ?>${{ number_format($tpro = $item->precio - $des, 2) }}</td>
+                   <td>${{ number_format($item->precio, 2) }}</td>
                 </tr>
                 <tr>
                    <td>Iva: 16%</td>
                 </tr>
                 <tr>
-                   <td>Piezas por paquete: {{ $item->piezas_paquete }}</td>
+                   <td>Cantidad: {{ $item->cantidad }}/td>
                 </tr>
                 <tr>
-                   <td>Cantidad: {{ $item->quantity }}</td>
-                </tr>
-                <tr>
-                   <td>Total producto: ${{ number_format($item->precio * $item->quantity, 2) }}</td>
+                   <td>Total producto: {{ number_format($item->precio * $item->cantidad, 2) }}</td>
                 </tr>
 
               </tbody>
@@ -174,7 +171,7 @@
                 <th>Precio</th>
                 <th>Iva</th>
                 <th>Cantidad</th>
-                <!--<th>Pedimento</th>-->
+                <th>Pedimento</th>
                 <th>Total producto</th>
               </tr>
               </thead>
@@ -185,15 +182,11 @@
                  <td>{{ $item->clave }}</td>
                  <td id="pro-d">{{ $item->nombre }}</td>
                  <td>{{ $item->color }}</td>
-                <td><?php $des = $item->precio * $item->descuento ?>${{ number_format($tpro = $item->precio - $des, 2) }}</td>
+                 <td>${{ number_format($item->precio, 2) }}</td>
                  <td>16%</td>
-                 <td>{{ $item->quantity }}</td>
-                <!-- @foreach($pedimento as $pedi)
-                 <td>
-                   {{ $pedi->num_pedimento }} - {{ $pedi->cantidad }}
-                 </td>
-                 @endforeach-->
-                 <td>${{ number_format($sub = $tpro * $item->quantity, 2) }}</td>
+                 <td>{{ $item->cantidad }}</td>
+                 <td>{{ $item->num_pedimento }}</td>
+                 <td>${{ number_format($item->precio * $item->cantidad, 2) }}</td>
                </tr>
               @endforeach
             </table>
@@ -236,6 +229,26 @@
               
           </div>
         </div>
+          @if(count($extra))
+            <h3 class="text-info extra-detalle">Extras: </h3>
+            <table class="table ta-extra">
+             <thead>
+               <th>Clave</th>
+               <th>Producto</th>
+               <th>Total</th>  
+             </thead>
+             <tbody id="body-extras">
+               <tr>
+                 @foreach($extra as $e)
+                   <td>{{ $e->clave }}</td>
+                   <td>{{ $e->descripcion }}</td>
+                   <td class="text-warning">Pendiente</td>
+                 @endforeach
+               </tr>
+             </tbody>
+           </table>
+          @else
+          @endif
 
       <div class="bolque-b">
         <div>
@@ -251,33 +264,6 @@
           </div>
         </div>
 
-        <div class="num_p_d">
-          <h2 class="text-center text-info txt-ped">Pedimentos</h2>
-          <table class="table table-striped table-condensed table-hover table-bordered table-detalle">
-           <thead>
-             <tr>
-               <th>Producto</th>
-               <th>Pedimento</th>
-               <th>Cantidad</th>
-             </tr>
-           </thead>
-           @foreach($pedimento as $pedi)
-            <tbody>
-              <tr>
-              <td>
-                {{ $pedi->clave }}
-              </td>
-              <td>
-                {{ $pedi->num_pedimento }}
-              </td>
-              <td>
-                {{ $pedi->cantidad }}
-              </td>
-            </tr>
-            </tbody>
-           @endforeach
-          </table>
-        </div>
       </div>
 
   </section>
