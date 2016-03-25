@@ -8,7 +8,8 @@
 		"laravel/framework": "4.2.*",
 		"anouar/fpdf": "1.0.1",
 		"thujohn/pdf": "dev-master",
-		"maatwebsite/excel": "~1.2.1"
+		"maatwebsite/excel": "~1.2.1",
+		"liebig/cron": "dev-master"
 	},
 	"autoload": {
 		"classmap": [

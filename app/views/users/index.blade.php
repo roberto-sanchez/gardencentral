@@ -41,6 +41,33 @@
     cursor:pointer;
   }
 
+.dialog-ped-cli{
+  width:50%;
+}
+
+.totales-p-dclie{
+  padding:0 .5em .5em .5em;
+  max-height:515px;
+  overflow-y: scroll;
+}
+
+  #list_p_ {
+        margin-bottom:0;
+      }
+
+      #list_p_ tbody tr{
+        text-align: center;
+        font-size:.8em;
+      }
+
+       ul.fancy li a, #list_p__info{
+        font-size:.9em;
+      }
+
+  #con-pd-cli{
+    width:100px;
+  }
+
 
 </style>
 @stop

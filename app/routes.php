@@ -62,6 +62,7 @@ Route::controller('users','ProductoController');
 //Admin
 Route::get('/pedidos/alertaproducto','AdminController@alertaproducto');
 Route::get('/pedidos/borraralerta','AdminController@borraralerta');
+Route::get('pedidos/detalletotales','AdminController@detalletotales');
 Route::post('pedidos/verpedidos','AdminController@verpedidos');
 Route::post('pedidos/detallepedido','AdminController@detallepedido'); 
 Route::get('pedidos/verbarras','AdminController@verbarras');
@@ -70,6 +71,7 @@ Route::get('pedidos/vergrafica','AdminController@vergrafica');
 Route::get('consultas/inventario', 'AdminController@inventario');
 Route::get('consultas/pedidos', 'AdminController@pedidos');
 Route::get('consultas/movimientos', 'AdminController@movimientos');
+Route::get('consultas/estatus', 'AdminController@estatus');
 Route::get('consultas/listapedidos', 'AdminController@listapedidos');
 Route::get('consultas/listaagentes', 'AdminController@listaagentes');
 Route::get('consultas/listp', 'AdminController@listp');
@@ -104,6 +106,7 @@ Route::GET('movimientos/listarm', 'AdminController@listarm');
 Route::GET('movimientos/verm', 'AdminController@verm');
 Route::POST('movimientos/nuevomovimiento', 'AdminController@nuevomovimiento'); 
 Route::GET('movimientos/vermovimientos', 'AdminController@vermovimientos');
+Route::GET('movimientos/verestatus', 'AdminController@verestatus');
 
 //Listar notas dependiendo de la vista
 Route::GET('notas/listnotas', 'AdminController@listnotas'); 

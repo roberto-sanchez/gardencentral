@@ -336,6 +336,8 @@ public function agregarextra(){
     }
 
 
+
+
     public function registrarlog(){
         $idp = Input::get('idp');
         $e_inicial = Input::get('e_inicial');

@@ -20,6 +20,25 @@ ClassLoader::addDirectories(array(
 
 ));
 
+
+//Event::listen('cron.collectJobs', function() {
+  //  Cron::add('example1', '* * * * *', function() {
+                    // Do some crazy things unsuccessfully every minute
+                //    return 'No';
+              //  });
+
+  //  Cron::add('example2', '*/2 * * * *', fun ction() {
+        // Do some crazy things successfully every two minute
+     //   return null;
+   // });
+
+ /*   Cron::add('disabled job', '0 * * * *', function() {
+        // Do some crazy things successfully every hour
+    }, false);
+});
+*/
+
+
 /*
 |--------------------------------------------------------------------------
 | Application Error Logger

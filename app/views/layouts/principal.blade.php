@@ -197,6 +197,7 @@
             <ul>
                 <li><a href="{{ URL::to('/consultas/pedidos') }}">Pedidos</a></li>
                 <li><a href="{{ URL::to('/consultas/movimientos') }}">Movimientos</a></li>
+                <li><a href="{{ URL::to('/consultas/estatus') }}">Estatus</a></li>
             </ul>
         </li>
         <li class="paginas">
@@ -253,19 +254,21 @@
    </footer>
 
 
-  <!--Modal para listar los pedidos del usuario-->
+     <!--Modal para listar los pedidos del usuario-->
     <div id="pedidos" class=" modal fade" data-keyboard="false" data-backdrop="static">
-      <div class="modal-dialog ">
+      <div class="modal-dialog dialog-ped-cli">
         <div class="modal-content">
           <div class="modal-header header-detalle">
             <button type="button" class="close close-mp" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h2 class="modal-title text-center txt-p"><span class="glyphicon glyphicon-shopping-cart"></span> Pedidos</h2>
           </div>
           <div class="modal-body body-d-cli">
-          <h2 class="t-p-clientes text-info"</h2>
-            <div class="pedidosCliente">
-                <div class="table-pd">
-                  <table id="list_p_" class="table table-striped table-hover">
+
+          <h2 class="t-p-clientes text-info"></h2>
+
+            <div class="totales-p-dclie">
+                <div class="totalespedidoscliente">
+                  <table id="list_p_" class="table">
                     <thead class="thead-pedido">
                       <tr>
                         <th>N° pedido</th>
@@ -277,10 +280,11 @@
                  </table>
                </div>
             </div>
+
           </div>
           <div class="modal-footer modal-conf-estat">
 
-              <span id="con-pd" class="sa-p c-p-cli btn btn-primary" data-dismiss="modal" >
+              <span id="con-pd-cli" class="sa-p c-p-cli btn btn-primary" data-dismiss="modal" >
                 <span class="glyphicon glyphicon-chevron-left"></span>
                  Cerrar
               </span>
@@ -288,6 +292,7 @@
         </div>
       </div>
     </div>
+
 
      <!--Modal detalle del pedido del cliente-->
     <div id="detallepedidocliente" class=" modal fade" data-keyboard="false" data-backdrop="static">

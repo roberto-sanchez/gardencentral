@@ -47,6 +47,34 @@
         stroke: #fff;
       }
 
+      .dialog-ped{
+        width:70%;
+      }
+
+      #list_p_ {
+        margin-bottom:0;
+      }
+
+      #list_p_ tbody tr{
+        text-align: center;
+        font-size:.8em;
+      }
+
+       ul.fancy li a, #list_p__info{
+        font-size:.9em;
+      }
+
+
+      .totales-p-d{
+        padding:1em;
+        max-height:515px;
+        overflow-y: scroll;
+      }
+
+      #cerrar-pe-de{
+        width: 100px;
+      }
+
 
 </style>
 @stop
@@ -76,7 +104,7 @@
             </div>
             <div class="text-p">
               <h2 class="txt-total">Total de pedidos.</h2>
-              <a href="#">Ver detalle</a>
+              <a value="5" data-text="Total de pedidos" class="v_detalle" href="#">Ver detalle</a>
             </div>
           </div>
 
@@ -86,7 +114,7 @@
             </div>
             <div class="text-p">
               <h2 class="txt-dia">Pedidos del día.</h2>
-              <a href="#">Ver detalle</a>
+              <a value="4" data-text="Pedidos del día" class="v_detalle" href="#">Ver detalle</a>
             </div>
           </div>
 
@@ -96,7 +124,7 @@
             </div>
             <div class="text-p">
               <h2 class="txt-pagados">Pedidos pagados.</h2>
-              <a href="#">Ver detalle</a>
+              <a value="2" data-text="Pedidos pagados" class="v_detalle" href="#">Ver detalle</a>
             </div>
           </div>
         </div>
@@ -108,7 +136,7 @@
           </div>
           <div class="text-p">
             <h2 class="txt-credito">Pedidos a crédito.</h2>
-            <a href="#">Ver detalle</a>
+            <a value="1" data-text="Pedidos a crédito" class="v_detalle" href="#">Ver detalle</a>
           </div>
         </div>
 
@@ -118,7 +146,7 @@
           </div>
           <div class="text-p">
             <h2 class="txt-pendientes">Pedidos pendientes.</h2>
-            <a href="#">Ver detalle</a>
+            <a value="0" data-text="Pedidos pendientes" class="v_detalle" href="#">Ver detalle</a>
           </div>
         </div>
 
@@ -128,7 +156,7 @@
           </div>
           <div class="text-p">
             <h2 class="txt-cancelados">Pedidos cancelados.</h2>
-            <a href="#">Ver detalle</a>
+            <a value="3" data-text="Pedidos cancelados" class="v_detalle" href="#">Ver detalle</a>
           </div>
         </div>
         </div>
@@ -222,7 +250,46 @@
       </div>
     </div>
 
+<!--  Modal para el detalle de los totales de los pedidos-->
+<div id="totalesmodal" class="modal fade" data-keyboard="false" data-backdrop="static">
+      <div class="modal-dialog dialog-ped">
+        <div class="modal-content">
+          <div class="modal-header header-nota">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 id="to-ped" class="modal-title text-info text-center"></h4>
+          </div>
+          <div class="modal-body">
 
+            <div class="totales-p-d">
+              <div class="totalespedidos">
+              <table id="list_p_" class="table">
+                <thead>
+                  <tr>
+                    <th>N° Pedido</th>
+                    <th>Fecha de registro</th>
+                    <th>Cliente</th>
+                    <th>Total pedido</th>
+                    <th>Agente</th>
+                    <th>Extra</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+                
+          </div>
+          <div class="modal-footer modal-conf-estat">
+              <button id="cerrar-pe-de" type="button" class="btn btn-primary confirm" data-dismiss="modal">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+              Cerrar
+              </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+{{ HTML::script('js/accounting.min.js') }}
 <script>
 
 $(document).ready(function(){
@@ -235,7 +302,6 @@ $(document).ready(function(){
 function barras() {
   d3.json('pedidos/verbarras', function(err, data) {
         datos = data;
-        console.log(datos);
         for(i = 0; i < datos; i++){
  
         }
@@ -393,7 +459,6 @@ function graficar() {
     url: "/pedidos/alertaproducto",
     success: function (a) {
       $('.num-a').text(a.t_alerts);
-      console.log(a);
       if(a.t_alerts == 0){
 
         $('.n-a').text('No hay alertas');
@@ -539,6 +604,237 @@ $.ajax({
   }
   });
 
+//Detalle de los totales
+$(document).on('click', '.v_detalle', function(){
+  estatus = $(this).attr('value');
+  txt = $(this).attr('data-text');
+  $('#to-ped').text(txt);
+
+      $('#totalesmodal').modal({
+        show: 'false',
+      });
+
+              //Listar pedidos
+            $.ajax({
+                dataType: 'json',
+                url: "/pedidos/detalletotales",
+                data:{estatus: estatus},
+                success: function (p) {
+                tabla_a = $('#list_p_').DataTable({
+                  "oLanguage": { 
+                      "oPaginate": { 
+                      "sPrevious": "Anterior", 
+                      "sNext": "Siguiente", 
+                      "sLast": "Ultima", 
+                      "sFirst": "Primera" 
+                      }, 
+
+                  "sLengthMenu": 'Mostrar <select>'+ 
+                  '<option value="10">10</option>'+ 
+                  '<option value="20">20</option>'+ 
+                  '<option value="30">30</option>'+ 
+                  '<option value="40">40</option>'+ 
+                  '<option value="50">50</option>'+ 
+                  '<option value="-1">Todos</option>'+ 
+                  '</select> registros', 
+
+                  "sInfo": "Mostrando del _START_ a _END_ (Total: _TOTAL_ resultados)", 
+                  "sInfoFiltered": " - filtrados de _MAX_ registros", 
+                  "sInfoEmpty": "No hay resultados de búsqueda", 
+                  "sZeroRecords": "No hay registros a mostrar", 
+                  "sProcessing": "Espere, por favor...", 
+                  "sSearch": "Buscar:", 
+
+               },
+
+                "aaSorting": [[ 1, "desc" ]], 
+
+
+                "sPaginationType": "simple_numbers",
+                 "sPaginationType": "bootstrap",
+
+
+
+            });
+
+
+                    tabla_a.fnClearTable();
+
+                      for(var i = 0; i < p.length; i++) {
+                             idp = p[i].id,
+                             ida = p[i].agente_id, 
+                             tabla_a.fnAddData([
+                                        p[i].num_pedido,
+                                        p[i].created_at,
+                                        p[i].nombre_cliente+" "+p[i].paterno,
+                                        '<span id="idp_'+p[i].id+'" class="text-success cantidad" value="'+p[i].id+'"></span>',
+                                        '<span id="ida_'+p[i].id+'" class="a_'+p[i].agente_id+' text-primary"></span>',
+                                        '<span id="e_'+p[i].id+'" class="extra_'+p[i].extra_pedido+'"></span>',
+                                       // '<span class="estatus_'+p[i].estatus+'"></span>',
+                                      ]);
+
+                             $('.extra_0').addClass('sin-extra text-warning glyphicon glyphicon-ban-circle');
+                             $('.extra_1').addClass('con-extra text-success glyphicon glyphicon-ok-circle');
+
+
+                             if(ida == 0){
+
+                                } else {
+                                  //console.log(ida);
+                                 $.ajax({
+                                    type: "GET",
+                                    url: "/consultas/listaagentes",
+                                    data: {ida: ida},
+                                    success: function( a ){
+                                            campo = $('.a_'+a.agente[0].id);
+                                            c = "";
+                                            c += a.agente[0].usuario;
+                                            campo.text(c);
+
+                                            $(document).on('click','.fancy > li, a',function(){
+                                                  campo = $('.a_'+a.agente[0].id);
+                                                  c = "";
+                                                  c += a.agente[0].usuario;
+                                                  campo.text(c);
+
+                                                }); 
+
+                                                $(document).on('keyup', '#list_p__filter', function(){
+                                                  campo = $('.a_'+a.agente[0].id);
+                                                  c = "";
+                                                  c += a.agente[0].usuario;
+                                                  campo.text(c);
+
+                                                });
+
+                                                $(document).on('click', '#list_p__length', function(){  
+                                                    campo = $('.a_'+a.agente[0].id);
+                                                    c = "";
+                                                    c += a.agente[0].usuario;
+                                                    campo.text(c);
+                                                });
+
+                                                     
+
+                                         }
+
+                                 });
+                                }
+
+
+
+
+                              }
+
+                                cantidad_total();
+
+                                 $(document).on('click','.fancy > li, a',function(){
+                                      cantidad_total();
+
+                                  }); 
+
+                                  $(document).on('keyup', '#list_p__filter', function(){
+
+                                      cantidad_total();
+                                  });
+
+                                  $(document).on('click', '#list_p__length', function(){
+                                      cantidad_total();
+
+                                  });
+
+
+                        $('.a_0').text('No asignado');
+                        $('.a_0').addClass('text-danger');
+
+                       /* $('.a_0').text('No asignado');
+                        $('.a_0').addClass('text-danger');
+                        $('.estatus_0').text('Pendiente');
+                        $('.estatus_0').addClass('text-warning');
+                        $('.estatus_1').text('Crédito');
+                        $('.estatus_1').addClass('text-primary');
+                        $('.estatus_2').text('Pagado');
+                        $('.estatus_2').addClass('text-success');
+                        $('.estatus_3').text('Cancelado');
+                        $('.estatus_3').addClass('text-danger');*/
+
+                        $('.dataTables_paginate .prev a').text('Anterior');
+                        $('.dataTables_paginate .next a').text('Siguiente');
+
+
+
+                },
+                error: function () {
+                    alert("failure");
+                }
+            });
+
+
+
+});
+
+
+ function cantidad_total(){
+
+      $('#list_p_ tbody tr').each(function(){
+            id  = $(this).find("[class*='cantidad']").attr('value');
+
+              $.ajax({
+                    type: "GET",
+                    url: "/pedidos/cantidadpedidos",
+                    data: {id: id},
+                    success: function( n ){
+
+                              if(n.n == 0){
+                              } else {
+
+                               campo = $('#idp_'+n.cant[0].pedido_id);
+                               c = "";
+                               t = n.total * 0.16;
+                               total = parseFloat(n.total + t);
+                               c +=  total.toFixed(2);
+                               campo.text(accounting.formatMoney(c));
+
+                              }
+
+
+
+                         }
+
+                 });
+
+
+
+
+        })
+  
+ }
+
+       $(document).on('click','.fancy > li, a',function(){
+        $('.extra_0').addClass('sin-extra text-warning glyphicon glyphicon-ban-circle');
+        $('.extra_1').addClass('con-extra text-success glyphicon glyphicon-ok-circle');
+        $('.a_0').text('No asignado');
+        $('.a_0').addClass('text-danger');
+
+      });        
+      
+
+      $(document).on('keyup', '#list_p__filter', function(){
+        $('.extra_0').addClass('sin-extra text-warning glyphicon glyphicon-ban-circle');
+        $('.extra_1').addClass('con-extra text-success glyphicon glyphicon-ok-circle');
+        $('.a_0').text('No asignado');
+        $('.a_0').addClass('text-danger');
+      });
+
+      $(document).on('click', '#list_p__length', function(){
+        $('.extra_0').addClass('sin-extra text-warning glyphicon glyphicon-ban-circle');
+        $('.extra_1').addClass('con-extra text-success glyphicon glyphicon-ok-circle');
+        $('.a_0').text('No asignado');
+        $('.a_0').addClass('text-danger');
+      });
+
+
+
 
 //Detalle del producto del inventario
   $(document).on('click', '.caja', function(){
@@ -580,10 +876,17 @@ $.ajax({
 
 $(document).on('click', '#cerrar-m', function(){
   $(".totales-p").load(location.href+" .totales-p>*","");
-})  
+});
+
+
+$(document).on('click', '#cerrar-pe-de', function(){
+  $(".totalespedidos").load(location.href+" .totalespedidos>*","");
+});
+
 
 $(document).on('click', '.close', function(){
   $(".totales-p").load(location.href+" .totales-p>*","");
+  $(".totalespedidos").load(location.href+" .totalespedidos>*","");
 });
 
 

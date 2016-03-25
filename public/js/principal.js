@@ -182,6 +182,7 @@ $(document).ready(function () {
       $('.tab-extra').hide(); 
       $('#body-extras').html('');
       $('.table-cli').hide();
+      $(".totalespedidoscliente").load(location.href+" .totalespedidoscliente>*","");
     });
 
 

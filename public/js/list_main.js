@@ -1,3 +1,8 @@
+$(document).on('click', '#con-pd-cli', function(){
+  $(".totalespedidoscliente").load(location.href+" .totalespedidoscliente>*","");
+});
+
+
 $(document).ready(function(){
     //Listar domicilios
      dom = $('#dom_c');

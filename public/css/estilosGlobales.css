@@ -3894,6 +3894,13 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f74a00', end
   cursor:pointer;
 }
 
+/*Modal detalle delos pedidos del dashboard*/
+.v_detalle:hover{
+  color:#31708f;
+}
+
+
+
 /*-----Dashboaard -- Totales inventario--------*/
 
 /*Totales del inventario */
@@ -5817,20 +5824,22 @@ margin-bottom:.5em;
 /*---Vista para los agentes-----*/
 .list-p{
   font-size:1.8em;
+  
 }
 
+
 .t-agentes{
-  width:90%;
+  width:100%;
   margin:0 auto;
 
 }
 
  .t-ag .c-agentes tr {
-  font-size:.9em;
+  font-size:.8em;
  }
 
 #datos_a tr td{
-  font-size:.9em;
+  font-size:.8em;
 }
 
 /*Boton para las consultas de ver pedido*/
@@ -6021,7 +6030,7 @@ margin-bottom:.5em;
 }
 
 .t-agentes{
-  width:80%;
+  width:100%;
 
 }
 

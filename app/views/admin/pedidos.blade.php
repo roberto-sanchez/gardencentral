@@ -53,6 +53,7 @@
             <th>Cliente</th>
             <th>Total pedido</th>
             <th>Agente</th>
+            <th>Extra</th>
             <th>Estatus</th>
           </tr>
         </thead>
@@ -170,6 +171,21 @@
                    </tr>
                  </table>
               </div>
+            <button class="btn btn-xs btn-primary add-ext" id="add-extras">Agregar extras</button>
+            <h3 class="text-info ext-d">Extras: </h3>
+            <table class="table ta-extra tab-extra">
+             <thead>
+               <th>Clave</th>
+               <th>Producto</th>
+               <th>Total</th> 
+               <th>Editar</th> 
+               <th>Eliminar</th>  
+             </thead>
+             <tbody id="body-extras"></tbody>
+           </table>
+
+
+
            </div>
            <div class="table-cli">
               <table class="table cliente-pedido">
@@ -277,6 +293,109 @@
       </div>
     </div>
 
+  <!--Modal para agregar extras-->
+        <div id="modalextras" class="modal fade">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title text-primary text-center">
+                  <span class="glyphicon glyphicon-plus"></span>
+                  Agregar extras
+                </h4>
+              </div>
+              <div class="modal-body body-extras">
+                <div class="area-nota error-c">
+                  <label class="text-info label-ext">Extras: </label>
+                  <textarea id="txt-extra" class="form-control" rows="5"></textarea>
+                  <span class="icon-c"></span>
+                </div>
+                <div class="t-pre">
+                  <label class="text-info label-ext">Total: </label>
+                  <div class="input-group has-feedback error-t">
+                    <span class="input-group-addon">
+                      <span class="glyphicon glyphicon-usd"></span>
+                    </span>
+                      <input type="number" class="form-control" id="p-total" placeholder="Precio total">
+                      <span class="icon-t"></span>
+                   </div>
+                   @foreach($p as $extra)
+                     <input type="text" class="hidden" id="inp-extras" value="{{ $extra->clave }}">
+                   @endforeach
+                </div>
+              </div>
+              <div class="modal-footer modal-confirmar">
+                <button id="can-extras" type="button" class="btn btn-danger confirm" data-dismiss="modal">Cancelar</button>
+                <button id="env-extras" class="btn btn-primary confirm" data-dismiss="modal">Agregar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+  <!--Modal para editar extras-->
+        <div id="modalextrasedit" class="modal fade">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title text-primary text-center">
+                  <span class="glyphicon glyphicon-edit"></span>
+                  Editar extras
+                </h4>
+              </div>
+              <div class="modal-body body-extras">
+                <div class="area-nota error-c">
+                 <label class="text-info label-ext">Extras: </label>
+                 <textarea id="txt-extraedit" class="form-control" rows="5"></textarea>
+                 <span class="icon-c"></span>
+                </div>
+                <div class="t-pre">
+                  <label class="text-info label-ext">Total: </label>
+                  <div class="input-group has-feedback error-t">
+                    <span class="input-group-addon">
+                      <span class="glyphicon glyphicon-usd"></span>
+                    </span>
+                      <input type="number" class="form-control" id="p-total-edit" placeholder="Precio total">
+                      <span class="icon-t"></span>
+                   </div>
+                </div>
+              </div>
+              <div class="modal-footer modal-confirmar">
+                <button id="can-act-extras" type="button" class="btn btn-danger confirm" data-dismiss="modal">Cancelar</button>
+                <button id="act-extras" class="btn btn-primary confirm" data-dismiss="modal">Actualizar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+<!--Modal para elimanr extras-->
+<div id="modaldeleteextra" class="modal fade" data-keyboard="false" data-backdrop="static">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title text-danger text-center">
+              <span class="glyphicon glyphicon-trash"></span>
+              Eliminar extra
+             </h4>
+          </div>
+          <div class="modal-body">
+            
+          <h3 class="txt-delete-n text-danger text-center">¿Estás seguro que deseas eliminar este producto?</h3>
+                
+          </div>
+          <div class="modal-footer modal-confirmar-pass">
+              <button type="button" class="btn btn-danger confirm" data-dismiss="modal">No</button>
+              <span id="de-ex" class="btn btn-primary confirm" data-dismiss="modal" >Si</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
 
 {{ HTML::script('js/accounting.min.js') }}
   <script>
@@ -382,64 +501,19 @@ $(document).ready(function(){
                              idp = p[i].id,
                              ida = p[i].agente_id, 
                              tabla_a.fnAddData([
-                                       '<a id="c-estatus" class="'+p[i].estatus+' v_'+p[i].razon_social+'" data-id="'+p[i].id+'" value="'+p[i].razon_social+'" href="#modalpedido" data-toggle="modal">'+p[i].num_pedido+'</a>',
+                                       '<a id="c-estatus" class="'+p[i].estatus+'" data-id="'+p[i].id+'" value="'+p[i].created_at+'" href="#modalpedido" data-toggle="modal">'+p[i].num_pedido+'</a>',
                                         p[i].numero_cliente,
                                         p[i].created_at,
                                         p[i].nombre_cliente+" "+p[i].paterno,
-                                        '<span id="idp_'+p[i].id+'" class="text-success '+p[i].id+'"></span>',
+                                        '<span id="idp_'+p[i].id+'" class="text-success cantidad" value="'+p[i].id+'"></span>',
                                         '<span id="ida_'+p[i].id+'" class="a_'+p[i].agente_id+' text-primary"></span>',
+                                        '<span id="e_'+p[i].id+'" class="extra_'+p[i].extra_pedido+'"></span>',
                                         '<span class="estatus_'+p[i].estatus+'"></span>',
                                       ]);
 
-                                 $.ajax({
-                                    type: "GET",
-                                    url: "/pedidos/cantidadpedidos",
-                                    data: {idp: idp},
-                                    success: function( n ){
-                                                campo = $('#idp_'+n.cant[0].pedido_id);
-                                                c = "";
-                                                t = n.total * 0.16;
-                                                total = parseFloat(n.total + t);
-                                                c +=  total.toFixed(2);
-                                                campo.text(accounting.formatMoney(c));
+                             $('.extra_0').addClass('sin-extra text-warning glyphicon glyphicon-ban-circle');
+                             $('.extra_1').addClass('con-extra text-success glyphicon glyphicon-ok-circle');
 
-
-                                                $(document).on('click','.fancy > li, a',function(){
-                                                  campo = $('#idp_'+n.cant[0].pedido_id);
-                                                  c = "";
-                                                  t = n.total * 0.16;
-                                                  total = parseFloat(n.total + t);
-                                                  c +=  total.toFixed(2);
-                                                  campo.text(accounting.formatMoney(c));
-
-                                                }); 
-
-                                                $(document).on('keyup', '#list_p__filter', function(){
-                                                  campo = $('#idp_'+n.cant[0].pedido_id);
-                                                  c = "";
-                                                  t = n.total * 0.16;
-                                                  total = parseFloat(n.total + t);
-                                                  c +=  total.toFixed(2);
-                                                  campo.text(accounting.formatMoney(c));
-
-                                                });
-
-                                                $(document).on('click', '#list_p__length', function(){
-
-                                                  campo = $('#idp_'+n.cant[0].pedido_id);
-                                                  c = "";
-                                                  t = n.total * 0.16;
-                                                  total = parseFloat(n.total + t);
-                                                  c +=  total.toFixed(2);
-                                                  campo.text(accounting.formatMoney(c));
-
-                                                });
-
-                                                     
-
-                                         }
-
-                                 });
 
 
                                 if(ida == 0){
@@ -490,6 +564,26 @@ $(document).ready(function(){
 
                               }
 
+
+                               //llamamos a la funcion 
+                                cantidad_total();
+
+                                 $(document).on('click','.fancy > li, a',function(){
+                                      cantidad_total();
+
+                                  }); 
+
+                                  $(document).on('keyup', '#list_p__filter', function(){
+
+                                      cantidad_total();
+                                  });
+
+                                  $(document).on('click', '#list_p__length', function(){
+                                      cantidad_total();
+
+                                  });
+
+
                        /* $('.v_').attr('value', 'Sin razón social');
                         $('.v_r_').text('Sin razón social');
                         $('.v_r_').addClass('text-info'); */
@@ -519,9 +613,8 @@ $(document).ready(function(){
 
 
       $(document).on('click','.fancy > li, a',function(){
-       /* $('.v_').attr('value', 'Sin razón social');
-        $('.v_r_').text('Sin razón social');
-        $('.v_r_').addClass('text-info'); */
+       $('.extra_0').addClass('sin-extra text-warning glyphicon glyphicon-ban-circle');
+       $('.extra_1').addClass('con-extra text-success glyphicon glyphicon-ok-circle');
 
         $('.a_0').text('No asignado');
         $('.a_0').addClass('text-danger');
@@ -537,9 +630,8 @@ $(document).ready(function(){
       
 
       $(document).on('keyup', '#list_p__filter', function(){
-       /* $('.v_').attr('value', 'Sin razón social');
-        $('.v_r_').text('Sin razón social'); 
-        $('.v_r_').addClass('text-info');*/
+        $('.extra_0').addClass('sin-extra text-warning glyphicon glyphicon-ban-circle');
+        $('.extra_1').addClass('con-extra text-success glyphicon glyphicon-ok-circle');
         $('.a_0').text('No asignado');
         $('.a_0').addClass('text-danger');
         $('.estatus_0').text('Pendiente');
@@ -553,9 +645,8 @@ $(document).ready(function(){
       });
 
       $(document).on('click', '#list_p__length', function(){
-       /* $('.v_').attr('value', 'Sin razón social');
-        $('.v_r_').text('Sin razón social');
-        $('.v_r_').addClass('text-info'); */
+        $('.extra_0').addClass('sin-extra text-warning glyphicon glyphicon-ban-circle');
+        $('.extra_1').addClass('con-extra text-success glyphicon glyphicon-ok-circle');
         $('.a_0').text('No asignado');
         $('.a_0').addClass('text-danger');
         $('.estatus_0').text('Pendiente');
@@ -575,14 +666,14 @@ $(document).ready(function(){
 
 $(document).on('click','#c-estatus', function(){
   id = $(this).attr('data-id');
-
-
-
-
-num = $(this).text();
-fe = $(this).attr('value');
-$('.n-pedd').text('Pedido #'+num);
-$('.n-peee').text('Fecha: '+fe);
+  $('#env-extras').attr('data-id', id);
+  num = $(this).text();
+  fe = $(this).attr('value');
+  ex = $('#ide_'+id).attr('class');
+ $('.n-pedd').text('Pedido #'+num);
+ $('.n-peee').text('Fecha: '+fe);
+ $('.c-pass').attr('data-extra', ex);
+ $('#de-ex').attr('data-pedido', id);
 
 
  tabla_d = $('#d-dpedido');
@@ -709,6 +800,53 @@ $('.total-p').html(accounting.formatMoney(resultado += iva));
 
      });
 
+
+      $(document).on('click', '#c-estatus', function(){
+          idp = $(this).attr('data-id');
+            //Extras
+            $.ajax({
+                type: "GET",
+                url: "/pedidos/verextra",
+                data: {idp: idp},
+                success: function( e ){
+                        if(e.n == 0){
+                          $('.add-ext').show();
+                        } else {
+                          $('.tab-extra').show();
+                          $('.ext-d').show();
+                          body = $('#body-extras');
+                          fila = "";
+                          for(datos in e.extra){
+
+                            fila += '<tr id="ex_'+e.extra[datos].id+'"><td>'+e.extra[datos].clave+'</td>';
+                            fila += '<td id="desc_'+e.extra[datos].id+'">'+e.extra[datos].descripcion+'</td>';
+                            fila += '<td data-total="'+e.extra[datos].total+'" id="t_'+e.extra[datos].id+'" value="'+e.extra[datos].total+'" class="total_"></td>';
+                            fila += '<td><span id="edit-ext" value="'+e.extra[datos].id+'"  class="btn btn-info btn-xs glyphicon glyphicon-edit"></span></td>';
+                            fila += '<td><span id="delet-ext" value="'+e.extra[datos].id+'" class="btn btn-danger btn-xs glyphicon glyphicon-remove"></span></td></tr>';
+                          }
+
+                          body.append(fila);
+
+                          if($('.total_').attr('value') == 0){
+                            $('.total_').text('Pendiente');
+                            $('.total_').addClass('text-warning');
+                          } else {
+                            $('.total_').text(accounting.formatMoney(e.extra[datos].total));
+                            $('.total_').addClass('text-success');
+                          }
+                          
+                        
+
+                        }
+
+                     }
+
+             });
+
+        });
+
+
+
   $('.header-e').click(function(){
     $('.select-e').slideToggle(500);
   });
@@ -717,6 +855,8 @@ $('.total-p').html(accounting.formatMoney(resultado += iva));
   $('.pendiente').click(function(){
     dataid = $(this).attr('data-id');
     id = $(this).attr('id');
+    gly_ex = $('#e_'+id).attr('class');
+    $('#c-pass').attr('data-gly', gly_ex);
     $('#c-pass').attr('data-id',dataid);
     $('#c-pass').attr('value',id);
     $('.select-e').slideUp(300);
@@ -725,6 +865,8 @@ $('.total-p').html(accounting.formatMoney(resultado += iva));
   $('.proceso').click(function(){
     dataid = $(this).attr('data-id');
     id = $(this).attr('id');
+    gly_ex = $('#e_'+id).attr('class');
+    $('#c-pass').attr('data-gly', gly_ex);
     $('#c-pass').attr('data-id',dataid);
     $('#c-pass').attr('value',id);
     $('.select-e').slideUp(300);
@@ -733,6 +875,8 @@ $('.total-p').html(accounting.formatMoney(resultado += iva));
   $('.pagado').click(function(){
     dataid = $(this).attr('data-id');
     id = $(this).attr('id');
+    gly_ex = $('#e_'+id).attr('class');
+    $('#c-pass').attr('data-gly', gly_ex);
     $('#c-pass').attr('data-id',dataid);
     $('#c-pass').attr('value',id);
     $('.select-e').slideUp(300);
@@ -741,6 +885,8 @@ $('.total-p').html(accounting.formatMoney(resultado += iva));
   $('.cancelado').click(function(){
     dataid = $(this).attr('data-id');
     id = $(this).attr('id');
+    gly_ex = $('#e_'+id).attr('class');
+    $('#c-pass').attr('data-gly', gly_ex);
     $('#c-pass').attr('data-id',dataid);
     $('#c-pass').attr('value',id);
     $('.select-e').slideUp(300);
@@ -752,18 +898,30 @@ $('.total-p').html(accounting.formatMoney(resultado += iva));
        $('.select-e').slideUp(300);
        $('.estatus-pe').hide();
        $('.table-cli').hide();
-       $("#d-dpedido").load(location.href+" #d-dpedido>*","");
+       $("#d-dpedido").html('');
        $('#det-p').addClass('enlace-active');
        $('#fotop').removeClass('enlace-active');
        $('#estatusp').removeClass('enlace-active');
        $('.table-pd').show();
+       $('.tab-extra').hide();
+       $('#body-extras').html('');
+       $('.ext-d').hide();
+       $('.add-ext').hide();
     });
 
 $(document).on('click', '.close-mp', function(){
      $('.select-e').slideUp(300);
-     $('.estatus-pe').hide();
-     $('.table-cli').hide();
-     $("#d-dpedido").load(location.href+" #d-dpedido>*","");
+       $('.estatus-pe').hide();
+       $('.table-cli').hide();
+       $("#d-dpedido").html('');
+       $('#det-p').addClass('enlace-active');
+       $('#fotop').removeClass('enlace-active');
+       $('#estatusp').removeClass('enlace-active');
+       $('.table-pd').show();
+       $('.tab-extra').hide();
+       $('#body-extras').html('');
+       $('.ext-d').hide();
+       $('.add-ext').hide();
 
 });
 
@@ -862,6 +1020,8 @@ $(document).on('click','.img-p',function(){
     id = $(this).attr('value');
     total = $(this).attr('data-total');
     agente = $(this).attr('data-agente');
+    ex = $(this).attr('data-extra');
+    gly = $(this).attr('data-gly');
     $('#campo-pass').val('');
     $('.input-pass').removeClass('has-success');
     $('.add-gly').removeClass('glyphicon-ok');
@@ -887,6 +1047,7 @@ $(document).on('click','.img-p',function(){
                 +'<td>'+ed.nombre_cliente+' '+ed.paterno+'</td>'
                 +'<td id="idp_'+ed.id+'" class="text-success">'+total+'</td>'
                 +'<td id="ida_'+ed.id+'" class="text-primary">'+agente+'</td>'
+                +'<td><span id="e_'+ed.id+'" class="'+gly+'"></span></td>'
                 +'<td><span class="estatus_'+ed.estatus+'"></span></td>'
                 +'<tr/>');
 
@@ -932,11 +1093,284 @@ $(document).on('click','.img-p',function(){
 
 
 
+  //Validaciones al agregar un extra
+  $("#env-extras").click(function () {
+
+      if($("#txt-extra").val().length == 0){
+              $('.error-c').addClass('has-error has-feedback');
+              $('.icon-c').addClass('glyphicon glyphicon-remove form-control-feedback');
+              return false;
+
+      } else if($("#p-total").val().length == 0){
+          $('.error-t').addClass('has-error has-feedback');
+          $('.icon-t').addClass('glyphicon glyphicon-remove form-control-feedback');
+          return false;
+
+      }  else {
+          return true;
+      }
+});
+
+  $("#txt-extra").focus(function(){
+    $('.error-c').removeClass('has-error has-feedback');
+    $('.icon-c').removeClass('glyphicon glyphicon-remove form-control-feedback');
+
+  });
+
+  $("#p-total").focus(function(){
+    $('.error-t').removeClass('has-error has-feedback');
+    $('.icon-t').removeClass('glyphicon glyphicon-remove form-control-feedback');
+
+  });
+
+$(document).on('click', '#can-extras', function(){
+  $("#txt-extra").val('');
+  $("#p-total").val('');
+  $('.error-c').removeClass('has-error has-feedback');
+  $('.icon-c').removeClass('glyphicon glyphicon-remove form-control-feedback');
+  $('.error-t').removeClass('has-error has-feedback');
+  $('.icon-t').removeClass('glyphicon glyphicon-remove form-control-feedback');
+
+});
+
+
+
+  //Validaciones al editar un extra
+  $("#act-extras").click(function () {
+
+      if($("#txt-extraedit").val().length == 0){
+              $('.error-c').addClass('has-error has-feedback');
+              $('.icon-c').addClass('glyphicon glyphicon-remove form-control-feedback');
+              return false;
+
+      } else if($("#p-total-edit").val().length <= 1){
+          $('.error-t').addClass('has-error has-feedback');
+          $('.icon-t').addClass('glyphicon glyphicon-remove form-control-feedback');
+          return false;
+
+      }  else {
+          return true;
+      }
+});
+
+  $("#txt-extraedit").focus(function(){
+    $('.error-c').removeClass('has-error has-feedback');
+    $('.icon-c').removeClass('glyphicon glyphicon-remove form-control-feedback');
+
+  });
+
+  $("#p-total-edit").focus(function(){
+    $('.error-t').removeClass('has-error has-feedback');
+    $('.icon-t').removeClass('glyphicon glyphicon-remove form-control-feedback');
+
+  });
+
+$(document).on('click', '#can-act-extras', function(){
+  $('.error-c').removeClass('has-error has-feedback');
+  $('.icon-c').removeClass('glyphicon glyphicon-remove form-control-feedback');
+  $('.error-t').removeClass('has-error has-feedback');
+  $('.icon-t').removeClass('glyphicon glyphicon-remove form-control-feedback');
+
+});
+
+
+
+  // Agregar extras
+  $(document).on('click', '#add-extras', function(){
+    $('#modalextras').modal({
+      show:'false',
+    });
+  });
+
+
+$(document).on('click', '#env-extras', function(){
+  pedidoid = $(this).attr('data-id');
+  clave = $('#inp-extras').val();
+  extra = $('#txt-extra').val();
+  total = $('#p-total').val();
+
+
+     $.ajax({
+          type: "POST",
+          url: "/pedidos/agregarextra",
+          data: {pedidoid: pedidoid, clave: clave, extra: extra, total: total},
+          success: function (e) {
+              $('.add-ext').hide();
+              ex = "";
+              body = $('#body-extras');
+              for(datos in e.new_ex){
+
+                    ex += '<tr id="ex_'+e.new_ex[datos].id+'"><td>'+e.new_ex[datos].clave+'</td>';
+                    ex += '<td id="desc_'+e.new_ex[datos].id+'">'+e.new_ex[datos].descripcion+'</td>';
+                    ex += '<td data-total="'+e.new_ex[datos].total+'" id="t_'+e.new_ex[datos].id+'" value="'+e.new_ex[datos].total+'" class="total_"></td>';
+                    ex += '<td><span id="edit-ext" value="'+e.new_ex[datos].id+'"  class="btn btn-info btn-xs glyphicon glyphicon-edit"></span></td>';
+                    ex += '<td><span id="delet-ext" value="'+e.new_ex[datos].id+'" class="btn btn-danger btn-xs glyphicon glyphicon-remove"></span></td></tr>';
+                 }
+
+                 $('#e_'+e.new_ex[datos].pedido_id).attr('class', 'extra_1 con-extra text-success glyphicon glyphicon-ok-circle');
+
+                 $('.extra_1').addClass('con-extra text-success glyphicon glyphicon-ok-circle');
+
+                 body.append(ex);
+
+                 $('.tab-extra').show();
+                 $('.ext-d').show();
+
+                 if($('.total_').attr('value') == 0){
+                      $('.total_').text('Pendiente');
+                      $('.total_').addClass('text-warning');
+                    } else {
+                      $('.total_').text(accounting.formatMoney(e.new_ex[datos].total));
+                      $('.total_').addClass('text-success');
+                    }
+
+                $('#ide_'+e.new_ex[datos].pedido_id).attr('class', 'con-extra text-success glyphicon glyphicon-ok-circle');
+
+                $('#txt-extra').val('');
+                $('#p-total').val('');
+
+          },
+          error: function () {
+              alert('failure');
+          }
+      });
+
+
+});
+
+
+
+  //Editar extras
+  $(document).on('click', '#edit-ext', function(){
+    $('#modalextrasedit').modal({
+      show:'false',
+    });
+
+    id = $(this).attr('value');
+    $('#act-extras').attr('data-id', id);
+    des = $('#desc_'+id).text();
+    total = $('#t_'+id).attr('data-total');
+    $('#txt-extraedit').val(des); 
+    $('#p-total-edit').val(total);    
+
+  });
+
+  $(document).on('click', '#act-extras', function(){
+    id = $(this).attr('data-id');
+    des = $('#txt-extraedit').val(); 
+    total = $('#p-total-edit').val(); 
+
+
+     $.ajax({
+          type: "POST",
+          url: "/pedidos/actualizarextra",
+          data: {id: id, des: des, total: total},
+          success: function (e) {
+              $('#desc_'+e.id).text(e.descripcion);
+              $('#t_'+e.id).attr('data-total', total);
+              $('#t_'+e.id).text(accounting.formatMoney(e.total));
+              $('#t_'+e.id).addClass('text-success');
+
+              
+
+          },
+          error: function () {
+              alert('failure');
+          }
+      });
+
+
+ });
+
+
+//Eliminar extra
+$(document).on('click', '#delet-ext', function(){
+  id  = $(this).attr('value');
+
+  $('#modaldeleteextra').modal({
+      show:'false',
+    });
+
+    $('#de-ex').attr('data-id', id);
+
+});
+
+
+$(document).on('click', '#de-ex', function(){
+  id  = $(this).attr('data-id');
+  idp = $(this).attr('data-pedido');
+
+  $.ajax({
+          type: "POST",
+          url: "/pedidos/eliminarextra",
+          data: {id: id, idp: idp},
+          success: function (e) {
+              $("#body-extras").load(location.href+" #body-extras>*","");
+              $('.tab-extra').hide();
+              $('.ext-d').hide();
+              $('.add-ext').show();
+
+              $('#e_'+idp).attr('class', 'extra_0 sin-extra text-warning glyphicon glyphicon-ban-circle');
+              $('.extra_0').addClass('sin-extra text-warning glyphicon glyphicon-ban-circle');
+
+          },
+          error: function () {
+              alert('failure');
+          }
+      });
+
+
+});
+
+
 
 
 
 
 });
+
+
+
+  //llamamos a la function 
+ function cantidad_total(){
+
+      $('#list_p_ tbody tr').each(function(){
+            id  = $(this).find("[class*='cantidad']").attr('value');
+
+              $.ajax({
+                    type: "GET",
+                    url: "/pedidos/cantidadpedidos",
+                    data: {id: id},
+                    success: function( n ){
+
+                              if(n.n == 0){
+                              } else {
+
+                               campo = $('#idp_'+n.cant[0].pedido_id);
+                               c = "";
+                               t = n.total * 0.16;
+                               total = parseFloat(n.total + t);
+                               c +=  total.toFixed(2);
+                               campo.text(accounting.formatMoney(c));
+
+                              }
+
+
+
+                         }
+
+                 });
+
+
+
+
+        })
+  
+ }
+
+
+
+
 
 
   </script>

@@ -46,7 +46,7 @@
 </div>
 
 
-    <!--  Modal para confirmar actualizar nota  -->
+    <!--  Modal para agregar un movimiento  -->
 <div id="editarmovi" class="modal fade" data-keyboard="false" data-backdrop="static">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -59,7 +59,7 @@
           </div>
           <div class="modal-body body-add-n b-cant">
               <h4 class="text-info text-center tex-produ"></h4>
-           <div class="form-group error-n">
+           <div class="form-group">
                 <label for="nota" class="text-primary">Cantidad actual: </label>
                 <input type="number" class="form-control" id="n-cantidad-a" disabled>
             </div>
@@ -68,11 +68,13 @@
             <div class="form-group error-n">
                 <label for="nota" class="text-primary">Cantidad nueva: </label>
                {{ Form::number('n-cantidad', null,  array('class' => 'form-control', 'id' => 'n-cantidad', 'placeholder' => 'Nueva cantidad')) }}
+               <span class="icon-n"></span>
             </div>
 
             <div class="area-nota error-c">
               <label class="text-primary">Motivo: </label>
               <textarea class="form-control" rows="5" id="mot" placeholder="Motivo..."></textarea>
+              <span class="icon-c"></span>
             </div>
             
                 
@@ -192,6 +194,48 @@
                 } //end error
             });
 
+//Validaciones movimiento
+ $("#actualizar-cant").click(function () {
+
+      if($("#n-cantidad").val().length == 0){
+              $('.error-n').addClass('has-error has-feedback');
+              $('.icon-n').addClass('glyphicon glyphicon-remove form-control-feedback');
+              return false;
+
+      } else if($("#mot").val().length == 0){
+          $('.error-c').addClass('has-error has-feedback');
+          $('.icon-c').addClass('glyphicon glyphicon-remove form-control-feedback');
+          return false;
+
+      }  else {
+          return true;
+      }
+});
+
+  $("#n-cantidad").focus(function(){
+    $('.error-n').removeClass('has-error has-feedback');
+    $('.icon-n').removeClass('glyphicon glyphicon-remove form-control-feedback');
+
+  });
+
+  $("#mot").focus(function(){
+    $('.error-c').removeClass('has-error has-feedback');
+    $('.icon-c').removeClass('glyphicon glyphicon-remove form-control-feedback');
+
+  });
+
+$(document).on('click', '#n-act', function(){
+  $('#n-cantidad').val('');
+  $('#mot').val('');
+  $('.error-n').removeClass('has-error has-feedback');
+  $('.icon-n').removeClass('glyphicon glyphicon-remove form-control-feedback');
+  $('.error-c').removeClass('has-error has-feedback');
+  $('.icon-c').removeClass('glyphicon glyphicon-remove form-control-feedback');
+
+});
+
+
+
 
   //Editar movimient
   $(document).on('click', '.edit-mo', function(){
@@ -236,10 +280,7 @@ $(document).on('click', '#actualizar-cant', function(){
 
 });
 
-$(document).on('click', '#n-act', function(){
-      $('#n-cantidad').val('');
-      $('#mot').val('');
-});
+
 
   </script>
 

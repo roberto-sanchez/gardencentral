@@ -6,6 +6,14 @@
 
 @section('scripts')
 @parent
+<style>
+
+#list_p_ tbody tr {
+  font-size:.8em;
+  text-align: center;
+}
+
+</style>
 @stop
 
 @section('username')
@@ -17,18 +25,6 @@
 
 @section('menu_users')
   @parent
-  <style>
-
-    .sin-extra{
-      border-radius:45%;
-      font-size:1.5em;
-    }
-
-    .con-extra{
-      border-radius:45%;
-      font-size:1.5em;
-    }
-  </style>
 @stop
 
 @section('menu')

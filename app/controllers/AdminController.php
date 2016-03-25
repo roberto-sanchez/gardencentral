@@ -15,7 +15,7 @@ class AdminController extends \BaseController {
  	$rol = Auth::user()->rol_id;
  	//si accede el admin
      if($rol == 3){
-		return View::make('admin/index');
+     	return View::make('admin/index');
 
 	 //si intenta acceder un agente al admin
 	 } elseif($rol == 2){
@@ -184,6 +184,81 @@ class AdminController extends \BaseController {
 	}
 
 
+
+	public function detalletotales(){
+		$estatus = Input::get('estatus');
+
+		if($estatus == 5){ //Totales
+			$p = DB::table('cliente')
+				->join('usuario','cliente.usuario_id','=','usuario.id')
+				->join('pedido','cliente.id','=','pedido.cliente_id')
+				->select('pedido.id','nombre_cliente','paterno','agente_id', 'num_pedido','pedido.created_at','pedido.estatus', 'rol_id', 'extra_pedido')
+				->orderBy('created_at','desc')
+				 ->get();
+
+			echo json_encode($p);
+			
+		} else if($estatus == 4){ //Del dia
+
+		   $date = date('Y-m-d');
+
+			$p = DB::table('cliente')
+				->join('usuario','cliente.usuario_id','=','usuario.id')
+				->join('pedido','cliente.id','=','pedido.cliente_id')
+				->select('pedido.id','nombre_cliente','paterno','agente_id', 'num_pedido','pedido.created_at','pedido.estatus', 'rol_id', 'extra_pedido')
+				->orderBy('created_at','desc')
+				->where('fecha_registro', $date)
+				 ->get();
+
+			echo json_encode($p);
+
+		} else if($estatus == 3){//Cancelados
+			$p = DB::table('cliente')
+				->join('usuario','cliente.usuario_id','=','usuario.id')
+				->join('pedido','cliente.id','=','pedido.cliente_id')
+				->select('pedido.id','nombre_cliente','paterno','agente_id', 'num_pedido','pedido.created_at','pedido.estatus', 'rol_id', 'extra_pedido')
+				->orderBy('created_at','desc')
+				->where('pedido.estatus', 3)
+				 ->get();
+
+			echo json_encode($p);
+
+		} else if($estatus == 2){ //pagados
+			$p = DB::table('cliente')
+				->join('usuario','cliente.usuario_id','=','usuario.id')
+				->join('pedido','cliente.id','=','pedido.cliente_id')
+				->select('pedido.id','nombre_cliente','paterno','agente_id', 'num_pedido','pedido.created_at','pedido.estatus', 'rol_id', 'extra_pedido')
+				->orderBy('created_at','desc')
+				->where('pedido.estatus', 2)
+				 ->get();
+
+			echo json_encode($p);
+
+		} else if($estatus == 1){ //Credito
+			$p = DB::table('cliente')
+				->join('usuario','cliente.usuario_id','=','usuario.id')
+				->join('pedido','cliente.id','=','pedido.cliente_id')
+				->select('pedido.id','nombre_cliente','paterno','agente_id', 'num_pedido','pedido.created_at','pedido.estatus', 'rol_id', 'extra_pedido')
+				->orderBy('created_at','desc')
+				->where('pedido.estatus', 1)
+				 ->get();
+
+			echo json_encode($p);
+		} else if($estatus == 0){ //pendientes
+			$p = DB::table('cliente')
+				->join('usuario','cliente.usuario_id','=','usuario.id')
+				->join('pedido','cliente.id','=','pedido.cliente_id')
+				->select('pedido.id','nombre_cliente','paterno','agente_id', 'num_pedido','pedido.created_at','pedido.estatus', 'rol_id', 'extra_pedido')
+				->orderBy('created_at','desc')
+				->where('pedido.estatus', 0)
+				 ->get();
+
+			echo json_encode($p);
+		}
+
+	}
+
+
 	/**
 	 * Show the form for creating a new resource.
 	 * GET /admins/create
@@ -205,7 +280,18 @@ class AdminController extends \BaseController {
 	 }
 
 	 public function pedidos(){
-		   return View::make('admin/pedidos');
+
+	 		//Extras
+       $p = DB::table('producto')
+                ->where('nombre', 'Extras')
+                ->select('clave')
+                ->get();
+
+		return View::make('admin/pedidos', 
+			compact(
+				'p'
+				));
+
 	 }
 
 	 public function listapedidos(){
@@ -213,15 +299,7 @@ class AdminController extends \BaseController {
 		    $p = DB::table('cliente')
 							->join('usuario','cliente.usuario_id','=','usuario.id')
 							->join('pedido','cliente.id','=','pedido.cliente_id')
-							->select('pedido.id','numero_cliente','nombre_cliente','paterno','agente_id', 'num_pedido','pedido.created_at','pedido.estatus', 'rol_id')
-							->orderBy('created_at','desc')
-							 ->get();
-
-		 $agente =	DB::table('cliente')
-							->join('usuario','cliente.usuario_id','=','usuario.id')
-							->join('pedido','cliente.id','=','pedido.cliente_id')
-							->select('pedido.id','numero_cliente','usuario','agente_id', 'num_pedido','pedido.created_at','pedido.estatus','usuario')
-							->where('usuario.rol_id', 2)
+							->select('pedido.id','numero_cliente','nombre_cliente','paterno','agente_id', 'num_pedido','pedido.created_at','pedido.estatus', 'rol_id', 'extra_pedido')
 							->orderBy('created_at','desc')
 							 ->get();
 
@@ -1077,6 +1155,23 @@ public function entradas(){
 
 		echo json_encode($mo);
 	}
+
+
+	 public function estatus(){
+        return View::make('admin/estatus');
+    }
+
+    public function verestatus(){
+
+    	$estatus = DB::table('log')
+    			->join('usuario', 'log.usuario_id', '=', 'usuario.id')
+    			->join('pedido', 'log.pedido_id', '=', 'pedido.id')
+    			->select('usuario', 'num_pedido', 'estatus_inicial', 'estatus_final', 'log.created_at')
+    			->get();
+
+    	echo json_encode($estatus);
+
+    }
 
 
 	public function notas(){

@@ -124,6 +124,7 @@ return array(
 		'Anouar\Fpdf\FpdfServiceProvider',
 		'Thujohn\Pdf\PdfServiceProvider',
 		'Maatwebsite\Excel\ExcelServiceProvider',
+		'Liebig\Cron\CronServiceProvider',
 
 	),
 

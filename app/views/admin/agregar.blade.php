@@ -54,6 +54,7 @@
               <div class="inputE date form-group">
                  <label for="ejemplo_email_1">Fecha</label>
                  <input type="text" name="fecha" class="form-control fecha">
+                 <span class="icon-d"></span>
               </div>
               <div class="inputE prov input-group infopago">
                 <label>PROVEEDOR</label>
@@ -61,6 +62,7 @@
                  @foreach($proveedor as $prov)
                   <option value="{{ $prov->id }}" data-tokens="{{ $prov->nombre }}">{{ $prov->nombre }}</option>
                  @endforeach
+                 <span class="icon-p"></span>
                  </select>
               </div>
               <div class="inputE fa form-group">
@@ -311,11 +313,14 @@ $(document).ready(function(){
     $("#gE").click(function () {
 
     if($(".fecha").val().length == 0){
-            $('.date').addClass('has-error');
+            $('.date').addClass('has-error has-feedback');
+            $('.icon-d').addClass('glyphicon glyphicon-remove form-control-feedback');
             return false;
 
-    } else if($('#idproveedor').val() == 0){
-            $('.prov').addClass('has-error');
+    } else if($('#idproveedor').val() == null){
+            $('#idproveedor').addClass('has-error has-feedback');
+            $('.icon-p').addClass('glyphicon glyphicon-remove form-control-feedback');
+            alert('selecciona el proveedor');
             return false;
 
     } else if($("#factura").val().length == 0){
@@ -331,7 +336,7 @@ $(document).ready(function(){
     }
 });
 
-    $("#enviar_f").click(function () {
+  /*  $("#enviar_f").click(function () {
 
     if($(".fecha").val().length == 0){
             $('.date').addClass('has-error');
@@ -352,7 +357,7 @@ $(document).ready(function(){
     }  else {
         return true;
     }
-});
+});*/
 
     $(document).on('click', '#gE', function(){
       $('.guardarentrada').attr('id', 'guardar-entrada');
