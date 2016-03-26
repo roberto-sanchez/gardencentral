@@ -30,6 +30,12 @@ Route::controller('users','UsersController');
 Route::controller('admin', 'AdminController');
 
 
+//Extras----------------
+Route::get('agregarextra/add/{contenido}','ProductoController@agregarextra');
+
+Route::get('extras/updateextra/{contenido}','ProductoController@updateextra');
+
+
 //Ruta para los agentes
 Route::controller('agentes','AgentesController');
 
@@ -180,6 +186,7 @@ Route::post('productos/delete/{producto}', 'ProductoController@delete');
 
 //Vaciar todo el contenido de el carrito
 Route::post('productos/vaciar', 'ProductoController@vaciar');
+Route::post('productos/vaciarextra', 'ProductoController@vaciarextra');
 
 
 //Rutas para verificar datos

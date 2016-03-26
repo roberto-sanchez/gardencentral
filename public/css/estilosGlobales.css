@@ -2133,7 +2133,6 @@ label {
 }
 
 .t-ext{
-  display:none;
   width:70%!important;
 }
 
@@ -3204,6 +3203,7 @@ margin-bottom:.5em;
   .t-pre{
     width:50%;
   }
+
 
   .d-detallep .table-pd .td-pedido {
     width: 100%;

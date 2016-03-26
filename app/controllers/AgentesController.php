@@ -49,16 +49,15 @@ class AgentesController extends \BaseController {
         if($rol_id == 4){
             $cliente = DB::table('cliente')
                     ->join('pedido','cliente.id', '=','pedido.cliente_id')
-                    ->select('pedido.id', 'num_pedido','nombre_cliente', 'paterno','razon_social','numero_cliente','pedido.created_at','estatus', 'extra_pedido')
+                    ->select('pedido.id', 'num_pedido','nombre_cliente', 'paterno','razon_social','total', 'numero_cliente','pedido.created_at','estatus', 'extra_pedido')
                     ->OrderBy('created_at', 'DESC')
                     ->get();
-
 
 
         } else {
        		$cliente = DB::table('cliente')
                     ->join('pedido','cliente.id', '=','pedido.cliente_id')
-       				->select('pedido.id', 'num_pedido','nombre_cliente', 'paterno','razon_social','numero_cliente','pedido.created_at','estatus', 'extra_pedido')
+       				->select('pedido.id', 'num_pedido','nombre_cliente', 'paterno','razon_social', 'total' ,'numero_cliente','pedido.created_at','estatus', 'extra_pedido')
        				->OrderBy('created_at', 'DESC')
        				->where('cliente.agente_id', $idagente)
        				->get();
@@ -66,7 +65,7 @@ class AgentesController extends \BaseController {
         }
 
 
-       echo json_encode($cliente);
+echo json_encode($cliente);
     
 
     }

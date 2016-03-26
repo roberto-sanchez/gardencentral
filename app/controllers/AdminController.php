@@ -192,7 +192,7 @@ class AdminController extends \BaseController {
 			$p = DB::table('cliente')
 				->join('usuario','cliente.usuario_id','=','usuario.id')
 				->join('pedido','cliente.id','=','pedido.cliente_id')
-				->select('pedido.id','nombre_cliente','paterno','agente_id', 'num_pedido','pedido.created_at','pedido.estatus', 'rol_id', 'extra_pedido')
+				->select('pedido.id','nombre_cliente','paterno','agente_id', 'total', 'num_pedido','pedido.created_at','pedido.estatus', 'rol_id', 'extra_pedido')
 				->orderBy('created_at','desc')
 				 ->get();
 
@@ -205,7 +205,7 @@ class AdminController extends \BaseController {
 			$p = DB::table('cliente')
 				->join('usuario','cliente.usuario_id','=','usuario.id')
 				->join('pedido','cliente.id','=','pedido.cliente_id')
-				->select('pedido.id','nombre_cliente','paterno','agente_id', 'num_pedido','pedido.created_at','pedido.estatus', 'rol_id', 'extra_pedido')
+				->select('pedido.id','nombre_cliente','paterno','agente_id' , 'total' , 'num_pedido','pedido.created_at','pedido.estatus', 'rol_id', 'extra_pedido')
 				->orderBy('created_at','desc')
 				->where('fecha_registro', $date)
 				 ->get();
@@ -216,7 +216,7 @@ class AdminController extends \BaseController {
 			$p = DB::table('cliente')
 				->join('usuario','cliente.usuario_id','=','usuario.id')
 				->join('pedido','cliente.id','=','pedido.cliente_id')
-				->select('pedido.id','nombre_cliente','paterno','agente_id', 'num_pedido','pedido.created_at','pedido.estatus', 'rol_id', 'extra_pedido')
+				->select('pedido.id','nombre_cliente','paterno','agente_id', 'total', 'num_pedido','pedido.created_at','pedido.estatus', 'rol_id', 'extra_pedido')
 				->orderBy('created_at','desc')
 				->where('pedido.estatus', 3)
 				 ->get();
@@ -227,7 +227,7 @@ class AdminController extends \BaseController {
 			$p = DB::table('cliente')
 				->join('usuario','cliente.usuario_id','=','usuario.id')
 				->join('pedido','cliente.id','=','pedido.cliente_id')
-				->select('pedido.id','nombre_cliente','paterno','agente_id', 'num_pedido','pedido.created_at','pedido.estatus', 'rol_id', 'extra_pedido')
+				->select('pedido.id','nombre_cliente','paterno','agente_id', 'total', 'num_pedido','pedido.created_at','pedido.estatus', 'rol_id', 'extra_pedido')
 				->orderBy('created_at','desc')
 				->where('pedido.estatus', 2)
 				 ->get();
@@ -238,7 +238,7 @@ class AdminController extends \BaseController {
 			$p = DB::table('cliente')
 				->join('usuario','cliente.usuario_id','=','usuario.id')
 				->join('pedido','cliente.id','=','pedido.cliente_id')
-				->select('pedido.id','nombre_cliente','paterno','agente_id', 'num_pedido','pedido.created_at','pedido.estatus', 'rol_id', 'extra_pedido')
+				->select('pedido.id','nombre_cliente','paterno','agente_id', 'total', 'num_pedido','pedido.created_at','pedido.estatus', 'rol_id', 'extra_pedido')
 				->orderBy('created_at','desc')
 				->where('pedido.estatus', 1)
 				 ->get();
@@ -248,7 +248,7 @@ class AdminController extends \BaseController {
 			$p = DB::table('cliente')
 				->join('usuario','cliente.usuario_id','=','usuario.id')
 				->join('pedido','cliente.id','=','pedido.cliente_id')
-				->select('pedido.id','nombre_cliente','paterno','agente_id', 'num_pedido','pedido.created_at','pedido.estatus', 'rol_id', 'extra_pedido')
+				->select('pedido.id','nombre_cliente','paterno','agente_id', 'total', 'num_pedido','pedido.created_at','pedido.estatus', 'rol_id', 'extra_pedido')
 				->orderBy('created_at','desc')
 				->where('pedido.estatus', 0)
 				 ->get();
@@ -299,7 +299,7 @@ class AdminController extends \BaseController {
 		    $p = DB::table('cliente')
 							->join('usuario','cliente.usuario_id','=','usuario.id')
 							->join('pedido','cliente.id','=','pedido.cliente_id')
-							->select('pedido.id','numero_cliente','nombre_cliente','paterno','agente_id', 'num_pedido','pedido.created_at','pedido.estatus', 'rol_id', 'extra_pedido')
+							->select('pedido.id','numero_cliente','nombre_cliente','paterno','agente_id', 'total', 'num_pedido','pedido.created_at','pedido.estatus', 'rol_id', 'extra_pedido')
 							->orderBy('created_at','desc')
 							 ->get();
 

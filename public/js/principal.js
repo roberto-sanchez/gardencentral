@@ -292,16 +292,6 @@ $(document).on('click', '.idProd2', function(){
         $('.idProd2').removeClass('disabled');
     });
 
-    $('.ingresar-p').click(function () {
-
-        if ($('.idProd').val() == '') {
-
-            alertas('error',"Ingrese la cantidad de productos.");
-            return false;
-
-        }
-
-    });
 
     $('.idProd').click(function () {
 
@@ -312,6 +302,16 @@ $(document).on('click', '.idProd2', function(){
             $('.idProd2').removeClass('disabled');
 
         }
+    $('.ingresar-p').click(function () {
+
+        if ($('.idProd').val() == '') {
+
+            alertas('error',"Ingrese la cantidad de productos.");
+            return false;
+
+        }
+
+    });
 
     });
 
@@ -373,8 +373,24 @@ $(".btn-update-sum").click(function (e) {
             type: "POST",
             url: "/productos/vaciar",
             success: function (v) {
-                //$('.panel-datos').hide();
                 $("#t-pedidoc").load(location.href+" #t-pedidoc>*","");
+
+            },
+            error: function () {
+                alert('failure');
+            }
+        });
+
+  });
+
+    //Vaciar extra
+  $('.quitarextra').click(function(){
+
+      $.ajax({
+            type: "POST",
+            url: "/productos/vaciarextra",
+            success: function (v) {
+                $(".agregar-ex").load(location.href+" .agregar-ex>*","");
 
             },
             error: function () {
@@ -1641,6 +1657,7 @@ $('#p-s-dom').click(function(){
   msjeria = $('#pago').val();
   r_extra = $('#add-extras').attr('data-id');
 
+
    var DATA = [];
 
         $('.tcarrito tbody tr').each(function(){
@@ -1679,10 +1696,10 @@ $('#p-s-dom').click(function(){
             url: "productos/pedidoexistente/"+id,
             data: {aInfo: aInfo, nExtra: nExtra, formapago: formapago, msjeria: msjeria, cotizar: cotizar, r_extra: r_extra},
             success: function (iddom) {
-                console.log(iddom);
                 window.location.href = 'productos/datosdelpedido/' + iddom;
 
             },
+
             error: function () {
                 alert('failure');
 

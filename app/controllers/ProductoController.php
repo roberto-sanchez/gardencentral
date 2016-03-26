@@ -6,8 +6,90 @@ class ProductoController extends \BaseController {
     public function __construct() {
             //si no exixte la variable de sesion cart, entonses la creamos y lo guardamos es un array vacio
             if(!\Session::has('cart')) \Session::put('cart', array());
+            if(!\Session::has('extras')) \Session::put('extras', array());
 
         }
+
+
+
+
+    //Agregar producto con sus respectivos paquetes
+    public function add(Producto $producto, $quantity){
+
+       $cart = \Session::get('cart');
+       $producto->quantity = 1;
+       $cart[$producto->clave] = $producto;
+       $cart[$producto->clave]->quantity = $quantity;
+       \Session::put('cart', $cart);
+       return Redirect::back();
+       
+       
+    }
+
+
+    // Delete producto
+    public function delete(Producto $producto){
+       $cart = \Session::get('cart');
+        unset($cart[$producto->clave]);
+        \Session::put('cart', $cart);
+        return Response::json('correcto');
+
+    }
+
+
+    //actualizar la cntidad de productos
+    public function update(Producto $producto, $quantity){
+        $cart = \Session::get('cart');
+        $cart[$producto->clave]->quantity = $quantity;
+
+        \Session::put('cart', $cart);
+        return Redirect::back();
+    }
+
+
+
+    // Trash productos (vaciar carrito)
+     public function vaciar() {
+
+        \Session::forget('cart');
+        \Session::forget('extras');
+
+    }
+
+    public function vaciarextra(){
+        \Session::forget('extras');
+    }
+
+
+        public function agregarextra($contenido){
+       $extras = \Session::get('extras');
+        $extras[$contenido] = $contenido;
+       \Session::put('extras', $extras);
+       return Redirect::back();
+    }
+
+
+    //actualizar extras
+    public function updateextra($contenido){
+        \Session::forget('extras');
+        $extras = \Session::get('extras');
+        $extras[$contenido] = $contenido;
+        \Session::put('extras', $extras);
+        return Redirect::back();
+    }
+
+
+    //mostrar el total
+    private function total(){
+      $cart = \Session::get('cart');
+        $total = 0;
+        foreach($cart as $item){
+            $m = $item->precio * $item->descuento;
+            $total += ($item->precio - $m) * $item -> quantity;
+        }
+
+        return $total;
+    }
 
 
     public function terminos(){
@@ -40,6 +122,7 @@ class ProductoController extends \BaseController {
             $pago = FormaDePago::all();
 
            $cart = \Session::get('cart');
+           $extras = \Session::get('extras');
 
            $total = $this->total();
 
@@ -52,6 +135,7 @@ class ProductoController extends \BaseController {
                    return View::make('users/index',
                         compact(
                             'cart', 
+                            'extras',
                             'total',
                             'pago',
                             'direccion', 
@@ -604,6 +688,12 @@ public function getProducto(){
             $pedido->direccion_cliente_id = $direccion['id'];
             $pedido->forma_pago_id = $formapago;
             $pedido->num_pedido = date('Y').date('m').date("d").$resp.$mensajeria['id'];
+            for ($i=0; $i < count($idpro); $i++) {
+
+             $pedido->total += $idpro[$i]->preciop * $idpro[$i]->cant;
+
+           }
+
             $pedido->fecha_registro = date('Y-m-d');
             $pedido->cotizar_envio = $cotizar;
             $pedido->extra_pedido = $r_extra;
@@ -913,8 +1003,13 @@ public function getProducto(){
             $pedido->mensajeria_id = $mensajeria['id'];
             $pedido->direccion_cliente_id = $direccion['id'];
             $pedido->forma_pago_id = $formapago;
-            //$pedido->fecha_registro = "fecha";
             $pedido->num_pedido = date('Y').date('m').date("d").$resp.$mensajeria['id'];
+
+             for ($i=0; $i < count($idpro); $i++) {
+
+             $pedido->total += $idpro[$i]->preciop * $idpro[$i]->cant;
+
+           }
             $pedido->fecha_registro = date('Y-m-d');
             $pedido->cotizar_envio = $cotizar;
             $pedido->extra_pedido = $r_extra;
@@ -1229,7 +1324,14 @@ public function getProducto(){
             $pedido->direccion_cliente_id = " ";
             $pedido->forma_pago_id = $formapago;
             $pedido->num_pedido = date('Y').date('m').date("d").$resp.$mensajeria['id'];
+
+            for ($i=0; $i < count($idpro); $i++) {
+
+             $pedido->total += $idpro[$i]->preciop * $idpro[$i]->cant;
+
+            }
             $pedido->fecha_registro = date('Y-m-d');
+
             $pedido->cotizar_envio = $cotizar;
             $pedido->extra_pedido = $r_extra;
             $pedido->observaciones =  " ";
@@ -1530,6 +1632,11 @@ public function getProducto(){
         $pedido->direccion_cliente_id = $id;
         $pedido->forma_pago_id = $formapago;
         $pedido->num_pedido = date('Y').date('m').date("d").$mensajeria['id'].$resp;
+         for ($i=0; $i < count($idpro); $i++) {
+
+             $pedido->total += $idpro[$i]->preciop * $idpro[$i]->cant;
+
+           }
         $pedido->fecha_registro = date('Y-m-d');
         $pedido->cotizar_envio = $cotizar;
         $pedido->extra_pedido = $r_extra;
@@ -1826,64 +1933,6 @@ public function getProducto(){
  }
 
 
-    //Agregar producto con sus respectivos paquetes
-    public function add(Producto $producto, $quantity){
-
-       $cart = \Session::get('cart');
-       $producto->quantity = 1;
-       $cart[$producto->clave] = $producto;
-       $cart[$producto->clave]->quantity = $quantity;
-       \Session::put('cart', $cart);
-       return Redirect::back();
-       
-       
-
-    }
-
-
-    // Delete producto
-    public function delete(Producto $producto)
-    {
-       $cart = \Session::get('cart');
-        unset($cart[$producto->clave]);
-        \Session::put('cart', $cart);
-        //return Redirect::back();
-        return Response::json('correcto');
-
-    }
-
-
-    //actualizar la cntidad de productos
-    public function update(Producto $producto, $quantity){
-        $cart = \Session::get('cart');
-        $cart[$producto->clave]->quantity = $quantity;
-
-        \Session::put('cart', $cart);
-        return Redirect::back();
-    }
-
-
-
-    // Trash productos (vaciar carrito)
-     public function vaciar() {
-
-        \Session::forget('cart');
-
-    }
-
-
-    //mostrar el total
-    private function total(){
-      $cart = \Session::get('cart');
-        $total = 0;
-        foreach($cart as $item){
-            $m = $item->precio * $item->descuento;
-            $total += ($item->precio - $m) * $item -> quantity;
-        }
-
-        return $total;
-    }
-
 
 
      //Editar domicilio
@@ -2060,6 +2109,7 @@ public function datosdelpedido($iddom){
 
             //Retornamos la vista y vaciamos el pedido actual
            $vaciar = \Session::forget('cart');
+           $vaciarextra = \Session::forget('extras');
             
             return View::make('users/detalle',
                       compact(
@@ -2070,6 +2120,7 @@ public function datosdelpedido($iddom){
                         'iddom',
                         'pedido', 
                         'vaciar',
+                        'vaciarextra',
                         'extra'
                         ));
             } else {
@@ -2110,6 +2161,7 @@ public function datosdelpedido($iddom){
 
                     //Retornamos la vista y vaciamos el pedido actual
                    $vaciar = \Session::forget('cart');
+                   $vaciarextra = \Session::forget('extras');
                     
                     return View::make('users/detalle',
                               compact(
@@ -2119,7 +2171,8 @@ public function datosdelpedido($iddom){
                                 'iddom',
                                 'pedido', 
                                 'vaciar',
-                                'extra'
+                                'extra',
+                                'vaciarextra'
                                 ));
 
                     } else {

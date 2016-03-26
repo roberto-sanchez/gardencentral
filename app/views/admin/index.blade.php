@@ -661,13 +661,15 @@ $(document).on('click', '.v_detalle', function(){
                     tabla_a.fnClearTable();
 
                       for(var i = 0; i < p.length; i++) {
-                             idp = p[i].id,
+                            t = p[i].total * 0.16;
+                            total = p[i].total + t;
+
                              ida = p[i].agente_id, 
                              tabla_a.fnAddData([
                                         p[i].num_pedido,
                                         p[i].created_at,
                                         p[i].nombre_cliente+" "+p[i].paterno,
-                                        '<span id="idp_'+p[i].id+'" class="text-success cantidad" value="'+p[i].id+'"></span>',
+                                        '<span id="idp_'+p[i].id+'" class="text-success">'+accounting.formatMoney(total)+'</span>',
                                         '<span id="ida_'+p[i].id+'" class="a_'+p[i].agente_id+' text-primary"></span>',
                                         '<span id="e_'+p[i].id+'" class="extra_'+p[i].extra_pedido+'"></span>',
                                        // '<span class="estatus_'+p[i].estatus+'"></span>',
@@ -726,22 +728,7 @@ $(document).on('click', '.v_detalle', function(){
 
                               }
 
-                                cantidad_total();
 
-                                 $(document).on('click','.fancy > li, a',function(){
-                                      cantidad_total();
-
-                                  }); 
-
-                                  $(document).on('keyup', '#list_p__filter', function(){
-
-                                      cantidad_total();
-                                  });
-
-                                  $(document).on('click', '#list_p__length', function(){
-                                      cantidad_total();
-
-                                  });
 
 
                         $('.a_0').text('No asignado');
@@ -774,41 +761,6 @@ $(document).on('click', '.v_detalle', function(){
 });
 
 
- function cantidad_total(){
-
-      $('#list_p_ tbody tr').each(function(){
-            id  = $(this).find("[class*='cantidad']").attr('value');
-
-              $.ajax({
-                    type: "GET",
-                    url: "/pedidos/cantidadpedidos",
-                    data: {id: id},
-                    success: function( n ){
-
-                              if(n.n == 0){
-                              } else {
-
-                               campo = $('#idp_'+n.cant[0].pedido_id);
-                               c = "";
-                               t = n.total * 0.16;
-                               total = parseFloat(n.total + t);
-                               c +=  total.toFixed(2);
-                               campo.text(accounting.formatMoney(c));
-
-                              }
-
-
-
-                         }
-
-                 });
-
-
-
-
-        })
-  
- }
 
        $(document).on('click','.fancy > li, a',function(){
         $('.extra_0').addClass('sin-extra text-warning glyphicon glyphicon-ban-circle');

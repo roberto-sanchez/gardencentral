@@ -211,56 +211,37 @@ $(document).on('click', '#can-extras', function(){
 });
 
 
+  
 
-//Agregar extras
-$(document).on('click', '#env-extras', function(){
-  $('#add-extras').hide();
-  $('#add-extras').attr('data-id', '1');
+  $(document).on('keyup', '#txt-extra', function(){
+    extra = $('#txt-extra').val();
+    $('#env-extras').attr('href', 'agregarextra/add/' + extra);
+  });
 
-  extra = $('#txt-extra').val();
-  extrafila = extra.length;
+  $(document).on('click', '.act-ext', function(){
+    $('.icon-area').addClass('glyphicon glyphicon-remove form-control-feedback');
+    $('.area-extra').addClass('has-error has-feedback');
 
-  clave = $('#inp-extras').val();
-  body = $('#b-extra');
-  fila = "";
+  });
 
-  fila += ' <tr id="fila_'+extrafila+'">'+
-            '<td class="text-clave">'+clave+'</td>'+
-            '<td class="text-contenido" id="cam_'+extrafila+'">'+extra+'</td>'+
-            '<td class="td-btn">'+
-               '<span id="'+extrafila+'" class="edit-extra btn btn-xs btn-info glyphicon glyphicon-edit" value="'+extra+'"></span>'
-            +'</td>'+
-            '<td>'+
-              '<span class="quitarextra btn btn-xs btn-danger glyphicon glyphicon-remove" value="'+extrafila+'"></span>'
-            '</td>'+
-           '</tr>';
-
-  body.append(fila);
-
-  $('.t-ext').show();
-
-  $('#txt-extra').val('');
+  $(document).on('keyup', '#txt-extra-edit', function(){
+    $('#env-extras-act').removeClass('act-ext');
+    $('.icon-area').removeClass('glyphicon glyphicon-remove form-control-feedback');
+    $('.area-extra').removeClass('has-error has-feedback');
+    extra = $('#txt-extra-edit').val();
+    $('#env-extras-act').attr('href', 'extras/updateextra/' + extra);
+  });
 
 
-});
 
 
-//Eliminar extra
-$(document).on('click', '.quitarextra', function(){
-  $('#add-extras').attr('data-id', '0');
-  nombre = $(this).attr('value');
-  $('#add-extras').show();
-  $('.t-ext').hide();
-  $('#fila_'+nombre).remove();
 
-
-});
 
 //Editar extra
 $(document).on('click', '.edit-extra', function(){
 
   extra = $(this).attr('value');
-  id = $(this).attr('id');
+
   
    $('#modalextraedit').modal({
       show:'false',
@@ -268,16 +249,10 @@ $(document).on('click', '.edit-extra', function(){
 
    $('#txt-extra-edit').text(extra);
 
-   $('#env-extras-act').attr('data-id', id);
 
 });
 
 
-$(document).on('click', '#env-extras-act', function(){
-  extraedit = $('#txt-extra-edit').val();
-  id = $(this).attr('data-id');
-  $('#cam_'+id).text(extraedit);
-});
 
 
 

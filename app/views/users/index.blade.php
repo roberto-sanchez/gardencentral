@@ -148,6 +148,34 @@
         </div>
 
 
+            <!--Modal productos disponibles en el inventario-->
+        <div id="pro_disponibles" class="modal fade">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title text-primary text-center">
+                 
+                  
+                </h4>
+              </div>
+              <div class="modal-body body-extras">
+                <h2 class="text-danger text-center t-exsts">Solo quedan 3 productos disponibles</h2>
+              </div>
+              <div class="modal-footer modal-confirmar">
+                <button id="can-extras" type="button" class="btn btn-danger confirm" data-dismiss="modal">Cancelar</button>
+               <!-- <button id="env-extras" class="btn btn-primary confirm" data-dismiss="modal">Agregar</button>-->
+                <a href="" class="btn agre-p-dis input-group-addon claveProd btn-update-sum idProd2" id="" title="Ingrese la cantidad de paquetes">
+                  Agregar
+                   <span class="glyphicon glyphicon-plus"></span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
       @if(count($cart))
     <div id="t-pedidoc">
       <div class="panel panel-datos">
@@ -331,7 +359,10 @@
             </div>
     
             <div class="agregar-ex">
+              @if(count($extras) == 0)
               <button data-id="0" class="btn btn-primary btn-md" id="add-extras">Agregar extras</button>
+              @else
+              <span data-id="1" id="add-extras"></span>
               <table class="table t-ext">
                 <thead class="thead-ext">
                   <tr>
@@ -341,8 +372,28 @@
                     <th>Quitar</th>
                   </tr>
                 </thead>
-                <tbody id="b-extra"></tbody>
+                <tbody id="b-extra">
+                  <tr>
+                    @foreach($p as $extra)
+                     <td class="text-clave">{{ $extra->clave }}</td>
+                    @endforeach
+                    
+                    @foreach($extras as $e)
+                      <td class="text-contenido">{{ $e }}</td>
+                    @endforeach
+
+                    <td class="td-btn">
+                      <span class="edit-extra btn btn-xs btn-info glyphicon glyphicon-edit" value="{{ $e }}"></span>
+                    </td>
+
+                    <td>
+                      <span class="quitarextra btn btn-xs btn-danger glyphicon glyphicon-remove"></span>
+                    </td>
+                    
+                  </tr>
+                </tbody>
               </table>
+              @endif
             </div>
 
               <div class="tipoEnvio">
@@ -379,6 +430,7 @@
               </div>
             </div>
 
+
         <section class="selecTipoEnvio">
               <div class="panel-footer footer-total">
                 <div class="d-entrega">
@@ -397,7 +449,8 @@
       </div>
 
 
-      <!--Modal para agregar extras-->
+
+          <!--Modal para agregar extras-->
         <div id="modalextras" class="modal fade">
           <div class="modal-dialog">
             <div class="modal-content">
@@ -414,13 +467,10 @@
                   <textarea id="txt-extra" class="form-control" rows="5"></textarea>
                   <span class="icon-c"></span>
                 </div>
-                @foreach($p as $extra)
-                 <input type="text" class="hidden" id="inp-extras" value="{{ $extra->clave }}">
-                @endforeach
               </div>
               <div class="modal-footer modal-confirmar">
                 <button id="can-extras" type="button" class="btn btn-danger confirm" data-dismiss="modal">Cancelar</button>
-                <button id="env-extras" class="btn btn-primary confirm" data-dismiss="modal">Agregar</button>
+                <a id="env-extras" class="btn btn-primary confirm" >Agregar</a >
               </div>
             </div>
           </div>
@@ -440,11 +490,14 @@
               </div>
               <div class="modal-body body-extras">
                 <label class="text-info label-ext">Extras: </label>
-                <textarea id="txt-extra-edit" class="form-control" rows="5"></textarea>
+                  <div class="area-extra">
+                  <textarea id="txt-extra-edit" class="txta-edit form-control" rows="5"></textarea>
+                  <span class="icon-area"></span>
+                </div>
               </div>
               <div class="modal-footer modal-confirmar">
                 <button id="can-extras" type="button" class="btn btn-danger confirm" data-dismiss="modal">Cancelar</button>
-                <button id="env-extras-act" class="btn btn-primary confirm" data-dismiss="modal">Actualizar</button>
+                <a id="env-extras-act" class="act-ext btn btn-primary confirm">Actualizar</a>
               </div>
             </div>
           </div>
