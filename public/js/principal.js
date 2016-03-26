@@ -1,5 +1,153 @@
 $(document).ready(function () {
 
+        //Listar pedidos del cliente
+    $('.pedidosCliente').hide();
+    pedido_c = $("#pedido_cliente");
+    $(document).on('click','#p_cliente', function(){
+          $.ajax({
+            dataType: 'json',
+            url: '/productos/listarpedidos',
+            success: function(l){
+                if(l == 0){
+                    $('.t-p-clientes').text('No tienes ningún pedido.');
+                  } else {
+                    $('.pedidosCliente').show();
+
+                      tabla_a = $('#list_p_').DataTable({
+                        "oLanguage": { 
+                            "oPaginate": { 
+                            "sPrevious": "Anterior", 
+                            "sNext": "Siguiente", 
+                            "sLast": "Ultima", 
+                            "sFirst": "Primera" 
+                            }, 
+
+                        "sLengthMenu": 'Mostrar <select>'+ 
+                        '<option value="10">10</option>'+ 
+                        '<option value="20">20</option>'+ 
+                        '<option value="30">30</option>'+ 
+                        '<option value="40">40</option>'+ 
+                        '<option value="50">50</option>'+ 
+                        '<option value="-1">Todos</option>'+ 
+                        '</select> registros', 
+
+                        "sInfo": "Mostrando del _START_ a _END_ (Total: _TOTAL_ pedidos)", 
+                        "sInfoFiltered": " - filtrados de _MAX_ registros", 
+                        "sInfoEmpty": "No hay resultados de búsqueda", 
+                        "sZeroRecords": "No hay registros a mostrar", 
+                        "sProcessing": "Espere, por favor...", 
+                        "sSearch": "Buscar:", 
+
+                     },
+
+                      "aaSorting": [[ 1, "desc" ]], 
+
+                      "sPaginationType": "simple_numbers",
+                       "sPaginationType": "bootstrap",
+
+
+
+                  });
+
+
+
+                  tabla_a.fnClearTable();
+
+                      for(var i = 0; i < l.length; i++) {
+
+                            t = l[i].total * 0.16;
+                            total = l[i].total + t;
+
+                             tabla_a.fnAddData([
+                                       '<a id="c-estatus" class="'+l[i].num_pedido+'" data-id="'+l[i].id+'" value="'+l[i].created_at+'" href="#detallepedidocliente" data-toggle="modal">'+l[i].num_pedido+'</a>',
+                                        l[i].created_at,
+                                        l[i].nombre,
+                                        '<span id="idp_'+l[i].id+'" value="'+total+'" class="estatus_'+l[i].estatus+'"</span>',
+                                      ]);
+
+
+                              }
+
+
+                        $('.estatus_0').text('Pendiente');
+                        $('.estatus_0').addClass('text-warning');
+                        $('.estatus_1').text('Crédito');
+                        $('.estatus_1').addClass('text-primary');
+                        $('.estatus_2').text('Pagado');
+                        $('.estatus_2').addClass('text-success');
+                        $('.estatus_3').text('Cancelado');
+                        $('.estatus_3').addClass('text-danger');
+
+                        $('.dataTables_paginate .prev a').text('Anterior');
+                        $('.dataTables_paginate .next a').text('Siguiente');
+
+
+                }
+            },
+
+            error: function(){
+              alert('failure');
+            }
+          });
+    });
+
+      //Reinicializamos la data table
+    $(document).on('click', '.c-p-cli', function(){
+      $('#list_p_').DataTable().fnDestroy();
+    });
+
+    $(document).on('click', '.close-mp', function(){
+      $('#list_p_').DataTable().fnDestroy();
+    });
+
+      $(document).on('click','.fancy > li, a',function(){
+        $('.estatus_0').text('Pendiente');
+        $('.estatus_0').addClass('text-warning');
+        $('.estatus_1').text('Crédito');
+        $('.estatus_1').addClass('text-primary');
+        $('.estatus_2').text('Pagado');
+        $('.estatus_2').addClass('text-success');
+        $('.estatus_3').text('Cancelado');
+        $('.estatus_3').addClass('text-danger');
+      });        
+      
+
+      $(document).on('keyup', '#list_p__filter', function(){
+        $('.estatus_0').text('Pendiente');
+        $('.estatus_0').addClass('text-warning');
+        $('.estatus_1').text('Crédito');
+        $('.estatus_1').addClass('text-primary');
+        $('.estatus_2').text('Pagado');
+        $('.estatus_2').addClass('text-success');
+        $('.estatus_3').text('Cancelado');
+        $('.estatus_3').addClass('text-danger');
+      });
+
+
+
+
+    //Detalle del pedido del cliente
+    $(document).on('click', '#c-estatus', function(){
+          $('.table-detail').show();
+          $('#fotop').removeClass('enlace-active');
+          $('#det-p').addClass('enlace-active');
+          id = $(this).attr('data-id');
+          num = $(this).attr('class');
+          fe = $(this).attr('value');
+          $('.n-pe').text('Pedido #'+num);
+          $('.n-fe').text('Fecha: '+fe);
+    });
+
+
+  // Agregar extras
+  $(document).on('click', '#add-extras', function(){
+    $('#modalextras').modal({
+      show:'false',
+    });
+  });
+
+
+
 
       //Detalle del pedido del cliente
     $(document).on('click', '#c-estatus', function(){
@@ -119,10 +267,31 @@ $(document).ready(function () {
 
                       fila += '<tr><td>'+e.extra[datos].clave+'</td>';
                       fila += '<td>'+e.extra[datos].descripcion+'</td>';
-                      fila += '<td class="total_'+e.extra[datos].total+'">'+accounting.formatMoney(e.extra[datos].total)+'</td></tr>';
+                      fila += '<td class="total_'+e.extra[datos].total+'" data-total="'+e.extra[datos].total+'" id="t_'+e.extra[datos].id+'" value="'+e.extra[datos].total+'" class="total_">'+accounting.formatMoney(e.extra[datos].total)+'</td></tr>';
+                      //fila += '<td class="total_'+e.extra[datos].total+'">'+accounting.formatMoney(e.extra[datos].total)+'</td></tr>';
                     }
 
                     body.append(fila);
+
+                    if($('#t_'+e.extra[datos].id).attr('value') == 0){
+                            $('.total_').text('Pendiente');
+                            $('.total_').addClass('text-warning');
+                            $('.fila_extras').hide();
+                            $('.fila_total').hide();
+                            //$('.t-extra')
+                          } else {
+                            $('.fila_extras').show();
+                            $('.fila_total').show();
+                            $('.total_').text(accounting.formatMoney(e.extra[datos].total));
+                            $('.total_').addClass('text-success');
+                            $('.to-extra-data').attr('data-extra', e.extra[datos].total);
+                            $('.to-extra').text(accounting.formatMoney(e.extra[datos].total));
+
+                            t = $('#idp_'+e.extra[datos].pedido_id).attr('value');
+                            e = $('.to-extra-data').attr('data-extra');
+                            final = parseFloat(t) + parseFloat(e);
+                            $('.gran-to-extra').text(accounting.formatMoney(final));
+                          }
                     
                   $('.total_0').text('Pendiente');
                   $('.total_0').addClass('text-warning');
@@ -174,6 +343,8 @@ $(document).ready(function () {
          $('.tab-extra').hide();
          $('#body-extras').html('');
          $('.table-cli').hide();
+         $('.fila_extras').hide();
+         $('.fila_total').hide();
 
     });
 
@@ -183,6 +354,8 @@ $(document).ready(function () {
       $('#body-extras').html('');
       $('.table-cli').hide();
       $(".totalespedidoscliente").load(location.href+" .totalespedidoscliente>*","");
+      $('.fila_extras').hide();
+      $('.fila_total').hide();
     });
 
 

@@ -363,6 +363,22 @@
                       <span class="total-p">
                     </td>
                   </tr>
+                  <tr class="fila_extras">
+                    <td class="to-extra-data">
+                      <span class="text-info">Extras: </span>
+                    </td>
+                    <td>
+                       <span class="to-extra"></span>
+                    </td>
+                  </tr>
+                  <tr class="fila_total">
+                    <td>
+                      <span class="text-info">Gran Total: </span>
+                    </td>
+                    <td>
+                       <span class="gran-to-extra"></span>
+                    </td>
+                  </tr>
                 </table>
              </div>  
             <h3 class="text-info ext-d">Extras: </h3>

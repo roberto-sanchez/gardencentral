@@ -99,6 +99,7 @@
 				  <li><a class="enlace-active" id="det-p" href="#">Detalle del pedido</a></li>
 				  <li><a id="fotop" href="#">Detalle del cliente</a></li>
 				  <li><a id="estatusp" href="#">Estatus</a></li>
+          <a title="Enviar pdf" class="im-pedido" target="_blank" href="">Enviar pdf</a>
 			   </ol>
 			 </div>
             <div class="table-pd">
@@ -686,6 +687,7 @@
 
            $(document).on('click','#c-estatus', function(){
 	           	 id = $(this).attr('data-id');
+               $('.im-pedido').attr('href', 'productos/imprimirpedido/'+id);
                $('#env-extras').attr('data-id', id);
 	           	 razon = $(this).attr('value');
 	           	 $('.c-pass').attr('id',razon);

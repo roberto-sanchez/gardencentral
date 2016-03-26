@@ -61,7 +61,7 @@ class ProductoController extends \BaseController {
     }
 
 
-        public function agregarextra($contenido){
+    public function agregarextra($contenido){
        $extras = \Session::get('extras');
         $extras[$contenido] = $contenido;
        \Session::put('extras', $extras);
@@ -211,7 +211,7 @@ class ProductoController extends \BaseController {
 
         $pedido = DB::table('pedido')
                     ->join('mensajeria', 'pedido.mensajeria_id','=','mensajeria.id')
-                    ->select('pedido.id','num_pedido', 'pedido.created_at','mensajeria.nombre', 'pedido.estatus')
+                    ->select('pedido.id','num_pedido', 'pedido.created_at','mensajeria.nombre', 'pedido.estatus', 'total')
                     ->orWhere('cliente_id', $cli)
                     ->OrderBy('created_at','Desc')
                     ->get();
@@ -497,93 +497,8 @@ public function getProducto(){
     
 
     } 
-    } 
+} 
     
-  /*  if($nivel == 'Retail'){
-
-        $producto = DB::table('producto')
-                ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-                ->select('producto.id', 'nombre', 'color', 'foto', 'piezas_paquete', 'clave', 'precio')
-                ->where('clave', $clave)
-                ->where('tipo', 1)
-                ->get();
-
-        $id_f = DB::table('producto')
-                ->join('familia', 'producto.familia_id', '=', 'familia.id')
-                ->where('clave', $clave)
-                ->pluck('familia.id');
-
-        $familia = DB::table('familia')
-                ->join('descuento', 'familia.id', '=', 'descuento.familia_id')
-                ->where('familia.id', $id_f)
-                ->get();
-
-
-        if(count($producto)==0){
-            $producto = array('indefinido' => 'vacio');
-            return Response::json(array('producto' => $producto));
-
-        } else {
-            return Response::json(array('producto' => $producto, 'familia' => $familia, 'nivel' => $nivel));
-        }
-
-    } else if($nivel == 'Mayorista') {
-
-        $producto = DB::table('producto')
-                 ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-                ->select('producto.id', 'nombre', 'color', 'foto', 'piezas_paquete', 'clave', 'precio')
-                ->where('clave', $clave)
-                ->where('tipo', 2)
-                ->get();
-
-        $id_f = DB::table('producto')
-                ->join('familia', 'producto.familia_id', '=', 'familia.id')
-                ->where('clave', $clave)
-                ->pluck('familia.id');
-
-        $familia = DB::table('familia')
-                ->join('descuento', 'familia.id', '=', 'descuento.familia_id')
-                ->where('familia.id', $id_f)
-                ->get();
-
-
-        if(count($producto)==0){
-            $producto = array('indefinido' => 'vacio');
-            return Response::json(array('producto' => $producto));
-
-        } else {
-            return Response::json(array('producto' => $producto, 'familia' => $familia, 'nivel' => $nivel));
-        }
-
-    } else if($nivel == 'Distribuidor'){
-
-        $producto = DB::table('producto')
-                 ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-                ->select('producto.id', 'nombre', 'color', 'foto', 'piezas_paquete', 'clave', 'precio')
-                ->where('clave', $clave)
-                ->where('tipo', 3)
-                ->get();
-
-        $id_f = DB::table('producto')
-                ->join('familia', 'producto.familia_id', '=', 'familia.id')
-                ->where('clave', $clave)
-                ->pluck('familia.id');
-
-        $familia = DB::table('familia')
-                ->join('descuento', 'familia.id', '=', 'descuento.familia_id')
-                ->where('familia.id', $id_f)
-                ->get();
-
-
-        if(count($producto)==0){
-            $producto = array('indefinido' => 'vacio');
-            return Response::json(array('producto' => $producto));
-
-        } else {
-            return Response::json(array('producto' => $producto, 'familia' => $familia, 'nivel' => $nivel));
-        }
-
-    } */
 
 
 
@@ -714,10 +629,11 @@ public function getProducto(){
             //por cada uo de estos arrays vamos a crear una query para poder hacer un insert en la base de datos. y para eso necesitamos recorrer el array por cada uno de sus posiciones
             for ($i=0; $i < count($idpro); $i++) {
                 //Insertamos en la tabla los datos temporales
-                    $temporal = new TotalProducto;
-                    $temporal->clave = $idpro[$i]->clave;
-                    $temporal->cantidad = $idpro[$i]->cant;
-                    $temporal->save();
+                $temporal = new TotalProducto;
+                $temporal->usuario_id = $idusuario;
+                $temporal->clave = $idpro[$i]->clave;
+                $temporal->cantidad = $idpro[$i]->cant;
+                $temporal->save();
 
 
             //total producto
@@ -808,6 +724,7 @@ public function getProducto(){
 
                         //eliminamos los datos temporales
                         $idy = DB::table('total_producto')
+                            ->where('usuario_id', $idusuario)
                             ->where('clave', $idpro[$i]->clave)
                             ->pluck('id');
 
@@ -914,6 +831,7 @@ public function getProducto(){
 
                         //Actualizamos la cantidad de los datos temporales
                         $id_t = DB::table('total_producto')
+                                ->where('usuario_id', $idusuario)
                                 ->where('clave', $idpro[$i]->clave)
                                 ->pluck('id');
                         
@@ -1031,6 +949,7 @@ public function getProducto(){
             for ($i=0; $i < count($idpro); $i++) {
                 //Insertamos en la tabla los datos temporales
                     $temporal = new TotalProducto;
+                    $temporal->usuario_id = $idusuario;
                     $temporal->clave = $idpro[$i]->clave;
                     $temporal->cantidad = $idpro[$i]->cant;
                     $temporal->save();
@@ -1124,6 +1043,7 @@ public function getProducto(){
 
                         //eliminamos los datos temporales
                         $idy = DB::table('total_producto')
+                            ->where('usuario_id', $idusuario)
                             ->where('clave', $idpro[$i]->clave)
                             ->pluck('id');
 
@@ -1230,6 +1150,7 @@ public function getProducto(){
 
                         //Actualizamos la cantidad de los datos temporales
                         $id_t = DB::table('total_producto')
+                                ->where('usuario_id', $idusuario)
                                 ->where('clave', $idpro[$i]->clave)
                                 ->pluck('id');
                         
@@ -1353,6 +1274,7 @@ public function getProducto(){
                     
                     //Insertamos en la tabla los datos temporales
                     $temporal = new TotalProducto;
+                    $temporal->usuario_id = $idusuario;
                     $temporal->clave = $idpro[$i]->clave;
                     $temporal->cantidad = $idpro[$i]->cant;
                     $temporal->save();
@@ -1390,6 +1312,7 @@ public function getProducto(){
 
                 //obtenemos la cantidad almacenada temporalmente
                 $y1 = DB::table('total_producto')
+                    ->where('usuario_id', $idusuario)
                     ->where('clave', $idpro[$i]->clave)
                     ->pluck('cantidad');
 
@@ -1449,6 +1372,7 @@ public function getProducto(){
 
                         //eliminamos los datos temporales
                         $idy = DB::table('total_producto')
+                            ->where('usuario_id', $idusuario)
                             ->where('clave', $idpro[$i]->clave)
                             ->pluck('id');
 
@@ -1555,6 +1479,7 @@ public function getProducto(){
 
                         //Actualizamos la cantidad de los datos temporales
                         $id_t = DB::table('total_producto')
+                                ->where('usuario_id', $idusuario)
                                 ->where('clave', $idpro[$i]->clave)
                                 ->pluck('id');
                         
@@ -1659,6 +1584,7 @@ public function getProducto(){
 
                  //Insertamos en la tabla los datos temporales
                     $temporal = new TotalProducto;
+                    $temporal->usuario_id = $idusuario;
                     $temporal->clave = $idpro[$i]->clave;
                     $temporal->cantidad = $idpro[$i]->cant;
                     $temporal->save();
@@ -1695,6 +1621,7 @@ public function getProducto(){
 
                 //obtenemos la cantidad almacenada temporalmente
                 $y1 = DB::table('total_producto')
+                    ->where('usuario_id', $idusuario)
                     ->where('clave', $idpro[$i]->clave)
                     ->pluck('cantidad');
 
@@ -1757,6 +1684,7 @@ public function getProducto(){
 
                         //eliminamos los datos temporales
                         $idy = DB::table('total_producto')
+                            ->where('usuario_id', $idusuario)
                             ->where('clave', $idpro[$i]->clave)
                             ->pluck('id');
 
@@ -1869,6 +1797,7 @@ public function getProducto(){
 
                         //Actualizamos la cantidad de los datos temporales
                         $id_t = DB::table('total_producto')
+                                ->where('usuario_id', $idusuario)
                                 ->where('clave', $idpro[$i]->clave)
                                 ->pluck('id');
                         
@@ -2195,6 +2124,7 @@ public function datosdelpedido($iddom){
 
       if (Auth::check()) {
             $iduser = Auth::user()->id;
+            $rol = Auth::user()->rol_id;
 
             $iddi = DB::table('pedido')
                  ->join('direccion_cliente', 'pedido.direccion_cliente_id', '=', 'direccion_cliente.id')
@@ -2303,7 +2233,7 @@ public function datosdelpedido($iddom){
 
                
 
-                if($idp == $idcliente){
+                if($idp == $idcliente || $rol != 1){
                     $domi = DB::table('direccion_cliente')
                         ->join('cliente', 'direccion_cliente.cliente_id', '=', 'cliente.id')
                         ->join('pais', 'direccion_cliente.pais_id', '=', 'pais.id')

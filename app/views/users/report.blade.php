@@ -123,6 +123,32 @@
                     ${{ number_format($total + $iva, 2) }}
                   </td>
                 </tr>
+                @if(count($extra))
+                  @foreach($extra as $e)
+                    @if($e->total == 0)
+                    @else
+                      <tr>  
+                        <td>
+                          <span>Extras:  </span>
+                        </td>
+                        <td>
+                          <?php $ex = $e->total  ?>
+                          ${{ number_format($e->total, 2) }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <span>Gran Total:  </span>
+                        </td>
+                        <td>
+                          <?php $to = $total + $iva ?>
+                          ${{ number_format($to + $ex, 2) }}
+                        </td>
+                      </tr>
+                    @endif
+                  @endforeach
+                @else
+                @endif
               </table>
       </div>
 
