@@ -8,6 +8,7 @@
 @parent
 @include('layouts/inc/lib')
 {{ Html::Script('js/d3.min.js') }}
+{{ HTML::style('css/select2.min.css') }}
 <script>
   $(document).ready(function(){
     $('.admin').addClass('active');
@@ -288,8 +289,33 @@
       </div>
     </div>
 
+    <!-- Modal para confirmar asignar oh cambiar agente -->
+    <div id="asig_n_a" class="modal fade" data-keyboard="false" data-backdrop="static">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header header-nota">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title text-danger text-center">
+              Asignar agente
+             </h4>
+          </div>
+          <div class="modal-body">
+            
+          <h3 class="txt-delete-n text-danger text-center">¿Estás seguro que deseas asignarle este agente?</h3>
+                
+          </div>
+          <div class="modal-footer modal-confirmar-pass">
+
+              <button id="no-asig" type="button" class="btn btn-danger confirm" data-dismiss="modal">No</button>
+              <span id="asig-agente" class="btn btn-primary confirm" data-dismiss="modal" >Si</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
 {{ HTML::script('js/accounting.min.js') }}
+{{ HTML::script('js/select2.min.js') }}
 <script>
 
 $(document).ready(function(){
@@ -670,10 +696,16 @@ $(document).on('click', '.v_detalle', function(){
                                         p[i].created_at,
                                         p[i].nombre_cliente+" "+p[i].paterno,
                                         '<span id="idp_'+p[i].id+'" class="text-success">'+accounting.formatMoney(total)+'</span>',
-                                        '<span id="ida_'+p[i].id+'" class="a_'+p[i].agente_id+' text-primary"></span>',
+                                        '<div class="bloque_a">'+
+                                          '<span id="ida_'+p[i].id+'" class="a_'+p[i].agente_id+' text-primary us_'+p[i].usuario+'"></span>'+
+                                          '<span id="span_'+p[i].id+'" value="'+p[i].agente_id+'" data-id="'+p[i].id+'" class="cam_'+p[i].usuario+' text-danger asg-agente asig_'+p[i].agente_id+' ">Asignar</span>'+
+                                          '<select id="s-agente_'+p[i].id+'" data-pedido="'+p[i].id+'" class="select_agente"></select>'+
+                                        '</div>',
                                         '<span id="e_'+p[i].id+'" class="extra_'+p[i].extra_pedido+'"></span>',
                                        // '<span class="estatus_'+p[i].estatus+'"></span>',
                                       ]);
+
+                            //$('.select_agente').select2();
 
                              $('.extra_0').addClass('sin-extra text-warning glyphicon glyphicon-ban-circle');
                              $('.extra_1').addClass('con-extra text-success glyphicon glyphicon-ok-circle');
@@ -692,12 +724,18 @@ $(document).on('click', '.v_detalle', function(){
                                             c = "";
                                             c += a.agente[0].usuario;
                                             campo.text(c);
+                                            $('.asig_'+a.agente[0].id).text('Cambiar');
+                                            $('.asig_'+a.agente[0].id).removeClass('text-danger');
+                                            $('.asig_'+a.agente[0].id).addClass('text-primary');
 
                                             $(document).on('click','.fancy > li, a',function(){
                                                   campo = $('.a_'+a.agente[0].id);
                                                   c = "";
                                                   c += a.agente[0].usuario;
                                                   campo.text(c);
+                                                  $('.asig_'+a.agente[0].id).text('Cambiar');
+                                                  $('.asig_'+a.agente[0].id).removeClass('text-danger');
+                                                  $('.asig_'+a.agente[0].id).addClass('text-primary');
 
                                                 }); 
 
@@ -706,6 +744,9 @@ $(document).on('click', '.v_detalle', function(){
                                                   c = "";
                                                   c += a.agente[0].usuario;
                                                   campo.text(c);
+                                                  $('.asig_'+a.agente[0].id).text('Cambiar');
+                                                  $('.asig_'+a.agente[0].id).removeClass('text-danger');
+                                                  $('.asig_'+a.agente[0].id).addClass('text-primary');
 
                                                 });
 
@@ -714,6 +755,9 @@ $(document).on('click', '.v_detalle', function(){
                                                     c = "";
                                                     c += a.agente[0].usuario;
                                                     campo.text(c);
+                                                    $('.asig_'+a.agente[0].id).text('Cambiar');
+                                                    $('.asig_'+a.agente[0].id).removeClass('text-danger');
+                                                    $('.asig_'+a.agente[0].id).addClass('text-primary');
                                                 });
 
                                                      
@@ -785,6 +829,125 @@ $(document).on('click', '.v_detalle', function(){
         $('.a_0').addClass('text-danger');
       });
 
+
+
+  //Cargar agentes
+  $(document).on('click', '.asg-agente', function(){
+    id_agente = $(this).attr('value');
+    id = $(this).attr('data-id');
+    $('#s-agente_'+id).show();
+
+ $.ajax({
+    type: "GET",
+    url: "/listapedidos/asignaragente",
+    data: {id_agente: id_agente, id: id},
+    success: function (d) {
+      //console.log(d.select[0].usuario);
+      s = $('#s-agente_'+d.id);
+      o = "";
+      if(d.id_agente == 0){
+        o +='<option value="" disabled selected>-- Seleccione --</option>';
+        for(datos in d.agentes){
+         o += '<option value="'+d.agentes[datos].id+'">'+d.agentes[datos].usuario+'</option>';
+       }
+       s.append(o);
+
+    } else {
+         o +='<option value="" disabled selected>'+d.select[0].usuario+'</option>';
+      for(datos in d.agentes){
+         o += '<option value="'+d.agentes[datos].id+'">'+d.agentes[datos].usuario+'</option>';
+       }
+       s.append(o);
+
+    }
+
+
+  },
+
+  error: function () {
+      alert("failure");
+  }
+  });
+
+});
+
+
+
+$(document).on('change', 'select.select_agente', function(){
+      id = $(this).val();
+      idp = $(this).attr('data-pedido');
+
+      $('#asig_n_a').modal({
+        show:'false',
+      });
+
+      $('#asig-agente').attr('value', id);
+      $('#asig-agente').attr('data-pedido', idp);
+
+      $('#no-asig').click(function(){
+        $('.select_agente').val($('.select_agente > option:first').val());
+      });
+
+});
+
+$(document).on('click', '#asig-agente', function(){
+  id_agente = $(this).attr('value');
+  idp = $(this).attr('data-pedido');
+
+   $.ajax({
+    type: "GET",
+    url: "/listapedidos/cambiaragente",
+    data: {id_agente: id_agente, idp: idp},
+    success: function (d) {
+
+      $('.us_'+d.u[0].usuario).removeClass('text-danger');
+      $('.us_'+d.u[0].usuario).addClass('text-primary');
+      $('.us_'+d.u[0].usuario).text(d.agente[0].usuario);
+      $('.cam_'+d.u[0].usuario).removeClass('text-danger');
+      $('.cam_'+d.u[0].usuario).addClass('text-primary');
+      $('.cam_'+d.u[0].usuario).text('Cambiar');
+      $('#s-agente_'+d.idp).hide();
+
+
+      $(".select_agente").load(location.href+" .select_agente>*","");
+
+      $(document).on('click','.fancy > li, a',function(){
+        $('.us_'+d.u[0].usuario).removeClass('text-danger');
+        $('.us_'+d.u[0].usuario).addClass('text-primary');
+        $('.us_'+d.u[0].usuario).text(d.agente[0].usuario);
+        $('.cam_'+d.u[0].usuario).removeClass('text-danger');
+        $('.cam_'+d.u[0].usuario).addClass('text-primary');
+        $('.cam_'+d.u[0].usuario).text('Cambiar');
+
+      });
+
+      $(document).on('keyup', '#list_p__filter', function(){
+        $('.us_'+d.u[0].usuario).removeClass('text-danger');
+        $('.us_'+d.u[0].usuario).addClass('text-primary');
+        $('.us_'+d.u[0].usuario).text(d.agente[0].usuario);
+        $('.cam_'+d.u[0].usuario).removeClass('text-danger');
+        $('.cam_'+d.u[0].usuario).addClass('text-primary');
+        $('.cam_'+d.u[0].usuario).text('Cambiar');
+      });
+
+      $(document).on('click', '#list_p__length', function(){
+        $('.us_'+d.u[0].usuario).removeClass('text-danger');
+        $('.us_'+d.u[0].usuario).addClass('text-primary');
+        $('.us_'+d.u[0].usuario).text(d.agente[0].usuario);
+        $('.cam_'+d.u[0].usuario).removeClass('text-danger');
+        $('.cam_'+d.u[0].usuario).addClass('text-primary');
+        $('.cam_'+d.u[0].usuario).text('Cambiar');
+      });
+
+
+  },
+
+  error: function () {
+      alert("failure");
+  }
+  });
+
+});
 
 
 

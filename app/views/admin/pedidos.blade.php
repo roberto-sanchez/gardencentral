@@ -35,8 +35,8 @@
 <div class="content">
   <!--<a href="{{ URL::to('consultas/listp') }}">Ver Listado</a>-->
   <div class="row row-pedidos">
-    <div class="menu-p">
-      <a href="{{ URL::to('consultas/exportarexcel') }}" class="btn btn-success">Exportar a Excel</a>
+    <div class="menu-p-mov">
+   <!--   <a href="{{ URL::to('consultas/exportarexcel') }}" class="btn btn-success">Exportar a Excel</a>-->
       <div class="btn-group">
         <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
           Ver por
@@ -97,6 +97,7 @@
           <li><a class="enlace-active" id="det-p" href="#">Detalle del pedido</a></li>
           <li><a id="fotop" href="#">Detalle del cliente</a></li>
           <li><a id="estatusp" href="#">Estatus</a></li>
+          <a title="Enviar pdf" class="im-pedido" target="_blank" href="">Enviar pdf</a>
          </ol>
        </div>
             <div class="table-pd">
@@ -552,6 +553,7 @@ $(document).ready(function(){
                                     url: "/consultas/listaagentes",
                                     data: {ida: ida},
                                     success: function( a ){
+                                      //console.log(a);
                                             campo = $('.a_'+a.agente[0].id);
                                             c = "";
                                             c += a.agente[0].usuario;
@@ -676,6 +678,7 @@ $(document).ready(function(){
 
 $(document).on('click','#c-estatus', function(){
   id = $(this).attr('data-id');
+   $('.im-pedido').attr('href', '/productos/imprimirpedido/'+id);
   $('#env-extras').attr('data-id', id);
   num = $(this).text();
   fe = $(this).attr('value');
@@ -879,6 +882,8 @@ $('.total-p').html(accounting.formatMoney(resultado += iva));
     dataid = $(this).attr('data-id');
     id = $(this).attr('id');
     gly_ex = $('#e_'+id).attr('class');
+    truco = 'trco_0';
+    $('#c-pass').attr('data-truco', truco);
     $('#c-pass').attr('data-gly', gly_ex);
     $('#c-pass').attr('data-id',dataid);
     $('#c-pass').attr('value',id);
@@ -889,6 +894,8 @@ $('.total-p').html(accounting.formatMoney(resultado += iva));
     dataid = $(this).attr('data-id');
     id = $(this).attr('id');
     gly_ex = $('#e_'+id).attr('class');
+    truco = 'trco_1';
+    $('#c-pass').attr('data-truco', truco);
     $('#c-pass').attr('data-gly', gly_ex);
     $('#c-pass').attr('data-id',dataid);
     $('#c-pass').attr('value',id);
@@ -899,6 +906,8 @@ $('.total-p').html(accounting.formatMoney(resultado += iva));
     dataid = $(this).attr('data-id');
     id = $(this).attr('id');
     gly_ex = $('#e_'+id).attr('class');
+    truco = 'trco_2';
+    $('#c-pass').attr('data-truco', truco);
     $('#c-pass').attr('data-gly', gly_ex);
     $('#c-pass').attr('data-id',dataid);
     $('#c-pass').attr('value',id);
@@ -909,6 +918,8 @@ $('.total-p').html(accounting.formatMoney(resultado += iva));
     dataid = $(this).attr('data-id');
     id = $(this).attr('id');
     gly_ex = $('#e_'+id).attr('class');
+    truco = 'trco_3';
+    $('#c-pass').attr('data-truco', truco);
     $('#c-pass').attr('data-gly', gly_ex);
     $('#c-pass').attr('data-id',dataid);
     $('#c-pass').attr('value',id);
@@ -986,6 +997,29 @@ $(document).on('click','.img-p',function(){
 
 
   $('#estatusp').click(function(){
+    //Comprobamos elestaud del pedido
+    if($('.estatus_a').attr('id') == 'estatus_0'){
+       $('.pendiente').hide();
+       $('.proceso').show();
+       $('.pagado').show();
+       $('.cancelado').show();
+    } else if($('.estatus_a').attr('id') == 'estatus_1'){
+       $('.proceso').hide();
+       $('.pendiente').show();
+       $('.pagado').show();
+       $('.cancelado').show();
+    } else if($('.estatus_a').attr('id') == 'estatus_2'){
+       $('.pagado').hide();
+       $('.pendiente').show();
+       $('.proceso').show();
+       $('.cancelado').show();
+    } else if($('.estatus_a').attr('id') == 'estatus_3'){
+       $('.cancelado').hide();
+       $('.pendiente').show();
+       $('.pagado').show();
+       $('.proceso').show();
+    }
+
     $('#estatusp').css('text-decoration', 'none');
     $('.estatus-pe').fadeToggle(500);
     $('.comen-t').hide();
@@ -1050,6 +1084,7 @@ $(document).on('click','.img-p',function(){
     ex = $(this).attr('data-extra');
     gly = $(this).attr('data-gly');
     t = $(this).attr('data-valor');
+    truco = $(this).attr('data-truco');
     $('#campo-pass').val('');
     $('.input-pass').removeClass('has-success');
     $('.add-gly').removeClass('glyphicon-ok');
@@ -1058,6 +1093,29 @@ $(document).on('click','.img-p',function(){
         url: "/consultas/cambiarestatusadmin",
         data:{id: id, estatus: estatus},
         success: function(ed){
+
+        if(truco == 'trco_0'){
+          $('.pendiente').hide();
+          $('.proceso').show();
+          $('.pagado').show();
+          $('.cancelado').show();
+        } else if(truco == 'trco_1'){
+          $('.proceso').hide();
+          $('.pendiente').show();
+          $('.pagado').show();
+          $('.cancelado').show();
+        } else if(truco == 'trco_2'){
+          $('.pagado').hide();
+          $('.pendiente').show();
+          $('.proceso').show();
+          $('.cancelado').show();
+        } else if(truco == 'trco_3'){
+          $('.cancelado').hide();
+          $('.pendiente').show();
+          $('.pagado').show();
+          $('.proceso').show();
+        }
+
         //Cambiamos el estatus del boton 
         if(ed.estatus == 0){
           $('.estatus_a').text('Pendiente');

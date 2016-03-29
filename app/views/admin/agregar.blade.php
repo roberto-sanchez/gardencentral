@@ -204,7 +204,7 @@ $(document).ready(function(){
                   url: "/entradas/listproducto",
                   data: {clave: $('#clave').val()},
                   success: function (p) {
-                    console.log(p);
+                    //console.log(p);
                     div = "";
                     for(datos in p.producto){
 
@@ -395,16 +395,21 @@ $(document).ready(function(){
             url: "/entradas/registrarentrada",
             data: {aInfo: aInfo, fecha: fecha, proveedor: proveedor, factura: factura, fechaFactura: fechaFactura, numeroPedimento: numeroPedimento, obc: obc, tipo: tipo },
             success: function (e) {
-                console.log(e);
-                alertas('success',"Entrada guardada correctamente.");
-                $("#nEntrada").load(location.href+" #nEntrada>*","");                 
-                $(".fecha").val('');
-                $('#idproveedor').prop('selectedIndex',0);
-                $("#factura").val('');
-                $(".fechaFactura").val('');
-                $('#numeroPedimento').val('');
-                $("#obc").val('');
-                $('#browse-p input[type=text]').val('');
+                //console.log(e);
+                if(e.ped == 0){
+                  alertas('error',"El pedimento ya existe.");
+                } else {
+
+                  alertas('success',"Entrada guardada correctamente.");
+                  $("#nEntrada").load(location.href+" #nEntrada>*","");                 
+                  $(".fecha").val('');
+                  $('#idproveedor').prop('selectedIndex',0);
+                  $("#factura").val('');
+                  $(".fechaFactura").val('');
+                  $('#numeroPedimento').val('');
+                  $("#obc").val('');
+                  $('#browse-p input[type=text]').val('');
+                }
 
 
             },
@@ -458,28 +463,34 @@ $(document).ready(function(){
             },*/
             //una vez finalizado correctamente
             success: function(data){
-                console.log(data);
-                if(data == 'indefinido'){
-                    alertas('error',"Error, el archivo introducido no es válido.");
+                //console.log(data);
+                if(data.ped == 0){
+                  alertas('error',"El pedimento ya existe.");
                 } else {
 
-                  if(data == 'error'){
-                      alertas('error',"Error, la clave está vacía o no existe.");
+                  if(data == 'indefinido'){
+                      alertas('error',"Error, el archivo introducido no es válido.");
                   } else {
 
-                  alertas('success',"Entrada guardada correctamente.");
-                  $("#nEntrada").load(location.href+" #nEntrada>*","");                 
-                  $(".fecha").val('');
-                  $('#idproveedor').prop('selectedIndex',0);
-                  $("#factura").val('');
-                  $(".fechaFactura").val('');
-                  $('#numeroPedimento').val('');
-                  $("#obc").val('');
-                  $('#browse-p input[type=text]').val('');
+                    if(data == 'error'){
+                        alertas('error',"Error, la clave está vacía o no existe.");
+                    } else {
+
+                    alertas('success',"Entrada guardada correctamente.");
+                    $("#nEntrada").load(location.href+" #nEntrada>*","");                 
+                    $(".fecha").val('');
+                    $('#idproveedor').prop('selectedIndex',0);
+                    $("#factura").val('');
+                    $(".fechaFactura").val('');
+                    $('#numeroPedimento').val('');
+                    $("#obc").val('');
+                    $('#browse-p input[type=text]').val('');
+
+                    }
 
                   }
-
                 }
+                
             },
 
             error: function(){

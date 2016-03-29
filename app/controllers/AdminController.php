@@ -192,7 +192,7 @@ class AdminController extends \BaseController {
 			$p = DB::table('cliente')
 				->join('usuario','cliente.usuario_id','=','usuario.id')
 				->join('pedido','cliente.id','=','pedido.cliente_id')
-				->select('pedido.id','nombre_cliente','paterno','agente_id', 'total', 'num_pedido','pedido.created_at','pedido.estatus', 'rol_id', 'extra_pedido')
+				->select('pedido.id','nombre_cliente','paterno','agente_id', 'total', 'num_pedido','pedido.created_at','pedido.estatus', 'rol_id', 'extra_pedido', 'usuario')
 				->orderBy('created_at','desc')
 				 ->get();
 
@@ -205,7 +205,7 @@ class AdminController extends \BaseController {
 			$p = DB::table('cliente')
 				->join('usuario','cliente.usuario_id','=','usuario.id')
 				->join('pedido','cliente.id','=','pedido.cliente_id')
-				->select('pedido.id','nombre_cliente','paterno','agente_id' , 'total' , 'num_pedido','pedido.created_at','pedido.estatus', 'rol_id', 'extra_pedido')
+				->select('pedido.id','nombre_cliente','paterno','agente_id' , 'total' , 'num_pedido','pedido.created_at','pedido.estatus', 'rol_id', 'extra_pedido', 'usuario')
 				->orderBy('created_at','desc')
 				->where('fecha_registro', $date)
 				 ->get();
@@ -216,7 +216,7 @@ class AdminController extends \BaseController {
 			$p = DB::table('cliente')
 				->join('usuario','cliente.usuario_id','=','usuario.id')
 				->join('pedido','cliente.id','=','pedido.cliente_id')
-				->select('pedido.id','nombre_cliente','paterno','agente_id', 'total', 'num_pedido','pedido.created_at','pedido.estatus', 'rol_id', 'extra_pedido')
+				->select('pedido.id','nombre_cliente','paterno','agente_id', 'total', 'num_pedido','pedido.created_at','pedido.estatus', 'rol_id', 'extra_pedido', 'usuario')
 				->orderBy('created_at','desc')
 				->where('pedido.estatus', 3)
 				 ->get();
@@ -227,7 +227,7 @@ class AdminController extends \BaseController {
 			$p = DB::table('cliente')
 				->join('usuario','cliente.usuario_id','=','usuario.id')
 				->join('pedido','cliente.id','=','pedido.cliente_id')
-				->select('pedido.id','nombre_cliente','paterno','agente_id', 'total', 'num_pedido','pedido.created_at','pedido.estatus', 'rol_id', 'extra_pedido')
+				->select('pedido.id','nombre_cliente','paterno','agente_id', 'total', 'num_pedido','pedido.created_at','pedido.estatus', 'rol_id', 'extra_pedido', 'usuario')
 				->orderBy('created_at','desc')
 				->where('pedido.estatus', 2)
 				 ->get();
@@ -238,7 +238,7 @@ class AdminController extends \BaseController {
 			$p = DB::table('cliente')
 				->join('usuario','cliente.usuario_id','=','usuario.id')
 				->join('pedido','cliente.id','=','pedido.cliente_id')
-				->select('pedido.id','nombre_cliente','paterno','agente_id', 'total', 'num_pedido','pedido.created_at','pedido.estatus', 'rol_id', 'extra_pedido')
+				->select('pedido.id','nombre_cliente','paterno','agente_id', 'total', 'num_pedido','pedido.created_at','pedido.estatus', 'rol_id', 'extra_pedido', 'usuario')
 				->orderBy('created_at','desc')
 				->where('pedido.estatus', 1)
 				 ->get();
@@ -248,7 +248,7 @@ class AdminController extends \BaseController {
 			$p = DB::table('cliente')
 				->join('usuario','cliente.usuario_id','=','usuario.id')
 				->join('pedido','cliente.id','=','pedido.cliente_id')
-				->select('pedido.id','nombre_cliente','paterno','agente_id', 'total', 'num_pedido','pedido.created_at','pedido.estatus', 'rol_id', 'extra_pedido')
+				->select('pedido.id','nombre_cliente','paterno','agente_id', 'total', 'num_pedido','pedido.created_at','pedido.estatus', 'rol_id', 'extra_pedido', 'usuario')
 				->orderBy('created_at','desc')
 				->where('pedido.estatus', 0)
 				 ->get();
@@ -256,6 +256,70 @@ class AdminController extends \BaseController {
 			echo json_encode($p);
 		}
 
+	}
+
+
+	public function asignaragente(){
+		$id_agente = Input::get('id_agente');
+		$id = Input::get('id');
+
+		if($id_agente == 0){
+			$agentes = DB::table('usuario')
+					->where('rol_id', 2)
+					->get();
+			$select = 0;
+
+		} else {
+			$agentes = DB::table('usuario')
+					->where('rol_id', 2)
+					->where('id','!=', $id_agente)
+					->get();
+
+			$select = DB::table('usuario')
+					->where('rol_id', 2)
+					->where('id', $id_agente)
+					->get();
+			
+		}
+
+		return Response::json(array(
+			'agentes' => $agentes,
+			'select' => $select,
+			'id_agente' => $id_agente,
+			'id' => $id
+			));
+	}
+
+
+	public function cambiaragente(){
+		$id_agente = Input::get('id_agente');
+		$idp = Input::get('idp');
+
+		$id_c = DB::table('pedido')
+				->join('cliente', 'pedido.cliente_id', '=', 'cliente.id')
+				->where('pedido.id', $idp)
+				->pluck('cliente.id');
+
+		$age = Cliente::find($id_c);
+		$age->agente_id = $id_agente;
+		$age->save();
+
+		$id_u = DB::table('pedido')
+				->join('cliente', 'pedido.cliente_id', '=', 'cliente.id')
+				->where('pedido.id', $idp)
+				->pluck('usuario_id');
+
+		$u = DB::table('usuario')
+				->where('id', $id_u)
+				->get();
+
+		
+
+		$agente = DB::table('usuario')
+				->where('id', $id_agente)
+				->get();
+
+		return Response::json(array('idp' => $idp, 'agente' => $agente, 'u' => $u));
 	}
 
 
@@ -314,7 +378,6 @@ class AdminController extends \BaseController {
 		 
 
 		    $agente = DB::table('usuario')
-		    			 //->join('cliente', 'usuario.id', '=', 'cliente.agente_id')
 	 					 ->select('usuario.id', 'usuario')
 	 					->where('usuario.id',$id)
 						->get();
@@ -466,16 +529,18 @@ class AdminController extends \BaseController {
 				$data=[];
 
 				$inventario =	DB::table('producto')
-	 		 					->join('inventario','producto.id','=','inventario.producto_id')
-	 							->select('producto.id','clave','nombre','cantidad')
+	 		 					->join('inventario_detalle','producto.id','=','inventario_detalle.producto_id')
+	 							->select('clave','nombre','num_pedimento','inventario_detalle.created_at', 'cantidad')
 	 							 ->get();
-						array_push($data, array('Id', 'Clave', 'Producto', 'Cantidad'));
+
+						array_push($data, array('Clave', 'Producto','Pedimento', 'Cantidad', 'Fecha de registro'));
 				foreach ($inventario as $key => $value) {
 					array_push($data, array(
-						$value->id, 
 						$value->clave, 
 						$value->nombre, 
-						$value->cantidad
+						$value->num_pedimento,
+						$value->cantidad,
+						$value->created_at
 					 ));
 				}
 
@@ -561,122 +626,135 @@ public function entradas(){
 		//$total = Input::get('total');
 		$obc = Input::get('obc');
 
+		//Verificamos el numero de pedimento
+		$ped = DB::table('inventario_detalle')
+				->where('num_pedimento', $numeroPedimento)
+				->get();
 
-      //verificamos si existe el producto
-      for ($i=0; $i < count($idpro); $i++) {
-      	  $consulta = DB::table('producto')
-      	  			 ->where('clave', $idpro[$i]->clavepro)
-      	  			 ->select('clave')
-      	  			 ->first();
-      	  //Verificamos si ya hay un producto con dicha clave e la tabla producto
-      	  if(count($consulta)==0){
-	        return Response::json('No hay productos con esa clave');
+		if(count($ped)){
+			$ped = 0;
+			return Response::json(array('ped' => $ped));
+		} else {
+	      //verificamos si existe el producto
+	      for ($i=0; $i < count($idpro); $i++) {
+	      	  $consulta = DB::table('producto')
+	      	  			 ->where('clave', $idpro[$i]->clavepro)
+	      	  			 ->select('clave')
+	      	  			 ->first();
 
-	    } else {
+	      	  //Verificamos si ya hay un producto con dicha clave e la tabla producto
+	      	  if(count($consulta)==0){
+		        return Response::json('No hay productos con esa clave');
 
-			/*---- Insertamos en la entrada -----*/
-		     	$entrada = new Entrada;
-				$entrada->id = Input::get('id');
-				$entrada->proveedor_id = $proveedor;
-				$entrada->fecha_entrada = $fecha;
-				$entrada->factura = $factura;
-				$entrada->fecha_factura = $fechaFactura;
-				$entrada->num_pedimento = $numeroPedimento;
-				$entrada->observaciones = $obc;
-				$entrada->estatus = '1';
-				$entrada->save();
+		    } else {
 
-		     for ($i=0; $i < count($idpro); $i++) {
-				$entradaDetalle = new EntradaDetalle;
-				$entradaDetalle->producto_id = $idpro[$i]->idp;
-				$entradaDetalle->entrada_id = $entrada['id'];
-				$entradaDetalle->cantidad = $idpro[$i]->cant;
-				$entradaDetalle->precio_compra = $idpro[$i]->pc;
-				$entradaDetalle->save();
-		      }
-		      
-	    	/*----- Insertar en el inventario -----*/
-	    	//verificamos si ya existe un producto con esa clave en el inventario
-	    	for ($i=0; $i < count($idpro); $i++) {
+				/*---- Insertamos en la entrada -----*/
+			     	$entrada = new Entrada;
+					$entrada->id = Input::get('id');
+					$entrada->proveedor_id = $proveedor;
+					$entrada->fecha_entrada = $fecha;
+					$entrada->factura = $factura;
+					$entrada->fecha_factura = $fechaFactura;
+					$entrada->num_pedimento = $numeroPedimento;
+					$entrada->observaciones = $obc;
+					$entrada->estatus = '1';
+					$entrada->save();
 
-			    	$consulta_i = DB::table('inventario')
-		      	  			 ->where('producto_id', $idpro[$i]->idp)
-		      	  			 ->select('producto_id')
-		      	  			 ->first();
+			     for ($i=0; $i < count($idpro); $i++) {
+					$entradaDetalle = new EntradaDetalle;
+					$entradaDetalle->producto_id = $idpro[$i]->idp;
+					$entradaDetalle->entrada_id = $entrada['id'];
+					$entradaDetalle->cantidad = $idpro[$i]->cant;
+					$entradaDetalle->precio_compra = $idpro[$i]->pc;
+					$entradaDetalle->save();
+			      }
+			      
+		    	/*----- Insertar en el inventario -----*/
+		    	//verificamos si ya existe un producto con esa clave en el inventario
+		    	for ($i=0; $i < count($idpro); $i++) {
 
-		      	  	//Si no existe el producto en el inv entonses lo registramos
-		      	  	if(count($consulta_i)==0){
-
-				      	$inventario = new Inventario;
-						$inventario->producto_id = $idpro[$i]->idp;
-						$inventario->cantidad = $idpro[$i]->cant;
-						$inventario->save();
-
-		      	  	  //si ya existe, le sumamos la cantidad a la cantidad actual
-		      	  	} else {
-		      	  		
-			      	  	//obtenemos el id del inventario
-			      	  	$id_i = DB::table('inventario')
+				    	$consulta_i = DB::table('inventario')
 			      	  			 ->where('producto_id', $idpro[$i]->idp)
-			      	  			 ->pluck('id');
+			      	  			 ->select('producto_id')
+			      	  			 ->first();
 
-		      	  		$inventario = Inventario::find($id_i);
-				        $inventario->cantidad += $idpro[$i]->cant;
-				        $inventario->save();
-		      	  	}
+			      	  	//Si no existe el producto en el inv entonses lo registramos
+			      	  	if(count($consulta_i)==0){
 
-		      	  		//comprobamos si hay alertas con dicho producto
-						 $x_pro = DB::table('producto')
-				                    ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
-				                    ->orderBy('producto.cantidad_minima', 'asc')
-				                    ->where('producto.id', $idpro[$i]->idp)
-				                    ->pluck('cantidad_minima');
+					      	$inventario = new Inventario;
+							$inventario->producto_id = $idpro[$i]->idp;
+							$inventario->cantidad = $idpro[$i]->cant;
+							$inventario->save();
 
-				        $x_inv = DB::table('producto')
-				                ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
-				                ->orderBy('producto.cantidad_minima', 'asc')
-				                ->where('producto.id', $idpro[$i]->idp)
-				                ->pluck('cantidad');
+			      	  	  //si ya existe, le sumamos la cantidad a la cantidad actual
+			      	  	} else {
+			      	  		
+				      	  	//obtenemos el id del inventario
+				      	  	$id_i = DB::table('inventario')
+				      	  			 ->where('producto_id', $idpro[$i]->idp)
+				      	  			 ->pluck('id');
 
-				        //Comparamos la cantidad actual del producto del inventario con la cantidad minima del producto
-                        if($x_inv  > $x_pro){
-                        	//Sies mayor la cantidad del inv eliminamos el alert
-                        	
-                        	$id_a = DB::table('alertas')
-                        				->where('producto_id', $idpro[$i]->idp)
-                        				->pluck('id');
+			      	  		$inventario = Inventario::find($id_i);
+					        $inventario->cantidad += $idpro[$i]->cant;
+					        $inventario->save();
+			      	  	}
 
-                        	//verificamos si existe un producto con ese id en los alerts
-                        	if($id_a != ""){
-                        		//si existe lo eliminamos
-	                            $alert = Alerta::find($id_a);
-	                            $alert->delete();
-                        	}
-                        	
-                            
-                            //Si es menor no pasa nada
-                        } else {
-                        	
-                        }
-	      	 }
+			      	  		//comprobamos si hay alertas con dicho producto
+							 $x_pro = DB::table('producto')
+					                    ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
+					                    ->orderBy('producto.cantidad_minima', 'asc')
+					                    ->where('producto.id', $idpro[$i]->idp)
+					                    ->pluck('cantidad_minima');
 
-	      	 //Insertamos en el inventario detalle
-	      	 for ($i=0; $i < count($idpro); $i++) {
-		      	$inventario_d = new InventarioDetalle;
-				$inventario_d->producto_id = $idpro[$i]->idp;
-				$inventario_d->cantidad = $idpro[$i]->cant;
-				$inventario_d->num_pedimento = $numeroPedimento;
-				$inventario_d->save();
-			 }
+					        $x_inv = DB::table('producto')
+					                ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
+					                ->orderBy('producto.cantidad_minima', 'asc')
+					                ->where('producto.id', $idpro[$i]->idp)
+					                ->pluck('cantidad');
 
-	    }
+					        //Comparamos la cantidad actual del producto del inventario con la cantidad minima del producto
+	                        if($x_inv  > $x_pro){
+	                        	//Sies mayor la cantidad del inv eliminamos el alert
+	                        	
+	                        	$id_a = DB::table('alertas')
+	                        				->where('producto_id', $idpro[$i]->idp)
+	                        				->pluck('id');
+
+	                        	//verificamos si existe un producto con ese id en los alerts
+	                        	if($id_a != ""){
+	                        		//si existe lo eliminamos
+		                            $alert = Alerta::find($id_a);
+		                            $alert->delete();
+	                        	}
+	                        	
+	                            
+	                            //Si es menor no pasa nada
+	                        } else {
+	                        	
+	                        }
+		      	 }
+
+		      	 //Insertamos en el inventario detalle
+		      	 for ($i=0; $i < count($idpro); $i++) {
+			      	$inventario_d = new InventarioDetalle;
+					$inventario_d->producto_id = $idpro[$i]->idp;
+					$inventario_d->cantidad = $idpro[$i]->cant;
+					$inventario_d->num_pedimento = $numeroPedimento;
+					$inventario_d->save();
+				 }
+
+		    }
 
 
 
-      } //END for verificar
-      	  
-      
-		return Response::json('Correcto :)');
+	      } //END for verificar
+	      	  
+	      
+			return Response::json('Correcto :)');
+
+		}
+
+
 
 	} else {
 
@@ -690,6 +768,16 @@ public function entradas(){
 		$fechaFactura = Input::get('fechaFactura');
 		$numeroPedimento = Input::get('numeroPedimento');
 		$obc = Input::get('obc');
+
+		//Verificamos el numero de pedimento
+		$ped = DB::table('inventario_detalle')
+				->where('num_pedimento', $numeroPedimento)
+				->get();
+
+		if(count($ped)){
+			$ped = 0;
+			return Response::json(array('ped' => $ped));
+		} else {
 
 	    //comprobamos si existe un directorio para subir el archivo
 	    //si no es así, lo creamos
@@ -836,56 +924,13 @@ public function entradas(){
 		    $i = 'indefinido';
 	    	return Response::json($i);
 		}
-
-	}
-
+		}
 
 
-
-/*	 $lineas = file('uploads/hola.txt');
-
-	 foreach ($lineas as $linea_num => $linea) {
-
-      $datos = explode(",",$linea);
-
-      echo $clave = trim($datos[0])." "; 
-      echo $producto = trim($datos[1])." "; 
-      echo $precio = trim($datos[2])."<br/>"; 
-  
-    
-} 
-*/
-
-
-	 //$ruta = Input::get('file');
-	/* $lineas = file('uploads/hola.txt');
-
-	 foreach ($lineas as $linea_num => $linea) {
-
-      $datos = explode("\t",$linea);
- 
-      echo $clave = trim($datos[0]);  
-      echo $producto = trim($datos[1]);
-      echo $precio = trim($datos[2]);
- 
-    
-} */
-
-
-/*	 $contents = array();
-
-		foreach(file('uploads/hola.txt') as $line) {
-
-			$contents[] = $line;
-
-		   }
-
-		dd($contents); */
-	
-	 //var_dump($lineas);
+	}//else
 		
  
-	}
+}
 
 
 	public function agregarpagina(){

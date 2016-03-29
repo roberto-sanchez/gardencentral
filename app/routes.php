@@ -67,6 +67,8 @@ Route::post('pedidos/verpedidos','AdminController@verpedidos');
 Route::post('pedidos/detallepedido','AdminController@detallepedido'); 
 Route::get('pedidos/verbarras','AdminController@verbarras');
 Route::get('pedidos/vergrafica','AdminController@vergrafica');
+Route::get('listapedidos/asignaragente','AdminController@asignaragente');
+Route::get('listapedidos/cambiaragente','AdminController@cambiaragente'); 
 
 Route::get('consultas/inventario', 'AdminController@inventario');
 Route::get('consultas/pedidos', 'AdminController@pedidos');

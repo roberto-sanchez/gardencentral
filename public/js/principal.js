@@ -92,13 +92,13 @@ $(document).ready(function () {
     });
 
       //Reinicializamos la data table
-    $(document).on('click', '.c-p-cli', function(){
+ /*   $(document).on('click', '.c-p-cli', function(){
       $('#list_p_').DataTable().fnDestroy();
     });
 
     $(document).on('click', '.close-mp', function(){
       $('#list_p_').DataTable().fnDestroy();
-    });
+    });*/
 
       $(document).on('click','.fancy > li, a',function(){
         $('.estatus_0').text('Pendiente');
@@ -390,7 +390,7 @@ $(document).ready(function () {
                 url: "productos/getProducto",
                 data: {clave: $('#clave').val()},
                 success: function (prod) {
-                  console.log(prod);
+                  //console.log(prod);
                     ver = prod.producto.indefinido;
                     if(ver === 'vacio'){
                         alertas('error',"El producto no existe.");
@@ -406,6 +406,8 @@ $(document).ready(function () {
                               $('#colorProd').html(prod.producto[0].color); 
                               $('#piezasProd').html(prod.producto[0].piezas_paquete);
                               $('#precioProd').html(accounting.formatMoney(prod.producto[0].precio));
+                              $('#dispoProd').html(prod.producto[0].cantidad);
+                              $('#total_p').attr('value', prod.producto[0].cantidad);
 
                               num = prod.familia[0].descuento;
                               n = num.toString(); //convertimos el entero en string
@@ -492,6 +494,20 @@ $(document).on('click', '.idProd2', function(){
 $(".btn-update-sum").click(function (e) {
     idt = $(this).attr('id');
     valor = $('.cant_'+idt).val();
+
+   /* canti = $('.idProd').val();
+    //alert(canti);
+    //Comprobamos que el cliente no elija mas productos de los q hay disponibles
+    valorActualInv = $('#total_p').attr('value');
+    //alert(valorActualInv);
+
+    if(valorActualInv <= cant){
+      alert('No puedes agregar mas de los que hay');
+      return false;
+    } else {
+      alert(':)');
+      return false;
+    }*/
 
     /*Comprovamos si el producto es ingresado por
      *primera ves, osea si esta vacio.
@@ -703,7 +719,7 @@ $(document).on('click', '.verfotop', function(){
         });
 
       //SEleccionar el tipo de envio
-      $('.selectTipo', this).click(function(){
+      $('select.selectTipo').on('change',function(){
           tipo = $(this).val();
           console.log(tipo);
 
@@ -720,7 +736,6 @@ $(document).on('click', '.verfotop', function(){
             $('.selecTipoEnvio').hide(500);
             $('#generar-tienda').show();
             $('.alert-pago').addClass('alert-v');
-            console.log('seleccionaste la tienda');
             $('.panel-entrega').hide();
             $('#checkdomicilio').removeAttr('checked');
             $('#checkfiscal').removeAttr('checked');

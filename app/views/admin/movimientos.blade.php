@@ -34,7 +34,7 @@
             <th>Producto</th>
             <th>Pedimento</th>
             <th style="width: 200px">Cantidad actual</th>
-            <!--<th>Motivo</th>-->
+            <th style="width: 200px">Fecha</th>
             <th>Editar</th>
           </tr>
         </thead>
@@ -156,7 +156,7 @@
                                           //  '<span class="spn-nueva"></span>'+
                                           //'</div>'+
                                         '</div>',
-                                        //'<span>Motivo</span>',
+                                        '<span>'+p[i].created_at+'</span>',
                                         '<span value="'+p[i].id+'" data-producto="'+p[i].producto_id+'" class="edit-mo btn btn-sm btn-primary glyphicon glyphicon-edit" data-clave="'+p[i].clave+'" data-nombre="'+p[i].nombre+'" data-pedimento="'+p[i].num_pedimento+'"></span>',
                                       ]);
 

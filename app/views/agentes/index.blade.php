@@ -687,7 +687,7 @@
 
            $(document).on('click','#c-estatus', function(){
 	           	 id = $(this).attr('data-id');
-               $('.im-pedido').attr('href', 'productos/imprimirpedido/'+id);
+               $('.im-pedido').attr('href', '/productos/imprimirpedido/'+id);
                $('#env-extras').attr('data-id', id);
 	           	 razon = $(this).attr('value');
 	           	 $('.c-pass').attr('id',razon);
@@ -872,7 +872,6 @@
                       url: "/pedidos/verextra",
                       data: {idp: idp},
                       success: function( e ){
-                              console.log(e.n);
                               if(e.n == 0){
                                 $('.add-ext').show();
                               } else {
@@ -991,6 +990,30 @@
 
 
 			$('#estatusp').click(function(){
+
+          //Comprobamos elestaud del pedido
+          if($('.estatus_a').attr('id') == 'estatus_0'){
+             $('.pendiente').hide();
+             $('.proceso').show();
+             $('.pagado').show();
+             $('.cancelado').show();
+          } else if($('.estatus_a').attr('id') == 'estatus_1'){
+             $('.proceso').hide();
+             $('.pendiente').show();
+             $('.pagado').show();
+             $('.cancelado').show();
+          } else if($('.estatus_a').attr('id') == 'estatus_2'){
+             $('.pagado').hide();
+             $('.pendiente').show();
+             $('.proceso').show();
+             $('.cancelado').show();
+          } else if($('.estatus_a').attr('id') == 'estatus_3'){
+             $('.cancelado').hide();
+             $('.pendiente').show();
+             $('.pagado').show();
+             $('.proceso').show();
+          }
+
 				$('#estatusp').css('text-decoration', 'none');
 				$('.estatus-pe').fadeToggle(500);
 				$('.comen-t').hide();
@@ -1007,6 +1030,7 @@
       razon = $(this).attr('value');
      	$('.table-pd').show();
      	$('.cancel-r').attr('data-id',estatus);
+
 
      	$.ajax({
      		type:'GET',
@@ -1056,6 +1080,8 @@
 		dataid = $(this).attr('data-id');
 		id = $(this).attr('id');
     gly_ex = $('#e_'+id).attr('class');
+    truco = 'trco_0';
+    $('.c-pass').attr('data-truco', truco);
     $('.c-pass').attr('data-gly', gly_ex);
 		$('.c-pass').attr('data-id',dataid);
     $('.c-pass').attr('value',id);
@@ -1066,6 +1092,8 @@
 		dataid = $(this).attr('data-id');
 		id = $(this).attr('id');
     gly_ex = $('#e_'+id).attr('class');
+    truco = 'trco_1';
+    $('.c-pass').attr('data-truco', truco);
     $('.c-pass').attr('data-gly', gly_ex);
 		$('.c-pass').attr('data-id',dataid);
     $('.c-pass').attr('value',id);
@@ -1076,6 +1104,8 @@
 		dataid = $(this).attr('data-id');
 		id = $(this).attr('id');
     gly_ex = $('#e_'+id).attr('class');
+    truco = 'trco_2';
+    $('.c-pass').attr('data-truco', truco);
     $('.c-pass').attr('data-gly', gly_ex);
 		$('.c-pass').attr('data-id',dataid);
     $('.c-pass').attr('value',id);
@@ -1086,6 +1116,8 @@
 		dataid = $(this).attr('data-id');
 		id = $(this).attr('id');
     gly_ex = $('#e_'+id).attr('class');
+    truco = 'trco_3';
+    $('.c-pass').attr('data-truco', truco);
     $('.c-pass').attr('data-gly', gly_ex);
 		$('.c-pass').attr('data-id',dataid);
     $('.c-pass').attr('value',id);
@@ -1138,6 +1170,7 @@
 
 
 
+
 $(document).on('click', '.c-pass', function(){
     estatus = $(this).attr('data-id');
     id = $(this).attr('value');
@@ -1146,6 +1179,7 @@ $(document).on('click', '.c-pass', function(){
     ex = $(this).attr('data-extra');
     gly = $(this).attr('data-gly');
     t = $(this).attr('data-valor');
+    truco = $(this).attr('data-truco');
     $('.cancel-e').hide();
     $('.cancel-r').show();
     $('.cancel-r').attr('id',id);
@@ -1160,6 +1194,28 @@ $(document).on('click', '.c-pass', function(){
         data:{id: id, estatus: estatus},
         success: function(ed){
 
+        if(truco == 'trco_0'){
+          $('.pendiente').hide();
+          $('.proceso').show();
+          $('.pagado').show();
+          $('.cancelado').show();
+        } else if(truco == 'trco_1'){
+          $('.proceso').hide();
+          $('.pendiente').show();
+          $('.pagado').show();
+          $('.cancelado').show();
+        } else if(truco == 'trco_2'){
+          $('.pagado').hide();
+          $('.pendiente').show();
+          $('.proceso').show();
+          $('.cancelado').show();
+        } else if(truco == 'trco_3'){
+          $('.cancelado').hide();
+          $('.pendiente').show();
+          $('.pagado').show();
+          $('.proceso').show();
+        }
+
         if(ed.estatus == 0){
           $('.estatus_a').text('Pendiente');
         } else if(ed.estatus == 1){
@@ -1169,6 +1225,7 @@ $(document).on('click', '.c-pass', function(){
         } else if(ed.estatus == 3){
           $('.estatus_a').text('Cancelado');
         }
+
         //Bolvemos a construir la fila
         $('#tr_'+id).replaceWith('<tr class="fila_'+ed.estatus+'" id="tr_'+ed.id+'">'+
                 '<td><a id="c-estatus" class="'+ed.estatus+'" data-id="'+ed.id+'" href="#modalpedido" data-toggle="modal">'+ed.num_pedido+'</a></td>'

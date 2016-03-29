@@ -419,7 +419,8 @@ public function getProducto(){
 
         $producto = DB::table('producto')
                 ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-                ->select('producto.id', 'nombre', 'color', 'foto', 'piezas_paquete', 'clave', 'precio', 'tipo')
+                ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
+                ->select('producto.id', 'nombre', 'color', 'foto', 'piezas_paquete', 'clave', 'precio', 'tipo', 'cantidad')
                 ->where('clave', $clave)
                 ->where('tipo', 1)
                 ->get();
@@ -2168,7 +2169,8 @@ public function datosdelpedido($iddom){
                         ->get();
 
                  $cli = DB::table('cliente')
-                    ->where('id', $idcliente)
+                    ->join('pedido', 'cliente.id', '=', 'pedido.cliente_id')
+                    ->where('pedido.id', $id)
                     ->get();
 
                  $domi = DB::table('direccion_cliente')

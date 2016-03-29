@@ -8,6 +8,7 @@
 @parent
 {{ HTML::style('css/select2.min.css') }}
 {{ HTML::style('css/bootstrap-select.min.css') }}
+{{ HTML::script('js/select2.min.js') }}
 {{ HTML::script('js/bootstrap-select.min.js') }}
 {{ HTML::script('js/i18n/defaults-es_CL.min.js') }}
 <style>
@@ -129,6 +130,8 @@
                      Precio: <span id="precioProd" class="text-info"></span>
                      <hr class="separador">
                      Descuento: <span id="descProd" class="text-info"></span>
+                     <hr class="separador">
+                     Productos disponibles: <span id="dispoProd" class="text-info"></span>
                  <!--    <hr class="separador">
                      Piezas por paquete: <span id="piezasProd" class="text-info"></span>-->
                    </h2>
@@ -152,33 +155,9 @@
           </div>
 
         </div>
-
-
-            <!--Modal productos disponibles en el inventario-->
-        <div id="pro_disponibles" class="modal fade">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title text-primary text-center">
-                 
-                  
-                </h4>
-              </div>
-              <div class="modal-body body-extras">
-                <h2 class="text-danger text-center t-exsts">Solo quedan 3 productos disponibles</h2>
-              </div>
-              <div class="modal-footer modal-confirmar">
-                <button id="can-extras" type="button" class="btn btn-danger confirm" data-dismiss="modal">Cancelar</button>
-               <!-- <button id="env-extras" class="btn btn-primary confirm" data-dismiss="modal">Agregar</button>-->
-                <a href="" class="btn agre-p-dis input-group-addon claveProd btn-update-sum idProd2" id="" title="Ingrese la cantidad de paquetes">
-                  Agregar
-                   <span class="glyphicon glyphicon-plus"></span>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
+        
+        <!--Total actual del producto elegido-->
+      <!--  <h2 id="total_p">Valor</h2>-->
 
 
 
@@ -409,7 +388,7 @@
                   <h3 class="text-info text-cotizar">Cotizar Envío.</h3>
                   <select class="selectTipo btn-group">
                       <option value="nada" disabled selected>-- Seleccione --</option>
-                      <option value="tienda">Recoger en tienda</option>
+                      <option class="tienda" value="tienda">Recoger en tienda</option>
                       <option value="domicilio" title="Aplican costos adicionales">Enviar a domicilio</option>
                   </select>
                 </div>

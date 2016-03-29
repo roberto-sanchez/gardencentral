@@ -236,7 +236,6 @@ $(document).on('click', '#can-extras', function(){
 
 
 
-
 //Editar extra
 $(document).on('click', '.edit-extra', function(){
 

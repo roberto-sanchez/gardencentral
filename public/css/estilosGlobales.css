@@ -2138,7 +2138,7 @@ label {
 
 #b-extra{
  
-}
+} 
 
 #b-extra tr{
   text-align:center;
@@ -3687,6 +3687,33 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f74a00', end
   overflow-y: scroll;
 }
 
+.bloque_a{
+  width:200px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient:vertical;
+  -webkit-box-direction:normal;
+  -webkit-flex-direction:column;
+      -ms-flex-direction:column;
+          flex-direction:column;
+  -webkit-box-align:center;
+  -webkit-align-items:center;
+      -ms-flex-align:center;
+          align-items:center;
+}
+
+.select_agente{
+  width:150px;
+  display:none;
+  margin:0;
+}
+
+.asg-agente{
+  cursor:pointer;
+}
+
 
 /*-----Totales de los pedidos-------*/
 .cont-sidebar{
@@ -4170,6 +4197,22 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f74a00', end
    -webkit-justify-content:space-between;
        -ms-flex-pack:justify;
            justify-content:space-between;
+}
+
+.menu-p-mov{
+  width:90%;
+  margin:0 auto;
+  margin-top:1em;
+  margin-bottom:1em;
+   display: -webkit-box;
+   display: -webkit-flex;
+   display: -ms-flexbox;
+   display: flex;
+   -webkit-box-pack:end;
+  -webkit-justify-content:flex-end;
+      -ms-flex-pack:end;
+          justify-content:flex-end;
+
 }
 
 /*---Tabla de los pedidos---*/
