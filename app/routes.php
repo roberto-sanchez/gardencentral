@@ -36,6 +36,7 @@ Route::controller('agentes','AgentesController');
 //listar pedidos
 Route::get('pedidos/listarpedidos', 'AgentesController@listarpedidos');
 Route::get('pedidos/cantidadpedidos', 'AgentesController@cantidadpedidos');
+Route::get('pedidos/sumarextra', 'AgentesController@sumarextra'); 
 
 Route::delete('pedidos/eliminarpedido/{id}', 'AgentesController@destroy');
 

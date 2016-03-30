@@ -71,6 +71,17 @@ echo json_encode($cliente);
     }
 
 
+    public function sumarextra(){
+        $idp = Input::get('idp');
+        $extra = DB::table('extra_pedido')
+                ->where('pedido_id', $idp)
+                ->select('pedido_id', 'total')
+                ->first();
+
+        return Response::json($extra);
+    }
+
+
   public function cantidadpedidos(){
         $id = Input::get('id');
         $cant = DB::table('pedido_detalle')

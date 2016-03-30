@@ -3710,8 +3710,12 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f74a00', end
   margin:0;
 }
 
-.asg-agente{
+.asg-agente, .agentes-cargados{
   cursor:pointer;
+}
+
+.cargando-gif{
+  display:none;
 }
 
 

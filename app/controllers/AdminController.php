@@ -278,7 +278,8 @@ class AdminController extends \BaseController {
 			$select = DB::table('usuario')
 					->where('rol_id', 2)
 					->where('id', $id_agente)
-					->get();
+					->select('usuario')
+					->first();
 			
 		}
 
@@ -295,31 +296,45 @@ class AdminController extends \BaseController {
 		$id_agente = Input::get('id_agente');
 		$idp = Input::get('idp');
 
+		//obtenemos el id del cliente
 		$id_c = DB::table('pedido')
 				->join('cliente', 'pedido.cliente_id', '=', 'cliente.id')
 				->where('pedido.id', $idp)
 				->pluck('cliente.id');
 
+		//le asiganamos oh actualizamos el agente al cliente
 		$age = Cliente::find($id_c);
 		$age->agente_id = $id_agente;
 		$age->save();
 
+		//obtenemos el id del usuario
 		$id_u = DB::table('pedido')
 				->join('cliente', 'pedido.cliente_id', '=', 'cliente.id')
 				->where('pedido.id', $idp)
 				->pluck('usuario_id');
 
+		//seleccionamos el usuario
 		$u = DB::table('usuario')
 				->where('id', $id_u)
 				->get();
 
-		
-
+		//seleccionamos el agente
 		$agente = DB::table('usuario')
 				->where('id', $id_agente)
 				->get();
 
-		return Response::json(array('idp' => $idp, 'agente' => $agente, 'u' => $u));
+		//retornamos loa agentes
+		$agentes = DB::table('usuario')
+					->where('rol_id', 2)
+					->where('id','!=', $id_agente)
+					->get();
+
+		return Response::json(array(
+			'idp' => $idp, 
+			'agente' => $agente,
+			'agentes' => $agentes, 
+			'u' => $u
+		));
 	}
 
 

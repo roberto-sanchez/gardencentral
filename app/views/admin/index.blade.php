@@ -260,7 +260,7 @@
             <h4 id="to-ped" class="modal-title text-info text-center"></h4>
           </div>
           <div class="modal-body">
-
+            <div class="messages"></div>
             <div class="totales-p-d">
               <div class="totalespedidos">
               <table id="list_p_" class="table">
@@ -699,7 +699,8 @@ $(document).on('click', '.v_detalle', function(){
                                         '<div class="bloque_a">'+
                                           '<span id="ida_'+p[i].id+'" class="a_'+p[i].agente_id+' text-primary us_'+p[i].usuario+'"></span>'+
                                           '<span id="span_'+p[i].id+'" value="'+p[i].agente_id+'" data-id="'+p[i].id+'" class="cam_'+p[i].usuario+' text-danger asg-agente asig_'+p[i].agente_id+' ">Asignar</span>'+
-                                          '<select id="s-agente_'+p[i].id+'" data-pedido="'+p[i].id+'" class="select_agente"></select>'+
+                                          '<img id="gif-agente_'+p[i].id+'" class="cargando-gif" src="img/cargando.gif" width="50px">'+
+                                          '<select id="s-agente_'+p[i].id+'" data-pedido="'+p[i].id+'" class="select_agente s_u_'+p[i].usuario+' form-control"></select>'+
                                         '</div>',
                                         '<span id="e_'+p[i].id+'" class="extra_'+p[i].extra_pedido+'"></span>',
                                        // '<span class="estatus_'+p[i].estatus+'"></span>',
@@ -834,14 +835,22 @@ $(document).on('click', '.v_detalle', function(){
   //Cargar agentes
   $(document).on('click', '.asg-agente', function(){
     id_agente = $(this).attr('value');
-    id = $(this).attr('data-id');
-    $('#s-agente_'+id).show();
+    id = $(this).attr('data-id'); //id del pedido
 
  $.ajax({
     type: "GET",
     url: "/listapedidos/asignaragente",
     data: {id_agente: id_agente, id: id},
+
+      //mientras enviamos el archivo
+        beforeSend: function(){
+            $('#gif-agente_'+id).show();
+        },
+
+
     success: function (d) {
+      $('#gif-agente_'+id).hide();
+      $('#s-agente_'+id).show();
       //console.log(d.select[0].usuario);
       s = $('#s-agente_'+d.id);
       o = "";
@@ -853,7 +862,8 @@ $(document).on('click', '.v_detalle', function(){
        s.append(o);
 
     } else {
-         o +='<option value="" disabled selected>'+d.select[0].usuario+'</option>';
+
+         o +='<option value="" disabled selected>'+d.select.usuario+'</option>';
       for(datos in d.agentes){
          o += '<option value="'+d.agentes[datos].id+'">'+d.agentes[datos].usuario+'</option>';
        }
@@ -874,8 +884,8 @@ $(document).on('click', '.v_detalle', function(){
 
 
 $(document).on('change', 'select.select_agente', function(){
-      id = $(this).val();
-      idp = $(this).attr('data-pedido');
+      id = $(this).val(); //id del agente
+      idp = $(this).attr('data-pedido'); //id del pedido
 
       $('#asig_n_a').modal({
         show:'false',
@@ -903,13 +913,38 @@ $(document).on('click', '#asig-agente', function(){
       $('.us_'+d.u[0].usuario).removeClass('text-danger');
       $('.us_'+d.u[0].usuario).addClass('text-primary');
       $('.us_'+d.u[0].usuario).text(d.agente[0].usuario);
+
       $('.cam_'+d.u[0].usuario).removeClass('text-danger');
       $('.cam_'+d.u[0].usuario).addClass('text-primary');
       $('.cam_'+d.u[0].usuario).text('Cambiar');
+
+      //eliminamos la clase del span asigar
+      $('.cam_'+d.u[0].usuario).removeClass('asg-agente');
+
+      //le agregamos la nueva clase
+      $('.cam_'+d.u[0].usuario).addClass('agentes-cargados');
+
       $('#s-agente_'+d.idp).hide();
 
+      //remplazamos los datos del select
+      $('#s-agente_'+d.idp).replaceWith('<select id="s-agente_'+d.idp+'" data-pedido="'+d.idp+'" class="select_agente s_u_'+d.u[0].usuario+' form-control">'+
+        '</select>');
 
-      $(".select_agente").load(location.href+" .select_agente>*","");
+      s = $('.s_u_'+d.u[0].usuario);
+      o = "";
+      o +='<option value="" disabled selected>'+d.agente[0].usuario+'</option>';
+      for(datos in d.agentes){
+         o += '<option value="'+d.agentes[datos].id+'">'+d.agentes[datos].usuario+'</option>';
+       }
+
+       s.append(o);
+
+
+      
+      
+
+
+      //$(".select_agente").load(location.href+" .select_agente>*","");
 
       $(document).on('click','.fancy > li, a',function(){
         $('.us_'+d.u[0].usuario).removeClass('text-danger');
@@ -918,7 +953,20 @@ $(document).on('click', '#asig-agente', function(){
         $('.cam_'+d.u[0].usuario).removeClass('text-danger');
         $('.cam_'+d.u[0].usuario).addClass('text-primary');
         $('.cam_'+d.u[0].usuario).text('Cambiar');
+        $('.cam_'+d.u[0].usuario).removeClass('asg-agente');
+        $('.cam_'+d.u[0].usuario).addClass('agentes-cargados');
 
+        $('#s-agente_'+d.idp).replaceWith('<select id="s-agente_'+d.idp+'" data-pedido="'+d.idp+'" class="select_agente s_u_'+d.u[0].usuario+' form-control">'+
+        '</select>');
+
+      s = $('.s_u_'+d.u[0].usuario);
+      o = "";
+      o +='<option value="" disabled selected>'+d.agente[0].usuario+'</option>';
+      for(datos in d.agentes){
+         o += '<option value="'+d.agentes[datos].id+'">'+d.agentes[datos].usuario+'</option>';
+       }
+
+       s.append(o);
       });
 
       $(document).on('keyup', '#list_p__filter', function(){
@@ -928,6 +976,20 @@ $(document).on('click', '#asig-agente', function(){
         $('.cam_'+d.u[0].usuario).removeClass('text-danger');
         $('.cam_'+d.u[0].usuario).addClass('text-primary');
         $('.cam_'+d.u[0].usuario).text('Cambiar');
+        $('.cam_'+d.u[0].usuario).removeClass('asg-agente');
+        $('.cam_'+d.u[0].usuario).addClass('agentes-cargados');
+
+        $('#s-agente_'+d.idp).replaceWith('<select id="s-agente_'+d.idp+'" data-pedido="'+d.idp+'" class="select_agente s_u_'+d.u[0].usuario+' form-control">'+
+        '</select>');
+
+      s = $('.s_u_'+d.u[0].usuario);
+      o = "";
+      o +='<option value="" disabled selected>'+d.agente[0].usuario+'</option>';
+      for(datos in d.agentes){
+         o += '<option value="'+d.agentes[datos].id+'">'+d.agentes[datos].usuario+'</option>';
+       }
+
+       s.append(o);
       });
 
       $(document).on('click', '#list_p__length', function(){
@@ -937,6 +999,20 @@ $(document).on('click', '#asig-agente', function(){
         $('.cam_'+d.u[0].usuario).removeClass('text-danger');
         $('.cam_'+d.u[0].usuario).addClass('text-primary');
         $('.cam_'+d.u[0].usuario).text('Cambiar');
+        $('.cam_'+d.u[0].usuario).removeClass('asg-agente');
+        $('.cam_'+d.u[0].usuario).addClass('agentes-cargados');
+
+        $('#s-agente_'+d.idp).replaceWith('<select id="s-agente_'+d.idp+'" data-pedido="'+d.idp+'" class="select_agente s_u_'+d.u[0].usuario+' form-control">'+
+        '</select>');
+
+      s = $('.s_u_'+d.u[0].usuario);
+      o = "";
+      o +='<option value="" disabled selected>'+d.agente[0].usuario+'</option>';
+      for(datos in d.agentes){
+         o += '<option value="'+d.agentes[datos].id+'">'+d.agentes[datos].usuario+'</option>';
+       }
+
+       s.append(o);
       });
 
 
@@ -949,6 +1025,15 @@ $(document).on('click', '#asig-agente', function(){
 
 });
 
+
+
+
+//mostrar select unicamente cuando se hayan actualizado los datos anteriormente
+  $(document).on('click', '.agentes-cargados', function(){
+    id = $(this).attr('data-id'); //id del pedido
+    $('#s-agente_'+id).show();
+
+});
 
 
 //Detalle del producto del inventario

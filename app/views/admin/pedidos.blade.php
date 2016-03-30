@@ -534,7 +534,7 @@ $(document).ready(function(){
                                         p[i].nombre_cliente+" "+p[i].paterno,
                                         '<span id="idp_'+p[i].id+'" value="'+total+'" class="text-success">'+accounting.formatMoney(total)+'</span>',
                                         '<span id="ida_'+p[i].id+'" class="a_'+p[i].agente_id+' text-primary"></span>',
-                                        '<span id="e_'+p[i].id+'" class="extra_'+p[i].extra_pedido+'"></span>',
+                                        '<span id="e_'+p[i].id+'" class="extra_'+p[i].extra_pedido+' verificar-extra" data-extra="'+p[i].extra_pedido+'" data-id="'+p[i].id+'"></span>',
                                         '<span class="estatus_'+p[i].estatus+'"></span>',
                                       ]);
 
@@ -613,7 +613,7 @@ $(document).ready(function(){
                         $('.dataTables_paginate .prev a').text('Anterior');
                         $('.dataTables_paginate .next a').text('Siguiente');
 
-
+                        verextra();
 
                 },
                 error: function () {
@@ -637,6 +637,7 @@ $(document).ready(function(){
         $('.estatus_2').addClass('text-success');
         $('.estatus_3').text('Cancelado');
         $('.estatus_3').addClass('text-danger');
+        verextra();
       });        
       
 
@@ -653,6 +654,7 @@ $(document).ready(function(){
         $('.estatus_2').addClass('text-success');
         $('.estatus_3').text('Cancelado');
         $('.estatus_3').addClass('text-danger');
+        verextra();
       });
 
       $(document).on('click', '#list_p__length', function(){
@@ -668,6 +670,7 @@ $(document).ready(function(){
         $('.estatus_2').addClass('text-success');
         $('.estatus_3').text('Cancelado');
         $('.estatus_3').addClass('text-danger');
+        verextra();
       });
 
 
@@ -831,6 +834,7 @@ $('.total-p').html(accounting.formatMoney(resultado += totaliva));
 
       $(document).on('click', '#c-estatus', function(){
           idp = $(this).attr('data-id');
+          $('#act-extras').attr('data-pedido', idp);
             //Extras
             $.ajax({
                 type: "GET",
@@ -1150,6 +1154,8 @@ $(document).on('click','.img-p',function(){
                 +'<td><span class="estatus_'+ed.estatus+'"></span></td>'
                 +'<tr/>');
 
+                nuevacantidad(ed.id);
+
           //Le agregamos el texto del estatus
                 $('.estatus_0').text('Pendiente');
                 $('.estatus_0').addClass('text-warning');
@@ -1312,6 +1318,10 @@ $(document).on('click', '#env-extras', function(){
 
                  body.append(ex);
 
+                 $('.extra_1').attr('data-extra', '1');
+
+                 nuevacantidad(e.new_ex[datos].pedido_id);
+
                  $('.tab-extra').show();
                  $('.ext-d').show();
 
@@ -1397,6 +1407,8 @@ $(document).on('click', '#env-extras', function(){
                       e = $('.to-extra-data').attr('data-extra');
                       final = parseFloat(t) + parseFloat(e);
                       $('.gran-to-extra').text(accounting.formatMoney(final));
+
+                      nuevacantidad(idp);
                     }
 
               
@@ -1443,6 +1455,9 @@ $(document).on('click', '#de-ex', function(){
               $('#e_'+idp).attr('class', 'extra_0 sin-extra text-warning glyphicon glyphicon-ban-circle');
               $('.extra_0').addClass('sin-extra text-warning glyphicon glyphicon-ban-circle');
 
+              $('.extra_0').attr('data-extra', '0');
+               extraeliminado(idp);
+
           },
           error: function () {
               alert('failure');
@@ -1461,6 +1476,80 @@ $(document).on('click', '#de-ex', function(){
 
 
 
+
+function verextra(){
+
+    $('#list_p_ tbody tr').each(function(){
+      idp = $(this).find("[class*='verificar-extra']").attr('data-id');
+      extra  = $(this).find("[class*='verificar-extra']").attr('data-extra');
+
+      if(extra == 0){
+
+      } else {
+        $.ajax({
+          type: "GET",
+          url: '/pedidos/sumarextra',
+          data: {idp: idp},
+          success: function(s){
+              if(s.total == 0){
+
+              } else {
+
+              actual = $('#idp_'+s.pedido_id).attr('value');
+              extra = s.total;
+              nueva = parseFloat(actual) + parseFloat(extra);
+              $('#idp_'+s.pedido_id).text(accounting.formatMoney(nueva));
+                
+              }
+          },
+          error: function(){
+            alert('failure');
+          }
+        });
+      }
+
+
+  });
+
+}
+
+
+  function nuevacantidad(idp){
+
+      if(extra == 0){
+
+      } else {
+        $.ajax({
+          type: "GET",
+          url: '/pedidos/sumarextra',
+          data: {idp: idp},
+          success: function(s){
+              if(s.total == 0){
+
+              } else {
+
+              actual = $('#idp_'+s.pedido_id).attr('value');
+              extra = s.total;
+              nueva = parseFloat(actual) + parseFloat(extra);
+              $('#idp_'+s.pedido_id).text(accounting.formatMoney(nueva));
+                
+              }
+          },
+          error: function(){
+            alert('failure');
+          }
+        });
+      }
+
+
+}
+
+
+function extraeliminado(idp){
+        actual = $('#idp_'+idp).attr('value');
+        $('#idp_'+idp).text(accounting.formatMoney(actual));
+
+}
 
 
 
