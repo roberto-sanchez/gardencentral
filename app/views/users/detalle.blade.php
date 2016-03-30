@@ -120,7 +120,11 @@
                    <td>${{ number_format($item->precio, 2) }}</td>
                 </tr>
                 <tr>
-                   <td>Iva: 16%</td>
+                   @if($item->iva0 == 0)
+                  <td>0%</td>
+                  @else
+                   <td>16%</td>
+                  @endif
                 </tr>
                 <tr>
                    <td>Cantidad: {{ $item->cantidad }}/td>
@@ -138,7 +142,8 @@
                     <span class="text-info">Subtotal:  </span>
                   </td>
                   <td id="totalp">
-                    ${{ number_format($total, 2) }}
+                      ${{ number_format($total, 2) }}
+                    
                   </td>
                 </tr>
                 <tr>
@@ -146,8 +151,7 @@
                     <span class="text-info">Iva: </span>
                   </td>
                   <td>
-                      <?php $iva = $total * 0.16 ?>
-                      ${{ number_format($total * 0.16, 2) }}
+                      ${{ number_format($t, 2) }}
                   </td>
                 </tr>
                 <tr>
@@ -155,7 +159,7 @@
                     <span class="text-info">Total:  </span>
                   </td>
                   <td>
-                    ${{ number_format($total + $iva, 2) }}
+                    ${{ number_format($total + $t, 2) }}
                   </td>
                 </tr>
               </table>
@@ -183,7 +187,11 @@
                  <td id="pro-d">{{ $item->nombre }}</td>
                  <td>{{ $item->color }}</td>
                  <td>${{ number_format($item->precio, 2) }}</td>
-                 <td>16%</td>
+                 @if($item->iva0 == 0)
+                  <td>0%</td>
+                  @else
+                   <td>16%</td>
+                  @endif
                  <td>{{ $item->cantidad }}</td>
                  <td>{{ $item->num_pedimento }}</td>
                  <td>${{ number_format($item->precio * $item->cantidad, 2) }}</td>
@@ -196,7 +204,7 @@
                     <span class="text-info">Subtotal:  </span>
                   </td>
                   <td id="totalp">
-                    ${{ number_format($total, 2) }}
+                      ${{ number_format($total, 2) }}
                   </td>
                 </tr>
                 <tr>
@@ -204,8 +212,7 @@
                     <span class="text-info">Iva: </span>
                   </td>
                   <td>
-                      <?php $iva = $total * 0.16 ?>
-                      ${{ number_format($total * 0.16, 2) }}
+                      ${{ number_format($t, 2) }}
                   </td>
                 </tr>
                 <tr>
@@ -213,7 +220,7 @@
                     <span class="text-info">Total:  </span>
                   </td>
                   <td>
-                    ${{ number_format($total + $iva, 2) }}
+                    ${{ number_format($total + $t, 2) }}
                   </td>
                 </tr>
               </table>

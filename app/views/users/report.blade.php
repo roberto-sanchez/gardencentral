@@ -88,7 +88,11 @@
                    <td>{{ $item->nombre }}</td>
                    <td>{{ $item->color }}</td>
                    <td>${{ number_format($item->precio, 2) }}</td>
-                   <td>16%</td>
+                   @if($item->iva0 == 0)
+                    <td>0%</td>
+                   @else
+                    <td>16%</td>
+                  @endif
                    <td>{{ $item->cantidad }}</td>
                    <td>{{ $item->num_pedimento }}</td>
                    <td>${{ number_format($item->precio * $item->cantidad, 2) }}</td>
@@ -103,7 +107,7 @@
                     <span>Subtotal:  </span>
                   </td>
                   <td>
-                    ${{ number_format($total, 2) }}
+                    ${{ number_format($t, 2)  }}
                   </td>
                 </tr>
                 <tr>
@@ -111,8 +115,7 @@
                     <span>Iva: </span>
                   </td>
                   <td>
-                     <?php $iva = $total * 0.16 ?>
-                      ${{ number_format($total * 0.16, 2) }}
+                      ${{ number_format($total, 2) }}
                   </td>
                 </tr>
                 <tr>
@@ -120,7 +123,7 @@
                     <span>Total:  </span>
                   </td>
                   <td>
-                    ${{ number_format($total + $iva, 2) }}
+                    ${{ number_format($total + $t, 2) }}
                   </td>
                 </tr>
                 @if(count($extra))
@@ -141,7 +144,7 @@
                           <span>Gran Total:  </span>
                         </td>
                         <td>
-                          <?php $to = $total + $iva ?>
+                          <?php $to = $total + $t ?>
                           ${{ number_format($to + $ex, 2) }}
                         </td>
                       </tr>

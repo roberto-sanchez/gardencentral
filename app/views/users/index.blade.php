@@ -155,11 +155,7 @@
           </div>
 
         </div>
-        
-        <!--Total actual del producto elegido-->
-      <!--  <h2 id="total_p">Valor</h2>-->
-
-
+      
 
       @if(count($cart))
     <div id="t-pedidoc">
@@ -281,11 +277,15 @@
                         <td class="tipo_precio" value="{{ $item->tipo }}">{{ $item->color }}</td>
                         <?php $des = $item->precio * $item->descuento ?>
                         <td class="precio_pro" value="{{ $tpro = number_format($item->precio - $des, 2) }}">${{ number_format($tpro = $item->precio - $des, 2) }}</td>
-                        <td>16%</td>
+                        @if($item->iva0 == 0)
+                         <td>0%</td>
+                        @else
+                         <td>16%</td>
+                        @endif
                        <!-- <td>{{ $item->piezas_paquete }}</td>-->
                         <td class="td-cpa">
                           <div class="c-pa">
-                            <input type="number" data-id="p_{{ $item -> id }}" class="form-control cant_{{ $item -> id }}" min="1" max="100" value="{{ $totalp = $item->quantity }}" id="product_{{$item->id }}">
+                            <input type="number" data-id="p_{{ $item -> id }}" class="form-control cant_{{ $item -> id }}" min="1" value="{{ $totalp = $item->quantity }}" id="product_{{$item->id }}">
                             <a href="{{ URL::to('productos/update', $item->clave) }}" class="btn btn-info btn-update-p" id="{{ $item -> id }}" title="Actualizar la cantidad de paquetes">
                               <span class="glyphicon glyphicon-refresh"></span>
                             </a>
@@ -312,7 +312,16 @@
                       <span class="text-info">Subtotal:  </span>
                     </td>
                     <td id="totalp">
-                      ${{ number_format($total, 2) }}
+                      <?php
+                        $t = 0;
+                        foreach($cart as $item){
+                            $m = $item->precio * $item->descuento;
+                            $t += ($item->precio - $m) * $item -> quantity;
+                        } 
+                        ?>
+                         
+                         ${{ number_format($t, 2) }}
+                      
                     </td>
                   </tr>
                   <tr>
@@ -320,16 +329,17 @@
                       <span class="text-info">Iva: </span>
                     </td>
                     <td>
-                       <?php $iva = $total * 0.16 ?>
-                        ${{ number_format($total * 0.16, 2) }}
+
+                        ${{ number_format($total, 2) }}
+
                     </td>
                   </tr>
                   <tr>
                     <td>
                       <span class="text-info">Total:  </span>
                     </td>
-                    <td>
-                      ${{ number_format($total + $iva, 2) }}
+                    <td class="total-ped" data-pedido="{{ $total + $t }}">
+                      ${{ number_format($total + $t, 2) }}
                     </td>
                   </tr>
                 </table>

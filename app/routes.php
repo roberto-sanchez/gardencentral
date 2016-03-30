@@ -174,6 +174,8 @@ Route::bind('producto', function($clave){
 //Agregar producto al carrito con sus paquetes
 Route::get('productos/add/{producto}/{quantity}','ProductoController@add');
 
+Route::get('productos/compararcantidad','ProductoController@compararcantidad');
+
 //Agregar productos al carrito con sus respectivos paquetes
 Route::get('productos/agregarproducto/{id}/{quantity}', 'ProductoController@agregarproducto');
 

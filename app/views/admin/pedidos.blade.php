@@ -524,8 +524,7 @@ $(document).ready(function(){
                     tabla_a.fnClearTable();
 
                       for(var i = 0; i < p.length; i++) {
-                            t = p[i].total * 0.16;
-                            total = p[i].total + t;
+                            total = p[i].total;
 
                              ida = p[i].agente_id, 
                              tabla_a.fnAddData([
@@ -743,7 +742,13 @@ $.ajax({
         pro += '<td>'+p.pro[datos].nombre+'</td>';
         pro += '<td>'+p.pro[datos].color+'</td>';
         pro += '<td>'+accounting.formatMoney(p.pro[datos].precio)+'</td>';
-        pro += '<td>16%</td>';
+        if(p.pro[datos].iva0 == 0){
+           pro += '<td class="c-iva" data-iva="0">0%</td>';
+            
+          } else {
+            pro += '<td class="c-iva" data-iva="16">16%</td>';
+          }
+
         pro += '<td>'+p.pro[datos].cantidad+'</td>';
         pro += '<td><span class="img-p" id="'+p.pro[datos].nombre+'" data-id="'+p.pro[datos].foto+'" href="#verfotop" data-toggle="modal" alt="Foto del producto" title="Ver Foto del prodcto">Ver foto</span></td>';
         pro += '<td class="t-pro" value="'+f+'">'+accounting.formatMoney(f)+'</td></tr>';
@@ -754,15 +759,24 @@ $.ajax({
 
     //Mostarr el subtotal, Iva y total
 resultado=0;
+totaliva=0;
 $('.td-pedido-a tbody tr').each(function(){
     cant  = $(this).find("[class*='t-pro']").attr('value');
+    iv  = $(this).find("td[class*='c-iva']").attr('data-iva');
+
+    if(iv  == 0){
+
+      } else {
+        totaliva += parseFloat(cant) * 0.16;
+      }
+
     resultado += parseFloat(cant);
     $('.sub-p').text(accounting.formatMoney(resultado));
-
+    
   });
 
-$('.sub-iva').html(accounting.formatMoney(iva = resultado * 0.16));
-$('.total-p').html(accounting.formatMoney(resultado += iva));
+$('.sub-iva').html(accounting.formatMoney(totaliva));
+$('.total-p').html(accounting.formatMoney(resultado += totaliva));
 
   },
 

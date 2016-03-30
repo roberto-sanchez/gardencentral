@@ -55,8 +55,7 @@ $(document).ready(function () {
 
                       for(var i = 0; i < l.length; i++) {
 
-                            t = l[i].total * 0.16;
-                            total = l[i].total + t;
+                            total = l[i].total;
 
                              tabla_a.fnAddData([
                                        '<a id="c-estatus" class="'+l[i].num_pedido+'" data-id="'+l[i].id+'" value="'+l[i].created_at+'" href="#detallepedidocliente" data-toggle="modal">'+l[i].num_pedido+'</a>',
@@ -165,6 +164,7 @@ $(document).ready(function () {
                 url: "/productos/detalledelpedido",
                 data: {id: id},
                 success: function (p) {
+                  //console.log(p);
                   if(p.t == 'tienda'){
                       $('#sindomi').addClass('sindomi');
                       $('.pc_domiclio').hide();
@@ -214,7 +214,14 @@ $(document).ready(function () {
                       pro += '<td>'+p.pro[datos].nombre+'</td>';
                       pro += '<td>'+p.pro[datos].color+'</td>';
                       pro += '<td>'+accounting.formatMoney(p.pro[datos].precio)+'</td>';
-                      pro += '<td>16%</td>';
+
+                      if(p.pro[datos].iva0 == 0){
+                       pro += '<td class="c-iva" data-iva="0">0%</td>';
+                        
+                      } else {
+                        pro += '<td class="c-iva" data-iva="16">16%</td>';
+                      }
+
                       pro += '<td id="cant_'+p.pro[datos].pedido_id+'">'+p.pro[datos].cantidad+'</td>';
                       pro += '<td>'+p.pro[datos].num_pedimento+'</td>';
                       pro += '<td><span class="img-p" id="'+p.pro[datos].nombre+'" data-id="'+p.pro[datos].foto+'" href="#verfotop" data-toggle="modal" alt="Foto del producto" title="Ver Foto del prodcto">Ver foto</span></td>';
@@ -226,16 +233,25 @@ $(document).ready(function () {
 
 
                   resultado=0;
+                  totaliva=0;
                   $('.detail-t tbody tr').each(function(){
                           cant  = $(this).find("[class*='t-pro']").attr('value');
+                          iv  = $(this).find("td[class*='c-iva']").attr('data-iva');
+
+                          if(iv  == 0){
+
+                          } else {
+                            totaliva += parseFloat(cant) * 0.16;
+                          }
+                          
 
                           resultado += parseFloat(cant);
                           $('.sub-p').text(accounting.formatMoney(resultado));
 
                         });
 
-                  $('.sub-iva').html(accounting.formatMoney(iva = resultado * 0.16));
-                  $('.total-p').html(accounting.formatMoney(resultado += iva));
+                   $('.sub-iva').html(accounting.formatMoney(totaliva));
+                   $('.total-p').html(accounting.formatMoney(resultado += totaliva));
 
 
                 },
@@ -349,13 +365,12 @@ $(document).ready(function () {
     });
 
     $(document).on('click', '.close-mp', function(){
-      $("#detail-dp").html('');
-      $('.tab-extra').hide(); 
-      $('#body-extras').html('');
-      $('.table-cli').hide();
-      $(".totalespedidoscliente").load(location.href+" .totalespedidoscliente>*","");
-      $('.fila_extras').hide();
-      $('.fila_total').hide();
+        $("#detail-dp").html('');
+         $('.tab-extra').hide();
+         $('#body-extras').html('');
+         $('.table-cli').hide();
+         $('.fila_extras').hide();
+         $('.fila_total').hide();
     });
 
 
@@ -494,44 +509,55 @@ $(document).on('click', '.idProd2', function(){
 $(".btn-update-sum").click(function (e) {
     idt = $(this).attr('id');
     valor = $('.cant_'+idt).val();
+    c = $('.idProd').val();
 
-   /* canti = $('.idProd').val();
-    //alert(canti);
-    //Comprobamos que el cliente no elija mas productos de los q hay disponibles
-    valorActualInv = $('#total_p').attr('value');
-    //alert(valorActualInv);
-
-    if(valorActualInv <= cant){
-      alert('No puedes agregar mas de los que hay');
+    if($('#dispoProd').text() < parseInt(c)){
+      alertas('error',"Productos disponibles: "+$('#dispoProd').text() + "  " );
       return false;
     } else {
-      alert(':)');
-      return false;
-    }*/
 
-    /*Comprovamos si el producto es ingresado por
-     *primera ves, osea si esta vacio.
-    */
-    if(valor == undefined){
-        vacio = 0;
-        e.preventDefault();
-        parseInt(id = $(this).attr('id'));
+        /*Comprovamos si el producto es ingresado por
+         *primera ves, osea si esta vacio.
+        */
+        if(valor == undefined){
+            vacio = 0;
+            e.preventDefault();
+            parseInt(id = $(this).attr('id'));
 
-        href = $(this).attr('href');
-        quantity = $('#product_' + id).val();
-         vacio += parseInt(quantity);
-        window.location.href = href + "/" + vacio;
-        //Si no esta vacio se le suma la cantidad ya existente
-    } else{
-        valorA = parseInt($('.cant_'+idt).val());
-        e.preventDefault();
-        parseInt(id = $(this).attr('id'));
+            href = $(this).attr('href');
+            quantity = $('#product_' + id).val();
+            vacio += parseInt(quantity);
+            window.location.href = href + "/" + vacio;
+            //Si no esta vacio se le suma la cantidad ya existente
+        } else{
+            //obtenemos la cantidad ya agregada
+            valorA = parseInt($('.cant_'+idt).val());
+            //obtenemos la nueva cantidad
+            c = $('.idProd').val();
+            //sumamos las dos cantidades
+            suma = parseInt(valorA) + parseInt(c);
+            //comparamos con los productos que hay disponibles
+            if($('#dispoProd').text() < suma){
+              alertas('error',"Productos disponibles: "+$('#dispoProd').text() + "  " );
+              return false;
+            } else {
+              e.preventDefault();
+              parseInt(id = $(this).attr('id'));
 
-        href = $(this).attr('href');
-        quantity = $('#product_' + id).val();
-        valorA += parseInt(quantity);
-        window.location.href = href + "/" + valorA;
+              href = $(this).attr('href');
+              quantity = $('#product_' + id).val();
+              valorA += parseInt(quantity);
+              window.location.href = href + "/" + valorA;
+
+            }
+            
+        }
+
     }
+
+   
+
+
 
     });
 
@@ -542,17 +568,42 @@ $(".btn-update-sum").click(function (e) {
         id = $(this).attr('id');
         href = $(this).attr('href');
         quantity = $('#product_' + id).val();
+
+        $.ajax({
+            type: "GET",
+            url: "/productos/compararcantidad",
+            data: {quantity: quantity, id: id},
+            success: function (q) {
+              console.log(q.m);
+              if(q.m == 0){
+                alertas('error',"Productos disponibles: "+ q.inv + "  " );
+                window.location.href = href + "/" + q.inv;
+              } else {
+                window.location.href = href + "/" + quantity;
+              }
+            },
+            error: function () {
+                alert('failure');
+            }
+        });
+
+      /*  if(quantity < 150){
+          alert('No puedes agregar mas productos');
+          return false;
+        } else {
         window.location.href = href + "/" + quantity;
+          
+        }*/
     });
 
     //actualizamos la cantidad del producto en movil
-    $(".btn-update-pxs").click(function (e) {
+  /*  $(".btn-update-pxs").click(function (e) {
         e.preventDefault();
         id = $(this).attr('id');
         href = $(this).attr('href');
         quantity = $('#productxs_' + id).val();
         window.location.href = href + "/" + quantity;
-    });
+    });*/
 
 
     //Vaciar pedido ----------
@@ -721,7 +772,6 @@ $(document).on('click', '.verfotop', function(){
       //SEleccionar el tipo de envio
       $('select.selectTipo').on('change',function(){
           tipo = $(this).val();
-          console.log(tipo);
 
           if(tipo == 'domicilio'){
             $('.g-tipo').attr('id', 'g-tipo');
@@ -761,7 +811,7 @@ $(document).on('click', '.verfotop', function(){
         $('.confirm-p').removeClass('disabled');
     }
 
-    $('#formapago').click(function(){
+    $('#formapago').on('change',function(){
         id = $(this).val();
         forma = $('#text_'+id).text();
         $('.f-p').attr('value',id);
@@ -1844,6 +1894,7 @@ $('#p-s-dom').click(function(){
   formapago = $('#formapago').val();
   msjeria = $('#pago').val();
   r_extra = $('#add-extras').attr('data-id');
+  total = $('.total-ped').attr('data-pedido');
 
 
    var DATA = [];
@@ -1882,7 +1933,7 @@ $('#p-s-dom').click(function(){
         $.ajax({
             type: "POST",
             url: "productos/pedidoexistente/"+id,
-            data: {aInfo: aInfo, nExtra: nExtra, formapago: formapago, msjeria: msjeria, cotizar: cotizar, r_extra: r_extra},
+            data: {aInfo: aInfo, nExtra: nExtra, formapago: formapago, msjeria: msjeria, cotizar: cotizar, r_extra: r_extra, total: total},
             success: function (iddom) {
                 window.location.href = 'productos/datosdelpedido/' + iddom;
 
@@ -1941,11 +1992,12 @@ $('#p-s-dom').click(function(){
         formapago = $('#formapago').val();
         msjeria = $('#pago').val();
         r_extra = $('#add-extras').attr('data-id');
+        total = $('.total-ped').attr('data-pedido');
 
         $.ajax({
             type: "POST", //metodo
             url: "productos/pedidoexistente/"+id,
-            data: {aInfo: aInfo, nExtra: nExtra, formapago: formapago, msjeria: msjeria, cotizar: cotizar, r_extra: r_extra},
+            data: {aInfo: aInfo, nExtra: nExtra, formapago: formapago, msjeria: msjeria, cotizar: cotizar, r_extra: r_extra, total: total},
             success: function (iddom) {
 
                 //redirigimosa¿ al detalle del pedido y le pasamos el id del domi
@@ -2011,11 +2063,12 @@ $('#p-s-dom').click(function(){
         msjeria = $('#pago').val();
         coment = $('#coment').val();
         r_extra = $('#add-extras').attr('data-id');
+        total = $('.total-ped').attr('data-pedido');
 
        $.ajax({
             type: "POST", //metodo
             url: "productos/nuevopedido/"+id,
-            data: {aInfo: aInfo, nExtra: nExtra, cotizar: cotizar, pais: pais, estado: estado, municipio: municipio, calle1: calle1, calle2: calle2, colonia: colonia, delegacion: delegacion, cp: cp, tipodom: tipodom, formapago: formapago, msjeria: msjeria, coment: coment, r_extra: r_extra},
+            data: {aInfo: aInfo, nExtra: nExtra, cotizar: cotizar, pais: pais, estado: estado, municipio: municipio, calle1: calle1, calle2: calle2, colonia: colonia, delegacion: delegacion, cp: cp, tipodom: tipodom, formapago: formapago, msjeria: msjeria, coment: coment, r_extra: r_extra, total: total},
             success: function (iddom) {
 
                 //redirigimosa¿ al detalle del pedido y le pasamos el id del domi
@@ -2101,12 +2154,13 @@ $('#p-s-dom').click(function(){
         coment = $('#coment').val();
         //alert(coment);
         r_extra = $('#add-extras').attr('data-id');
+        total = $('.total-ped').attr('data-pedido');
 
 
         $.ajax({
             type: "POST", //metodo
             url: "productos/nuevopedido/"+id,
-            data: {aInfo: aInfo, nExtra: nExtra, cotizar: cotizar, pais: pais, estado: estado, municipio: municipio, calle1: calle1, calle2: calle2, colonia: colonia, delegacion: delegacion, cp: cp, tipodom: tipodom, tel: tel, tipotel: tipotel, formapago: formapago, msjeria: msjeria, coment: coment, r_extra: r_extra},
+            data: {aInfo: aInfo, nExtra: nExtra, cotizar: cotizar, pais: pais, estado: estado, municipio: municipio, calle1: calle1, calle2: calle2, colonia: colonia, delegacion: delegacion, cp: cp, tipodom: tipodom, tel: tel, tipotel: tipotel, formapago: formapago, msjeria: msjeria, coment: coment, r_extra: r_extra, total: total},
             success: function (iddom) {
 
                 //redirigimosa¿ al detalle del pedido y le pasamos el id del domi

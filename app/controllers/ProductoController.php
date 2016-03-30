@@ -81,14 +81,39 @@ class ProductoController extends \BaseController {
 
     //mostrar el total
     private function total(){
-      $cart = \Session::get('cart');
+
+        $cart = \Session::get('cart');
         $total = 0;
         foreach($cart as $item){
-            $m = $item->precio * $item->descuento;
-            $total += ($item->precio - $m) * $item -> quantity;
+            if($item->iva0 == 0){
+
+            } else {
+                $m = $item->precio * $item->descuento;
+                $total += ($item->precio - $m) * $item -> quantity * 0.16;
+            }
         }
 
         return $total;
+
+    }
+
+
+    public function compararcantidad(){
+        $quantity = Input::get('quantity');
+        $id = Input::get('id');
+
+        $inv = DB::table('inventario')
+                ->where('producto_id', $id)
+                ->pluck('cantidad');
+
+        if($inv < $quantity){
+            $m = 0;
+            return Response::json(array('m' => $m, 'inv' => $inv));
+        } else {
+            $m = 1;
+            return Response::json(array('m' => $m, 'inv' => $inv));
+        }
+
     }
 
 
@@ -559,6 +584,7 @@ public function getProducto(){
         $msjeria = Input::get('msjeria');
         $coment = Input::get('coment');
         $r_extra = Input::get('r_extra');
+        $total = Input::get('total'); 
     if (Request::ajax()) {
         if($id == 0){
 
@@ -604,11 +630,8 @@ public function getProducto(){
             $pedido->direccion_cliente_id = $direccion['id'];
             $pedido->forma_pago_id = $formapago;
             $pedido->num_pedido = date('Y').date('m').date("d").$resp.$mensajeria['id'];
-            for ($i=0; $i < count($idpro); $i++) {
+            $pedido->total = $total;
 
-             $pedido->total += $idpro[$i]->preciop * $idpro[$i]->cant;
-
-           }
 
             $pedido->fecha_registro = date('Y-m-d');
             $pedido->cotizar_envio = $cotizar;
@@ -923,12 +946,7 @@ public function getProducto(){
             $pedido->direccion_cliente_id = $direccion['id'];
             $pedido->forma_pago_id = $formapago;
             $pedido->num_pedido = date('Y').date('m').date("d").$resp.$mensajeria['id'];
-
-             for ($i=0; $i < count($idpro); $i++) {
-
-             $pedido->total += $idpro[$i]->preciop * $idpro[$i]->cant;
-
-           }
+            $pedido->total = $total;
             $pedido->fecha_registro = date('Y-m-d');
             $pedido->cotizar_envio = $cotizar;
             $pedido->extra_pedido = $r_extra;
@@ -1223,6 +1241,7 @@ public function getProducto(){
         $data_extra = json_decode(Input::get('nExtra'));
         $idusuario = Auth::user()->id;
         $r_extra = Input::get('r_extra');
+        $total = Input::get('total'); 
 
         $resp = DB::table('cliente')
             ->where('usuario_id', $idusuario)->pluck('id');
@@ -1246,12 +1265,7 @@ public function getProducto(){
             $pedido->direccion_cliente_id = " ";
             $pedido->forma_pago_id = $formapago;
             $pedido->num_pedido = date('Y').date('m').date("d").$resp.$mensajeria['id'];
-
-            for ($i=0; $i < count($idpro); $i++) {
-
-             $pedido->total += $idpro[$i]->preciop * $idpro[$i]->cant;
-
-            }
+            $pedido->total = $total;
             $pedido->fecha_registro = date('Y-m-d');
 
             $pedido->cotizar_envio = $cotizar;
@@ -1558,11 +1572,7 @@ public function getProducto(){
         $pedido->direccion_cliente_id = $id;
         $pedido->forma_pago_id = $formapago;
         $pedido->num_pedido = date('Y').date('m').date("d").$mensajeria['id'].$resp;
-         for ($i=0; $i < count($idpro); $i++) {
-
-             $pedido->total += $idpro[$i]->preciop * $idpro[$i]->cant;
-
-           }
+        $pedido->total = $total;
         $pedido->fecha_registro = date('Y-m-d');
         $pedido->cotizar_envio = $cotizar;
         $pedido->extra_pedido = $r_extra;
@@ -2035,7 +2045,23 @@ public function datosdelpedido($iddom){
 
             if(count(\Session::get('cart')) <= 0) return Redirect::to('users');
 
-            $total = $this->total();
+            //subtotal
+            $total = 0;
+            foreach($producto as $item){
+               // $m = $item->precio * $item->descuento;
+                $total += ($item->precio) * $item ->cantidad;
+            }
+
+               //iva
+                $t = 0;
+                    foreach($producto as $item){
+                    if($item->iva0 == 0){
+
+                    } else {
+                        //$m = $item->precio * $item->descuento;
+                        $t += ($item->precio) * $item -> cantidad * 0.16;
+                    }
+                }
 
             //Retornamos la vista y vaciamos el pedido actual
            $vaciar = \Session::forget('cart');
@@ -2045,6 +2071,7 @@ public function datosdelpedido($iddom){
                       compact(
                         'producto', 
                         'total', 
+                        't',
                         'direc',
                         'cli', 
                         'iddom',
@@ -2080,6 +2107,7 @@ public function datosdelpedido($iddom){
                                 ->select('clave', 'nombre', 'color', 'pedido_detalle.precio','iva0', 'cantidad', 'num_pedimento')
                                 ->get();
 
+
                     $extra = DB::table('extra_pedido')
                         ->where('pedido_id', $iddom)
                         ->get();
@@ -2087,7 +2115,23 @@ public function datosdelpedido($iddom){
                         
 
                     if(count(\Session::get('cart')) <= 0) return Redirect::to('users');
-                    $total = $this->total();
+                    //subtotal
+                    $total = 0;
+                    foreach($producto as $item){
+                       // $m = $item->precio * $item->descuento;
+                        $total += ($item->precio) * $item ->cantidad;
+                    }
+
+                    //iva
+                     $t = 0;
+                    foreach($producto as $item){
+                    if($item->iva0 == 0){
+
+                    } else {
+                        //$m = $item->precio * $item->descuento;
+                        $t += ($item->precio) * $item -> cantidad * 0.16;
+                    }
+                }
 
                     //Retornamos la vista y vaciamos el pedido actual
                    $vaciar = \Session::forget('cart');
@@ -2097,6 +2141,7 @@ public function datosdelpedido($iddom){
                               compact(
                                 'producto', 
                                 'total', 
+                                't',
                                 'direc', 
                                 'iddom',
                                 'pedido', 
@@ -2204,12 +2249,24 @@ public function datosdelpedido($iddom){
                             ->where('pedido_detalle.id', $id)
                             ->get();
 
-                //Sacamos el total
-               $total = 0;
+                   //Sacamos el iva
+                    $total = 0;
                     foreach($pro as $item){
-                       // $m = $item->precio * $item->descuento;
-                        $total += $item->precio * $item -> cantidad;
+                    if($item->iva0 == 0){
+
+                    } else {
+                        //$m = $item->precio * $item->descuento;
+                        $total += ($item->precio) * $item ->cantidad * 0.16;
                     }
+                }
+
+                   //Sacamos el subtotal
+                     $t = 0;
+                        foreach($pro as $item){
+                           // $m = $item->precio * $item->descuento;
+                            $t += ($item->precio) * $item ->cantidad;
+                        } 
+
 
 
 
@@ -2221,6 +2278,7 @@ public function datosdelpedido($iddom){
                             'ped', 
                             'pedido', 
                             'total', 
+                            't',
                             'cli',
                             'extra'
                             ));
@@ -2268,12 +2326,23 @@ public function datosdelpedido($iddom){
                                 ->where('pedido_detalle.id', $id)
                                 ->get();
 
-                    //Sacamos el total
-                    $total = 0;
+                    //Sacamos el iva
+                     $total = 0;
                     foreach($pro as $item){
-                       // $m = $item->precio * $item->descuento;
-                        $total += $item->precio * $item -> cantidad;
+                    if($item->iva0 == 0){
+
+                    } else {
+                        //$m = $item->precio * $item->descuento;
+                        $total += ($item->precio) * $item -> cantidad * 0.16;
                     }
+                }
+
+                    //Sacamos el subtotal
+                     $t = 0;
+                        foreach($pro as $item){
+                           // $m = $item->precio * $item->descuento;
+                            $t += ($item->precio) * $item ->cantidad;
+                        }
 
 
                     $pdf = View::make('users/report', 
@@ -2284,6 +2353,7 @@ public function datosdelpedido($iddom){
                                 'ped', 
                                 'pedido', 
                                 'total',
+                                't',
                                 'extra'
                                 ));
                        
