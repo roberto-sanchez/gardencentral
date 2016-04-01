@@ -74,6 +74,22 @@
     display:none;
   }
 
+  .c-carga{
+    display:none;
+  }
+
+
+  #env_p{
+    background:rgba(0, 0, 0, 0.7);
+  }
+  
+  .img-gif{
+    width:100%;
+    margin:0 auto;
+    text-align:center;
+    margin-top:5em;
+  }
+
 
 
 </style>
@@ -96,7 +112,6 @@
 <div class="users">
   <section class="container">
      @include('layouts/inc/estatus')
-     
      <div class="notifications bottom-right" data-html="true"></div>
 
       <div class="buscador">
@@ -286,7 +301,7 @@
                         <td class="td-cpa">
                           <div class="c-pa">
                             <input type="number" data-id="p_{{ $item -> id }}" class="form-control cant_{{ $item -> id }}" min="1" value="{{ $totalp = $item->quantity }}" id="product_{{$item->id }}">
-                            <a href="{{ URL::to('productos/update', $item->clave) }}" class="btn btn-info btn-update-p" id="{{ $item -> id }}" title="Actualizar la cantidad de paquetes">
+                            <a href="{{ URL::to('productos/update', $item->clave) }}" class="btn btn-info btn-update-p" id="{{ $item -> id }}" title="Actualizar la cantidad de productos">
                               <span class="glyphicon glyphicon-refresh"></span>
                             </a>
                           </div>
@@ -396,15 +411,16 @@
                 <div class="list-n"></div>
                 <div class="select-tipo">
                   <h3 class="text-info text-cotizar">Cotizar Envío.</h3>
-                  <select class="selectTipo btn-group">
+                  <select class="selectpicker selectTipo btn btn-default form-control ">
                       <option value="nada" disabled selected>-- Seleccione --</option>
                       <option class="tienda" value="tienda">Recoger en tienda</option>
-                      <option value="domicilio" title="Aplican costos adicionales">Enviar a domicilio</option>
+                      <option value="domicilio">Enviar a domicilio</option>
                   </select>
+                  <h5 class="text-info txt-costos">Aplican costos adicionales</h5>
                 </div>
               </div>
               <input id="inpEnvio" type="text">
-
+               <!-- <button class="presioname">Presioname</button>-->
           </div>
 
             <div class="panel-elegir">
@@ -416,7 +432,7 @@
               </div>
 
               <div class="input-group infopago">
-                 <select id="formapago" class="btn btn-info form-control formapago" name="formapago">
+                 <select id="formapago" class="selectpicker btn btn-info form-control formapago" name="formapago" data-style="btn-primary">
                      <option value="" disabled selected>Elige la forma de pago</option>
                    @foreach($pago as $pagos)
                      <option id="text_{{ $pagos->id }}" value="{{ $pagos->id }}">{{ $pagos->descripcion }}</option>
@@ -442,6 +458,24 @@
              </section><!--selecTipoEnvio-->
         </div>  <!--Panel productos-->
       </div>
+
+
+      <!-- Modal cuando se procesa el pedido -->
+            <div id="env_p" class="modal fade">
+              <div class="modal-dialog">
+                <div class="img-gif">
+                  <img class="img-proce" src="img/Cargandocc.gif" width="200px">
+                  <h1 class="text-info text-center txt-pro">Procesando pedido..</h1>
+                </div>
+                <div class="modal-content c-carga">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  </div>
+                  <div class="modal-body">
+                  </div>
+                </div>
+              </div>
+            </div>
 
 
 

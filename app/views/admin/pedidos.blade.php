@@ -21,6 +21,36 @@
     display:none;
   }
 
+  .im-pedido{
+    margin-right:.2em;
+  }
+
+  .c-carga{
+    display:none;
+  }
+
+  #env_pdf{
+    background:rgba(0, 0, 0, 0.7);
+  }
+  
+  .img-gif{
+    width:100%;
+    margin:0 auto;
+    text-align:center;
+    margin-top:5em;
+  }
+
+
+  .txt-sal{
+    cursor:pointer;
+    font-size:1.8em;
+  }
+
+  .txt-sal:hover{
+    color:#64A9F7;
+    text-decoration:underline;
+  }
+
 </style>
 @stop
 
@@ -97,7 +127,8 @@
           <li><a class="enlace-active" id="det-p" href="#">Detalle del pedido</a></li>
           <li><a id="fotop" href="#">Detalle del cliente</a></li>
           <li><a id="estatusp" href="#">Estatus</a></li>
-          <a title="Enviar pdf" class="im-pedido" target="_blank" href="">Enviar pdf</a>
+          <span title="Enviar pdf" class="en-pedido"> / Enviar pdf</span>
+          <a title="Ver pdf" class="im-pedido" target="_blank" href=""> Ver pdf</a>
          </ol>
        </div>
             <div class="table-pd">
@@ -248,6 +279,7 @@
             <a class="pendiente" data-id="0" href="#cambiarestatus" data-toggle="modal">Pendiente</a>
             <a class="proceso" data-id="1" href="#cambiarestatus" data-toggle="modal">Crédito</a>
             <a class="pagado" data-id="2" href="#cambiarestatus" data-toggle="modal">Pagado</a>
+            <a class="cancelado" data-id="3" href="#cambiarestatus" data-toggle="modal">Cancelado</a>
           </div>
 
         </div>
@@ -418,6 +450,25 @@
         </div>
       </div>
     </div>
+
+<!-- Modal cuando se envia nuevamente el pdf -->
+  <div id="env_pdf" class="modal fade">
+    <div class="modal-dialog">
+      <div class="img-gif">
+        <img class="img-proce" src="/img/Cargandocc.gif" width="200px">
+        <h1 class="text-info text-center txt-pro">Procesando..</h1>
+        <h1 class="text-center text-info txt-msj">El pdf ha sido enviado correctamente.</h1>
+        <h2 class="text-center text-info txt-sal">< Salir</h2>
+      </div>
+      <div class="modal-content c-carga">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+        </div>
+      </div>
+    </div>
+  </div>
 
 
 
@@ -681,6 +732,7 @@ $(document).ready(function(){
 $(document).on('click','#c-estatus', function(){
   id = $(this).attr('data-id');
    $('.im-pedido').attr('href', '/productos/imprimirpedido/'+id);
+   $('.en-pedido').attr('data-pedido', id);
   $('#env-extras').attr('data-id', id);
   num = $(this).text();
   fe = $(this).attr('value');
@@ -790,6 +842,44 @@ $('.total-p').html(accounting.formatMoney(resultado += totaliva));
 
 
 });
+
+
+          $('.txt-msj').hide();
+          $('.txt-sal').hide();
+
+          //Reenviar pdf
+          $(document).on('click','.en-pedido', function(){
+              id = $(this).attr('data-pedido');
+               $.ajax({
+                      type: "GET",
+                      url: "/productos/enviaremail/"+id,
+                      beforeSend: function(){
+                          $('#env_pdf').modal({
+                                show:'false',
+                              });
+                      },
+                      success: function( p ){
+                              $('.txt-pro').hide();
+                              $('.img-proce').hide();
+                              $('.txt-msj').show();
+                              $('.txt-sal').show();
+                              
+                           }
+
+                   });
+
+          });
+
+          $(document).on('click','.txt-sal', function(){
+            $('#env_pdf').modal('hide');
+            $('.txt-pro').show();
+            $('.img-proce').show();
+            $('.txt-msj').hide();
+            $('.txt-sal').hide();
+
+          });
+
+
 
 
      $(document).on('click', '#c-estatus', function(){
@@ -1141,6 +1231,8 @@ $(document).on('click','.img-p',function(){
           $('.estatus_a').text('Crédito');
         } else if(ed.estatus == 2){
           $('.estatus_a').text('Pagado');
+        } else if(ed.estatus == 3){
+          $('.estatus_a').text('Cancelado');
         }
         //Bolvemos a construir la fila
         $('#tr_'+id).replaceWith('<tr class="fila_'+ed.estatus+'" id="tr_'+ed.id+'">'+
@@ -1163,6 +1255,8 @@ $(document).on('click','.img-p',function(){
                 $('.estatus_1').addClass('text-primary');
                 $('.estatus_2').text('Pagado');
                 $('.estatus_2').addClass('text-success');
+                $('.estatus_3').text('Cancelado');
+                $('.estatus_3').addClass('text-danger');
 
                 $('#c-pass').addClass('disabled');
 

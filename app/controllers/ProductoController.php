@@ -7,6 +7,7 @@ class ProductoController extends \BaseController {
             //si no exixte la variable de sesion cart, entonses la creamos y lo guardamos es un array vacio
             if(!\Session::has('cart')) \Session::put('cart', array());
             if(!\Session::has('extras')) \Session::put('extras', array());
+            if(!\Session::has('datos')) \Session::put('datos', array());
 
         }
 
@@ -67,6 +68,113 @@ class ProductoController extends \BaseController {
        \Session::put('extras', $extras);
        return Redirect::back();
     }
+
+    public function datos(){
+       return Response::json('XD');
+    }
+
+public function enviaremail($id){
+
+
+            $iddirec = DB::table('pedido')
+                    ->join('direccion_cliente','pedido.direccion_cliente_id', '=','direccion_cliente.id')
+                    ->where('pedido.id', $id)
+                    ->pluck('pedido.direccion_cliente_id');
+
+
+            $pedido = DB::table('pedido')
+                        ->where('pedido.id', $id)
+                        ->get();
+
+                 $cli = DB::table('cliente')
+                    ->join('pedido', 'cliente.id', '=', 'pedido.cliente_id')
+                    ->where('pedido.id', $id)
+                    ->get();
+
+                 $domi = DB::table('direccion_cliente')
+                    ->join('cliente', 'direccion_cliente.cliente_id', '=', 'cliente.id')
+                    ->join('pais', 'direccion_cliente.pais_id', '=', 'pais.id')
+                    ->join('estado', 'direccion_cliente.estado_id', '=', 'estado.id')
+                    ->join('municipio', 'direccion_cliente.municipio_id', '=', 'municipio.id')
+                    ->join('telefono_cliente', 'direccion_cliente.telefono_cliente_id', '=', 'telefono_cliente.id')
+                    ->where("direccion_cliente.id", $iddirec)
+                    ->get();
+
+                 $ped = DB::table('cliente')
+                    ->join('pedido','cliente.id', '=','pedido.cliente_id')
+                    ->where('pedido.id', $id)
+                    ->get();
+
+
+                  $pro = DB::table('producto')
+                              ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
+                                ->where('pedido_detalle.pedido_id', $id)
+                                ->select('clave', 'nombre', 'color', 'pedido_detalle.precio','iva0', 'cantidad', 'num_pedimento')
+                                ->get();
+
+                $extra = DB::table('extra_pedido')
+                        ->where('pedido_id', $id)
+                        ->get();
+ 
+
+                $dpro = DB::table('pedido_detalle')
+                            ->join('producto','pedido_detalle.producto_id', '=','producto.id')
+                            ->where('pedido_detalle.id', $id)
+                            ->get();
+
+                   //Sacamos el iva
+                    $total = 0;
+                    foreach($pro as $item){
+                    if($item->iva0 == 0){
+
+                    } else {
+                        //$m = $item->precio * $item->descuento;
+                        $total += ($item->precio) * $item ->cantidad * 0.16;
+                    }
+                }
+
+                   //Sacamos el subtotal
+                     $t = 0;
+                        foreach($pro as $item){
+                           // $m = $item->precio * $item->descuento;
+                            $t += ($item->precio) * $item ->cantidad;
+                        } 
+
+
+
+                $pdf = View::make('users/report', 
+                        compact(
+                            'dpro', 
+                            'pro', 
+                            'domi', 
+                            'ped', 
+                            'pedido', 
+                            'total', 
+                            't',
+                            'cli',
+                            'extra'
+                            ));
+
+                 define('BUDGETS_DIR', public_path('uploads/pdf')); // I define this in a constants.php file
+
+                    if (!is_dir(BUDGETS_DIR)){
+                        mkdir(BUDGETS_DIR, 0755, true);
+                    }
+
+                    $outputName = str_random(10); // str_random is a [Laravel helper](http://laravel.com/docs/helpers#strings)
+                    $pdfPath = BUDGETS_DIR.'/'.$outputName.'.pdf';
+                    File::put($pdfPath, PDF::load($pdf, 'A4', 'portrait')->output());
+
+                    Mail::send('emails/pdf', compact('pedido'), function($message) use ($pdfPath){
+                        $message->from('garden@live.com', 'Garden Central');
+                        $message->to('luis_mh@outlook.es');
+                        $message->subject('Tú pedido está en proceso.');
+                        $message->attach($pdfPath);
+                    });
+
+                    return Response::json('XD');
+    
+   }
 
 
     //actualizar extras
@@ -1226,7 +1334,110 @@ public function getProducto(){
         }
 
 
-    return Response::json($pedido['id']);
+
+            $id = $pedido['id'];
+
+            $iddirec = DB::table('pedido')
+                    ->join('direccion_cliente','pedido.direccion_cliente_id', '=','direccion_cliente.id')
+                    ->where('pedido.id', $id)
+                    ->pluck('pedido.direccion_cliente_id');
+
+
+            $pedido = DB::table('pedido')
+                        ->where('pedido.id', $id)
+                        ->get();
+
+                 $cli = DB::table('cliente')
+                    ->join('pedido', 'cliente.id', '=', 'pedido.cliente_id')
+                    ->where('pedido.id', $id)
+                    ->get();
+
+                 $domi = DB::table('direccion_cliente')
+                    ->join('cliente', 'direccion_cliente.cliente_id', '=', 'cliente.id')
+                    ->join('pais', 'direccion_cliente.pais_id', '=', 'pais.id')
+                    ->join('estado', 'direccion_cliente.estado_id', '=', 'estado.id')
+                    ->join('municipio', 'direccion_cliente.municipio_id', '=', 'municipio.id')
+                    ->join('telefono_cliente', 'direccion_cliente.telefono_cliente_id', '=', 'telefono_cliente.id')
+                    ->where("direccion_cliente.id", $iddirec)
+                    ->get();
+
+                 $ped = DB::table('cliente')
+                    ->join('pedido','cliente.id', '=','pedido.cliente_id')
+                    ->where('pedido.id', $id)
+                    ->get();
+
+
+                  $pro = DB::table('producto')
+                              ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
+                                ->where('pedido_detalle.pedido_id', $id)
+                                ->select('clave', 'nombre', 'color', 'pedido_detalle.precio','iva0', 'cantidad', 'num_pedimento')
+                                ->get();
+
+                $extra = DB::table('extra_pedido')
+                        ->where('pedido_id', $id)
+                        ->get();
+ 
+
+                $dpro = DB::table('pedido_detalle')
+                            ->join('producto','pedido_detalle.producto_id', '=','producto.id')
+                            ->where('pedido_detalle.id', $id)
+                            ->get();
+
+                   //Sacamos el iva
+                    $total = 0;
+                    foreach($pro as $item){
+                    if($item->iva0 == 0){
+
+                    } else {
+                        //$m = $item->precio * $item->descuento;
+                        $total += ($item->precio) * $item ->cantidad * 0.16;
+                    }
+                }
+
+                   //Sacamos el subtotal
+                     $t = 0;
+                        foreach($pro as $item){
+                           // $m = $item->precio * $item->descuento;
+                            $t += ($item->precio) * $item ->cantidad;
+                        } 
+
+
+
+                $pdf = View::make('users/report', 
+                        compact(
+                            'dpro', 
+                            'pro', 
+                            'domi', 
+                            'ped', 
+                            'pedido', 
+                            'total', 
+                            't',
+                            'cli',
+                            'extra'
+                            ));
+
+                 define('BUDGETS_DIR', public_path('uploads/pdf')); // I define this in a constants.php file
+
+                    if (!is_dir(BUDGETS_DIR)){
+                        mkdir(BUDGETS_DIR, 0755, true);
+                    }
+
+                    $outputName = str_random(10); // str_random is a [Laravel helper](http://laravel.com/docs/helpers#strings)
+                    $pdfPath = BUDGETS_DIR.'/'.$outputName.'.pdf';
+                    File::put($pdfPath, PDF::load($pdf, 'A4', 'portrait')->output());
+
+                    Mail::send('emails/pdf', compact('pedido'), function($message) use ($pdfPath){
+                        $message->from('garden@live.com', 'Garden Central');
+                        $message->to('luis_mh@outlook.es');
+                        $message->subject('Tú pedido está en proceso.');
+                        $message->attach($pdfPath);
+                    });
+
+
+
+
+
+    return Response::json($id);
   }
   
  }
@@ -1866,9 +2077,186 @@ public function getProducto(){
           }//End For
 
         }
+
+
+           $id = $pedido['id'];
+
+            $iddirec = DB::table('pedido')
+                    ->join('direccion_cliente','pedido.direccion_cliente_id', '=','direccion_cliente.id')
+                    ->where('pedido.id', $id)
+                    ->pluck('pedido.direccion_cliente_id');
+
+
+            $pedido = DB::table('pedido')
+                        ->where('pedido.id', $id)
+                        ->get();
+
+                 $cli = DB::table('cliente')
+                    ->join('pedido', 'cliente.id', '=', 'pedido.cliente_id')
+                    ->where('pedido.id', $id)
+                    ->get();
+
+                 $domi = DB::table('direccion_cliente')
+                    ->join('cliente', 'direccion_cliente.cliente_id', '=', 'cliente.id')
+                    ->join('pais', 'direccion_cliente.pais_id', '=', 'pais.id')
+                    ->join('estado', 'direccion_cliente.estado_id', '=', 'estado.id')
+                    ->join('municipio', 'direccion_cliente.municipio_id', '=', 'municipio.id')
+                    ->join('telefono_cliente', 'direccion_cliente.telefono_cliente_id', '=', 'telefono_cliente.id')
+                    ->where("direccion_cliente.id", $iddirec)
+                    ->get();
+
+                 $ped = DB::table('cliente')
+                    ->join('pedido','cliente.id', '=','pedido.cliente_id')
+                    ->where('pedido.id', $id)
+                    ->get();
+
+
+                  $pro = DB::table('producto')
+                              ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
+                                ->where('pedido_detalle.pedido_id', $id)
+                                ->select('clave', 'nombre', 'color', 'pedido_detalle.precio','iva0', 'cantidad', 'num_pedimento')
+                                ->get();
+
+                $extra = DB::table('extra_pedido')
+                        ->where('pedido_id', $id)
+                        ->get();
+ 
+
+                $dpro = DB::table('pedido_detalle')
+                            ->join('producto','pedido_detalle.producto_id', '=','producto.id')
+                            ->where('pedido_detalle.id', $id)
+                            ->get();
+
+                   //Sacamos el iva
+                    $total = 0;
+                    foreach($pro as $item){
+                    if($item->iva0 == 0){
+
+                    } else {
+                        //$m = $item->precio * $item->descuento;
+                        $total += ($item->precio) * $item ->cantidad * 0.16;
+                    }
+                }
+
+                   //Sacamos el subtotal
+                     $t = 0;
+                        foreach($pro as $item){
+                           // $m = $item->precio * $item->descuento;
+                            $t += ($item->precio) * $item ->cantidad;
+                        } 
+
+                $pdf = View::make('users/report', 
+                        compact(
+                            'dpro', 
+                            'pro', 
+                            'domi', 
+                            'ped', 
+                            'pedido', 
+                            'total', 
+                            't',
+                            'cli',
+                            'extra'
+                            ));
+
+                
+
+                 define('BUDGETS_DIR', public_path('uploads/pdf')); // I define this in a constants.php file
+
+                    if (!is_dir(BUDGETS_DIR)){
+                        mkdir(BUDGETS_DIR, 0755, true);
+                    }
+
+                    $outputName = str_random(10); // str_random is a [Laravel helper](http://laravel.com/docs/helpers#strings)
+                    $pdfPath = BUDGETS_DIR.'/'.$outputName.'.pdf';
+                    File::put($pdfPath, PDF::load($pdf, 'A4', 'portrait')->output());
+
+                    Mail::send('emails/pdf', compact('pedido'), function($message) use ($pdfPath){
+
+
+                        $message->from('garden@live.com', 'Garden Central');
+                        $message->to('luis_mh@outlook.es');
+                        $message->subject('Tú pedido está en proceso.');
+                        $message->attach($pdfPath);
+                    });
+
+              /*      for ($i=1;$i<=2;$i++){
+
+                        $pdf = View::make('users/report'.$i, 
+                        compact(
+                            'dpro', 
+                            'pro', 
+                            'domi', 
+                            'ped', 
+                            'pedido', 
+                            'total', 
+                            't',
+                            'cli',
+                            'extra'
+                            ));
+
+                      /*  $pdf = new \Thujohn\Pdf\Pdf();
+                        $content = $pdf->load(View::make('pdf.image'))->output();
+                        File::put(public_path('test'.$i.'.pdf'), $content);*/
+
+                 /*       $outputName = str_random(10); 
+                        $pdfPath = BUDGETS_DIR.'/'.$outputName.'.pdf';
+                        File::put($pdfPath, PDF::load($pdf, 'A4', 'portrait')->output());
+
+                        Mail::send('emails/pdf', compact('pedido'), function($message) use ($pdfPath){
+
+
+                            $message->from('garden@live.com', 'Garden Central');
+                            $message->to('luis_mh@outlook.es');
+                            $message->subject('Tú pedido está en proceso.');
+                            $message->attach($pdfPath);
+                            PDF::clear();
+                    });
+
+
+                    }*/
+
+                    
+
+
+
+
+
+                    /*-------------------------------------------*/
+         /*    $pdf2 = View::make('users/report', 
+                        compact(
+                            'dpro', 
+                            'pro', 
+                            'domi', 
+                            'ped', 
+                            'pedido', 
+                            'total', 
+                            't',
+                            'cli',
+                            'extra'
+                            ));*/
+
+                /* define('BUDGETS_DIR', public_path('uploads/pdf')); // I define this in a constants.php file
+
+                    if (!is_dir(BUDGETS_DIR)){
+                        mkdir(BUDGETS_DIR, 0755, true);
+                    }*/
+
+                   // $outputName2 = str_random(10); // str_random is a [Laravel helper](http://laravel.com/docs/helpers#strings)
+                   // $pdfPath2 = BUDGETS_DIR.'/'.$outputName2.'.pdf';
+                    ////File::put($pdfPath2, PDF::load($pdf2, 'A4', 'portrait')->output());
+
+                   /* Mail::send('emails/pdf', compact('pedido'), function($message) use ($pdfPath){
+
+
+                        $message->from('garden@live.com', 'Garden Central');
+                        $message->to('luis_mh@outlook.es');
+                        $message->subject('Tú pedido está en proceso.');
+                        $message->attach($pdfPath);
+                    });*/
+
         
 
-        return Response::json($pedido['id']);
+        return Response::json($id);
 
  }
 
@@ -2269,7 +2657,6 @@ public function datosdelpedido($iddom){
 
 
 
-
                 $pdf = View::make('users/report', 
                         compact(
                             'dpro', 
@@ -2282,8 +2669,15 @@ public function datosdelpedido($iddom){
                             'cli',
                             'extra'
                             ));
-                   
+
+
+
                     return PDF::load($pdf, 'A4', 'portrait')->show();
+                    //return PDF::load($pdf, 'A4', 'portrait')->download('my_pdf');
+
+                   
+
+                     // return PDF::load($pdf, 'A4', 'portrait')->show();                  
 
             } else {
 

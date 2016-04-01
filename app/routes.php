@@ -125,6 +125,8 @@ Route::POST('consultas/dpedidos', 'AdminController@dpedidos');
 Route::GET('productos/terminosycondiciones','ProductoController@terminos');
 Route::GET('productos/verterminos','ProductoController@verterminos');
 
+
+
 // Ruta para la busqueda de productos
 Route::post('productos/getProducto','ProductoController@getProducto');
 
@@ -190,7 +192,8 @@ Route::post('productos/vaciar', 'ProductoController@vaciar');
 Route::get('agregarextra/add/{contenido}','ProductoController@agregarextra');
 Route::get('extras/updateextra/{contenido}','ProductoController@updateextra');
 Route::post('productos/vaciarextra', 'ProductoController@vaciarextra');
-
+//Datos en la sesion
+Route::get('datos/add','ProductoController@datos');
 
 //Rutas para verificar datos
 Route::post('verificar/getLoginUser','LoginController@getLoginUser');
@@ -270,6 +273,7 @@ Route::POST('productos/detalledelpedido', 'ProductoController@detalledelpedido')
 
 //Imprimir pdf
 Route::get('productos/imprimirpedido/{iddom}', 'ProductoController@imprimirpedido');
+Route::GET('productos/enviaremail/{id}','ProductoController@enviaremail');
 
 Route::get('salidas/listar', 'AdminController@listp');
 

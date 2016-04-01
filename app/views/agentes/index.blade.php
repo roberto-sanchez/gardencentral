@@ -18,6 +18,37 @@
     display:none;
   }
 
+  .im-pedido{
+    margin-right:.2em;
+  }
+
+  .c-carga{
+    display:none;
+  }
+
+  #env_pdf{
+    background:rgba(0, 0, 0, 0.7);
+  }
+  
+  .img-gif{
+    width:100%;
+    margin:0 auto;
+    text-align:center;
+    margin-top:5em;
+  }
+
+
+  .txt-sal{
+    cursor:pointer;
+    font-size:1.8em;
+  }
+
+  .txt-sal:hover{
+    color:#64A9F7;
+    text-decoration:underline;
+  }
+
+
 </style>
 @stop
 
@@ -84,7 +115,7 @@
           <div class="modal-header header-detalle">
             <button type="button" class="close close-mp" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title text-center d-pe"></h4>
-           <h4 class="modal-title text-center d-fe"></h4>
+            <h4 class="modal-title text-center d-fe"></h4>
           </div>
           <div class="modal-body content-datos">
           	<div class="cont-btn">
@@ -98,7 +129,8 @@
 				  <li><a class="enlace-active" id="det-p" href="#">Detalle del pedido</a></li>
 				  <li><a id="fotop" href="#">Detalle del cliente</a></li>
 				  <li><a id="estatusp" href="#">Estatus</a></li>
-          <a title="Enviar pdf" class="im-pedido" target="_blank" href="">Enviar pdf</a>
+          <span title="Enviar pdf" class="en-pedido"> / Enviar pdf</span>
+          <a title="Ver pdf" class="im-pedido" target="_blank" href=""> Ver pdf</a>
 			   </ol>
 			 </div>
             <div class="table-pd">
@@ -437,6 +469,25 @@
       </div>
     </div>
 
+       <!-- Modal cuando se envia nuevamente el pdf -->
+            <div id="env_pdf" class="modal fade">
+              <div class="modal-dialog">
+                <div class="img-gif">
+                  <img class="img-proce" src="img/Cargandocc.gif" width="200px">
+                  <h1 class="text-info text-center txt-pro">Procesando..</h1>
+                  <h1 class="text-center text-info txt-msj">El pdf ha sido enviado correctamente.</h1>
+                  <h2 class="text-center text-info txt-sal">< Salir</h2>
+                </div>
+                <div class="modal-content c-carga">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  </div>
+                  <div class="modal-body">
+                  </div>
+                </div>
+              </div>
+            </div>
+
 
 {{ HTML::script('js/select2.min.js') }}
 {{ HTML::script('js/accounting.min.js') }}
@@ -580,7 +631,7 @@
                               total = p[i].total;
 
                                 tabla_a.fnAddData([
-                                       '<a id="c-estatus" class="'+p[i].estatus+' v_'+p[i].razon_social+'" data-id="'+p[i].id+'" value="'+p[i].razon_social+'" href="#modalpedido" data-toggle="modal">'+p[i].num_pedido+'</a>',
+                                       '<a id="c-estatus" class="'+p[i].estatus+' v_'+p[i].razon_social+'" data-id="'+p[i].id+'" value="'+p[i].razon_social+'" href="#modalpedido" data-toggle="modal" data-fecha="'+p[i].created_at+'">'+p[i].num_pedido+'</a>',
                                         p[i].numero_cliente,
                                         p[i].created_at,
                                         p[i].nombre_cliente+" "+p[i].paterno,
@@ -685,10 +736,16 @@
         verextra();
       });
 
+          
 
            $(document).on('click','#c-estatus', function(){
+               p = $(this).text();
+               f = $(this).attr('data-fecha');
+               $('.d-pe').html('#'+p);
+               $('.d-fe').html('Fecha: '+f);
 	           	 id = $(this).attr('data-id');
                $('.im-pedido').attr('href', '/productos/imprimirpedido/'+id);
+               $('.en-pedido').attr('data-pedido', id);
                $('#env-extras').attr('data-id', id);
 	           	 razon = $(this).attr('value');
 	           	 $('.c-pass').attr('id',razon);
@@ -734,8 +791,7 @@
                      $('.c_cp').html(p.domi[0].codigo_postal);
                      $('.c_telefono').html(p.domi[0].numero);
 
-                     $('.d-pe').html('#'+p.ped[0].num_pedido);
-                     $('.d-fe').html('Fecha: '+p.ped[0].created_at);
+                     
 
                    if(p.ped[0].observaciones == " "){
                       $('.c_observaciones').text('No ay observaciones.');
@@ -877,6 +933,41 @@
 
 
       });
+
+          $('.txt-msj').hide();
+          $('.txt-sal').hide();
+
+          //Reenviar pdf
+          $(document).on('click','.en-pedido', function(){
+              id = $(this).attr('data-pedido');
+               $.ajax({
+                      type: "GET",
+                      url: "/productos/enviaremail/"+id,
+                      beforeSend: function(){
+                          $('#env_pdf').modal({
+                                show:'false',
+                              });
+                      },
+                      success: function( p ){
+                              $('.txt-pro').hide();
+                              $('.img-proce').hide();
+                              $('.txt-msj').show();
+                              $('.txt-sal').show();
+                              
+                           }
+
+                   });
+
+          });
+
+          $(document).on('click','.txt-sal', function(){
+            $('#env_pdf').modal('hide');
+            $('.txt-pro').show();
+            $('.img-proce').show();
+            $('.txt-msj').hide();
+            $('.txt-sal').hide();
+
+          });
 
             $(document).on('click', '#c-estatus', function(){
                 idp = $(this).attr('data-id');

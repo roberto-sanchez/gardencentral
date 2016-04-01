@@ -1040,26 +1040,32 @@ $(document).on('click', '#asig-agente', function(){
   $(document).on('click', '.caja', function(){
     id = $(this).attr('value');
     caja = $('.totales-p');
+    clave = $('.clave-inv', this).text();
   $.ajax({
     type: "POST",
     url: "/pedidos/detallepedido",
     data: {id: id},
     success: function (d) {
-      console.log(d);
-      $('#clave-i').text(d.i[0].clave);
-      $('#nombre-i').text(d.i[0].nombre);;
-      div = "";
-      for(datos in d.i){
+      $('#clave-i').text(clave);
 
-              div += '<div class="caja-pedimento">'+
-              '<div class="cont-pedimento">'+
-              '<h4 class="text-info txt-total-inv">'+d.i[datos].cantidad+'</h4>'+
-              '<h3 class="num-pedimento">'+d.i[datos].num_pedimento+'</h3>'+
-              '<h3 class="text-info pedi-fecha">'+d.i[datos].created_at+'</h3>'+
-              '</div></div>';
-           }
+      if(d.i == 0){
+        $('#nombre-i').text('Producto agotado');
+      } else {
+         $('#nombre-i').text(d.i[0].nombre);
+          div = "";
+          for(datos in d.i){
 
-          caja.append(div); 
+                  div += '<div class="caja-pedimento">'+
+                  '<div class="cont-pedimento">'+
+                  '<h4 class="text-info txt-total-inv">'+d.i[datos].cantidad+'</h4>'+
+                  '<h3 class="num-pedimento">'+d.i[datos].num_pedimento+'</h3>'+
+                  '<h3 class="text-info pedi-fecha">'+d.i[datos].created_at+'</h3>'+
+                  '</div></div>';
+               }
+
+              caja.append(div); 
+      }
+  
 
   },
 

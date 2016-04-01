@@ -2459,6 +2459,12 @@ div.users{
   width:145px;
 }
 
+.txt-costos{
+  margin:0;
+  margin-top:.3em;
+  display:none;
+  font-size:.8em;
+}
 
 .g-p-tipo{
   clear: both;
@@ -2853,12 +2859,17 @@ footer p{
   margin-left:1.2em;
 }
 
-.im-pedido{
+.im-pedido, .en-pedido{
   float:right;
   margin-right:5%;
 }
 
-.im-pedido:hover{
+.en-pedido{
+  cursor:pointer;
+  color: #337ab7;
+}
+
+.im-pedido:hover, .en-pedido:hover{
   text-decoration:underline;
   color:#64A9F7;
 }
@@ -3060,6 +3071,10 @@ footer p{
 
 
 /*--Modal del detalle de los agentes--*/
+/*
+.content-p{
+  display: none;
+}*/
 
 /*Ocultamos la tabla grande*/
 .td-pedido{

@@ -642,7 +642,7 @@ public function entradas(){
 		$obc = Input::get('obc');
 
 		//Verificamos el numero de pedimento
-		$ped = DB::table('inventario_detalle')
+		$ped = DB::table('entrada')
 				->where('num_pedimento', $numeroPedimento)
 				->get();
 
@@ -775,7 +775,8 @@ public function entradas(){
 
 
 		//obtenemos el archivo a subir
-	    $file = $_FILES['archivo_file']['name'];
+	     //$file = Input::get('file');
+	     $file = $_FILES['archivo_file']['name'];
 
 	    $fecha = Input::get('fecha');
 	    $proveedor = Input::get('proveedor');
@@ -785,7 +786,7 @@ public function entradas(){
 		$obc = Input::get('obc');
 
 		//Verificamos el numero de pedimento
-		$ped = DB::table('inventario_detalle')
+		$ped = DB::table('entrada')
 				->where('num_pedimento', $numeroPedimento)
 				->get();
 

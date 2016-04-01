@@ -17,7 +17,7 @@ class RemindersController extends Controller {
 		})){
 
 			case Password::INVALID_USER:
-				Session::flash('messageDanger', 'No existe ningun usuario registrado con ese e-mail.');
+				Session::flash('messageDanger', 'El e-mail no existe.');
 				return Redirect::back();
 
 			case Password::REMINDER_SENT:
@@ -66,8 +66,9 @@ class RemindersController extends Controller {
 				Session::flash('messageDanger', 'Las contraseñas no coinciden.');
 				return Redirect::back();
 			case Password::INVALID_TOKEN:
+
 			case Password::INVALID_USER:
-				Session::flash('messageDanger', 'No existe ningun usuario registrado con ese e-mail.');
+				Session::flash('messageDanger', 'El e-mail no existe.');
 				return Redirect::back();
 
 			case Password::PASSWORD_RESET:

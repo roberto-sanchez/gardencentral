@@ -1,26 +1,90 @@
-@extends('layouts/principal')
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    @yield('title')
+    <meta name="description" content="">
+    @section('scripts')
+       @include('layouts/inc/head_common')
+       @include('layouts/inc/footer_common')
+    @show
+  </head>
+    
+    <style>
 
-@section('title')
-<title>Garden Central Productos</title>
-@show
+        .nav-p{
+            padding-bottom:2em;
+            padding-right:10em;
+        }
 
-@section('username')
-  
-@stop
+        .est{
+            font-size:2em;
+        }
+        .form{
+            width:50%;
+            margin:0 auto;
+        }
 
-@section('menu')
-  
-@stop
+        .div-btn{
+            width:35%;
+            margin:0 auto;
+        }
 
-@section('content')
-<div class="content users">
+        .btn-c{
+            width:100%;
+        }
+
+        .alerts{
+            width:25%;
+            margin:0 auto;
+        }
+
+    </style>
+
+
+    
+  <body>
+  <!--<![endif]-->
+    <!--Boton para dispositivos pequeños-->
+    <div class="navbar navbar-inverse navbar-fixed-top nav-p">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="glyphicon glyphicon-th-list"></span>
+          </button>
+          <a class="navbar-brand" href="#">Garden Central</a>
+        </div>
+    </div>
+
+
+<div class="users">
   <section class="container">
-    @include('layouts/inc/estatus')
-    <div class="row princip">
-      <div class=" princip2 col-xs-8">
-        <h1 class="est">Establezca su nueva contraseña</h1>
 
-            {{ Form::open() }}
+    <div class="t_condiciones">
+    <div class="row princip">
+      <div class=" princip2 col-xs-12">
+            <div class="alerts">
+                   @if(Session::has('messageOK'))
+                      <div class="alert alert-success fade in">
+                      <button class="close" data-dismiss="alert" type="button">
+                          <span class="glyphicon glyphicon-remove" ></span>
+                      </button>
+                        {{ Session::get('messageOK') }}
+                      </div>
+                    @endif
+
+                   @if(Session::has('messageDanger'))
+                      <div class="alert alert-danger fade in">
+                      <button class="close" data-dismiss="alert" type="button">
+                          <span class="glyphicon glyphicon-remove"></span>
+                      </button>
+                        {{ Session::get('messageDanger') }}
+                      </div>
+                    @endif
+
+            </div>
+        <h1 class="est text-info text-center">Restablecer contraseña.</h1>
+            <div class="form">
+               {{ Form::open() }}
                 <input type="hidden" name="token" value="{{ $token }}">
 
                 <div class="form-group">
@@ -36,13 +100,37 @@
                  {{ Form::password('password_confirmation', array('class' => 'form-control', 'placeholder' => 'Repite tu nueva contraseña')) }}
                 </div>
 
-                <div>
-                    {{ Form::submit('Cambiar contraseña', array('class' => 'btn btn-primary btn-block' )) }}
+                <div class="div-btn">
+                    {{ Form::submit('Cambiar contraseña', array('class' => 'btn-c btn btn-primary' )) }}
                 </div>
-            {{ Form::close() }}
+              {{ Form::close() }}
+            </div>
+            
      </div>
     </div>
-  </section>
-</div>
-@stop
 
+        
+    </div>
+
+  </section>
+</div> <!-- Content users -->
+
+
+
+   <footer>
+      <hr>
+      <p>
+          &copy; Copyright: Todos los derechos reservados. Garden Central. 
+
+      </p>
+   </footer>
+
+
+
+
+  <div class="notifications top-right" data-html="true"></div>
+
+
+
+  </body>
+</html>

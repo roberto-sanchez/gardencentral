@@ -59,20 +59,21 @@
               <div class="inputE prov input-group infopago">
                 <label>PROVEEDOR</label>
                  <select class="selectpicker form-control" name="proveedor" id="idproveedor" data-live-search="true" data-size="5">
+                 <option value="0" selected>-- Seleccione --</option>
                  @foreach($proveedor as $prov)
                   <option value="{{ $prov->id }}" data-tokens="{{ $prov->nombre }}">{{ $prov->nombre }}</option>
                  @endforeach
-                 <span class="icon-p"></span>
                  </select>
               </div>
               <div class="inputE fa form-group">
                  <label for="ejemplo_email_1">FACTURA</label>
                  <input type="text" class="form-control" name="factura" id="factura">
+                 <span class="icon-fa"></span>
               </div>
               <div class="inputE ffa form-group">
                  <label for="ejemplo_email_1">FECHA FACTURA</label>
-                 
                  <input type="text" name="fechaFactura" class="form-control fechaFactura">
+                 <span class="icon-ffa"></span>
               </div>
             </div>
               <div class="form-add-s">
@@ -232,6 +233,8 @@ $(document).ready(function(){
       });
 
 
+
+
       $(document).on('click', '#c-env', function(){
 
         $("#cont-products").load(location.href+" #cont-products>*","");
@@ -287,7 +290,6 @@ $(document).ready(function(){
       });
 
 
-
     //Actualizar cantidad
     $(document).on('click', '#actC', function(){
       valor = $(this).val();
@@ -315,26 +317,47 @@ $(document).ready(function(){
     if($(".fecha").val().length == 0){
             $('.date').addClass('has-error has-feedback');
             $('.icon-d').addClass('glyphicon glyphicon-remove form-control-feedback');
+            alertas('error',"Agregue la fecha.");
             return false;
 
-    } else if($('#idproveedor').val() == null){
-            $('#idproveedor').addClass('has-error has-feedback');
-            $('.icon-p').addClass('glyphicon glyphicon-remove form-control-feedback');
-            alert('selecciona el proveedor');
+    } else if($("#idproveedor").val() == 0){
+            alertas('error',"Seleccione un proveedor.");
             return false;
 
     } else if($("#factura").val().length == 0){
-            $('.fa').addClass('has-error');
+            $('.fa').addClass('has-error has-feedback');
+            $('.icon-fa').addClass('glyphicon glyphicon-remove form-control-feedback');
+            alertas('error',"Agregue el número de factura.");
             return false;
 
     } else if($(".fechaFactura").val().length == 0){
-            $('.ffa').addClass('has-error');
+            $('.ffa').addClass('has-error has-feedback');
+            $('.icon-ffa').addClass('glyphicon glyphicon-remove form-control-feedback');
+             alertas('error',"Agregue la fecha de factura.");
             return false;
 
-    } else {
+    }  else {
         return true;
     }
 });
+
+$(".fecha").focus(function(){
+    $('.date').removeClass('has-error has-feedback');
+    $('.icon-d').removeClass('glyphicon glyphicon-remove form-control-feedback');
+});
+
+$("#factura").focus(function(){
+    $('.fa').removeClass('has-error has-feedback');
+    $('.icon-fa').removeClass('glyphicon glyphicon-remove form-control-feedback');
+});
+
+$(".fechaFactura").focus(function(){
+    $('.ffa').removeClass('has-error has-feedback');
+    $('.icon-ffa').removeClass('glyphicon glyphicon-remove form-control-feedback');
+});
+
+
+
 
   /*  $("#enviar_f").click(function () {
 
@@ -371,7 +394,7 @@ $(document).ready(function(){
       proveedor = $('#idproveedor').val();
       factura = $('#factura').val();
       fechaFactura = $('.fechaFactura').val();
-      numeroPedimento = $('#numeroPedimento').val();
+      numeroPedimento = $('#numeroPedimento').val().trim();
       obc = $('#obc').val();
       tipo = 1;
 
@@ -441,9 +464,9 @@ $(document).ready(function(){
    
      $(document).on('click', '#registrar-entrada', function(){
           
+          f = $(".formulario");
         //información del formulario
-         formData = new FormData($(".formulario")[0]);
-
+         formData = new FormData(f[0]);
         //hacemos la petición ajax
        $.ajax({
             url: '/entradas/registrarentrada',
