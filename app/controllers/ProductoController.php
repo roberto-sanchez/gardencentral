@@ -2261,6 +2261,111 @@ public function getProducto(){
  }
 
 
+ public function enviaragente($id){
+
+            $iddirec = DB::table('pedido')
+                    ->join('direccion_cliente','pedido.direccion_cliente_id', '=','direccion_cliente.id')
+                    ->where('pedido.id', $id)
+                    ->pluck('pedido.direccion_cliente_id');
+
+
+            $pedido = DB::table('pedido')
+                        ->where('pedido.id', $id)
+                        ->get();
+
+                 $cli = DB::table('cliente')
+                    ->join('pedido', 'cliente.id', '=', 'pedido.cliente_id')
+                    ->where('pedido.id', $id)
+                    ->get();
+
+                 $domi = DB::table('direccion_cliente')
+                    ->join('cliente', 'direccion_cliente.cliente_id', '=', 'cliente.id')
+                    ->join('pais', 'direccion_cliente.pais_id', '=', 'pais.id')
+                    ->join('estado', 'direccion_cliente.estado_id', '=', 'estado.id')
+                    ->join('municipio', 'direccion_cliente.municipio_id', '=', 'municipio.id')
+                    ->join('telefono_cliente', 'direccion_cliente.telefono_cliente_id', '=', 'telefono_cliente.id')
+                    ->where("direccion_cliente.id", $iddirec)
+                    ->get();
+
+                 $ped = DB::table('cliente')
+                    ->join('pedido','cliente.id', '=','pedido.cliente_id')
+                    ->where('pedido.id', $id)
+                    ->get();
+
+
+                  $pro = DB::table('producto')
+                              ->join('pedido_detalle','producto.id', '=','pedido_detalle.producto_id')
+                                ->where('pedido_detalle.pedido_id', $id)
+                                ->select('clave', 'nombre', 'color', 'pedido_detalle.precio','iva0', 'cantidad', 'num_pedimento')
+                                ->get();
+
+                $extra = DB::table('extra_pedido')
+                        ->where('pedido_id', $id)
+                        ->get();
+ 
+
+                $dpro = DB::table('pedido_detalle')
+                            ->join('producto','pedido_detalle.producto_id', '=','producto.id')
+                            ->where('pedido_detalle.id', $id)
+                            ->get();
+
+                   //Sacamos el iva
+                    $total = 0;
+                    foreach($pro as $item){
+                    if($item->iva0 == 0){
+
+                    } else {
+                        //$m = $item->precio * $item->descuento;
+                        $total += ($item->precio) * $item ->cantidad * 0.16;
+                    }
+                }
+
+                   //Sacamos el subtotal
+                     $t = 0;
+                        foreach($pro as $item){
+                           // $m = $item->precio * $item->descuento;
+                            $t += ($item->precio) * $item ->cantidad;
+                        } 
+
+                $pdf = View::make('users/report2', 
+                        compact(
+                            'dpro', 
+                            'pro', 
+                            'domi', 
+                            'ped', 
+                            'pedido', 
+                            'total', 
+                            't',
+                            'cli',
+                            'extra'
+                            ));
+
+                
+
+                 define('BUDGETS_DIR', public_path('uploads/pdf')); // I define this in a constants.php file
+
+                    if (!is_dir(BUDGETS_DIR)){
+                        mkdir(BUDGETS_DIR, 0755, true);
+                    }
+
+                    $outputName = str_random(10); // str_random is a [Laravel helper](http://laravel.com/docs/helpers#strings)
+                    $pdfPath = BUDGETS_DIR.'/'.$outputName.'.pdf';
+                    File::put($pdfPath, PDF::load($pdf, 'A4', 'portrait')->output());
+
+                    Mail::send('emails/pdf', compact('pedido'), function($message) use ($pdfPath){
+
+
+                        $message->from('garden@live.com', 'Garden Central');
+                        $message->to('luis_mh@outlook.es');
+                        $message->subject('Tú pedido está en proceso.');
+                        $message->attach($pdfPath);
+                    });
+
+                    return Response::json($id);
+
+ }
+
+
 
 
      //Editar domicilio

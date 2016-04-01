@@ -74,7 +74,7 @@
                   <th>Clave</th>
                   <th>Producto</th>
                   <th>Color</th>
-                  <th>Precio</th>
+                 <!-- <th>Precio</th>-->
                   <th>Iva</th>
                   <th>Cantidad</th>
                   <th>Pedimento</th>
@@ -87,7 +87,7 @@
                    <td>{{ $item->clave }}</td>
                    <td>{{ $item->nombre }}</td>
                    <td>{{ $item->color }}</td>
-                   <td>${{ number_format($item->precio, 2) }}</td>
+                 <!--  <td>${{ number_format($item->precio, 2) }}</td>-->
                    @if($item->iva0 == 0)
                     <td>0%</td>
                    @else

@@ -251,6 +251,7 @@ Route::POST('productos/nuevopedido/{id}', 'ProductoController@nuevopedido');
 
 
 Route::POST('productos/pedidoexistente/{id}', 'ProductoController@pedidoexistente');
+Route::POST('productos/enviaragente/{id}', 'ProductoController@enviaragente');
 
 //Editar domicilio
 Route::get('productos/editar/{uddom}', 'ProductoController@editar');

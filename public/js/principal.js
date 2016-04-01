@@ -1998,7 +1998,8 @@ $('#p-s-dom').click(function(){
               },
 
             success: function (iddom) {
-                window.location.href = 'productos/datosdelpedido/' + iddom;
+                enviaragente(iddom);
+                //console.log(iddom);
 
             },
 
@@ -2070,7 +2071,8 @@ $('#p-s-dom').click(function(){
             success: function (iddom) {
 
                 //redirigimosa¿ al detalle del pedido y le pasamos el id del domi
-                window.location.href = 'productos/datosdelpedido/' + iddom;
+                //window.location.href = 'productos/datosdelpedido/' + iddom;
+                enviaragente(iddom);
 
             },
             error: function () {
@@ -2148,7 +2150,8 @@ $('#p-s-dom').click(function(){
             success: function (iddom) {
 
                 //redirigimosa¿ al detalle del pedido y le pasamos el id del domi
-                window.location.href = 'productos/datosdelpedido/' + iddom;
+                //window.location.href = 'productos/datosdelpedido/' + iddom;
+                enviaragente(iddom);
 
             },
             error: function () {
@@ -2247,7 +2250,8 @@ $('#p-s-dom').click(function(){
             success: function (iddom) {
 
                 //redirigimosa¿ al detalle del pedido y le pasamos el id del domi
-                window.location.href = 'productos/datosdelpedido/' + iddom;
+               // window.location.href = 'productos/datosdelpedido/' + iddom;
+               enviaragente(iddom);
 
             },
             error: function () {
@@ -2261,6 +2265,24 @@ $('#p-s-dom').click(function(){
 
 
 }); //cerramos la funcion jquery principal
+
+function enviaragente(iddom){
+    $.ajax({
+
+            type: "POST", 
+            url: "productos/enviaragente/"+iddom,
+
+            success: function (iddom) {
+                //console.log(iddom);
+                //redirigimosa¿ al detalle del pedido y le pasamos el id del domi
+                window.location.href = 'productos/datosdelpedido/' + iddom;
+
+            },
+            error: function () {
+                alert('failure');
+            }
+        });
+}
 
 
 function alertas(tipo,mensaje){
