@@ -8,8 +8,9 @@
 @parent
 <style>
 
-	.u-oculto{
-		visibility:hidden;
+	.navbar-nav{
+		display:none;
+		cursor:auto;
 	}
 
 	#terminos_c{
@@ -22,11 +23,16 @@
 		text-align:center;
 	}
 
+	.navbar-brand{
+		padding-bottom:2em;
+	}
+
 </style>
+
 @stop
 
 @section('username')
-<span class="glyphicon glyphicon-user u-oculto"></span>
+<span class="glyphicon glyphicon-user u-use"></span>
 <strong class="u-oculto"> Bienvenido: {{ Auth::user()->usuario }} </strong>
 @stop
 

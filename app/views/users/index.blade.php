@@ -461,7 +461,7 @@
 
 
       <!-- Modal cuando se procesa el pedido -->
-            <div id="env_p" class="modal fade">
+            <div id="env_p" class="modal fade" data-keyboard="false" data-backdrop="static">
               <div class="modal-dialog">
                 <div class="img-gif">
                   <img class="img-proce" src="img/Cargandocc.gif" width="200px">

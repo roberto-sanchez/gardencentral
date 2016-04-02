@@ -82,6 +82,7 @@ Route::get('entradas/agregar', 'AdminController@agregar');
 Route::POST('entradas/listproducto', 'AdminController@listproducto');
 
 Route::POST('entradas/registrarentrada', 'AdminController@entradas');
+Route::POST('entradas/verificarpedimento', 'AdminController@verificarpedimento');
 Route::GET('consultas/verestatusadmin', 'AdminController@verestatusadmin');
 Route::GET('consultas/cambiarestatusadmin', 'AdminController@cambiarestatusadmin');
 Route::POST('consultas/verificarpassadmin', 'AdminController@verificarpassadmin');

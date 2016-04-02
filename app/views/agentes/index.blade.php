@@ -470,7 +470,7 @@
     </div>
 
        <!-- Modal cuando se envia nuevamente el pdf -->
-            <div id="env_pdf" class="modal fade">
+            <div id="env_pdf" class="modal fade" data-keyboard="false" data-backdrop="static">
               <div class="modal-dialog">
                 <div class="img-gif">
                   <img class="img-proce" src="img/Cargandocc.gif" width="200px">

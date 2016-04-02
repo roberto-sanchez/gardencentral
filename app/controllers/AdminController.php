@@ -619,6 +619,25 @@ class AdminController extends \BaseController {
 		));
 	}
 
+
+	public function verificarpedimento(){
+		$ped = Input::get('ped');
+
+		$verificar = DB::table('entrada')
+					->where('num_pedimento', $ped)
+					->get();
+
+		if(count($verificar) == 0){
+			$p = 'Vacio';
+		} else if(count($verificar) == ''){
+			$p = 'Vacio';
+		} else {
+			$p = 'Existe';
+		}
+
+		return Response::json($p);
+	}
+
 	/**
 	 * Show the form for editing the specified resource.
 	 * GET /admins/{id}/edit
@@ -641,15 +660,7 @@ public function entradas(){
 		//$total = Input::get('total');
 		$obc = Input::get('obc');
 
-		//Verificamos el numero de pedimento
-		$ped = DB::table('entrada')
-				->where('num_pedimento', $numeroPedimento)
-				->get();
 
-		if(count($ped)){
-			$ped = 0;
-			return Response::json(array('ped' => $ped));
-		} else {
 	      //verificamos si existe el producto
 	      for ($i=0; $i < count($idpro); $i++) {
 	      	  $consulta = DB::table('producto')
@@ -714,39 +725,32 @@ public function entradas(){
 					        $inventario->save();
 			      	  	}
 
-			      	  		//comprobamos si hay alertas con dicho producto
-							 $x_pro = DB::table('producto')
-					                    ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
-					                    ->orderBy('producto.cantidad_minima', 'asc')
-					                    ->where('producto.id', $idpro[$i]->idp)
-					                    ->pluck('cantidad_minima');
+			      	  	//comprobamos si hay alertas con dicho producto
+						 $x_pro = DB::table('producto')
+				                    ->where('producto.id', $idpro[$i]->idp)
+				                    ->pluck('cantidad_minima');
 
-					        $x_inv = DB::table('producto')
-					                ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
-					                ->orderBy('producto.cantidad_minima', 'asc')
-					                ->where('producto.id', $idpro[$i]->idp)
-					                ->pluck('cantidad');
+				        $x_inv = DB::table('inventario')
+				                ->where('producto_id', $idpro[$i]->idp)
+				                ->pluck('cantidad');
 
-					        //Comparamos la cantidad actual del producto del inventario con la cantidad minima del producto
-	                        if($x_inv  > $x_pro){
-	                        	//Sies mayor la cantidad del inv eliminamos el alert
-	                        	
-	                        	$id_a = DB::table('alertas')
-	                        				->where('producto_id', $idpro[$i]->idp)
-	                        				->pluck('id');
+				        //Comparamos la cantidad actual del producto del inventario con la cantidad minima del producto
+				        if($x_inv  > $x_pro){
+				        	//Sies mayor la cantidad del inv eliminamos el alert
+				        	
+				        	$id_a = DB::table('alertas')
+				        				->where('producto_id', $idpro[$i]->idp)
+				        				->pluck('id');
 
-	                        	//verificamos si existe un producto con ese id en los alerts
-	                        	if($id_a != ""){
-	                        		//si existe lo eliminamos
-		                            $alert = Alerta::find($id_a);
-		                            $alert->delete();
-	                        	}
-	                        	
-	                            
-	                            //Si es menor no pasa nada
-	                        } else {
-	                        	
-	                        }
+				        	//verificamos si existe un producto con ese id en los alerts
+				        	if(count($id_a) == 0){
+				        		
+				        	} else {
+				                $alert = Alerta::find($id_a);
+				                $alert->delete();
+				        	}
+
+				       }
 		      	 }
 
 		      	 //Insertamos en el inventario detalle
@@ -767,7 +771,6 @@ public function entradas(){
 	      
 			return Response::json('Correcto :)');
 
-		}
 
 
 
@@ -790,10 +793,6 @@ public function entradas(){
 				->where('num_pedimento', $numeroPedimento)
 				->get();
 
-		if(count($ped)){
-			$ped = 0;
-			return Response::json(array('ped' => $ped));
-		} else {
 
 	    //comprobamos si existe un directorio para subir el archivo
 	    //si no es así, lo creamos
@@ -885,39 +884,35 @@ public function entradas(){
 				        $inventario->cantidad += $cantidad;
 				        $inventario->save();
 
-				        //comprobamos si hay alertas con dicho producto
+				      //comprobamos si hay alertas con dicho producto
 						 $x_pro = DB::table('producto')
-				                    ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
-				                    ->orderBy('producto.cantidad_minima', 'asc')
 				                    ->where('producto.id', $producto)
 				                    ->pluck('cantidad_minima');
 
-				        $x_inv = DB::table('producto')
-				                ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
-				                ->orderBy('producto.cantidad_minima', 'asc')
-				                ->where('producto.id', $producto)
+				        $x_inv = DB::table('inventario')
+				                ->where('producto_id', $producto)
 				                ->pluck('cantidad');
 
 				        //Comparamos la cantidad actual del producto del inventario con la cantidad minima del producto
-                        if($x_inv  > $x_pro){
-                        	//Sies mayor la cantidad del inv eliminamos el alert
-                        	
-                        	$id_a = DB::table('alertas')
-                        				->where('producto_id', $producto)
-                        				->pluck('id');
-                        	
-                            //verificamos si existe un producto con ese id en los alerts
-                        	if($id_a != ""){
-                        		//si existe lo eliminamos
-	                            $alert = Alerta::find($id_a);
-	                            $alert->delete();
-                        	}
-                            
-                            //Si es menor no pasa nada
-                        } else {
-                        	
-                        }
-			    }
+				        if($x_inv  > $x_pro){
+				        	//Sies mayor la cantidad del inv eliminamos el alert
+				        	
+				        	$id_a = DB::table('alertas')
+				        				->where('producto_id', $producto)
+				        				->pluck('id');
+
+				        	//verificamos si existe un producto con ese id en los alerts
+				        	if(count($id_a) == 0){
+				        		
+				        	} else {
+				                $alert = Alerta::find($id_a);
+				                $alert->delete();
+				        	}
+
+				       }
+
+				        
+			    }//else
 
 			    //Insertamos en el inventario detalle
 		      	$inventario_d = new InventarioDetalle;
@@ -943,7 +938,6 @@ public function entradas(){
 		}
 
 
-	}//else
 		
  
 }
@@ -1191,6 +1185,40 @@ public function entradas(){
 		    $new_inv->cantidad -= $diferencia;
 		    $new_inv->save();
 		}
+
+
+		//comprobamos si hay alertas con dicho producto
+		 $x_pro = DB::table('producto')
+                    ->where('producto.id', $id)
+                    ->pluck('cantidad_minima');
+
+        $x_inv = DB::table('inventario')
+                ->where('producto_id', $id)
+                ->pluck('cantidad');
+
+        //Comparamos la cantidad actual del producto del inventario con la cantidad minima del producto
+        if($x_inv  > $x_pro){
+        	//Sies mayor la cantidad del inv eliminamos el alert
+        	
+        	$id_a = DB::table('alertas')
+        				->where('producto_id', $id)
+        				->pluck('id');
+
+        	//verificamos si existe un producto con ese id en los alerts
+        	if(count($id_a) == 0){
+        		
+        	} else {
+                $alert = Alerta::find($id_a);
+                $alert->delete();
+        	}
+        	
+            
+            //Si es menor no pasa nada
+        } else {
+        	
+        }
+
+
 
 		$i = DB::table('inventario_detalle')
 		    ->where('producto_id', $id)

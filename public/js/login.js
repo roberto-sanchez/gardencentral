@@ -72,7 +72,7 @@ if($('.sesion-f').length == 0){
   $('#password').keyup( function(){
     if($('#password').val()!= ""){
          idpass = $('#password').attr('data-id');
-         pass = $('#password').val();
+         pass = $('#password').val().trim();
         $.ajax({
             type: "POST",
             url: "/verificar/getLoginPass",
@@ -247,7 +247,7 @@ $('#password').focus(function(){
 
    //validaciones el nombre
    $('.formName').keyup(function(){
-        valor = $('#formName').val();
+        valor = $('#formName').val().trim();
 		if(valor.length <= 2 || /^\s+$/.test(valor)){
          	$('.spanName').addClass('glyphicon glyphicon-remove form-control-feedback');
          	$('.formName').addClass('has-error');
@@ -263,7 +263,7 @@ $('#password').focus(function(){
 
     //validamos el apellido paterno
     $('.formLast').keyup(function(){
-        valor = $('#formLast').val();
+        valor = $('#formLast').val().trim();
         if(valor.length <= 2 || /^\s+$/.test(valor) ){
             $('.spanLast').addClass('glyphicon glyphicon-remove form-control-feedback');
             $('.formLast').addClass('has-error');

@@ -77,9 +77,10 @@
               </div>
             </div>
               <div class="form-add-s">
-                  <div class="inputP npe form-group">
+                  <div class="inputP npe ped form-group">
                    <label for="numero_p">Numero de pedimento</label>
                    <input type="text" name="numeroPedimento" class="form-control" id="numeroPedimento">
+                   <span class="icon-ped"></span>
                 </div>
                 <div class="obse-e">
                   <label class=" text-info">OBSERVACIONES</label>
@@ -283,6 +284,7 @@ $(document).ready(function(){
             }
 
             $('#gE').removeClass('disabled');
+            $('#pedexists').removeClass('disabled');
 
 
         })
@@ -357,6 +359,42 @@ $(".fechaFactura").focus(function(){
 });
 
 
+//Verificar que no se repita el pedimento
+  /*Verificar la contraseña del user */
+  $('#numeroPedimento').keyup( function(){
+    if($('#numeroPedimento').val()!= ""){
+         ped = $('#numeroPedimento').val().trim();
+
+        $.ajax({
+            type: "POST",
+            url: "/entradas/verificarpedimento",
+             data: {ped: ped },
+
+            success: function( p ){
+                 if (p == "Existe") {
+                     alertas('error',"El pedimento ya existe.");
+                     $('.ped').addClass('has-error has-feedback');
+                     $('.icon-ped').addClass('glyphicon glyphicon-remove form-control-feedback');
+                     $('.enviar_e').attr('id', 'pedexists');
+                    } else {
+                      $('.enviar_e').attr('id', 'gE');
+                      $('.ped').removeClass('has-error has-feedback');
+                      $('.icon-ped').removeClass('glyphicon glyphicon-remove form-control-feedback');
+                    }
+                    
+
+            }
+        });
+     }
+});
+
+  $(document).on('click','#pedexists', function(){
+    alertas('error',"El pedimento ya existe.");
+    return false;
+  });
+
+
+
 
 
   /*  $("#enviar_f").click(function () {
@@ -426,7 +464,6 @@ $(".fechaFactura").focus(function(){
                   alertas('success',"Entrada guardada correctamente.");
                   $("#nEntrada").load(location.href+" #nEntrada>*","");                 
                   $(".fecha").val('');
-                  $('#idproveedor').prop('selectedIndex',0);
                   $("#factura").val('');
                   $(".fechaFactura").val('');
                   $('#numeroPedimento').val('');
@@ -449,6 +486,7 @@ $(".fechaFactura").focus(function(){
       $('.enviar_e').attr('id', 'enviar_f');
       $('.enviar_e').addClass('enviar_f');
       $('.enviar_e').removeClass('disabled');
+      $('#pedexists').removeClass('disabled');
       $("#nEntrada").load(location.href+" #nEntrada>*","");
       $('#productoPanel').hide();
       $("#clave").val('');
@@ -502,7 +540,7 @@ $(".fechaFactura").focus(function(){
                     alertas('success',"Entrada guardada correctamente.");
                     $("#nEntrada").load(location.href+" #nEntrada>*","");                 
                     $(".fecha").val('');
-                    $('#idproveedor').prop('selectedIndex',0);
+                    $('#idproveedor > option[value="0"]').attr('selected', 'selected');
                     $("#factura").val('');
                     $(".fechaFactura").val('');
                     $('#numeroPedimento').val('');

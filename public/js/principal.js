@@ -1,7 +1,7 @@
 $(document).ready(function () {
 
         //Listar pedidos del cliente
-    $('.pedidosCliente').hide();
+    $('.totales-p-dclie').hide();
     pedido_c = $("#pedido_cliente");
     $(document).on('click','#p_cliente', function(){
           $.ajax({
@@ -11,7 +11,7 @@ $(document).ready(function () {
                 if(l == 0){
                     $('.t-p-clientes').text('No tienes ningún pedido.');
                   } else {
-                    $('.pedidosCliente').show();
+                    $('.totales-p-dclie').show();
 
                       tabla_a = $('#list_p_').DataTable({
                         "oLanguage": { 
@@ -492,17 +492,19 @@ $(document).on('click', '.idProd2', function(){
             $('.idProd2').removeClass('disabled');
 
         }
-    $('.ingresar-p').click(function () {
 
-        if ($('.idProd').val() == '') {
+
+    });
+
+
+    $(document).on('click', '.ingresar-p', function(){
+      if ($('.idProd').val() == '') {
             alertas('error',"Ingrese la cantidad de productos.");
             return false;
 
         }
-
     });
 
-    });
 
 //Sumar productos al pedido
 $(".btn-update-sum").click(function (e) {
@@ -512,6 +514,9 @@ $(".btn-update-sum").click(function (e) {
 
     if($('#dispoProd').text() < parseInt(c)){
       alertas('error',"Productos disponibles: "+$('#dispoProd').text() + "  " );
+      return false;
+    } else if(parseInt(c) == 0){
+      alertas('error',"Ingrese la cantidad de productos." );
       return false;
     } else {
 
@@ -1944,6 +1949,8 @@ $('.phone-o').focus(function(){
     $('.regis-exixts-t').hide();
 
 
+
+
 //Registrar un pedido sin domicilio
 $('#p-s-dom').click(function(){
   cotizar = $('#inpEnvio').val();
@@ -1985,10 +1992,9 @@ $('#p-s-dom').click(function(){
 
         id = 0;
         
-
         $.ajax({
             type: "POST",
-            url: "productos/pedidoexistente/"+id,
+            url: "/productos/pedidoexistente/"+id,
             data: {aInfo: aInfo, nExtra: nExtra, formapago: formapago, msjeria: msjeria, cotizar: cotizar, r_extra: r_extra, total: total},
 
           beforeSend: function(){
@@ -2060,7 +2066,7 @@ $('#p-s-dom').click(function(){
 
         $.ajax({
             type: "POST", //metodo
-            url: "productos/pedidoexistente/"+id,
+            url: "/productos/pedidoexistente/"+id,
             data: {aInfo: aInfo, nExtra: nExtra, formapago: formapago, msjeria: msjeria, cotizar: cotizar, r_extra: r_extra, total: total},
             beforeSend: function(){
                   $('#env_p').modal({
@@ -2138,7 +2144,7 @@ $('#p-s-dom').click(function(){
 
        $.ajax({
             type: "POST", //metodo
-            url: "productos/nuevopedido/"+id,
+            url: "/productos/nuevopedido/"+id,
             data: {aInfo: aInfo, nExtra: nExtra, cotizar: cotizar, pais: pais, estado: estado, municipio: municipio, calle1: calle1, calle2: calle2, colonia: colonia, delegacion: delegacion, cp: cp, tipodom: tipodom, formapago: formapago, msjeria: msjeria, coment: coment, r_extra: r_extra, total: total},
 
             beforeSend: function(){
@@ -2238,7 +2244,7 @@ $('#p-s-dom').click(function(){
 
         $.ajax({
             type: "POST", //metodo
-            url: "productos/nuevopedido/"+id,
+            url: "/productos/nuevopedido/"+id,
             data: {aInfo: aInfo, nExtra: nExtra, cotizar: cotizar, pais: pais, estado: estado, municipio: municipio, calle1: calle1, calle2: calle2, colonia: colonia, delegacion: delegacion, cp: cp, tipodom: tipodom, tel: tel, tipotel: tipotel, formapago: formapago, msjeria: msjeria, coment: coment, r_extra: r_extra, total: total},
 
             beforeSend: function(){
