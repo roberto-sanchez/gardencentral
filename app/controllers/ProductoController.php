@@ -1374,7 +1374,7 @@ public function getProducto(){
 
                 
 
-                 define('BUDGETS_DIR', public_path('uploads/pdf')); // I define this in a constants.php file
+                 define('BUDGETS_DIR', public_path('uploads/cliente/pdf')); // I define this in a constants.php file
 
                     if (!is_dir(BUDGETS_DIR)){
                         mkdir(BUDGETS_DIR, 0755, true);
@@ -2166,7 +2166,7 @@ public function getProducto(){
                             'extra'
                             ));
 
-                 define('BUDGETS_DIR', public_path('uploads/pdf')); // I define this in a constants.php file
+                 define('BUDGETS_DIR', public_path('uploads/cliente/pdf')); // I define this in a constants.php file
 
                     if (!is_dir(BUDGETS_DIR)){
                         mkdir(BUDGETS_DIR, 0755, true);
@@ -2245,23 +2245,6 @@ public function getProducto(){
                             ->where('pedido_detalle.id', $id)
                             ->get();
 
-                   //Sacamos el iva
-                    $total = 0;
-                    foreach($pro as $item){
-                    if($item->iva0 == 0){
-
-                    } else {
-                        //$m = $item->precio * $item->descuento;
-                        $total += ($item->precio) * $item ->cantidad * 0.16;
-                    }
-                }
-
-                   //Sacamos el subtotal
-                     $t = 0;
-                        foreach($pro as $item){
-                           // $m = $item->precio * $item->descuento;
-                            $t += ($item->precio) * $item ->cantidad;
-                        } 
 
                 $pdf = View::make('users/report2', 
                         compact(
@@ -2270,15 +2253,13 @@ public function getProducto(){
                             'domi', 
                             'ped', 
                             'pedido', 
-                            'total', 
-                            't',
                             'cli',
                             'extra'
                             ));
 
                 
 
-                 define('BUDGETS_DIR', public_path('uploads/pdf')); // I define this in a constants.php file
+                 define('BUDGETS_DIR', public_path('uploads/agente/pdf')); // I define this in a constants.php file
 
                     if (!is_dir(BUDGETS_DIR)){
                         mkdir(BUDGETS_DIR, 0755, true);

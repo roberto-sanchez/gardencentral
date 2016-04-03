@@ -47,7 +47,8 @@
 }
 
 .totales-p-dclie{
-  padding:0 .5em .5em .5em;  max-height:515px;
+  padding:0 .5em .5em .5em;
+  max-height:515px;
   overflow-y: scroll;
 }
 
