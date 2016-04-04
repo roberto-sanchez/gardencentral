@@ -424,6 +424,7 @@ class AdminController extends \BaseController {
             $t = 'tienda';
             $domi = DB::table('cliente')
             ->join('pedido', 'cliente.id', '=', 'pedido.cliente_id')
+            ->join('usuario', 'cliente.usuario_id', '=', 'usuario.id')
             //->join('telefono_cliente', 'cliente.id', '=', 'telefono_cliente.cliente_id')
             ->where("pedido.id", $id)
             ->get();
@@ -431,6 +432,7 @@ class AdminController extends \BaseController {
             $t = 'domicilio';
         $domi = DB::table('direccion_cliente')
             ->join('cliente', 'direccion_cliente.cliente_id', '=', 'cliente.id')
+            ->join('usuario', 'cliente.usuario_id', '=', 'usuario.id')
             ->join('pais', 'direccion_cliente.pais_id', '=', 'pais.id')
             ->join('estado', 'direccion_cliente.estado_id', '=', 'estado.id')
             ->join('municipio', 'direccion_cliente.municipio_id', '=', 'municipio.id')

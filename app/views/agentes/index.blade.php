@@ -469,24 +469,58 @@
       </div>
     </div>
 
-       <!-- Modal cuando se envia nuevamente el pdf -->
-            <div id="env_pdf" class="modal fade" data-keyboard="false" data-backdrop="static">
-              <div class="modal-dialog">
-                <div class="img-gif">
-                  <img class="img-proce" src="img/Cargandocc.gif" width="200px">
-                  <h1 class="text-info text-center txt-pro">Procesando..</h1>
-                  <h1 class="text-center text-info txt-msj">El pdf ha sido enviado correctamente.</h1>
-                  <h2 class="text-center text-info txt-sal">< Salir</h2>
-                </div>
-                <div class="modal-content c-carga">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                  </div>
-                  <div class="modal-body">
-                  </div>
-                </div>
-              </div>
+    
+        <!--  Modal para confirmar enviar pdf  -->
+<div id="confirm-e-email" class="modal fade" data-keyboard="false" data-backdrop="static">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header header-nota">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title text-danger text-center">
+            <span class="glyphicon glyphicon-envelope"></span>
+              Enviar correo
+             </h4>
+          </div>
+          <div class="modal-body">
+            
+          <h3 class="txt-delete-n txt-env-email text-danger text-center">¿Estás seguro que deseas enviar este pdf?</h3>
+          <h3 class="txt-delete-n text-msj-email text-primary text-center">Para: <div class="correo-email"><input type="text" class="para-email form-control" disabled><button title="Editar correo" class="btn btn-primary edit-email"><span class=" glyphicon glyphicon-edit"></span></button></div></h3>
+          <h3 class="txt-delete-n txt-asunto-email text-primary text-center">Asunto: </h3>
+          <div class="area-msj-email">
+            <textarea id="asunto-email" cols="10" rows="3" class="form-control"></textarea>
+          </div>
+
+                
+          </div>
+          <div class="modal-footer modal-confirmar-pass">
+
+              <button id="no-email" class="btn btn-danger confirm" data-dismiss="modal">Cancelar</button>
+              <span id="env-email" class="btn btn-primary confirm" data-dismiss="modal" >Enviar</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+ <!-- Modal cuando se envia nuevamente el pdf -->
+      <div id="env_pdf" class="modal fade" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog">
+          <div class="img-gif">
+            <img class="img-proce" src="img/Cargandocc.gif" width="200px">
+            <h1 class="text-info text-center txt-pro">Procesando..</h1>
+            <h1 class="text-center text-info txt-msj">El pdf ha sido enviado correctamente.</h1>
+            <h2 class="text-center text-info txt-sal">< Salir</h2>
+          </div>
+          <div class="modal-content c-carga">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
+            <div class="modal-body">
+            </div>
+          </div>
+        </div>
+      </div>
+
+
 
 
 {{ HTML::script('js/select2.min.js') }}
@@ -745,7 +779,7 @@
                $('.d-fe').html('Fecha: '+f);
 	           	 id = $(this).attr('data-id');
                $('.im-pedido').attr('href', '/productos/imprimirpedido/'+id);
-               $('.en-pedido').attr('data-pedido', id);
+               $('#env-email').attr('data-pedido', id);
                $('#env-extras').attr('data-id', id);
 	           	 razon = $(this).attr('value');
 	           	 $('.c-pass').attr('id',razon);
@@ -937,12 +971,25 @@
           $('.txt-msj').hide();
           $('.txt-sal').hide();
 
-          //Reenviar pdf
           $(document).on('click','.en-pedido', function(){
+            e = $('.c_correo').html();
+            $('.para-email').val(e);
+            $('#confirm-e-email').modal({
+              show: 'false',
+            });
+
+          });
+
+
+          //Reenviar pdf
+          $(document).on('click','#env-email', function(){
               id = $(this).attr('data-pedido');
+              e = $('.para-email').val();
+              asunto = $('#asunto-email').val();
                $.ajax({
                       type: "GET",
                       url: "/productos/enviaremail/"+id,
+                      data: {e: e, asunto: asunto},
                       beforeSend: function(){
                           $('#env_pdf').modal({
                                 show:'false',
@@ -953,10 +1000,23 @@
                               $('.img-proce').hide();
                               $('.txt-msj').show();
                               $('.txt-sal').show();
+                              $('#asunto-email').val(' ');
+                              $('.para-email').attr('disabled', true);
                               
                            }
 
                    });
+
+          });
+
+          //Editar correo
+          $(document).on('click','.edit-email', function(){
+              $('.para-email').attr('disabled', false);
+          });
+
+          $(document).on('click','#no-email', function(){
+            $('#asunto-email').val(' ');
+            $('.para-email').attr('disabled', true);
 
           });
 

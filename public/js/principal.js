@@ -164,7 +164,6 @@ $(document).ready(function () {
                 url: "/productos/detalledelpedido",
                 data: {id: id},
                 success: function (p) {
-                  //console.log(p);
                   if(p.t == 'tienda'){
                       $('#sindomi').addClass('sindomi');
                       $('.pc_domiclio').hide();
@@ -1958,7 +1957,6 @@ $('#p-s-dom').click(function(){
   msjeria = $('#pago').val();
   r_extra = $('#add-extras').attr('data-id');
   total = $('.total-ped').attr('data-pedido');
-
 
    var DATA = [];
 

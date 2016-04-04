@@ -3435,6 +3435,37 @@ margin-bottom:.5em;
   .img-p:hover {
     color: #58A2F6; }
 
+/*Modal para reenviar el email al cliente*/
+.txt-env-email{
+  margin-bottom:0;
+}
+
+.text-msj-email, .txt-asunto-email{
+  margin:0;
+}
+
+.correo-email{
+  width:60%;
+  margin:0 auto;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+
+}
+
+.para-email{
+border-radius:3px 0px 0px 3px!important;
+}
+
+.edit-email{
+  border-radius:0px 3px 3px 0px;
+}
+
+.area-msj-email{
+  width:70%;
+  margin:0 auto;
+}
 
 
 /*-----***----terminos y condiciones----*********/

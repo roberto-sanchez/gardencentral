@@ -75,6 +75,8 @@ class ProductoController extends \BaseController {
 
 public function enviaremail($id){
 
+            $email = Input::get('e'); 
+            $asunto = Input::get('asunto'); 
 
             $iddirec = DB::table('pedido')
                     ->join('direccion_cliente','pedido.direccion_cliente_id', '=','direccion_cliente.id')
@@ -141,7 +143,6 @@ public function enviaremail($id){
                         } 
 
 
-
                 $pdf = View::make('users/report', 
                         compact(
                             'dpro', 
@@ -155,7 +156,7 @@ public function enviaremail($id){
                             'extra'
                             ));
 
-                 define('BUDGETS_DIR', public_path('uploads/pdf')); // I define this in a constants.php file
+                 define('BUDGETS_DIR', public_path('uploads/pdf/cliente')); // I define this in a constants.php file
 
                     if (!is_dir(BUDGETS_DIR)){
                         mkdir(BUDGETS_DIR, 0755, true);
@@ -164,15 +165,15 @@ public function enviaremail($id){
                     $outputName = str_random(10); // str_random is a [Laravel helper](http://laravel.com/docs/helpers#strings)
                     $pdfPath = BUDGETS_DIR.'/'.$outputName.'.pdf';
                     File::put($pdfPath, PDF::load($pdf, 'A4', 'portrait')->output());
-
-                    Mail::send('emails/pdf', compact('pedido'), function($message) use ($pdfPath){
+                    Mail::send('emails/pdf', compact('pedido'), function($message) use ($pdfPath, $email, $asunto){
+                        //$e = 'luis_mh@outlook.es';
                         $message->from('garden@live.com', 'Garden Central');
-                        $message->to('luis_mh@outlook.es');
-                        $message->subject('Tú pedido está en proceso.');
+                        $message->to($email);
+                        $message->subject($asunto);
                         $message->attach($pdfPath);
                     });
 
-                    return Response::json('XD');
+                    return Response::json('Hola');
     
    }
 
@@ -382,12 +383,14 @@ public function enviaremail($id){
             $t = 'tienda';
             $domi = DB::table('cliente')
             ->join('pedido', 'cliente.id', '=', 'pedido.cliente_id')
+            ->join('usuario', 'cliente.usuario_id', '=', 'usuario.id')
             ->where("pedido.id", $id)
             ->get();
         } else {
             $t = 'domicilio';
         $domi = DB::table('direccion_cliente')
             ->join('cliente', 'direccion_cliente.cliente_id', '=', 'cliente.id')
+            ->join('usuario', 'cliente.usuario_id', '=', 'usuario.id')
             ->join('pais', 'direccion_cliente.pais_id', '=', 'pais.id')
             ->join('estado', 'direccion_cliente.estado_id', '=', 'estado.id')
             ->join('municipio', 'direccion_cliente.municipio_id', '=', 'municipio.id')
@@ -667,6 +670,7 @@ public function getProducto(){
 
 
    public function pedidoexistente($id){
+        $email = Auth::user()->email;
 
         $formapago = Input::get('formapago');
         $msjeria = Input::get('msjeria');
@@ -1374,7 +1378,7 @@ public function getProducto(){
 
                 
 
-                 define('BUDGETS_DIR', public_path('uploads/cliente/pdf')); // I define this in a constants.php file
+                 define('BUDGETS_DIR', public_path('uploads/pdf/cliente')); // I define this in a constants.php file
 
                     if (!is_dir(BUDGETS_DIR)){
                         mkdir(BUDGETS_DIR, 0755, true);
@@ -1384,11 +1388,11 @@ public function getProducto(){
                     $pdfPath = BUDGETS_DIR.'/'.$outputName.'.pdf';
                     File::put($pdfPath, PDF::load($pdf, 'A4', 'portrait')->output());
 
-                    Mail::send('emails/pdf', compact('pedido'), function($message) use ($pdfPath){
+                    Mail::send('emails/pdf', compact('pedido'), function($message) use ($pdfPath, $email){
 
 
                         $message->from('garden@live.com', 'Garden Central');
-                        $message->to('luis_mh@outlook.es');
+                        $message->to($email);
                         $message->subject('Tú pedido está en proceso.');
                         $message->attach($pdfPath);
                     });
@@ -1403,6 +1407,7 @@ public function getProducto(){
  public function nuevopedido($id){
 
         $idusuario = Auth::user()->id;
+        $email = Auth::user()->email;
 
         $resp = DB::table('cliente')
             ->where('usuario_id', $idusuario)->pluck('id');
@@ -2166,7 +2171,7 @@ public function getProducto(){
                             'extra'
                             ));
 
-                 define('BUDGETS_DIR', public_path('uploads/cliente/pdf')); // I define this in a constants.php file
+                 define('BUDGETS_DIR', public_path('uploads/pdf/cliente')); // I define this in a constants.php file
 
                     if (!is_dir(BUDGETS_DIR)){
                         mkdir(BUDGETS_DIR, 0755, true);
@@ -2176,9 +2181,9 @@ public function getProducto(){
                     $pdfPath = BUDGETS_DIR.'/'.$outputName.'.pdf';
                     File::put($pdfPath, PDF::load($pdf, 'A4', 'portrait')->output());
 
-                    Mail::send('emails/pdf', compact('pedido'), function($message) use ($pdfPath){
+                    Mail::send('emails/pdf', compact('pedido'), function($message) use ($pdfPath, $email){
                         $message->from('garden@live.com', 'Garden Central');
-                        $message->to('luis_mh@outlook.es');
+                        $message->to($email);
                         $message->subject('Tú pedido está en proceso.');
                         $message->attach($pdfPath);
                     });
@@ -2259,7 +2264,7 @@ public function getProducto(){
 
                 
 
-                 define('BUDGETS_DIR', public_path('uploads/agente/pdf')); // I define this in a constants.php file
+                 define('BUDGETS_DIR', public_path('uploads/pdf/agente')); // I define this in a constants.php file
 
                     if (!is_dir(BUDGETS_DIR)){
                         mkdir(BUDGETS_DIR, 0755, true);
