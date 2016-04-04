@@ -173,7 +173,7 @@ public function enviaremail($id){
                         $message->attach($pdfPath);
                     });
 
-                    return Response::json('Hola');
+                    //return Response::json('Hola');
     
    }
 
@@ -2262,6 +2262,9 @@ public function getProducto(){
                             'extra'
                             ));
 
+                $admin = DB::table('usuario')
+                        ->where('rol_id', 3)
+                        ->pluck('email');
                 
 
                  define('BUDGETS_DIR', public_path('uploads/pdf/agente')); // I define this in a constants.php file
@@ -2274,12 +2277,12 @@ public function getProducto(){
                     $pdfPath = BUDGETS_DIR.'/'.$outputName.'.pdf';
                     File::put($pdfPath, PDF::load($pdf, 'A4', 'portrait')->output());
 
-                    Mail::send('emails/pdf', compact('pedido'), function($message) use ($pdfPath){
+                    Mail::send('emails/pdf', compact('pedido'), function($message) use ($pdfPath, $admin){
 
 
                         $message->from('garden@live.com', 'Garden Central');
-                        $message->to('luis_mh@outlook.es');
-                        $message->subject('Tú pedido está en proceso.');
+                        $message->to($admin);
+                        $message->subject('Nuevo pedido.');
                         $message->attach($pdfPath);
                     });
 
