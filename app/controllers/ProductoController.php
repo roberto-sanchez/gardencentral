@@ -679,10 +679,16 @@ public function getProducto(){
         $data_extra = json_decode(Input::get('nExtra'));
         $idusuario = Auth::user()->id;
         $r_extra = Input::get('r_extra');
-        $total = Input::get('total'); 
+        $total = Input::get('total');
+
+         $mensajeria = new Mensajeria;
+         $mensajeria->id = Input::get('id');
+         $mensajeria->nombre = $msjeria;
+         $mensajeria->save();
 
         $resp = DB::table('cliente')
             ->where('usuario_id', $idusuario)->pluck('id');
+         $num_ped = date('Y').date('m').date("d").$resp.$mensajeria['id'];
 
         if($id == 0){
 
@@ -691,17 +697,12 @@ public function getProducto(){
             $clienteformapago->forma_pago_id = $formapago;
             $clienteformapago->save();
 
-            $mensajeria = new Mensajeria;
-            $mensajeria->id = Input::get('id');
-            $mensajeria->nombre = $msjeria;
-            $mensajeria->save();
-
             $pedido = new Pedido;
             $pedido->cliente_id = $resp;
             $pedido->mensajeria_id = $mensajeria['id'];
             $pedido->direccion_cliente_id = " ";
             $pedido->forma_pago_id = $formapago;
-            $pedido->num_pedido = date('Y').date('m').date("d").$resp.$mensajeria['id'];
+            $pedido->num_pedido = $num_ped;
             $pedido->total = $total;
             $pedido->fecha_registro = date('Y-m-d');
             $pedido->cotizar_envio = $cotizar;
@@ -890,7 +891,7 @@ public function getProducto(){
                                 $pedido->mensajeria_id = $mensajeria['id'];
                                 $pedido->direccion_cliente_id = $id;
                                 $pedido->forma_pago_id = $formapago;
-                                $pedido->num_pedido = date('Y').date('m').date("d").$mensajeria['id'].$resp;
+                                $pedido->num_pedido = $num_ped;
                                 $pedido->total = $total;
                                 $pedido->fecha_registro = date('Y-m-d');
                                 $pedido->cotizar_envio = $cotizar;
@@ -1008,7 +1009,7 @@ public function getProducto(){
         $pedido->mensajeria_id = $mensajeria['id'];
         $pedido->direccion_cliente_id = $id;
         $pedido->forma_pago_id = $formapago;
-        $pedido->num_pedido = date('Y').date('m').date("d").$mensajeria['id'].$resp;
+        $pedido->num_pedido = $num_ped;
         $pedido->total = $total;
         $pedido->fecha_registro = date('Y-m-d');
         $pedido->cotizar_envio = $cotizar;
@@ -1197,7 +1198,7 @@ public function getProducto(){
                                 $pedido->mensajeria_id = $mensajeria['id'];
                                 $pedido->direccion_cliente_id = $id;
                                 $pedido->forma_pago_id = $formapago;
-                                $pedido->num_pedido = date('Y').date('m').date("d").$mensajeria['id'].$resp;
+                                $pedido->num_pedido = $num_ped;
                                 $pedido->total = $total;
                                 $pedido->fecha_registro = date('Y-m-d');
                                 $pedido->cotizar_envio = $cotizar;
@@ -1388,12 +1389,12 @@ public function getProducto(){
                     $pdfPath = BUDGETS_DIR.'/'.$outputName.'.pdf';
                     File::put($pdfPath, PDF::load($pdf, 'A4', 'portrait')->output());
 
-                    Mail::send('emails/pdf', compact('pedido'), function($message) use ($pdfPath, $email){
+                    Mail::send('emails/pdf', compact('pedido'), function($message) use ($pdfPath, $email, $num_ped){
 
 
                         $message->from('garden@live.com', 'Garden Central');
                         $message->to($email);
-                        $message->subject('Tú pedido está en proceso.');
+                        $message->subject('Tu pedido #'.$num_ped.' está en proceso.');
                         $message->attach($pdfPath);
                     });
 
@@ -1431,7 +1432,14 @@ public function getProducto(){
         $msjeria = Input::get('msjeria');
         $coment = Input::get('coment');
         $r_extra = Input::get('r_extra');
-        $total = Input::get('total'); 
+        $total = Input::get('total');
+
+          $mensajeria = new Mensajeria;
+          $mensajeria->id = Input::get('id');
+          $mensajeria->nombre = $msjeria;
+          $mensajeria->save();
+
+         $num_ped = date('Y').date('m').date("d").$resp.$mensajeria['id'];
 
 
     if (Request::ajax()) {
@@ -1467,20 +1475,15 @@ public function getProducto(){
             $clienteformapago->forma_pago_id = $formapago;
             $clienteformapago->save();
 
-            $mensajeria = new Mensajeria;
-            $mensajeria->id = Input::get('id');
-            $mensajeria->nombre = $msjeria;
-            $mensajeria->save();
-
             $pedido = new Pedido;
             //$pedido->id = Input::get('id');
             $pedido->cliente_id = $resp;
             $pedido->mensajeria_id = $mensajeria['id'];
             $pedido->direccion_cliente_id = $direccion['id'];
             $pedido->forma_pago_id = $formapago;
-            $pedido->num_pedido = date('Y').date('m').date("d").$resp.$mensajeria['id'];
-            $pedido->total = $total;
+            $pedido->num_pedido = $num_ped;
 
+            $pedido->total = $total;
 
             $pedido->fecha_registro = date('Y-m-d');
             $pedido->cotizar_envio = $cotizar;
@@ -1669,7 +1672,7 @@ public function getProducto(){
                                 $pedido->mensajeria_id = $mensajeria['id'];
                                 $pedido->direccion_cliente_id = $id;
                                 $pedido->forma_pago_id = $formapago;
-                                $pedido->num_pedido = date('Y').date('m').date("d").$mensajeria['id'].$resp;
+                                $pedido->num_pedido = $num_ped;
                                 $pedido->total = $total;
                                 $pedido->fecha_registro = date('Y-m-d');
                                 $pedido->cotizar_envio = $cotizar;
@@ -1801,7 +1804,7 @@ public function getProducto(){
             $pedido->mensajeria_id = $mensajeria['id'];
             $pedido->direccion_cliente_id = $direccion['id'];
             $pedido->forma_pago_id = $formapago;
-            $pedido->num_pedido = date('Y').date('m').date("d").$resp.$mensajeria['id'];
+            $pedido->num_pedido = $num_ped;
             $pedido->total = $total;
             $pedido->fecha_registro = date('Y-m-d');
             $pedido->cotizar_envio = $cotizar;
@@ -1990,7 +1993,7 @@ public function getProducto(){
                                 $pedido->mensajeria_id = $mensajeria['id'];
                                 $pedido->direccion_cliente_id = $id;
                                 $pedido->forma_pago_id = $formapago;
-                                $pedido->num_pedido = date('Y').date('m').date("d").$mensajeria['id'].$resp;
+                                $pedido->num_pedido = $num_ped;
                                 $pedido->total = $total;
                                 $pedido->fecha_registro = date('Y-m-d');
                                 $pedido->cotizar_envio = $cotizar;
@@ -2181,10 +2184,10 @@ public function getProducto(){
                     $pdfPath = BUDGETS_DIR.'/'.$outputName.'.pdf';
                     File::put($pdfPath, PDF::load($pdf, 'A4', 'portrait')->output());
 
-                    Mail::send('emails/pdf', compact('pedido'), function($message) use ($pdfPath, $email){
+                    Mail::send('emails/pdf', compact('pedido'), function($message) use ($pdfPath, $email, $num_ped){
                         $message->from('garden@live.com', 'Garden Central');
                         $message->to($email);
-                        $message->subject('Tú pedido está en proceso.');
+                        $message->subject('Tu pedido #'.$num_ped.' está en proceso.');
                         $message->attach($pdfPath);
                     });
 
@@ -2276,13 +2279,15 @@ public function getProducto(){
                     $outputName = str_random(10); // str_random is a [Laravel helper](http://laravel.com/docs/helpers#strings)
                     $pdfPath = BUDGETS_DIR.'/'.$outputName.'.pdf';
                     File::put($pdfPath, PDF::load($pdf, 'A4', 'portrait')->output());
-
-                    Mail::send('emails/pdf', compact('pedido'), function($message) use ($pdfPath, $admin){
+                   $n_ped = DB::table('pedido')
+                      ->where('pedido.id', $id)
+                      ->pluck('num_pedido');
+                    Mail::send('emails/pdf', compact('pedido'), function($message) use ($pdfPath, $admin, $n_ped){
 
 
                         $message->from('garden@live.com', 'Garden Central');
                         $message->to($admin);
-                        $message->subject('Nuevo pedido.');
+                        $message->subject('Nuevo pedido #'.$n_ped);
                         $message->attach($pdfPath);
                     });
 

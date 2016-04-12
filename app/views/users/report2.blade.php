@@ -78,7 +78,6 @@
                   <th>Iva</th>
                   <th>Cantidad</th>
                   <th>Pedimento</th>
-                  <th>Total producto</th>
                  </tr>
               </thead>
               @foreach($pro as $item)
@@ -95,7 +94,6 @@
                   @endif
                    <td>{{ $item->cantidad }}</td>
                    <td>{{ $item->num_pedimento }}</td>
-                   <td>${{ number_format($item->precio * $item->cantidad, 2) }}</td>
                   </tr>
                </tbody>
               @endforeach
