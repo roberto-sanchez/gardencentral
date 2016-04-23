@@ -24,7 +24,7 @@
     <div class="content">
         <div class="row contenido-principal">
             <div class="titulo_catalogo" >
-                <h2>  Catálogo    {{$catalogo }}  </h2>
+                <h2>    &nbsp;&nbsp;&nbsp;Catálogo    {{$catalogo }}  </h2>
             </div>
             <div class="col-md-12 main-content" id="catalogo_principal" class="panel-body">
                 @include('layouts/inc/estatus')
@@ -165,7 +165,7 @@
                             <thead>
                             <tr class="">
                                 <th class="col-md-4 col-xs-5 col-sm-4">Descripcion</th>
-                                <th class="col-md-2 col-xs-1 col-sm-2">Decuento</th>
+                                <th class="col-md-2 col-xs-1 col-sm-2">Descuento</th>
                                 <th class="col-md-2 col-xs-1 col-sm-2">Estatus</th>
                                 <th class="col-md-4 col-xs-5 col-sm-4"></th>
                             </tr>
@@ -1298,12 +1298,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             var catalogo= '{{$catalogo}}';
-
-
-
-
-
-//:::::::---- FUNCION PARA HABILITAR LOS CAMPOS A MODIFICAR ---::::::::::::::::::::::::::::::::::::://
+            {{---- FUNCION PARA HABILITAR LOS CAMPOS A MODIFICAR ---}}
             $(document).on('click', '.modificar', function(){
                 catalogo = $(this).data('cat');
                 switch (catalogo){
@@ -4528,6 +4523,7 @@
             $(function(){
                 $('table.data-table.sort').dataTable( {
                     "bPaginate": false,
+                    "iDisplayLength": 500,
                     "bLengthChange": false,
                     "bFilter": false,
                     "bSort": true,
@@ -4536,6 +4532,7 @@
                 });
                 $('table.data-table.full').dataTable( {
                     "bPaginate": true,
+                    "iDisplayLength": 500,
                     "bLengthChange": true,
                     "bFilter": true,
                     "bSort": true,

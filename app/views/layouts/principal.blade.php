@@ -48,10 +48,12 @@
                   <ul class="dropdown-menu">
                       <li class="divider"></li>
                         <li><a href="#cambiarpass" data-toggle="modal"><span class="glyphicon glyphicon-lock"></span> Cambiar Contraseña</a></li>
+                      @if(Auth::user()->rol_id == 1)
                       @section('pedidos_user')
                         <li class="divider"></li>
                         <li><a id="p_cliente" href="#pedidos" data-toggle="modal"><span class="glyphicon glyphicon-shopping-cart"></span> Pedidos</a></li>
                       @show
+                      @endif
                       <li class="divider"></li>
                       @if(Auth::user()->rol_id == 1)
                         <li><a class="logout"><span class="glyphicon glyphicon-off"></span> Cerrar Sesión</a></li>
@@ -175,12 +177,12 @@
                 <li><a href="{{ URL::to('/catalogo/Cliente') }}">Clientes</a></li>
                 <li><a href="{{ URL::to('/catalogo/Comercializador') }}">Comercializador</a></li>
                <!-- <li><a href="{{ URL::to('/catalogo/Contacto') }}">Contacto</a></li>-->
-                <li><a href="{{ URL::to('/catalogo/Descuentos') }}">Descuentos</a></li>
+                <li><a href="{{ URL::to('/catalogo/Descuentos') }}">Descuentos x Familia</a></li>
                 <li><a href="{{ URL::to('/catalogo/Estados') }}">Estados</a></li>
                 <li><a href="{{ URL::to('/catalogo/Familias') }}">Familias</a></li>
                 <li><a href="{{ URL::to('/catalogo/FormaPago') }}">Formas de pago</a></li>
                 <li><a href="{{ URL::to('/catalogo/Importador') }}">Importador</a></li>
-                <li><a href="{{ URL::to('/catalogo/Mensajeria') }}">Mensajeria</a></li>
+                {{--Hola <li><a href="{{ URL::to('/catalogo/Mensajeria') }}">Mensajeria</a></li>--}}
                 <li><a href="{{ URL::to('/catalogo/Municipios') }}">Municipio</a></li>
                 <li><a href="{{ URL::to('/catalogo/NivelDescuento') }}">Nivel de descuento</a></li>
                 <li><a href="{{ URL::to('/catalogo/Pais') }}">País</a></li>

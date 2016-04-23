@@ -109,7 +109,7 @@
                <tr>
                  <th>Clave</th>
                  <th>Producto</th>
-                 <th>Total</th> 
+                 <!--<th>Total</th>-->
                </tr> 
              </thead>
              <tbody id="body-extras">
@@ -117,11 +117,13 @@
                  @foreach($extra as $e)
                    <td>{{ $e->clave }}</td>
                    <td>{{ $e->descripcion }}</td>
+                   <?php /*
                    @if($e->total == 0)
                     <td class="text-warning">Pendiente</td>
                   @else
                     <td class="text-warning">${{ number_format($e->total, 2) }}</td>
                   @endif
+                   */?>
                  @endforeach
                </tr>
              </tbody>

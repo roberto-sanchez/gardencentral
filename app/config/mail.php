@@ -54,7 +54,7 @@ return array(
 	|
 	*/
 
-	'from' => array('address' => 'chikizz99@gmail.com', 'name' => 'Garden central'),
+	'from' => array('address' => 'rsanch3zb@gmail.com', 'name' => 'Garden central'),
 
 	/*
 	|--------------------------------------------------------------------------
@@ -80,7 +80,7 @@ return array(
 	|
 	*/
 
-	'username' => 'chikizz99@gmail.com',
+	'username' => 'rsanch3zb@gmail.com',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -93,7 +93,7 @@ return array(
 	|
 	*/
 
-	'password' => '',
+	'password' => '080676Rsb01',
 
 	/*
 	|--------------------------------------------------------------------------
