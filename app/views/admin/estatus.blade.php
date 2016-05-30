@@ -78,6 +78,8 @@
 
                }, //end o
 
+                'iDisplayLength': 50,
+
                 "aaSorting": [[ 4, "desc" ]], 
 
                 "sPaginationType": "simple_numbers",
@@ -119,6 +121,7 @@
                         $('.estatus_3').text('Cancelado');
                         $('.estatus_3').addClass('text-danger');
                       
+                        llamarpaginaciondatatable();
 
 
                 },//End success
@@ -129,7 +132,8 @@
             });
 
 
-    $(document).on('click','.fancy > li, a',function(){
+    $(document).on('click','.cargarpaginacion', function(){
+        $('.fancy a').addClass('cargarpaginacion');
         $('.estatus_0').text('Pendiente');
         $('.estatus_0').addClass('text-warning');
         $('.estatus_1').text('Crédito');
@@ -164,6 +168,9 @@
       });
 
 
+    function llamarpaginaciondatatable(){
+      $('.fancy a').addClass('cargarpaginacion');
+    }
 
 
   </script>

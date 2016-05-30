@@ -18,6 +18,11 @@
           })
       });
     </script>
+    <style>
+      .contenedor-img-detalle{
+        text-align: center;
+       }
+    </style>
   </head>
 
   <!--[if lt IE 7 ]> <body class="ie ie6"> <![endif]-->
@@ -53,11 +58,7 @@
                         <li><a id="p_cliente" href="#pedidos" data-toggle="modal"><span class="glyphicon glyphicon-shopping-cart"></span> Pedidos</a></li>
                       @show
                       <li class="divider"></li>
-                      @if(Auth::user()->rol_id == 1)
-                        <li><a class="logout"><span class="glyphicon glyphicon-off"></span> Cerrar Sesión</a></li>
-                      @else
                         <li><a href="/logout"><span class="glyphicon glyphicon-off"></span> Cerrar Sesión</a></li>
-                      @endif
                       <li class="divider"></li>
                   </ul>
               </li>
@@ -172,10 +173,10 @@
             <h3 class="t-catalogos"><span class="glyphicon glyphicon-folder-open"></span>Catalogos</h3>
             <ul class="ScrollY">
                 <li><a href="{{ URL::to('/catalogo/Almacen') }}">Almacen</a></li>
+                <li><a href="{{ URL::to('/catalogo/Categorias') }}">Categorías</a></li>
                 <li><a href="{{ URL::to('/catalogo/Cliente') }}">Clientes</a></li>
                 <li><a href="{{ URL::to('/catalogo/Comercializador') }}">Comercializador</a></li>
                <!-- <li><a href="{{ URL::to('/catalogo/Contacto') }}">Contacto</a></li>-->
-                <li><a href="{{ URL::to('/catalogo/Descuentos') }}">Descuentos</a></li>
                 <li><a href="{{ URL::to('/catalogo/Estados') }}">Estados</a></li>
                 <li><a href="{{ URL::to('/catalogo/Familias') }}">Familias</a></li>
                 <li><a href="{{ URL::to('/catalogo/FormaPago') }}">Formas de pago</a></li>
@@ -185,7 +186,8 @@
                 <li><a href="{{ URL::to('/catalogo/NivelDescuento') }}">Nivel de descuento</a></li>
                 <li><a href="{{ URL::to('/catalogo/Pais') }}">País</a></li>
                 <!--<li><a href="{{ URL::to('/catalogo/Precio') }}">Precio</a></li>-->
-                <li><a href="{{ URL::to('/catalogo/Producto') }}">Producto</a></li>
+                <!--<li><a href="{{ URL::to('/catalogo/Producto') }}">Producto</a></li>-->
+                <li><a href="{{ URL::to('/catalogo/producto') }}">Producto</a></li>
                 <li><a href="{{ URL::to('/catalogo/Proveedor') }}">Proveedor</a></li>
                 <li><a href="{{ URL::to('/catalogo/Rol') }}">Rol</a></li>
                 <li><a href="{{ URL::to('/catalogo/UnidadMedida') }}">Unidad medida</a></li>
@@ -302,6 +304,9 @@
             <button type="button" class="close close-mp" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
            <h2 class="modal-title text-center n-pedd"></h2>
            <h2 class="modal-title text-center n-peee"></h2>
+          </div>
+          <div class="contenedor-img-detalle">
+            <img class="img-proce-pedido-total-detalle" src="/img/cargando.gif" width="300px">
           </div>
           <div class="modal-body content-datos">
             <div class="cont-btn">

@@ -29,7 +29,6 @@ Route::controller('users','UsersController');
 //ruta para el admin
 Route::controller('admin', 'AdminController');
 
-
 //Ruta para los agentes
 Route::controller('agentes','AgentesController');
 
@@ -50,6 +49,10 @@ Route::get('pedidos/verextra', 'AgentesController@verextra');
 Route::POST('pedidos/actualizarextra', 'AgentesController@actualizarextra');
 Route::POST('pedidos/agregarextra', 'AgentesController@agregarextra');
 Route::POST('pedidos/eliminarextra', 'AgentesController@eliminarextra');
+Route::POST('pedidos/generarnuevopedido', 'AgentesController@generarnuevopedido');
+Route::POST('pedidos/compararproductosinventario', 'AgentesController@compararproductosinventario');
+Route::POST('pedidos/enviaragente/{id}', 'AgentesController@enviaragente');
+Route::GET('pedidos/regresarproductosalinventario', 'AgentesController@regresarproductosalinventario');
 
 
 //ruta para resetear la contraseña
@@ -62,9 +65,51 @@ Route::controller('users','ProductoController');
 
 //Admin
 Route::get('/pedidos/alertaproducto','AdminController@alertaproducto');
+
+//Categorias
+Route::get('catalogo/Categorias','AdminController@Categorias');
+Route::get('categorias/listarcategorias','AdminController@listarcategorias');
+Route::POST('categorias/agregarcategoria','AdminController@agregarcategoria');
+Route::get('categorias/eliminarcategoria','AdminController@eliminarcategoria');
+Route::get('categorias/editarcategoria','AdminController@editarcategoria');
+Route::get('categorias/actualizarcategoria','AdminController@actualizarcategoria');
+
+//Catalogo producto  
+Route::get('catalogo/producto','AdminController@producto');
+Route::get('productos/listarproductos','AdminController@listarproductos');
+Route::get('productos/selectmedidas','AdminController@selectmedidas');
+Route::get('productos/selectimportadores','AdminController@selectimportadores');
+Route::get('productos/selectalmacenes','AdminController@selectalmacenes');
+Route::get('productos/selectfamilias','AdminController@selectfamilias');
+Route::get('productos/selectcategorias','AdminController@selectcategorias');
+Route::get('productos/selectpreciostipo','AdminController@selectpreciostipo');
+Route::POST('productos/agregarnuevoproducto','AdminController@agregarnuevoproducto');
+Route::POST('productos/agregarnuevoprecioalproducto','AdminController@agregarnuevoprecioalproducto'); 
+//Editar
+Route::get('productos/listarproductoedit','AdminController@listarproductoedit');
+Route::get('productos/selectunidadesedit','AdminController@sselectunidadesedit');
+Route::get('productos/selectimportadoredit','AdminController@selectimportadoredit');
+Route::get('productos/selectalmacenedit','AdminController@selectalmacenedit');
+Route::get('productos/selectfamiliasedit','AdminController@selectfamiliasedit');
+Route::get('productos/selectcategoriasedit','AdminController@selectcategoriasedit');
+Route::get('productos/listarprecioseditar','AdminController@listarprecioseditar');
+Route::get('productos/elimartarpreciodelproducto','AdminController@elimartarpreciodelproducto'); 
+Route::get('productos/agregarprecioaleditar','AdminController@agregarprecioaleditar');
+Route::get('productos/listarpreciosedit','AdminController@listarpreciosedit');
+Route::get('productos/actualizarproductoprecio','AdminController@actualizarproductoprecio');
+Route::POST('productos/actualizarproducto','AdminController@actualizarproducto');
+Route::POST('productos/actualizarproductosrepetidos','AdminController@actualizarproductosrepetidos');
+Route::GET('productos/eliminartodoslosregitros','AdminController@eliminartodoslosregitros');
+Route::get('productos/actualizarestatusprecio','AdminController@actualizarestatusprecio');
+
+//Agregar producto por archivo de texto 
+Route::POST('productos/agregarproductosarchivo','AdminController@agregarproductosarchivo'); 
+
 Route::get('/pedidos/borraralerta','AdminController@borraralerta');
 Route::get('pedidos/detalletotales','AdminController@detalletotales');
 Route::post('pedidos/verpedidos','AdminController@verpedidos');
+Route::post('pedidos/vertotalespedidos','AdminController@vertotalespedidos');
+Route::post('pedidos/vertotalespedidosporperiodo','AdminController@vertotalespedidosporperiodo');
 Route::post('pedidos/detallepedido','AdminController@detallepedido'); 
 Route::get('pedidos/verbarras','AdminController@verbarras');
 Route::get('pedidos/vergrafica','AdminController@vergrafica');
@@ -78,6 +123,9 @@ Route::get('consultas/estatus', 'AdminController@estatus');
 Route::get('consultas/listapedidos', 'AdminController@listapedidos');
 Route::get('consultas/listaagentes', 'AdminController@listaagentes');
 Route::get('consultas/listp', 'AdminController@listp');
+Route::get('consultas/ejemplo', 'AdminController@ejemplo');
+Route::get('consultas/listarejemplo', 'AdminController@listarejemplo'); 
+
 Route::get('entradas/agregar', 'AdminController@agregar');
 Route::POST('entradas/listproducto', 'AdminController@listproducto');
 
@@ -131,79 +179,14 @@ Route::GET('productos/verterminos','ProductoController@verterminos');
 // Ruta para la busqueda de productos
 Route::post('productos/getProducto','ProductoController@getProducto');
 
-// Carrito de productos -------
-//ruta para obtener la clave del producto
-
-Route::bind('producto', function($clave){
-		$id_user = Auth::user()->id;
-		$nivel = DB::table('cliente')
-            ->join('nivel_descuento', 'cliente.nivel_descuento_id', '=', 'nivel_descuento.id')
-            ->select('descripcion')
-            ->where('cliente.usuario_id', $id_user)
-            ->pluck('descripcion');
-
-         if($nivel == 'Retail'){
-			return Producto::join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-						->join('familia', 'producto.familia_id', '=', 'familia.id')
-						->Join('descuento', 'familia.id', "=", 'descuento.familia_id')
-						->select('producto.id','iva0','nombre','color','foto','piezas_paquete','clave','precio', 'familia.descripcion', 'descuento', 'tipo')
-						->where('clave', $clave)
-						->where('tipo', 1)
-						->first();
-
-         } else if($nivel == 'Mayorista'){
-         	return Producto::join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-						->join('familia', 'producto.familia_id', '=', 'familia.id')
-						->Join('descuento', 'familia.id', "=", 'descuento.familia_id')
-						->select('producto.id','iva0','nombre','color','foto','piezas_paquete','clave','precio', 'familia.descripcion', 'descuento', 'tipo')
-						->where('clave', $clave)
-						->where('tipo', 2)
-						->first();
-         	
-         } else if($nivel == 'Distribuidor'){
-         	return Producto::join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
-						->join('familia', 'producto.familia_id', '=', 'familia.id')
-						->Join('descuento', 'familia.id', "=", 'descuento.familia_id')
-						->select('producto.id','iva0','nombre','color','foto','piezas_paquete','clave','precio', 'familia.descripcion', 'descuento', 'tipo')
-						->where('clave', $clave)
-						->where('tipo', 3)
-						->first();
-
-         }
-
-
-
-});
-
-//Agregar producto al carrito con sus paquetes
-Route::get('productos/add/{producto}/{quantity}','ProductoController@add');
-
-Route::get('productos/compararcantidad','ProductoController@compararcantidad');
-
-//Agregar productos al carrito con sus respectivos paquetes
-Route::get('productos/agregarproducto/{id}/{quantity}', 'ProductoController@agregarproducto');
-
-//Eliminar producto del carrito
-Route::post('productos/delete/{producto}', 'ProductoController@delete');
-
-//Vaciar todo el contenido de el carrito
-Route::post('productos/vaciar', 'ProductoController@vaciar');
-
-//Extras----------------
-Route::get('agregarextra/add/{contenido}','ProductoController@agregarextra');
-Route::get('extras/updateextra/{contenido}','ProductoController@updateextra');
-Route::post('productos/vaciarextra', 'ProductoController@vaciarextra');
-//Datos en la sesion
-Route::get('datos/add','ProductoController@datos');
+//Extras 
+Route::get('productos/mostrarextra','ProductoController@mostrarextra');
 
 //Rutas para verificar datos
 Route::post('verificar/getLoginUser','LoginController@getLoginUser');
 Route::post('verificar/getLoginPass','LoginController@getLoginPass');
 Route::post('verificar/getVerificarUser','LoginController@getVerificarUser');
 Route::post('productos/getVerificaremail','ProductoController@getVerificaremail');
-
-//Actualizar la cantidad de productos
-Route::get('productos/update/{producto}/{quantity}','ProductoController@update');
 
 
 //Listar domcilios
@@ -216,6 +199,8 @@ Route::delete('productos/eliminardomicilio', 'ProductoController@eliminardomicil
 Route::get('productos/listartelefonos', 'ProductoController@listartelefonos');
 
 Route::get('productos/listnotas', 'ProductoController@listnotas');
+Route::get('productos/selectcategorias', 'ProductoController@selectcategorias');
+Route::get('productos/listarproductoscategoria', 'ProductoController@listarproductoscategoria');
 
 //Rutas de los catalogos
 //Rutas de los catalogos
@@ -247,11 +232,17 @@ Route::POST('municipios', function(){
 
 Route::get('productos/estado/{id}', 'ProductoController@estado');
 
-//Ruta para registrar pedido
-Route::POST('productos/nuevopedido/{id}', 'ProductoController@nuevopedido');
-
-
+//Rutas para registrar los pedidos
+//pedido sin domicilio
 Route::POST('productos/pedidoexistente/{id}', 'ProductoController@pedidoexistente');
+
+//pedido con domicilio existente
+Route::POST('productos/pedidoexistentedomicilio/{id}', 'ProductoController@pedidoexistentedomicilio');
+
+//pedido con un telefono existente
+
+
+Route::POST('productos/nuevopedido/{id}', 'ProductoController@nuevopedido');
 Route::POST('productos/enviaragente/{id}', 'ProductoController@enviaragente');
 
 //Editar domicilio

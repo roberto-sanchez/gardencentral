@@ -16,15 +16,15 @@
   </head>
 
   <body>
+
+
     <div class="panel panel-regis">
         <h2 data-toggle="modal" data-target="#ModalAgregar">Registrarse</h2>
     </div>
         <div class="cont-sesion">
-            <div class='notifications top sess-f'></div>
+            <div class="notifications top-center" data-html="true"></div>
         </div>
-        <div class="cont-sesion">
-            <div class='notifications top-lef sess-f'></div>
-        </div>
+
         <div id="container">
         <!--       Alertas       -->
         @include('layouts/inc/estatus')

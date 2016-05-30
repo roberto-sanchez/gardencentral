@@ -237,7 +237,7 @@
         url:'/notas/listarnotas',
         dataType: 'json',
         success: function(n){
-          console.log(n);
+ 
           tabla_n = $('#list_p_').DataTable({
                   "oLanguage": { 
                       "oPaginate": { 
@@ -270,6 +270,8 @@
                                
                 },
 
+                'iDisplayLength': 50,
+
                 "aaSorting": [[ 2, "desc" ]], 
 
 
@@ -297,15 +299,16 @@
                         $('.dataTables_paginate .prev a').text('Anterior');
                         $('.dataTables_paginate .next a').text('Siguiente');
 
-    $('.usar_1').addClass('glyphicon glyphicon-ok');
-    $('.usar_1').addClass('btn-success');
-    $('.usar_1').attr('title', 'Desactivar nota');
-    $('.usar_1').removeClass('usar-n');
-    $('.usar_1').addClass('no-usar');
 
-    $('.usar_0').addClass('glyphicon glyphicon-off');
-    $('.usar_0').addClass('btn-default');
-    $('.usar_0').attr('title', 'Publicar esta nota');
+                    $('.usar_1').addClass('glyphicon glyphicon-ok');
+                    $('.usar_1').addClass('btn-success');
+                    $('.usar_1').attr('title', 'Desactivar nota');
+                    $('.usar_1').removeClass('usar-n');
+                    $('.usar_1').addClass('no-usar');
+
+                    $('.usar_0').addClass('glyphicon glyphicon-off');
+                    $('.usar_0').addClass('btn-default');
+                    $('.usar_0').attr('title', 'Publicar esta nota');
 
         },
         error: function(){

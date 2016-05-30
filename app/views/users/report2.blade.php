@@ -42,7 +42,7 @@
     @if(count($domi))
       @foreach($domi as $d)
         <tr>
-          <td>RFC: <span class="rfc">{{ $d->rfc }}</span> <span>• </span>Nombre: {{ $d->nombre_cliente }} {{ $d->paterno }} {{ $d->materno }} <span>• </span>Correo: {{ Auth::user()->email }} <span>• </span>N° cliente: {{ $d->numero_cliente }}</td>
+          <td>RFC: <span class="rfc">{{ $d->rfc }}</span> <span>• </span>Nombre: {{ $d->nombre_cliente }} {{ $d->paterno }} {{ $d->materno }} <span>• </span><!--Correo: {{ Auth::user()->email }} <span>• </span>-->N° cliente: {{ $d->numero_cliente }}</td>
         </tr>
         <tr>
           <td>Pais: {{ $d->pais }} <span>• </span>Estado: {{ $d->estados }} <span>• </span>Municipio: {{ $d->municipio }}</td>
@@ -51,13 +51,13 @@
           <td>Calle1: {{ $d->calle1 }} <span>• </span>Calle2: {{ $d->calle2 }} <span>• </span>Colonia: {{ $d->colonia }}</td>
         </tr>
         <tr>
-          <td>Delegacion: {{ $d->delegacion }} <span>• </span>CP: {{ $d->codigo_postal }} <span>• </span>Telefono: {{ $d->numero }}</td>
+          <td>Delegacion: {{ $d->delegacion }} <span>• </span>CP: {{ $d->codigo_postal }} <!--<span>• </span>Telefono: {{ $d->numero }}--></td>
         </tr>
       @endforeach
     @else
         @foreach($cli as $c)
           <tr>
-            <td>RFC: <span class="rfc">{{ $c->rfc }}</span> <span>• </span>Nombre: {{ $c->nombre_cliente }} {{ $c->paterno }} {{ $c->materno }} <span>• </span>Correo: {{ Auth::user()->email }} <span>• </span>N° cliente: {{ $c->numero_cliente }}</td>
+            <td>RFC: <span class="rfc">{{ $c->rfc }}</span> <span>• </span>Nombre: {{ $c->nombre_cliente }} {{ $c->paterno }} {{ $c->materno }} <span>• </span><!--Correo: {{ Auth::user()->email }} <span>• </span>-->N° cliente: {{ $c->numero_cliente }}</td>
           </tr>
         @endforeach
     @endif
@@ -75,10 +75,9 @@
                   <th>Producto</th>
                   <th>Color</th>
                  <!-- <th>Precio</th>-->
-                  <th>Iva</th>
+                  <!--<th>Iva</th>-->
                   <th>Cantidad</th>
                   <th>Pedimento</th>
-                  <th>Total producto</th>
                  </tr>
               </thead>
               @foreach($pro as $item)
@@ -88,14 +87,13 @@
                    <td>{{ $item->nombre }}</td>
                    <td>{{ $item->color }}</td>
                  <!--  <td>${{ number_format($item->precio, 2) }}</td>-->
-                   @if($item->iva0 == 0)
+                  <!-- @if($item->iva0 == 0)
                     <td>0%</td>
                    @else
                     <td>16%</td>
-                  @endif
+                  @endif-->
                    <td>{{ $item->cantidad }}</td>
                    <td>{{ $item->num_pedimento }}</td>
-                   <td>${{ number_format($item->precio * $item->cantidad, 2) }}</td>
                   </tr>
                </tbody>
               @endforeach
@@ -111,7 +109,6 @@
                <tr>
                  <th>Clave</th>
                  <th>Producto</th>
-                 <th>Total</th> 
                </tr> 
              </thead>
              <tbody id="body-extras">
@@ -119,11 +116,6 @@
                  @foreach($extra as $e)
                    <td>{{ $e->clave }}</td>
                    <td>{{ $e->descripcion }}</td>
-                   @if($e->total == 0)
-                    <td class="text-warning">Pendiente</td>
-                  @else
-                    <td class="text-warning">${{ number_format($e->total, 2) }}</td>
-                  @endif
                  @endforeach
                </tr>
              </tbody>

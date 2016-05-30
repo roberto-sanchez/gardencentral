@@ -1,3 +1,14 @@
+
+//Funciones para los alerts
+function alertas(tipo,mensaje){
+    $('.top-center').notify({
+      message: {text: decodeURIComponent(mensaje)},
+      type: tipo
+    }).show();
+  }
+
+
+
 $(document).ready(function(){
 
 
@@ -5,13 +16,7 @@ $(document).ready(function(){
 if($('.sesion-f').length == 0){
 
 } else {
-    noexiste = [[ 'top', 'success',  "Tu sesión ha sido cerrada." ]];
-    message = noexiste[Math.floor(Math.random() * noexiste.length)];
-
-    $('.' + message[0]).notify({
-        message: { text: message[2] },
-        type: message[1]
-    }).show();
+    alertas('success',"Tu sesión ha sido cerrada.");
 }
 
 // ------------------ Inicio de Sesion  --------------------

@@ -27,6 +27,10 @@ class Producto extends Eloquent{
 		return $this->belongsTo('Familia');
 	}
 
+	public function categoria(){
+		return $this->belongsTo('Categoria');
+	}
+
 	public function importador(){
 		return $this->belongsTo('Importador');
 	}

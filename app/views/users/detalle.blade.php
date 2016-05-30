@@ -289,7 +289,6 @@
                 url: "/productos/listnotas",
                 data:{seccion: seccion},
                 success: function (n) {
-                    console.log(n);
                     no = "";
                     for(datos in n.nota){
 
@@ -308,28 +307,7 @@
         }
     });
 
-
-    $('.logout').attr('class', 'l_vaciar');
-
-    $(document).on('click', '.l_vaciar', function(){
-
-
-      $.ajax({
-            type: "POST",
-            url: "/productos/vaciar",
-            success: function (v) {
-                //$('.panel-datos').hide();
-                //$("#t-pedidoc").load(location.href+" #t-pedidoc>*","");
-                window.location = window.location.href = '/logout';
-            },
-            error: function () {
-                alert('failure');
-            }
-        });
-
-    });
-
-  });
+});
 
 </script>
 

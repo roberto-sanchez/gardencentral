@@ -78,7 +78,6 @@
                 dataType: 'json',
                 url: "/inventario/listarinventario",
                 success: function (p) {
-                  console.log(p);
 
                 tabla_a = $('#list_p_').DataTable({
                   "oLanguage": { 
@@ -107,7 +106,9 @@
 
                }, //end o
 
-                "aaSorting": [[ 3, "desc" ]], 
+                'iDisplayLength': 50,
+
+                "aaSorting": [[ 0, "asc" ], [ 3, "asc" ]], 
 
                 "sPaginationType": "simple_numbers",
                  "sPaginationType": "bootstrap",
@@ -124,7 +125,7 @@
                                         p[i].clave,
                                         p[i].nombre,
                                         '<span title="Ver foto del producto" class="pro-foto" id="'+p[i].foto+'" data-id="'+p[i].nombre+'">Ver Foto</span>',
-                                        '<span class="hidden">'+p[i].created_at+'</span>' + p[i].num_pedimento,
+                                        p[i].num_pedimento,
                                         p[i].cantidad,
                                         p[i].created_at,
                                       ]);

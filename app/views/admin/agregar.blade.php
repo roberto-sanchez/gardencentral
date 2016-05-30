@@ -1,33 +1,24 @@
 @extends('layouts/principal')
 
 @section('title')
-<title>Garden Central | Administración</title>
+<title>Garden Central | Nueva entrada</title>
 @show
 
 @section('scripts')
 @parent
 @include('layouts/inc/lib')
 {{ HTML::style('css/bootstrap-select.min.css') }}
-{{ HTML::style('css/bootstrap-datepicker.min.css') }}
+{{ HTML::style('lib/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css') }}
 {{ HTML::script('js/bootstrap-filestyle.min.js') }}
 {{ HTML::script('js/bootstrap-select.min.js') }}
 {{ HTML::script('js/i18n/defaults-es_CL.min.js') }}
-{{ HTML::script('js/bootstrap-datepicker.min.js') }}
+{{ HTML::script('js/i18n/defaults-es_CL.min.js') }}
+{{ HTML::Script('lib/bootstrap-datetimepicker/moment.min.js') }}
+{{ HTML::Script('lib/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js') }}
 <script>
   $(document).ready(function(){
     $('.addentrada').addClass('active');
     $('.t-addentrada').addClass('en-admin');
-
-    $("#fecha").datepicker({
-				changeMonth:true,
-				changeYear:true,
-			});
-
-      $("#fechaFactura").datepicker({
-          changeMonth:true,
-          changeYear:true,
-        });
-
 
   });
 </script>
@@ -53,7 +44,7 @@
             <div class="form-add-entrada">
               <div class="inputE date form-group">
                  <label for="ejemplo_email_1">Fecha</label>
-                 <input type="text" name="fecha" class="form-control fecha">
+                 <input type="text" name="fecha" class="form-control fecha" id="fecha">
                  <span class="icon-d"></span>
               </div>
               <div class="inputE prov input-group infopago">
@@ -72,7 +63,7 @@
               </div>
               <div class="inputE ffa form-group">
                  <label for="ejemplo_email_1">FECHA FACTURA</label>
-                 <input type="text" name="fechaFactura" class="form-control fechaFactura">
+                 <input type="text" name="fechaFactura" class="form-control fechaFactura" id="fecha_factura">
                  <span class="icon-ffa"></span>
               </div>
             </div>
@@ -92,7 +83,7 @@
             <div id="browse-p">
               <label class="txt-browse text-primary">Cargar archivo de productos</label>
               <input type="file" class="filestyle" data-buttonText="Buscar" data-buttonBefore="true" data-placeholder="Ningún archivo seleccionado" name="archivo_file" id="enviar_file">
-            </div>
+            </div> 
             <div>
           </form>
               <button id="add-p" class="btn btn-default">Agregar productos</button>
@@ -186,15 +177,19 @@
 $(document).ready(function(){
 
 
-      $('.fecha').datepicker({
-                format: "dd/mm/yyyy",
-                autoclose: true
+    $(function () {
+        $('#fecha').datetimepicker({
+            format: 'YYYY-MM-DD'
         });
+    });
 
-      $('.fechaFactura').datepicker({
-                format: "dd/mm/yyyy",
-                autoclose: true
+    $(function () {
+        $('#fecha_factura').datetimepicker({
+            format: 'YYYY-MM-DD'
         });
+    });
+
+
 
       $(document).on('click', '#add-p', function(){
         $('#agregar-p').modal({

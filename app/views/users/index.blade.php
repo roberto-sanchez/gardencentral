@@ -113,6 +113,8 @@
   <section class="container">
      @include('layouts/inc/estatus')
      <div class="notifications bottom-right" data-html="true"></div>
+  
+      <button class="btn btn-primary" id="mostar-modal-catalogo">Ver Catalogo</button>
 
       <div class="buscador">
          {{ Form::open(['id'=>'searchForm','method' => 'POST', 'class' => 'buscador input-group has-feedback']) }}
@@ -132,11 +134,11 @@
         <div id="productoPanel" class="panel">
             <div class="panel-heading">
               <h1 class="text-center text-primary rbusqueda">Resultados de la busqueda</h1>
-              <h2 id="nombreProd" class="text-center text-info"></h2>
+              <h2 id="nombreProd" data-clave="" data-id="" data-tipo="" class="text-center text-info"></h2>
             </div>
             <div class="panel-body panel-producto">
 
-                  <img id="imagenProd" src="" alt="Imagen del producto" class="imagenproducto img-responsive img-circle" />
+                  <img id="imagenProd" src="" data-foto="" alt="Imagen del producto" class="imagenproducto img-responsive img-circle" />
 
                 <div class="datos">
                    <h2 class="text-center text-primary txt-info">
@@ -144,7 +146,8 @@
                      <hr class="separador">
                      Precio: <span id="precioProd" class="text-info"></span>
                      <hr class="separador">
-                     Descuento: <span id="descProd" class="text-info"></span>
+                     <span id="descPrecio" data-precio="" class="text-info"></span>
+                     Iva: <span id="t_iva_" data-iva="" class="text-info"></span>
                      <hr class="separador">
                      Productos disponibles: <span id="dispoProd" class="text-info"></span>
                  <!--    <hr class="separador">
@@ -158,9 +161,9 @@
           <div class="panel-footer footer-producto">
             <div class="agregar-producto input-group has-feedback" title="Ingrese la cantidad de paquetes">
 
-               {{ Form::number('agregarproducto',null,array('class' => 'form-control idProd', 'id' => 'agregarproducto', 'min' => '1', 'max' => '100', 'placeholder' => 'Cantidad', 'title' => 'Ingrese la cantidad', 'required')) }}
+               <input type="number" class="form-control idProd" id="agregarproducto" min="1" placeholder="Cantidad" title="Ingrese la cantidad">
               <span class="ingresar-p">
-                <a href="" class="btn input-group-addon claveProd btn-update-sum idProd2 disabled" id="" title="Ingrese la cantidad de paquetes">
+                <a id="enviar-producto" class="btn input-group-addon" id="" title="Ingrese la cantidad de paquetes">
                   Agregar
                    <span class="glyphicon glyphicon-plus"></span>
                 </a>
@@ -172,7 +175,6 @@
         </div>
       
 
-      @if(count($cart))
     <div id="t-pedidoc">
       <div class="panel panel-datos">
           <div class="panel-heading panelcarrito">
@@ -187,177 +189,48 @@
           </div>
           <div class="panel-body bodycarrito">
 
-              <!-- Tabla visible para dispositivos moviles -->
-              <table class=" tcarritoxs">
-              @foreach($cart as $item)
-                <thead>
-                  <tr class="tr-car filap_{{ $item->id }}" id="{{ $item->id }}">
-                     <td class="clave_pro" value="{{ $item->clave }}">Clave: {{ $item->clave }}</td>
-                   </tr>
-                   <tr class="tr-car filap_{{ $item->id }}" id="{{ $item->id }}">
-                      <td>Nombre: <div class="pnombre">{{ $item->nombre }}</div></td>
-                   </tr>
-                   <tr class="tr-car filap_{{ $item->id }}" id="{{ $item->id }}">
-                      <td>Color: {{ $item->color }}</td>
-                   </tr>
-                   <tr class="tr-car filap_{{ $item->id }}" id="{{ $item->id }}">
-                      <td>Precio: ${{ number_format($item->precio, 2)}}</td>
-                   </tr>
-                   <tr class="tr-car filap_{{ $item->id }}" id="{{ $item->id }}">
-                      <td>Iva: 16%</td>
-                   </tr>
-                 <!--  <tr class="tr-car filap_{{ $item->id }}" id="{{ $item->id }}">
-                      <td>Piezas paquete: {{ $item->piezas_paquete }}</td>
-                   </tr>-->
-                   <tr class="tr-car filap_{{ $item->id }}" id="{{ $item->id }}">
-                      <td class="td-cpa">
-                        <div class="c-paxs">
-                          <input type="number" data-id="p_{{ $item -> id }}" class="form-control cant_{{ $item -> id }}" min="1" max="100" value="{{ $totalp = $item->quantity }}" id="productxs_{{$item->id }}">
-                          <a href="{{ URL::to('productos/update', $item->clave) }}" class="btn btn-info btn-update-pxs" id="{{ $item -> id }}" title="Actualizar la cantidad">
-                            <span class="glyphicon glyphicon-refresh"></span>
-                          </a>
-                        </div>
-                      </td>
-                   </tr>
-                   <tr class="tr-car filap_{{ $item->id }}" id="{{ $item->id }}">
-                      <td>
-                        <span class="verfotop" id="{{ $item->foto }}" data-id="{{ $item->nombre }}" alt="Foto del producto">
-                          Ver Foto
-                        </span>
-                      </td>
-                   </tr>
-                   <tr class="tr-car filap_{{ $item->id }}" id="{{ $item->id }}">
-                      <td>Total producto: ${{ number_format($item->precio * $item->quantity, 2) }}</td>
-                   </tr>
-                   <tr class="tr-car filap_{{ $item->id }}" id="{{ $item->id }}">
-                      <td>
-                        <span class="btn btn-danger delete-p" title="Eliminar producto" data-id="{{ $item->clave }}" value="{{ $item->id }}">
-                          <span class="glyphicon glyphicon-remove"></span>
-                        </span>
-                      </td>
-                   </tr>
-
-                </thead>
-                  @endforeach
-              </table> <!--- Se cierra la tabla visible para dispositivos moviles -->
-              <table class=" table-striped table-condensed table-hover  total-pedidoxs">
-                <tr>
-                  <td id="subtotalp">
-                    <span class="text-info">Subtotal:  </span>
-                  </td>
-                  <td id="totalp">
-                    ${{ number_format($total, 2) }}
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <span class="text-info">Iva: </span>
-                  </td>
-                  <td>
-                      <?php $iva = $total * 0.16 ?>
-                      ${{ number_format($total * 0.16, 2) }}
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <span class="text-info">Total:  </span>
-                  </td>
-                  <td>
-                    ${{ number_format($total + $iva, 2) }}
-                  </td>
-                </tr>
-              </table>
               <!--Tabla oculta para dispositivos moviles-->
-              <div class="table-responsive table-carrito">
-                <table class="table table-hover tcarrito">
-                  <thead>
-                    <tr id="c-ped" class="cabecerapedido">
-                      <th>Clave</th>
-                      <th>Nombre</th>
-                      <th>Color</th>
-                      <th>Precio</th>
-                      <th>Iva</th>
-                     <!-- <th>Piezas por paquete</th>-->
-                      <th>Cantidad</th>
-                      <th>Foto</th>
-                      <th>Total producto</th>
-                      <th>Quitar</th>
-                    </tr>
-                  </thead>
-                  <tbody id="c-carp">
-                    @foreach($cart as $item)
-                      <tr class="tr-car filap_{{ $item->id }}" id="{{ $item->id }}">
-                        <td class="clave_pro" value="{{ $item->clave }}">{{ $item->clave }}</td>
-                        <td class="p-nom">{{ $item->nombre }}</td>
-                        <td class="tipo_precio" value="{{ $item->tipo }}">{{ $item->color }}</td>
-                        <?php $des = $item->precio * $item->descuento ?>
-                        <td class="precio_pro" value="{{ $tpro = number_format($item->precio - $des, 2) }}">${{ number_format($tpro = $item->precio - $des, 2) }}</td>
-                        @if($item->iva0 == 0)
-                         <td>0%</td>
-                        @else
-                         <td>16%</td>
-                        @endif
-                       <!-- <td>{{ $item->piezas_paquete }}</td>-->
-                        <td class="td-cpa">
-                          <div class="c-pa">
-                            <input type="number" data-id="p_{{ $item -> id }}" class="form-control cant_{{ $item -> id }}" min="1" value="{{ $totalp = $item->quantity }}" id="product_{{$item->id }}">
-                            <a href="{{ URL::to('productos/update', $item->clave) }}" class="btn btn-info btn-update-p" id="{{ $item -> id }}" title="Actualizar la cantidad de productos">
-                              <span class="glyphicon glyphicon-refresh"></span>
-                            </a>
-                          </div>
-                        </td>
-                        <td>
-                          <span class="verfotop" id="{{ $item->foto }}" data-id="{{ $item->nombre }}" alt="Foto del producto">
-                            Ver Foto
-                          </span>
-                        </td>
-                        <td>${{ number_format($sub = $tpro * $item->quantity, 2) }}</td>
-                        <td>
-                          <span class="btn btn-danger delete-p" title="Eliminar producto" data-id="{{ $item->clave }}" value="{{ $item->id }}">
-                            <span class="glyphicon glyphicon-remove"></span>
-                          </span>
-                        </td>
-                      </tr>
-                  </tbody>
-                    @endforeach
-                </table>
-                <table class=" table-striped table-condensed table-hover  total-pedido">
+            <div class="table-responsive table-carrito">
+              <table class="table table-hover tcarrito tcarrido-productos">
+                <thead>
+                  <tr id="c-ped" class="cabecerapedido">
+                    <th>Clave</th>
+                    <th>Nombre</th>
+                    <th>Color</th>
+                    <th>Precio</th>
+                    <th>Iva</th>
+                    <th>Cantidad</th>
+                    <th>Foto</th>
+                    <th>Total producto</th>
+                    <th>Quitar</th>
+                  </tr>
+                </thead>
+                <tbody id="nEntrada"></tbody>
+              </table>
+              <table class=" table-striped table-condensed table-hover  total-pedido">
                   <tr>
                     <td id="subtotalp">
                       <span class="text-info">Subtotal:  </span>
                     </td>
-                    <td id="totalp">
-                      <?php
-                        $t = 0;
-                        foreach($cart as $item){
-                            $m = $item->precio * $item->descuento;
-                            $t += ($item->precio - $m) * $item -> quantity;
-                        } 
-                        ?>
-                         
-                         ${{ number_format($t, 2) }}
-                      
-                    </td>
+                    <td id="totalp-d-d" value="0"></td>
                   </tr>
                   <tr>
                     <td>
                       <span class="text-info">Iva: </span>
                     </td>
-                    <td>
-
-                        ${{ number_format($total, 2) }}
-
-                    </td>
+                    <td id="t_t_iva" value="0"></td>
                   </tr>
                   <tr>
                     <td>
                       <span class="text-info">Total:  </span>
                     </td>
-                    <td class="total-ped" data-pedido="{{ $total + $t }}">
-                      ${{ number_format($total + $t, 2) }}
+                    <td id="total_mas_iva" class="total-ped" data-pedido="">
+
                     </td>
                   </tr>
                 </table>
+
+            
                 <div class="notas_a">
                     <div class="alert alert-desc">
                     <strong>Descuento incluido.</strong>
@@ -365,14 +238,14 @@
                 </div>
     
 
-              </div>
+              </div> <!-- END table responsive -->
+
+
             </div>
-    
+        
             <div class="agregar-ex">
-              @if(count($extras) == 0)
-              <button data-id="0" class="btn btn-primary btn-md" id="add-extras">Agregar extras</button>
-              @else
-              <span data-id="1" id="add-extras"></span>
+              <button class="btn btn-primary btn-md" id="add-extras">Agregar extras</button>
+              <span data-id="0" id="add-extras-s"></span>
               <table class="table t-ext">
                 <thead class="thead-ext">
                   <tr>
@@ -382,30 +255,11 @@
                     <th>Quitar</th>
                   </tr>
                 </thead>
-                <tbody id="b-extra">
-                  <tr>
-                    @foreach($p as $extra)
-                     <td class="text-clave">{{ $extra->clave }}</td>
-                    @endforeach
-                    
-                    @foreach($extras as $e)
-                      <td class="text-contenido">{{ $e }}</td>
-                    @endforeach
-
-                    <td class="td-btn">
-                      <span class="edit-extra btn btn-xs btn-info glyphicon glyphicon-edit" value="{{ $e }}"></span>
-                    </td>
-
-                    <td>
-                      <span class="quitarextra btn btn-xs btn-danger glyphicon glyphicon-remove"></span>
-                    </td>
-                    
-                  </tr>
-                </tbody>
+                <tbody id="b-extra"></tbody>
               </table>
-              @endif
             </div>
 
+    
               <div class="tipoEnvio">
                 <!--Lista de notas aclaratorias-->
                 <div class="list-n"></div>
@@ -424,9 +278,7 @@
           </div>
 
             <div class="panel-elegir">
-              <span id="g-tipo" data-toggle="modal" class="g-tipo btn btn-primary">
-                Generar pedido
-              </span>
+              
               <div class="alert alert-info alert-v alert-pago">
                 <strong>Elige un domiclio.!</strong>
               </div>
@@ -440,6 +292,11 @@
                  </select>
               </div>
             </div>
+           <div class="div-generar-pedido">
+             <span id="g-tipo" data-toggle="modal" class="g-tipo btn btn-success">
+              Generar pedido
+            </span>
+           </div>
 
 
         <section class="selecTipoEnvio">
@@ -479,12 +336,82 @@
 
 
 
+        <!--  Modal para ver los productos-->
+<div id="modal-catalogo-productos" class="modal fade" data-keyboard="false" data-backdrop="static">
+      <div class="modal-dialog dialog-productos">
+        <div class="modal-content content-productos">
+          <div class="modal-header header-nota">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title text-info text-center">Catalogo de productos</h4>
+          </div>
+          <div class="modal-body">
+          
+          <div class="header-productos">
+            <div>
+              <label for="select-producto-categoria" class="text-info">Categorías:</label>
+              <select id="select-producto-categoria" class="form-control"></select>
+            </div>
+          </div>
+
+          <div class="body-productos">
+           <div class="img-espera">
+             <img src="/img/cargando.gif" alt="Espere un momento.." >
+           </div>
+           <div class="div-seleccione-categoria">
+             <h2 class="text-info">Seleccione una categoría.</h2>
+           </div>
+           <div class="div-nohay-categoria">
+             <h2 class="text-info">Actualmente no hay productos en la categoria seleccionada.</h2>
+           </div>
+
+          <table class="table-datos-producto">
+           <tbody class="contenedor-productos"></tbody>
+          </table>
+          </div>
+                
+          </div>
+          <div class="footer-catalogo-productos">
+              <button id="salir-catalogo-p" type="button" class="btn btn-primary confirm-pro-s" data-dismiss="modal">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+                Salir
+              </button>
+              <button id="agregar-del-catalogo" class="btn btn-success confirm-pro">Agregar al pedido</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<!-- Modal detalle del producto  -->
+    <div id="modaldetalleproducto" class="modal fade" data-keyboard="false" data-backdrop="static">
+      <div class="modal-dialog dialog-detalle-pro">
+        <div class="modal-content">
+          <div class="modal-header header-nota">
+            <h4 id="to-ped" class="modal-title text-info text-center">Detalle del producto</h4>
+          </div>
+          <div class="modal-body body-detalle-pro">
+            <div class="cont-img">
+              <img id="img-detalle-p" src="/img/productos/Bebederoparapajaros.png" alt="Imagen del producto">
+            </div>
+            <div class="datos-detalle-pro">
+
+            </div>      
+          </div>
+          <div class="modal-footer modal-conf-estat">
+              <button id="cerrar-detalle-pro" type="button" class="btn btn-primary confirm">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+              Salir
+              </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
           <!--Modal para agregar extras-->
-        <div id="modalextras" class="modal fade">
+        <div id="modalextras" class="modal fade" data-keyboard="false" data-backdrop="static">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title text-primary text-center">
                   <span class="glyphicon glyphicon-plus"></span>
                   Agregar extras
@@ -499,7 +426,7 @@
               </div>
               <div class="modal-footer modal-confirmar">
                 <button id="can-extras" type="button" class="btn btn-danger confirm" data-dismiss="modal">Cancelar</button>
-                <a id="env-extras" class="btn btn-primary confirm" >Agregar</a >
+                <span id="env-extras" class="btn btn-primary confirm" data-dismiss="modal">Agregar</span>
               </div>
             </div>
           </div>
@@ -507,11 +434,10 @@
 
 
   <!--Modal para editar extras-->
-        <div id="modalextraedit" class="modal fade">
+        <div id="modalextraedit" class="modal fade" data-keyboard="false" data-backdrop="static">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title text-primary text-center">
                   <span class="glyphicon glyphicon-edit"></span>
                   Editar extras
@@ -525,8 +451,8 @@
                 </div>
               </div>
               <div class="modal-footer modal-confirmar">
-                <button id="can-extras" type="button" class="btn btn-danger confirm" data-dismiss="modal">Cancelar</button>
-                <a id="env-extras-act" class="act-ext btn btn-primary confirm">Actualizar</a>
+                <button id="can-extras-edit" type="button" class="btn btn-danger confirm" data-dismiss="modal">Cancelar</button>
+                <span id="env-extras-actualizar" class="btn btn-primary confirm" data-dismiss="modal">Actualizar</span>
               </div>
             </div>
           </div>
@@ -797,13 +723,13 @@
 
 
             <div class="panel-footer footer-formpago">
-            <span id="conf-p1" class="btn btn-primary btn-conf-1 disabled"> <!--   -->
+            <span id="conf-p1" class="btn btn-success btn-conf-1 disabled"> <!--   -->
               Generar pedido
             </span>
-            <span id="gen-c"  class="btn btn-primary">
+            <span id="gen-c"  class="btn btn-success">
               Generar pedido
             </span>
-            <a id="conf-p" href="#confirmarpedido" class="btn btn-primary hidden ge-p" data-toggle="modal"> <!--   -->
+            <a id="conf-p" href="#confirmarpedido" class="btn btn-success hidden ge-p" data-toggle="modal"> <!--   -->
               Generar pedido
             </a>
 
@@ -1024,9 +950,7 @@
         </div>
       </div>
     </div>
-     @else
-
-    @endif
+ <!--  ___________________________________END IF_________________________________________ -->
 
   </section>
 </div> <!-- Content users -->
@@ -1035,6 +959,7 @@
 {{ HTML::script('js/accounting.min.js') }}
 {{ HTML::script('js/principal.js') }}
 {{ HTML::script('js/list_main.js') }}
+{{ HTML::script('js/main.js') }}
 
 
 

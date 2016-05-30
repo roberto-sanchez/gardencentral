@@ -80,6 +80,8 @@ $(document).ready(function () {
                         $('.dataTables_paginate .prev a').text('Anterior');
                         $('.dataTables_paginate .next a').text('Siguiente');
 
+                        llamarpaginaciondatatable();
+
 
                 }
             },
@@ -99,7 +101,9 @@ $(document).ready(function () {
       $('#list_p_').DataTable().fnDestroy();
     });*/
 
-      $(document).on('click','.fancy > li, a',function(){
+     $(document).on('click','.cargarpaginacion', function(){
+        $('.fancy a').addClass('cargarpaginacion');
+
         $('.estatus_0').text('Pendiente');
         $('.estatus_0').addClass('text-warning');
         $('.estatus_1').text('Crédito');
@@ -108,6 +112,7 @@ $(document).ready(function () {
         $('.estatus_2').addClass('text-success');
         $('.estatus_3').text('Cancelado');
         $('.estatus_3').addClass('text-danger');
+
       });        
       
 
@@ -137,16 +142,12 @@ $(document).ready(function () {
           $('.n-fe').text('Fecha: '+fe);
     });
 
-
-  // Agregar extras
-  $(document).on('click', '#add-extras', function(){
-    $('#modalextras').modal({
-      show:'false',
-    });
-  });
+    function llamarpaginaciondatatable(){
+      $('.fancy a').addClass('cargarpaginacion');
+    }
 
 
-
+    $('.content-datos').hide();
 
       //Detalle del pedido del cliente
     $(document).on('click', '#c-estatus', function(){
@@ -164,6 +165,9 @@ $(document).ready(function () {
                 url: "/productos/detalledelpedido",
                 data: {id: id},
                 success: function (p) {
+                  $('.contenedor-img-detalle').hide();
+                  $('.content-datos').show();
+
                   if(p.t == 'tienda'){
                       $('#sindomi').addClass('sindomi');
                       $('.pc_domiclio').hide();
@@ -360,6 +364,8 @@ $(document).ready(function () {
          $('.table-cli').hide();
          $('.fila_extras').hide();
          $('.fila_total').hide();
+         $('.contenedor-img-detalle').show();
+         $('.content-datos').hide();
 
     });
 
@@ -370,6 +376,8 @@ $(document).ready(function () {
          $('.table-cli').hide();
          $('.fila_extras').hide();
          $('.fila_total').hide();
+         $('.contenedor-img-detalle').show();
+         $('.content-datos').hide();
     });
 
 
@@ -384,7 +392,7 @@ $(document).ready(function () {
         $('.mialert3').hide();
     });
 
-    $('#clave').focus(function () {
+    $(document).on('focus', '#clave', function () {
         $('#clave').attr('value', '');
     });
     $('#clave').blur(function () {
@@ -404,7 +412,7 @@ $(document).ready(function () {
                 url: "productos/getProducto",
                 data: {clave: $('#clave').val()},
                 success: function (prod) {
-                  //console.log(prod);
+
                     ver = prod.producto.indefinido;
                     if(ver === 'vacio'){
                         alertas('error',"El producto no existe.");
@@ -414,23 +422,28 @@ $(document).ready(function () {
                               $('#productoPanel').slideDown(1000);
                               $('.idProd').attr('id', 'product_' + prod.producto[0].id);
                               $('.idProd2').attr('id', +prod.producto[0].id);
-                              $('.claveProd').attr('href', 'productos/add/' + prod.producto[0].clave);
-                              $('#nombreProd').html(prod.nombre);
+                              $('#nombreProd').text(prod.producto[0].nombre);
+                              $('#nombreProd').attr('data-clave', prod.producto[0].clave);
+                              $('#nombreProd').attr('data-id', prod.producto[0].id);
+                              $('#nombreProd').attr('data-tipo', prod.producto[0].tipo);
                               $('#imagenProd').prop('src', 'img/productos/' + prod.producto[0].foto); 
+                              $('#imagenProd').attr('data-foto', prod.producto[0].foto); 
                               $('#colorProd').html(prod.producto[0].color); 
                               $('#piezasProd').html(prod.producto[0].piezas_paquete);
                               $('#precioProd').html(accounting.formatMoney(prod.producto[0].precio));
+                              $('#descPrecio').attr('data-precio',accounting.formatMoney(prod.producto[0].precio, " ", "2", ""));
+                              $('#t_iva_').attr('data-iva', prod.producto[0].iva0);
+
+                              iva = prod.producto[0].iva0;
+
+                              if(iva == 0){
+                                $('#t_iva_').html('0%');
+                              } else {
+                                $('#t_iva_').html('16%');
+                              }
+
                               $('#dispoProd').html(prod.producto[0].cantidad);
                               $('#total_p').attr('value', prod.producto[0].cantidad);
-
-                              num = prod.familia[0].descuento;
-                              n = num.toString(); //convertimos el entero en string
-                              desc = n.substring(2); //ocultamos los primeros dos caracteres
-                              if(n.length == 3){
-                                 $('#descProd').html(desc+'0%');
-                              } else {
-                                $('#descProd').html(desc+'%');
-                              }
        
                            
                     }
@@ -452,216 +465,245 @@ $(document).ready(function () {
      */
 
 
-/*
-$(document).on('click', '.idProd2', function(){
-    if($('.idProd').val() == 0){
-        $('.claveProd').removeClass('btn-update-p');
-        $('.mialert3').show();
-        alert('esta vacio');
+$(document).on('click', '#enviar-producto', function(){
+
+  cantidad = $('.idProd').val();
+
+  if(cantidad == 0){
+      alertas('error',"Ingrese la cantidad de productos." );
+  } else {
+
+    id = $('#nombreProd').attr('data-id');
+    //comprobamos si ya esta agregado el producto en el pedido para poder compara las cantidades
+    c_actual = $('#v_'+id).val();
+    cantidad_elegida = $('.idProd').val();
+
+    if(c_actual == undefined){
+
+    if($('#dispoProd').text() < parseInt(cantidad_elegida)){
+      alertas('error',"Productos disponibles: "+$('#dispoProd').text() + "  " );
+
     } else {
-        $('.claveProd').addClass('btn-update-p');
-        $('.mialert3').hide();
-        alert('No esta vacio');
+
+        agregardatosalpedido();
+
     }
-});
-*//*
-$(document).on('click', '.idProd2', function(){
-   if($('.idProd').val() == 0){
-    $('.claveProd').addClass('disabled');
-       $('.claveProd').removeClass('btn-update-p');
-        $('.claveProd').removeAttr('href');
-    alert('XD');
-    } else{
-      alert('no esta vacio');
+
+    } else {
+      cantidad_total_producto = parseInt(c_actual) + parseInt(cantidad_elegida);
+
+      if($('#dispoProd').text() < cantidad_total_producto){
+      alertas('error',"Productos disponibles: "+$('#dispoProd').text() + "  " );
+
+    } else {
+
+        agregardatosalpedido();
+
+    }
+
+    }
+
+
+
+
   }
 
-});*/
-
-    $('#agregarproducto').keypress(function (e) {
-        $('.idProd2').removeClass('disabled');
-    });
+});
 
 
-    $('.idProd').click(function () {
+function agregardatosalpedido(){
 
-        if ($('.idProd').val() == '') {
+    $('#t-pedidoc').show();
 
-        } else {
-
-            $('.idProd2').removeClass('disabled');
-
-        }
-
-
-    });
-
-
-    $(document).on('click', '.ingresar-p', function(){
-      if ($('.idProd').val() == '') {
-            alertas('error',"Ingrese la cantidad de productos.");
-            return false;
-
-        }
-    });
-
-
-//Sumar productos al pedido
-$(".btn-update-sum").click(function (e) {
-    idt = $(this).attr('id');
-    valor = $('.cant_'+idt).val();
-    c = $('.idProd').val();
-
-    if($('#dispoProd').text() < parseInt(c)){
-      alertas('error',"Productos disponibles: "+$('#dispoProd').text() + "  " );
-      return false;
-    } else if(parseInt(c) == 0){
-      alertas('error',"Ingrese la cantidad de productos." );
-      return false;
-    } else {
-
-        /*Comprovamos si el producto es ingresado por
-         *primera ves, osea si esta vacio.
-        */
-        if(valor == undefined){
-            vacio = 0;
-            e.preventDefault();
-            parseInt(id = $(this).attr('id'));
-
-            href = $(this).attr('href');
-            quantity = $('#product_' + id).val();
-            vacio += parseInt(quantity);
-            window.location.href = href + "/" + vacio;
-            //Si no esta vacio se le suma la cantidad ya existente
-        } else{
-            //obtenemos la cantidad ya agregada
-            valorA = parseInt($('.cant_'+idt).val());
-            //obtenemos la nueva cantidad
-            c = $('.idProd').val();
-            //sumamos las dos cantidades
-            suma = parseInt(valorA) + parseInt(c);
-            //comparamos con los productos que hay disponibles
-            if($('#dispoProd').text() < suma){
-              alertas('error',"Productos disponibles: "+$('#dispoProd').text() + "  " );
-              return false;
-            } else {
-              e.preventDefault();
-              parseInt(id = $(this).attr('id'));
-
-              href = $(this).attr('href');
-              quantity = $('#product_' + id).val();
-              valorA += parseInt(quantity);
-              window.location.href = href + "/" + valorA;
-
-            }
-            
-        }
-
-    }
-
-   
+    $('#productoPanel').hide();
+    clave = $('#nombreProd').attr('data-clave');
+    foto = $('#imagenProd').attr('data-foto');
+    id = $('#nombreProd').attr('data-id');
+    pro = $('#nombreProd').text();
+    color = $('#colorProd').text();
+    precio = $('#descPrecio').attr('data-precio');
+    tipo_precio = $('#nombreProd').attr('data-tipo');
+    iva = $('#t_iva_').text();
+    niva = $('#t_iva_').attr('data-iva');
+    cant = $('.idProd').val();
+    disponibles = $('#dispoProd').text();
 
 
 
-    });
+            tablep = $('#nEntrada');
+              d= "";
+
+              if($('#v_'+id).length){
+
+                cant_actual = $('#v_'+id).val(); //cantidad actual del producto en el pedido
+
+                resultado= (parseFloat(cant_actual) + parseFloat(cant)); //sumamos la actual con la nueva q eligio el cliente
+
+                $('#v_'+id).attr('value', resultado); //le asignamos la nueva cantidad al producto del pedido
+                $('#v_'+id).val(resultado);
+                $('#actC_'+id).attr('data-id', resultado);
+
+                $('#canti_'+id).attr('value', accounting.formatMoney(resultado * precio, " ", "2", ""));
+                $('#canti_'+id).text(accounting.formatMoney(resultado * precio));
+
+                $('#totalp-d-d').attr('value', 0);
+                $('#t_t_iva').attr('value', 0);
+                $('.tcarrido-productos tbody tr').each(function(){
+
+                   total_nueva = $(this).find("td[class*='cantidadelproducto']").attr('value');
+
+                   total_actual = $('#totalp-d-d').attr('value');
+
+                   idp = $(this).find("td[class*='idpro']").attr('value');
+
+                   totalnuevo = parseFloat(total_actual) + parseFloat(total_nueva);
+
+                   $('#totalp-d-d').attr('value', accounting.formatMoney(totalnuevo, " ", "2", ""));
+                   $('#totalp-d-d').text(accounting.formatMoney(totalnuevo));
+
+                    //iva
+                  iva = $(this).find("td[class*='v_iva']").attr('value');
+                   if(iva == 0){
+
+                      if($('#t_t_iva').attr('value') == 0){
+
+                       $('#t_t_iva').text(accounting.formatMoney(0));
+                         $('#t_t_iva').attr('value', 0);
+
+                      } else {
+
+                      }
+
+                   } else {
+
+                    c_a = $('#t_t_iva').attr('value');
+                    //alert(c_a);
+                    iva_1 = $('#canti_'+idp).attr('value');
+                   //alert(iva_1);
+                   t_iva_ = parseFloat(c_a) + parseFloat(iva_1);
+                  $('#t_t_iva').attr('value', accounting.formatMoney(t_iva_, " ", "2", ""));
+                  $('#t_t_iva').text(accounting.formatMoney(t_iva_));
+
+                   }
+                   
 
 
-    //actualizamos la cantidad del producto
-    $(".btn-update-p").click(function (e) {
-        e.preventDefault();
-        id = $(this).attr('id');
-        href = $(this).attr('href');
-        quantity = $('#product_' + id).val();
+              });
 
-        $.ajax({
-            type: "GET",
-            url: "/productos/compararcantidad",
-            data: {quantity: quantity, id: id},
-            success: function (q) {
-              console.log(q.m);
-              if(q.m == 0){
-                alertas('error',"Productos disponibles: "+ q.inv + "  " );
-                window.location.href = href + "/" + q.inv;
+              //cuando se termne de ejcutar el forech multiplicamos el iva por 0.16
+                  t_iva_total = $('#t_t_iva').attr('value') * 0.16;
+                   $('#t_t_iva').attr('value', accounting.formatMoney(t_iva_total, " ", "2", ""));
+                   $('#t_t_iva').text(accounting.formatMoney(t_iva_total));
+
+
               } else {
-                window.location.href = href + "/" + quantity;
+
+               d += '<tr class="clave_'+clave+'" value="clave_'+clave+'" id="fila_'+id+'"><td class="clavepro" data-id="'+id+'">'+clave+'</td>';
+               d += '<td class="idpro" value="'+id+'">'+pro+'</td>';
+               d += '<td class="tipo_precio" value="'+tipo_precio+'">'+color+'</td>';
+               d += '<td class="p_c" value="'+accounting.formatMoney(precio, " ", "2", "")+'">'+accounting.formatMoney(precio)+'</td>';
+               d += '<td class="v_iva" value="'+niva+'">'+iva+'</td>';
+               d += '<td><div class="c-pa"><input id="v_'+id+'" type="number" class="form-control cant" data-id="'+accounting.formatMoney(precio, " ", "2", "")+'" value="'+cant+'"><button value="'+id+'" class="btn btn-primary actC btn_'+clave+'" data-id="'+cant+'" data-disponibles="'+disponibles+'" id="actC_'+id+'"><span class="glyphicon glyphicon-refresh"></span></button></div></td>';
+               d += '<td><span class="verfotop" id="'+foto+'" data-id="'+pro+'" alt="Foto del producto">Ver Foto</span></td>';
+               d += '<td id="canti_'+id+'" class="cantidadelproducto" value="'+accounting.formatMoney(precio * cant, " ", "2", "")+'">'+accounting.formatMoney(precio * cant)+'</td>';
+               d += '<td><button id="q-t" value="'+id+'" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></button></td>';
+                        
+
+              tablep.prepend(d);
+
+              if($('#totalp-d-d').attr('value') == 0){
+                $('#totalp-d-d').text(accounting.formatMoney(precio * cant));
+                $('#totalp-d-d').attr('value', accounting.formatMoney(precio * cant, " ", "2", ""));
+
+                 //iva
+                  if(niva == 0){
+                        if($('#t_t_iva').attr('value') == 0){
+
+                       $('#t_t_iva').text(accounting.formatMoney(0));
+                         $('#t_t_iva').attr('value', 0);
+
+                      } else {
+
+                      }
+                   } else {
+                    $('#t_t_iva').attr('value', '');
+                    t_p_ = $('#totalp-d-d').attr('value');
+                    iva_total = t_p_ * 0.16;
+                    $('#t_t_iva').text(accounting.formatMoney(iva_total));
+                    $('#t_t_iva').attr('value', accounting.formatMoney(iva_total, " ", "2", ""));
+
+                   }
+
+              } else {
+
+                $('#totalp-d-d').attr('value', 0);
+                $('#t_t_iva').attr('value', 0);
+                $('.tcarrido-productos tbody tr').each(function(){
+
+                   total_nueva = $(this).find("td[class*='cantidadelproducto']").attr('value');
+
+                   total_actual = $('#totalp-d-d').attr('value');
+
+                   idp = $(this).find("td[class*='idpro']").attr('value');
+
+                   totalnuevo = parseFloat(total_actual) + parseFloat(total_nueva);
+
+                   $('#totalp-d-d').attr('value', accounting.formatMoney(totalnuevo, " ", "2", ""));
+                   $('#totalp-d-d').text(accounting.formatMoney(totalnuevo));
+
+                   //iva
+                  iva = $(this).find("td[class*='v_iva']").attr('value');
+                   if(iva == 0){
+
+                      if($('#t_t_iva').attr('value') == 0){
+
+                       $('#t_t_iva').text(accounting.formatMoney(0));
+                         $('#t_t_iva').attr('value', 0);
+
+                      } else {
+
+                      }
+
+                   } else {
+
+                    c_a = $('#t_t_iva').attr('value');
+                    //alert(c_a);
+                    iva_1 = $('#canti_'+idp).attr('value');
+                   //alert(iva_1);
+                   t_iva_ = parseFloat(c_a) + parseFloat(iva_1);
+                  $('#t_t_iva').attr('value', accounting.formatMoney(t_iva_, " ", "2", ""));
+                  $('#t_t_iva').text(accounting.formatMoney(t_iva_));
+
+                   }
+                   
+
+
+              });
+
+                //cuando se termne de ejcutar el forech multiplicamos el iva por 0.16
+                  t_iva_total = $('#t_t_iva').attr('value') * 0.16;
+                   $('#t_t_iva').attr('value', accounting.formatMoney(t_iva_total, " ", "2", ""));
+                   $('#t_t_iva').text(accounting.formatMoney(t_iva_total));
+
+
               }
-            },
-            error: function () {
-                alert('failure');
-            }
-        });
 
-      /*  if(quantity < 150){
-          alert('No puedes agregar mas productos');
-          return false;
-        } else {
-        window.location.href = href + "/" + quantity;
-          
-        }*/
-    });
+              
 
-    //actualizamos la cantidad del producto en movil
-  /*  $(".btn-update-pxs").click(function (e) {
-        e.preventDefault();
-        id = $(this).attr('id');
-        href = $(this).attr('href');
-        quantity = $('#productxs_' + id).val();
-        window.location.href = href + "/" + quantity;
-    });*/
+              } //end else
+
+              //total
+               total_mas_iva = parseFloat($('#t_t_iva').attr('value')) + parseFloat($('#totalp-d-d').attr('value'));
+               $('#total_mas_iva').text(accounting.formatMoney(total_mas_iva));
+               $('#total_mas_iva').attr('data-pedido', accounting.formatMoney(total_mas_iva, " ", "2", ""));
+
+               //limpiamos
+               $('.idProd').val('');
+                $('#clave').val('');
 
 
-    //Vaciar pedido ----------
-    $('#v-pedido').click(function(){
+        }//end function
 
-      $.ajax({
-            type: "POST",
-            url: "/productos/vaciar",
-            success: function (v) {
-                $("#t-pedidoc").load(location.href+" #t-pedidoc>*","");
-
-            },
-            error: function () {
-                alert('failure');
-            }
-        });
-
-  });
-
-    //Vaciar extra
-  $('.quitarextra').click(function(){
-
-      $.ajax({
-            type: "POST",
-            url: "/productos/vaciarextra",
-            success: function (v) {
-                $(".agregar-ex").load(location.href+" .agregar-ex>*","");
-
-            },
-            error: function () {
-                alert('failure');
-            }
-        });
-
-  });
-
-//Eliminar producto del carrito
-    $(document).on('click', '.delete-p', function(){
-      id = $(this).attr('value');
-      clave = $(this).attr('data-id');
-
-      $.ajax({
-            type: "POST",
-            url: "/productos/delete/"+clave,
-            success: function (d) {
-                $("#t-pedidoc").load(location.href+" #t-pedidoc>*","");
-
-            },
-
-            error: function () {
-                alert('failure');
-            }
-        });
-
-  });
 
 
 //Ver foto del producto del pedido
@@ -805,36 +847,6 @@ $(document).on('click', '.verfotop', function(){
           }    
       });
 
-      //guardar datos al recargar la pagina
- /*     $(document).on('click', '.presioname', function(){
-        d = $('select.selectTipo').val();
-          if(d == null){
-            a = 0;
-            console.log(a);
-          } else if(d == 'tienda') {
-            a = 1;
-            console.log(a);
-          } else {
-            a = 2;
-            console.log(a);
-          }
-
-      $.ajax({
-        url: "/datos/add",
-        type: "GET",
-        data: {a: a},
-        success: function(d){ 
-          console.log(d);
-        },
-
-        error: function(){
-          alert("failure");
-        }
-      });
-
-
-
-      });*/
 
 
     //comprobamos que el cliente seleccione la forma de pago
@@ -1051,41 +1063,6 @@ $(document).on('click', '.verfotop', function(){
     });
 
 
-
-/*Verificar disponibilidaddeñ telefono*/
- /*$('#teledit').keyup( function(){
-    if($('#teledit').val() != ""){
-
-         tel = $('#teledit').val().trim();
-         //alert(pass);
-        $.ajax({
-            type: "POST",
-            url: "productos/getVerificarTel",
-             data: {tel: tel },
-            success: function( t ){
-                vt = t.numero;
-                   if (vt === undefined) {
-                      $('.tel1').removeClass('has-error');
-                      $('.spanTel').removeClass('glyphicon-remove');
-                      $('.tel1').addClass('has-success');
-                      $('.spanTel').addClass('glyphicon glyphicon-ok form-control-feedback');
-                      $('#conf-p').removeClass('disabled');
-                      $('.msgTeledit').html("");
-                    } else {
-                         $('.tel1').removeClass('has-success');
-                         $('.spanTel').removeClass('glyphicon-ok');
-                         $('.spanTel').addClass('glyphicon glyphicon-remove form-control-feedback');
-                         $('.tel1').addClass('has-error');
-                         $('.msgTeledit').html("El teléfono ya existe, elige otro.");
-                         $('#conf-p').addClass('disabled');
-                }
-
-
-            }
-        });
-     }
-});
-*/
 
 
 
@@ -1655,29 +1632,6 @@ $(document).on('click', '.verfotop', function(){
 });
 
 
-/**
- *
- * Funcion trim() elimina los espacios en blanco del input
- *
- */
-/*
-$(".ge-p").click(function () {
-
-   else if($(".tel-celular").val().length <= 8){
-            $('.tel1').addClass('has-error');
-            return false;
-
-    } else if($(".tel-fijo").val().length <= 8){
-            $('.tel1').addClass('has-error');
-            return false;
-    } else if($(".tel-otro").val().length <= 8){
-            $('.tel1').addClass('has-error');
-            return false;
-
-    }
-
-});
-*/
 
 $('.phone-c').focus(function(){
     $('.phone-c').addClass('tel-celular');
@@ -1869,7 +1823,7 @@ $('.phone-o').focus(function(){
     //validamos la colonia
     $('.colonia').keyup(function(){
         valor = $('#colonia').val();
-        if(valor.length <= 3 || /^\s+$/.test(valor) ){
+        if(valor.length == 3 || /^\s+$/.test(valor) ){
             $('.colonia').addClass('has-error');
 
          } else {
@@ -1879,18 +1833,6 @@ $('.phone-o').focus(function(){
          }
     });
 
-        //validamos la delegacion
-    $('.delegacion').keyup(function(){
-        valor = $('#delegacion').val();
-        if(valor.length <= 3 || /^\s+$/.test(valor) ){
-            $('.delegacion').addClass('has-error');
-
-         } else {
-            $('.delegacion').removeClass('has-error');
-            $('.delegacion').addClass('has-success');
-
-         }
-    });
 
     //Validamos el codigo postal
     $('.cp').keyup(function(){
@@ -1955,17 +1897,17 @@ $('#p-s-dom').click(function(){
   cotizar = $('#inpEnvio').val();
   formapago = $('#formapago').val();
   msjeria = $('#pago').val();
-  r_extra = $('#add-extras').attr('data-id');
+  r_extra = $('#add-extras-s').attr('data-id');
   total = $('.total-ped').attr('data-pedido');
 
    var DATA = [];
 
         $('.tcarrito tbody tr').each(function(){
-            idp = $(this).attr('id');
-            clave  = $(this).find("[class*='clave_pro']").attr('value');
+            idp = $(this).find("[class*='clavepro']").attr('data-id');
+            clave  = $(this).find("[class*='clavepro']").text();
             cant  = $(this).find("input[class*='cant']").val();
             tipoprecio  = $(this).find("td[class*='tipo_precio']").attr('value');
-            preciop  = $(this).find("td[class*='precio_pro']").attr('value');
+            preciop  = $(this).find("td[class*='p_c']").attr('value');
 
             item = {idp, clave, cant, tipoprecio, preciop};
 
@@ -1977,20 +1919,14 @@ $('#p-s-dom').click(function(){
         //Extras
         var DATA2 = [];
 
-        $('.t-ext tbody tr').each(function(){
-
-            claveextra  = $(this).find("td[class*='text-clave']").text();
-            contenido  = $(this).find("td[class*='text-contenido']").text();
+            claveextra  = $('.text-clave').text();
+            contenido  = $('#tdextra').text();
             extra = {claveextra, contenido};
-
             DATA2.push(extra);
-        })
+            nExtra = JSON.stringify(DATA2);
 
-        nExtra = JSON.stringify(DATA2);
-
-        id = 0;
         
-        $.ajax({
+       $.ajax({
             type: "POST",
             url: "/productos/pedidoexistente/"+id,
             data: {aInfo: aInfo, nExtra: nExtra, formapago: formapago, msjeria: msjeria, cotizar: cotizar, r_extra: r_extra, total: total},
@@ -2003,7 +1939,6 @@ $('#p-s-dom').click(function(){
 
             success: function (iddom) {
                 enviaragente(iddom);
-                //console.log(iddom);
 
             },
 
@@ -2025,46 +1960,44 @@ $('#p-s-dom').click(function(){
 
         //recorremos cada TR para obtener el id del producto y el td de la cantidad
         $('.tcarrito tbody tr').each(function(){
-            idp = $(this).attr('id');
-            clave  = $(this).find("[class*='clave_pro']").attr('value');
+            idp = $(this).find("[class*='clavepro']").attr('data-id');
+            clave  = $(this).find("[class*='clavepro']").text();
             cant  = $(this).find("input[class*='cant']").val();
             tipoprecio  = $(this).find("td[class*='tipo_precio']").attr('value');
-            preciop  = $(this).find("td[class*='precio_pro']").attr('value');
+            preciop  = $(this).find("td[class*='p_c']").attr('value');
 
-            //declaramos un array para guardar estos datos
             item = {idp, clave, cant, tipoprecio, preciop};
 
-            // hacemos un .push() para agregarlos a nuestro array principal "DATA".
             DATA.push(item);
         })
 
         //convertiremos el array en json para evitar cualquier incidente con compativilidades.
         aInfo   = JSON.stringify(DATA);
 
-        //Extras
+         //Extras
         var DATA2 = [];
-
-        $('.t-ext tbody tr').each(function(){
-
-            claveextra  = $(this).find("td[class*='text-clave']").text();
-            contenido  = $(this).find("td[class*='text-contenido']").text();
+        
+            claveextra  = $('.text-clave').text();
+            contenido  = $('#tdextra').text();
             extra = {claveextra, contenido};
-
             DATA2.push(extra);
-        })
+            nExtra = JSON.stringify(DATA2);
 
-        nExtra = JSON.stringify(DATA2);
-
+        //id de la direccion
         id = $(this).attr('id');
+
+        //datos generales
         cotizar = $('#inpEnvio').val();
         formapago = $('#formapago').val();
         msjeria = $('#pago').val();
-        r_extra = $('#add-extras').attr('data-id');
+        r_extra = $('#add-extras-s').attr('data-id');
         total = $('.total-ped').attr('data-pedido');
+
+
 
         $.ajax({
             type: "POST", //metodo
-            url: "/productos/pedidoexistente/"+id,
+            url: "/productos/pedidoexistentedomicilio/"+id,
             data: {aInfo: aInfo, nExtra: nExtra, formapago: formapago, msjeria: msjeria, cotizar: cotizar, r_extra: r_extra, total: total},
             beforeSend: function(){
                   $('#env_p').modal({
@@ -2074,8 +2007,6 @@ $('#p-s-dom').click(function(){
 
             success: function (iddom) {
 
-                //redirigimosa¿ al detalle del pedido y le pasamos el id del domi
-                //window.location.href = 'productos/datosdelpedido/' + iddom;
                 enviaragente(iddom);
 
             },
@@ -2086,6 +2017,7 @@ $('#p-s-dom').click(function(){
         });
     });
 
+
 //Registrar un pedido co un telefono existente
    $(document).on('click', '.regis-exixts-t', function(){
         //Array principal donde estarán los datos de los productos
@@ -2093,11 +2025,11 @@ $('#p-s-dom').click(function(){
 
         //recorremos cada TR para obtener el id del producto y el td de la cantidad
         $('.tcarrito tbody tr').each(function(){
-            idp = $(this).attr('id');
-            clave  = $(this).find("[class*='clave_pro']").attr('value');
+            idp = $(this).find("[class*='clavepro']").attr('data-id');
+            clave  = $(this).find("[class*='clavepro']").text();
             cant  = $(this).find("input[class*='cant']").val();
             tipoprecio  = $(this).find("td[class*='tipo_precio']").attr('value');
-            preciop  = $(this).find("td[class*='precio_pro']").attr('value');
+            preciop  = $(this).find("td[class*='p_c']").attr('value');
 
             //declaramos un array para guardar estos datos
             item = {idp, clave, cant, tipoprecio, preciop};
@@ -2109,22 +2041,27 @@ $('#p-s-dom').click(function(){
 
         //Extras
         var DATA2 = [];
-
-        $('.t-ext tbody tr').each(function(){
-
-            claveextra  = $(this).find("td[class*='text-clave']").text();
-            contenido  = $(this).find("td[class*='text-contenido']").text();
+        
+            claveextra  = $('.text-clave').text();
+            contenido  = $('#tdextra').text();
             extra = {claveextra, contenido};
-
             DATA2.push(extra);
-        })
-
-        nExtra = JSON.stringify(DATA2);
+            nExtra = JSON.stringify(DATA2);
 
         //convertiremos el array en json para evitar cualquier incidente con compativilidades.
         aInfo   = JSON.stringify(DATA);
-        cotizar = $('#inpEnvio').val();
+
+        //id del telefono
         id = $(this).attr('id');
+
+        //datos generales
+        cotizar = $('#inpEnvio').val();
+        formapago = $('#formapago').val();
+        msjeria = $('#pago').val();
+        r_extra = $('#add-extras-s').attr('data-id');
+        total = $('.total-ped').attr('data-pedido');
+
+        //Datos del formulario
         pais = $('#pais').val();
         estado = $('#estado').val();
         municipio = $('#municipio').val();
@@ -2134,11 +2071,8 @@ $('#p-s-dom').click(function(){
         delegacion = $('#delegacion').val();
         cp = $('#cp').val();
         tipodom = $('.d-domicilio').val();
-        formapago = $('#formapago').val();
-        msjeria = $('#pago').val();
         coment = $('#coment').val();
-        r_extra = $('#add-extras').attr('data-id');
-        total = $('.total-ped').attr('data-pedido');
+
 
        $.ajax({
             type: "POST", //metodo
@@ -2173,11 +2107,11 @@ $('#p-s-dom').click(function(){
 
         //recorremos cada TR para obtener el id del producto y el td de la cantidad
         $('.tcarrito tbody tr').each(function(){
-            idp = $(this).attr('id');
-            clave  = $(this).find("[class*='clave_pro']").attr('value');
+            idp = $(this).find("[class*='clavepro']").attr('data-id');
+            clave  = $(this).find("[class*='clavepro']").text();
             cant  = $(this).find("input[class*='cant']").val();
             tipoprecio  = $(this).find("td[class*='tipo_precio']").attr('value');
-            preciop  = $(this).find("td[class*='precio_pro']").attr('value');
+            preciop  = $(this).find("td[class*='p_c']").attr('value');
 
             //declaramos un array para guardar estos datos
             item = {idp, clave, cant, tipoprecio, preciop};
@@ -2188,56 +2122,40 @@ $('#p-s-dom').click(function(){
 
         //Extras
         var DATA2 = [];
-
-        $('.t-ext tbody tr').each(function(){
-
-            claveextra  = $(this).find("td[class*='text-clave']").text();
-            contenido  = $(this).find("td[class*='text-contenido']").text();
+        
+            claveextra  = $('.text-clave').text();
+            contenido  = $('#tdextra').text();
             extra = {claveextra, contenido};
-
             DATA2.push(extra);
-        })
-
-        nExtra = JSON.stringify(DATA2);
+            nExtra = JSON.stringify(DATA2);
 
         //convertiremos el array en json para evitar cualquier incidente con compativilidades.
         aInfo   = JSON.stringify(DATA);
 
         id = 0;
         //alert(id);
-        //obtenemos los valores de los campos del form
+
+        //datos generales
         cotizar = $('#inpEnvio').val();
-        //alert(cotizar);
-        pais = $('#pais').val();
-       // alert(pais);
-        estado = $('#estado').val();
-        //alert(estado);
-        municipio = $('#municipio').val();
-        //alert(municipio);
-        calle1 = $('#calle1').val();
-        //alert(calle1);
-        calle2 = $('#calle2').val();
-       // alert(calle1);
-        colonia = $('#colonia').val();
-       // alert(colonia);
-        delegacion = $('#delegacion').val();
-        //alert(delegacion);
-        cp = $('#cp').val();
-        //alert(cp);
-        tipodom = $('.d-domicilio').val();
-        //alert(tipodom);
-        tel = $('.requerido').val();
-        //alert(tel);
-        tipotel = $('.t-tipo').val();
-        //alert(tipotel);
         formapago = $('#formapago').val();
-        //alert(formapago);
         msjeria = $('#pago').val();
-        //alert(msjeria);
-        coment = $('#coment').val();
-        //alert(coment);
-        r_extra = $('#add-extras').attr('data-id');
+        r_extra = $('#add-extras-s').attr('data-id');
         total = $('.total-ped').attr('data-pedido');
+
+        //Datos del formulario
+        pais = $('#pais').val();
+        estado = $('#estado').val();
+        municipio = $('#municipio').val();
+        calle1 = $('#calle1').val();
+        calle2 = $('#calle2').val();
+        colonia = $('#colonia').val();
+        delegacion = $('#delegacion').val();
+        cp = $('#cp').val();
+        tipodom = $('.d-domicilio').val();
+        tel = $('.requerido').val();
+        tipotel = $('.t-tipo').val();
+        coment = $('#coment').val();
+
 
 
         $.ajax({
@@ -2253,8 +2171,6 @@ $('#p-s-dom').click(function(){
 
             success: function (iddom) {
 
-                //redirigimosa¿ al detalle del pedido y le pasamos el id del domi
-               // window.location.href = 'productos/datosdelpedido/' + iddom;
                enviaragente(iddom);
 
             },

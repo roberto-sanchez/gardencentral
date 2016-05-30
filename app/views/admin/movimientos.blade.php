@@ -127,7 +127,10 @@
 
                }, //end o
 
-                "aaSorting": [[ 2, "desc" ]], 
+                'iDisplayLength': 50,
+
+                "aaSorting": [[ 0, "asc" ], [ 2, "asc" ]], 
+
 
                 "sPaginationType": "simple_numbers",
                  "sPaginationType": "bootstrap",
@@ -145,7 +148,7 @@
                              tabla_a.fnAddData([
                                         p[i].clave,
                                         p[i].nombre,
-                                        '<span class="hidden">'+p[i].created_at+'</span>' + p[i].num_pedimento,
+                                        p[i].num_pedimento,
                                         '<div class="cantidades">'+
                                           '<div class="actual-anterior">'+
                                             //'<h4 class="text-info txt-ac-ant">Actual</h4>'+
