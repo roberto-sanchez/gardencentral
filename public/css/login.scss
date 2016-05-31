@@ -171,7 +171,15 @@ body {
               display:flex;
               flex-direction:column;
               justify-content:space-between;
+                .formRfc, .formName{
+                  width:100%;
+                }
+
                 .formLast, .formMat{
+                  width:100%;
+                }
+
+                .formUser, .formEmail{
                   width:100%;
                 }
 
@@ -314,7 +322,15 @@ margin:0;
             padding:0 1em;
             .ap{
               flex-direction:row;
+              .formRfc, .formName{
+                  width:47%;
+                }
+
                 .formLast, .formMat{
+                  width:47%;
+                }
+
+                .formUser, .formEmail{
                   width:47%;
                 }
 

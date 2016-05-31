@@ -78,17 +78,19 @@
                * de apertura esta con html...  :(
                -->
               <form id="formulario_registros" role="form" action="users/create" method="post">
-              <div class="none form-group formRfc has-feedback">
-                   {{ Form::label('RFC') }}
-                   {{ Form::text('rfc',null, array('class' => 'form-control', 'placeholder' => 'RFC (13 caracteres)', 'id' => 'formRfc')) }}
-                   <span class=" spanRfc help-block" ></span>
-                   <span class=" spanRfcText" ></span>
-                 </div>
-                 <div class="none form-group formName has-feedback">
-                   {{ Form::label('Nombre') }}
-                   {{ Form::text('name',null, array('class' => 'form-control', 'placeholder' => 'Nombre', 'id' => 'formName')) }}
-                   <span class=" spanName help-block" ></span>
-                 </div>                  <hr class="hr">
+                 <div class="ap">
+                   <div class="none form-group formRfc has-feedback">
+                     {{ Form::label('RFC') }}
+                     {{ Form::text('rfc',null, array('class' => 'form-control', 'placeholder' => 'RFC (13 caracteres)', 'id' => 'formRfc')) }}
+                     <span class=" spanRfc help-block" ></span>
+                     <span class=" spanRfcText" ></span>
+                   </div>
+                   <div class="none form-group formName has-feedback">
+                     {{ Form::label('Nombre') }}
+                     {{ Form::text('name',null, array('class' => 'form-control', 'placeholder' => 'Nombre', 'id' => 'formName')) }}
+                     <span class=" spanName help-block" ></span>
+                   </div>   
+                </div>               <hr class="hr">
                  <div class="ap">
                    <div class="none form-group formLast has-feedback">
                      {{ Form::label('Apellido Paterno') }}
@@ -102,19 +104,21 @@
                      <span class=" spanMatText" ></span>
                    </div>
                  </div>
-                 <div class="none form-group formUser has-feedback">
-                   {{ Form::label('Usuario') }}
-                   {{ Form::text('username',null, array('class' => 'form-control', 'placeholder' => 'Usuario', 'id' => 'formUser')) }}
-                   <span class=" spanUser help-block" ></span>
-                   <span class=" spanUserText" ></span>
-                    <span class="user-v" id="msgUsuario"></span>
-                 </div>
-                 <div class="none form-group formEmail has-feedback">
-                   {{ Form::label('Email') }}
-                   {{ Form::text('email',null, array('class' => 'form-control', 'placeholder' => 'ejemplo@dominio.com', 'id' => 'formEmail')) }}
-                   <span class=" spanEmail help-block" ></span>
-                   <span class=" spanEmailText" ></span>
-                   <span class="email-v" id="msgEmail"></span>
+                 <div class="ap">
+                   <div class="none form-group formUser has-feedback">
+                     {{ Form::label('Usuario') }}
+                     {{ Form::text('username',null, array('class' => 'form-control', 'placeholder' => 'Usuario', 'id' => 'formUser')) }}
+                     <span class=" spanUser help-block" ></span>
+                     <span class=" spanUserText" ></span>
+                      <span class="user-v" id="msgUsuario"></span>
+                   </div>
+                   <div class="none form-group formEmail has-feedback">
+                     {{ Form::label('Email') }}
+                     {{ Form::text('email',null, array('class' => 'form-control', 'placeholder' => 'ejemplo@dominio.com', 'id' => 'formEmail')) }}
+                     <span class=" spanEmail help-block" ></span>
+                     <span class=" spanEmailText" ></span>
+                     <span class="email-v" id="msgEmail"></span>
+                   </div>
                  </div>
                  <hr class="hr">
                    <div class="radio">
