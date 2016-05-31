@@ -2,11 +2,13 @@
 <html lang="es">
 <head>
     <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @yield('title')
     <meta name="description" content="">
-    @section('scripts')
-       @include('layouts/inc/head_common')
-       @include('layouts/inc/footer_common')
+    @section('scripts') 
+      @include('layouts/inc/head_common')
+      @include('layouts/inc/footer_common')
     @show
     <script>
         $(document).ready(function(){
@@ -22,6 +24,7 @@
       .contenedor-img-detalle{
         text-align: center;
        }
+
     </style>
   </head>
 

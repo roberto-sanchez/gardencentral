@@ -218,6 +218,7 @@ public function listarproductoscategoria(){
         ->select('producto.id', 'nombre', 'color', 'foto', 'iva0', 'cantidad', 'precio', 'clave', 'tipo')
         ->where('categoria_id', $id)
         ->where('tipo', 1)
+        ->where('producto.estatus', 1)
         ->where('producto_precio.estatus', 1)
         ->get();
 
@@ -231,6 +232,7 @@ public function listarproductoscategoria(){
         ->where('categoria_id', $id)
         ->where('tipo', 2)
         ->where('producto.estatus', 1)
+        ->where('producto_precio.estatus', 1)
         ->get();
 
     } else if($nivel == 'Distribuidor'){
@@ -243,6 +245,7 @@ public function listarproductoscategoria(){
         ->where('categoria_id', $id)
         ->where('tipo', 3)
         ->where('producto.estatus', 1)
+        ->where('producto_precio.estatus', 1)
         ->get();
 
     }
@@ -325,29 +328,36 @@ public function getVerificaremail(){
 public function getProducto(){
     $id_user = Auth::user()->id;
     $clave = Input::get('clave');
+
     $nivel = DB::table('cliente')
             ->join('nivel_descuento', 'cliente.nivel_descuento_id', '=', 'nivel_descuento.id')
             ->select('descripcion')
             ->where('cliente.usuario_id', $id_user)
             ->pluck('descripcion');
+
     $p = DB::table('producto')
                 ->where('clave', $clave)
                 ->pluck('producto.id');
-    //verificamos que el producto este disponible ene l inventario
+
+    //verificamos que el producto este disponible en el inventario
     $inve = DB::table('inventario')
                 ->where('producto_id', $p)
                 ->pluck('id');
+
     if($inve == ""){
         $producto = array('indefinido' => 'vacio');
         return Response::json(array('producto' => $producto));
     } else {
         if($nivel == 'Retail'){
+
         $producto = DB::table('producto')
                 ->join('producto_precio', 'producto.id', '=', 'producto_precio.producto_id')
                 ->join('inventario', 'producto.id', '=', 'inventario.producto_id')
                 ->select('producto.id', 'nombre', 'color', 'foto', 'piezas_paquete', 'clave', 'precio', 'tipo', 'cantidad', 'iva0')
                 ->where('clave', $clave)
                 ->where('tipo', 1)
+                ->where('producto.estatus', 1)
+                ->where('producto_precio.estatus', 1)
                 ->get();
 
             return Response::json(array(
@@ -362,6 +372,8 @@ public function getProducto(){
                 ->select('producto.id', 'nombre', 'color', 'foto', 'piezas_paquete', 'clave', 'precio', 'tipo', 'cantidad', 'iva0')
                 ->where('clave', $clave)
                 ->where('tipo', 2)
+                ->where('producto.estatus', 1)
+                ->where('producto_precio.estatus', 1)
                 ->get();
 
             return Response::json(array(
@@ -375,6 +387,8 @@ public function getProducto(){
                 ->select('producto.id', 'nombre', 'color', 'foto', 'piezas_paquete', 'clave', 'precio', 'tipo', 'cantidad', 'iva0')
                 ->where('clave', $clave)
                 ->where('tipo', 3)
+                ->where('producto.estatus', 1)
+                ->where('producto_precio.estatus', 1)
                 ->get();
 
             return Response::json(array(

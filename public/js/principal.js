@@ -40,6 +40,8 @@ $(document).ready(function () {
 
                      },
 
+                      'iDisplayLength': 50,
+
                       "aaSorting": [[ 1, "desc" ]], 
 
                       "sPaginationType": "simple_numbers",
@@ -413,6 +415,10 @@ $(document).ready(function () {
                 data: {clave: $('#clave').val()},
                 success: function (prod) {
 
+                    if(prod.producto == ''){
+                      alertas('error',"El producto no se encuentra actualmente.");
+                    } else {
+
                     ver = prod.producto.indefinido;
                     if(ver === 'vacio'){
                         alertas('error',"El producto no existe.");
@@ -447,6 +453,8 @@ $(document).ready(function () {
        
                            
                     }
+                    }
+
 
                 },
                 

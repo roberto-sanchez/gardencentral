@@ -60,7 +60,6 @@ $(document).on('change', '#select-producto-categoria', function(){
         },
 
 		success: function(p){
-
 			if(p.producto== 0){
 				$('.img-espera').hide();
 				$('.div-seleccione-categoria').hide();

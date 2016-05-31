@@ -2577,7 +2577,7 @@ public function listarprecioseditar(){
 
 	$p_d = DB::table('producto_precio')
 			->where('producto_id', '=', $id)
-	 	->get();
+	 	    ->get();
 
 
 	return Response::json(array(
@@ -2644,22 +2644,81 @@ public function actualizarproductoprecio(){
 	$fecha_fin = Input::get('fecha_fin');
 	$activo = Input::get('activo');
 
-	$p = PrecioProducto::find($id_precio);
-	$p->producto_id = $id_producto;
-	$p->precio = $precio;
-	$p->tipo = $tipo_precio;
-	$p->moneda = $moneda;
-	$p->fecha_inicio = $fecha_inicio;
-	$p->fecha_fin = $fecha_fin;
-	$p->estatus = $activo;
-	$p->save();
+	$comprobaranterior = DB::table('producto_precio')
+					->where('producto_id', $id_producto)
+					->where('tipo', $tipo_precio)
+					->where('estatus', $activo)
+					->OrderBy('created_at', 'asc')
+					->first();
 
-	//retornamos
-	$pro = DB::table('producto_precio')
-		      ->where('id', $p['id'])
-			  ->first();
+	if(count($comprobaranterior) == 0){
 
-	 return Response::json($pro);
+		$p = PrecioProducto::find($id_precio);
+		$p->producto_id = $id_producto;
+		$p->precio = $precio;
+		$p->tipo = $tipo_precio;
+		$p->moneda = $moneda;
+		$p->fecha_inicio = $fecha_inicio;
+		$p->fecha_fin = $fecha_fin;
+		$p->estatus = $activo;
+		$p->save();
+
+		$x = 0;
+		//retornamos
+		$pro = DB::table('producto_precio')
+			      ->where('id', $p['id'])
+				  ->first();
+
+		 return Response::json(array(
+		 	'x' => $x,
+		 	'pro' => $pro
+		 	));
+
+	} else {
+
+		$precioanterior = DB::table('producto_precio')
+					->where('producto_id', $id_producto)
+					->where('tipo', $tipo_precio)
+					->where('estatus', $activo)
+					->OrderBy('created_at', 'asc')
+					->pluck('id');
+
+	    $pa = PrecioProducto::find($precioanterior);
+		$pa->estatus = 0;
+		$pa->save();
+
+		$p = PrecioProducto::find($id_precio);
+		$p->producto_id = $id_producto;
+		$p->precio = $precio;
+		$p->tipo = $tipo_precio;
+		$p->moneda = $moneda;
+		$p->fecha_inicio = $fecha_inicio;
+		$p->fecha_fin = $fecha_fin;
+		$p->estatus = $activo;
+		$p->save();
+
+		//retornamos
+
+		$x = 1;
+
+		//estatus cambiado
+		$pro_a = DB::table('producto_precio')
+			      ->where('id', $precioanterior)
+				  ->first();
+
+		//actualizado
+		$pro = DB::table('producto_precio')
+			      ->where('id', $p['id'])
+				  ->first();
+
+		 return Response::json(array(
+		 	     'x' => $x,
+		 	     'pro' => $pro,
+		 	     'pro_a' => $pro_a
+		 	     ));
+		
+	}
+
 }
 
 public function actualizarestatusprecio(){

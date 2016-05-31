@@ -164,23 +164,6 @@
                                       ]);
 
 
-                              /*  $.ajax({
-                                    type: "GET",
-                                    url: "/movimientos/verm",
-                                    data: {id: id},
-                                    success: function( e ){
-                                          console.log(e);
-                                          if(e.n == 0){ 
-                                              console.log('No hay movimientos');
-                                          } else {
-                                            console.log('Si hay movimientos');
-                                            
-                                          }
- 
-                                         }
-
-                                 });*/
-
                               } //End for
 
 

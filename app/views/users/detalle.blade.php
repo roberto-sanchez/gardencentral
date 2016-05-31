@@ -1,12 +1,15 @@
 @extends('layouts/principal')
 
 @section('title')
-<title>Garden Central</title>
-@show
+<title>Detalle del pedido</title>
+@stop
 
 @section('scripts')
-@parent
-{{ HTML::style('css/select2.min.css') }}
+{{ HTML::style('css/bootstrap.min.css') }}
+{{ HTML::style('css/estilosGlobales.css') }}
+
+{{ HTML::script('js/jquery.js') }}
+{{ HTML::script('js/bootstrap.min.js') }}
 <style>
 
   .notas_a{

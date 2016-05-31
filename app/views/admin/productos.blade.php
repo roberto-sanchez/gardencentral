@@ -668,6 +668,7 @@
 
               <button id="cancelar-precio-producto" type="button" class="btn btn-danger confirm boton-add-p" data-dismiss="modal">Cancelar</button>
               <span id="save-precio-producto" class="btn btn-primary confirm boton-add-p" data-dismiss="modal" >Agregar</span>
+              <span id="save-edit-precio-producto" class="btn btn-primary confirm boton-add-p" data-dismiss="modal" >Agregar</span>
           </div>
         </div>
       </div>
@@ -954,8 +955,11 @@
 
     });
 
-
+    
     $(document).on('click', '#add-producto', function(){
+
+    $('#save-precio-producto').show();
+    $('#save-edit-precio-producto').hide();
 
       $('#agregarproducto').modal({
         show:'false',
@@ -1176,7 +1180,7 @@ $(document).on('click', '#save-precio-producto', function(){
 
     body = $('#body-precio-detalle');
       
-      nueva_fila = '<tr id="fila_'+precio+'_'+tipo_precio+'_'+moneda+'_'+fecha_inicio+'_'+fecha_fin+'">'+
+      nueva_fila = '<tr id="fila_'+precio+'_'+tipo_precio+'_'+fecha_inicio+'_'+fecha_fin+'">'+
                         '<td class="td_precio" data-valor="'+tipo_precio+activo+'" value="'+precio+'">'+accounting.formatMoney(precio)+'</td>'+
                         '<td class="td_tipo_precio" value="'+tipo_precio+'">'+nombre_tipo_precio+'</td>'+
                         '<td class="td_moneda" value="'+moneda+'">'+nombre_moneda+'</td>'+
@@ -1184,7 +1188,7 @@ $(document).on('click', '#save-precio-producto', function(){
                         '<td class="td_fecha_fin" value="'+fecha_fin+'">'+fecha_fin+'</td>'+
                         '<td class="'+tipo_precio+activo+' td_estatus" value="'+activo+'">'+activo_nombre+'</td>'+
                       '<td>'+
-                        '<button class="btn btn-sm btn-danger eliminar-btn-detalle" value="'+precio+'_'+tipo_precio+'_'+moneda+'_'+fecha_inicio+'_'+fecha_fin+'" title="Eliminar">'+
+                        '<button class="btn btn-sm btn-danger eliminar-btn-detalle" value="'+precio+'_'+tipo_precio+'_'+fecha_inicio+'_'+fecha_fin+'" title="Eliminar">'+
                                     '<span class="glyphicon glyphicon-remove"></span>'+
                             '</button>'+
                       '</td>'+
@@ -1199,7 +1203,7 @@ $(document).on('click', '#save-precio-producto', function(){
     $('#moneda').prop('selectedIndex',0);
     $('#fechainicio').val('');
     $('#fechafin').val('');
-     $('#inp-estatus-precio').bootstrapToggle('on');
+    $('#inp-estatus-precio').bootstrapToggle('on');
 
 });
 
@@ -1326,9 +1330,9 @@ $(document).on('click', '#cancelar-precio-producto', function(){
       }
 
     if($('#inp-iva').prop("checked") == true){
-           $("#valor-inp-iva").val(1);
-      } else {
           $("#valor-inp-iva").val(0);
+      } else {
+          $("#valor-inp-iva").val(1);
       }
       
     tabla_a = $('#list_p_ tbody');
@@ -1660,9 +1664,11 @@ $(document).on('click', '#cancelar-precio-producto', function(){
 
 //Editar producto
 $(document).on('click', '.editar-n', function(){
-    id = $(this).attr('value');
 
-    $('#save-precio-producto').addClass('save-precio-producto');
+    $('#save-precio-producto').hide();
+    $('#save-edit-precio-producto').show();
+
+    id = $(this).attr('value');
     
     $('#agregarproductoedit').modal({
       show:'false',
@@ -1861,6 +1867,7 @@ $(document).on('click', '.editar-n', function(){
                 type: "GET",
                 data:{id: id},
                 success: function(p){
+
                   if(p.p_d == ''){
                   
                 } else {
@@ -1872,7 +1879,7 @@ $(document).on('click', '.editar-n', function(){
                                         
 
                   fila += '<tr class="tr_actual" id="fila_edit_'+p.p_d[datos].id+'">'+
-                    '<td class="td_precio_actual" value="'+p.p_d[datos].precio+'">'+accounting.formatMoney(p.p_d[datos].precio)+'</td>'+
+                    '<td class="td_precio_actual" data-id="'+p.p_d[datos].id+'" data-valor="'+p.p_d[datos].tipo+p.p_d[datos].estatus+'" value="'+p.p_d[datos].precio+'">'+accounting.formatMoney(p.p_d[datos].precio)+'</td>'+
                     '<td class="td_tipo_precio_actual tipo_'+p.p_d[datos].tipo+'" value="'+p.p_d[datos].tipo+'"></td>'+
                     '<td class="td_moneda_actual" value="'+p.p_d[datos].moneda+'">'+p.p_d[datos].moneda+'</td>'+
                     '<td class="td_fecha_inicio_actual" value="'+p.p_d[datos].fecha_inicio+'">'+p.p_d[datos].fecha_inicio+'</td>'+
@@ -1956,8 +1963,6 @@ $(document).on('click', '.editar-n', function(){
         $('#body-precio-detalle-edit').html('');
         $('#body-precio-detalle').html('');
 
-        $('#save-precio-producto').removeClass('save-precio-producto');
-
         $('#unidad-edit').html('');
         $('#importador-edit').html('');
         $('#almacen-edit').html('');
@@ -2008,7 +2013,7 @@ $(document).on('click', '.editar-n', function(){
 //Agregar nuevo precio al editar producto
   $(document).on('click', '#ad-nuevo-precio-edit', function(){
     id_p = $(this).attr('value');
-    $('#save-precio-producto').attr('data-id', id_p);
+    $('#save-edit-precio-producto').attr('data-id', id_p);
 
     $('#agregarprecio').modal({
         show:'false',
@@ -2021,7 +2026,7 @@ $(document).on('click', '.editar-n', function(){
 
 });
 
-$(document).on('click', '.save-precio-producto', function(){
+$(document).on('click', '#save-edit-precio-producto', function(){
     //valores
     id = $(this).attr('data-id');
     precio = $('#precio-producto').val();
@@ -2036,17 +2041,18 @@ $(document).on('click', '.save-precio-producto', function(){
           activo = 0;
       }
 
-     /* $('.tabla_detallepro tbody tr').each(function(){
+      $('.tabla_detallepro tbody tr').each(function(){
 
             existe = $(this).find("[class*='td_precio_actual']").attr('data-valor');
 
             if(existe == tipo_precio+activo){
-              id = $('.td_precio_actual').attr('data-id');
-              actualizarestatus(id);
+              idprecioantiguo = $('.td_precio_actual').attr('data-id');
+              actualizarestatus(idprecioantiguo);
             } else {
+
             }
 
-      })*/
+      })
 
 
       $.ajax({
@@ -2081,6 +2087,14 @@ $(document).on('click', '.save-precio-producto', function(){
                 $('.tipo_1').text('Retail');
                 $('.tipo_2').text('Mayorista');
                 $('.tipo_3').text('Distribuidor');
+
+                    //Limpiamos
+              $('#precio-producto').val('');
+              $('#tipo-precio').prop('selectedIndex',0);
+              $('#moneda').prop('selectedIndex',0);
+              $('#fechainicio').val('');
+              $('#fechafin').val('');
+              $('#inp-estatus-precio').bootstrapToggle('on');
                 
                 
                 },
@@ -2250,16 +2264,45 @@ $(document).on('click', '#save-precio-producto-edit', function(){
              data:{id_precio: id_precio, id_producto: id_producto, precio: precio, tipo_precio: tipo_precio, moneda: moneda, fecha_inicio: fecha_inicio, fecha_fin: fecha_fin, activo: activo},
               success: function(d){
 
-                        $('#fila_edit_'+d.id).replaceWith('<tr class="tr_actual" id="fila_edit_'+d.id+'">'+
-                            '<td class="td_precio_actual" value="'+d.precio+'">'+accounting.formatMoney(d.precio)+'</td>'+
-                            '<td class="td_tipo_precio_actual tipo_'+d.tipo+'" value="'+d.tipo+'"></td>'+
-                            '<td class="td_moneda_actual" value="'+d.moneda+'">'+d.moneda+'</td>'+
-                            '<td class="td_fecha_inicio_actual" value="'+d.fecha_inicio+'">'+d.fecha_inicio+'</td>'+
-                            '<td class="td_fecha_fin_actual" value="'+d.fecha_fin+'">'+d.fecha_fin+'</td>'+
-                            '<td id="esta_'+d.id+'" class="td_estatus_actual estatus_'+d.estatus+'" value="'+d.estatus+'"></td>'+
-                            '<td><span class="editar-d-a btn btn-sm btn-info" title="Editar" value="'+d.id+'"><span class="glyphicon glyphicon-edit"></span></span></td>'+
-                            '<td><span class="quitar-d-a btn btn-sm btn-danger" title="Eliminar" value="'+d.id+'"><span class="glyphicon glyphicon-remove"></span></span></td>'+
+                    if(d.x == 0){
+
+                        $('#fila_edit_'+d.pro.id).replaceWith('<tr class="tr_actual" id="fila_edit_'+d.pro.id+'">'+
+                            '<td class="td_precio_actual" data-id="'+d.pro.id+'" data-valor="'+d.pro.tipo+d.pro.estatus+'" value="'+d.pro.precio+'">'+accounting.formatMoney(d.pro.precio)+'</td>'+
+                            '<td class="td_tipo_precio_actual tipo_'+d.pro.tipo+'" value="'+d.pro.tipo+'"></td>'+
+                            '<td class="td_moneda_actual" value="'+d.pro.moneda+'">'+d.pro.moneda+'</td>'+
+                            '<td class="td_fecha_inicio_actual" value="'+d.pro.fecha_inicio+'">'+d.pro.fecha_inicio+'</td>'+
+                            '<td class="td_fecha_fin_actual" value="'+d.pro.fecha_fin+'">'+d.pro.fecha_fin+'</td>'+
+                            '<td id="esta_'+d.pro.id+'" class="td_estatus_actual estatus_'+d.pro.estatus+'" value="'+d.pro.estatus+'"></td>'+
+                            '<td><span class="editar-d-a btn btn-sm btn-info" title="Editar" value="'+d.pro.id+'"><span class="glyphicon glyphicon-edit"></span></span></td>'+
+                            '<td><span class="quitar-d-a btn btn-sm btn-danger" title="Eliminar" value="'+d.pro.id+'"><span class="glyphicon glyphicon-remove"></span></span></td>'+
                        '</tr>');
+
+                    } else {
+
+                        $('#fila_edit_'+d.pro_a.id).replaceWith('<tr class="tr_actual" id="fila_edit_'+d.pro_a.id+'">'+
+                            '<td class="td_precio_actual" data-id="'+d.pro_a.id+'" data-valor="'+d.pro_a.tipo+d.pro_a.estatus+'" value="'+d.pro_a.precio+'">'+accounting.formatMoney(d.pro_a.precio)+'</td>'+
+                            '<td class="td_tipo_precio_actual tipo_'+d.pro_a.tipo+'" value="'+d.pro_a.tipo+'"></td>'+
+                            '<td class="td_moneda_actual" value="'+d.pro_a.moneda+'">'+d.pro_a.moneda+'</td>'+
+                            '<td class="td_fecha_inicio_actual" value="'+d.pro_a.fecha_inicio+'">'+d.pro_a.fecha_inicio+'</td>'+
+                            '<td class="td_fecha_fin_actual" value="'+d.pro_a.fecha_fin+'">'+d.pro_a.fecha_fin+'</td>'+
+                            '<td id="esta_'+d.pro_a.id+'" class="td_estatus_actual estatus_'+d.pro_a.estatus+'" value="'+d.pro_a.estatus+'"></td>'+
+                            '<td><span class="editar-d-a btn btn-sm btn-info" title="Editar" value="'+d.pro_a.id+'"><span class="glyphicon glyphicon-edit"></span></span></td>'+
+                            '<td><span class="quitar-d-a btn btn-sm btn-danger" title="Eliminar" value="'+d.pro_a.id+'"><span class="glyphicon glyphicon-remove"></span></span></td>'+
+                       '</tr>');
+
+                        $('#fila_edit_'+d.pro.id).replaceWith('<tr class="tr_actual" id="fila_edit_'+d.pro.id+'">'+
+                            '<td class="td_precio_actual" data-id="'+d.pro.id+'" data-valor="'+d.pro.tipo+d.pro.estatus+'" value="'+d.pro.precio+'">'+accounting.formatMoney(d.pro.precio)+'</td>'+
+                            '<td class="td_tipo_precio_actual tipo_'+d.pro.tipo+'" value="'+d.pro.tipo+'"></td>'+
+                            '<td class="td_moneda_actual" value="'+d.pro.moneda+'">'+d.pro.moneda+'</td>'+
+                            '<td class="td_fecha_inicio_actual" value="'+d.pro.fecha_inicio+'">'+d.pro.fecha_inicio+'</td>'+
+                            '<td class="td_fecha_fin_actual" value="'+d.pro.fecha_fin+'">'+d.pro.fecha_fin+'</td>'+
+                            '<td id="esta_'+d.pro.id+'" class="td_estatus_actual estatus_'+d.pro.estatus+'" value="'+d.pro.estatus+'"></td>'+
+                            '<td><span class="editar-d-a btn btn-sm btn-info" title="Editar" value="'+d.pro.id+'"><span class="glyphicon glyphicon-edit"></span></span></td>'+
+                            '<td><span class="quitar-d-a btn btn-sm btn-danger" title="Eliminar" value="'+d.pro.id+'"><span class="glyphicon glyphicon-remove"></span></span></td>'+
+                       '</tr>');
+                      
+                    }
+
 
 
                       $('.estatus_0').text('Inactivo');
@@ -2296,10 +2339,12 @@ function actualizarestatus(id){
                 type: "GET",
                data:{id: id},
               success: function(d){
-
+                    console.log(d);
                     $('#esta_'+d).attr('value', 0);
-                    $('#esta_'+d).text('');
-                    $('#esta_'+d).removeClass('text-primary');;
+                    $('#esta_'+d).removeClass('text-primary');
+                    $('#esta_'+d).removeClass('estatus_1');
+                    $('#esta_'+d).addClass('estatus_0');
+                    $('#esta_'+d).text('Inactivo');
                     $('#esta_'+d).addClass('text-warning');
 
                 
@@ -2392,9 +2437,9 @@ $(document).on('click', '#save-producto-edit', function(){
       }
 
     if($('#inp-iva-edit').prop("checked") == true){
-           $("#valor-inp-iva-edit").val(1);
-      } else {
           $("#valor-inp-iva-edit").val(0);
+      } else {
+          $("#valor-inp-iva-edit").val(1);
       }
       
     
@@ -2931,7 +2976,7 @@ $(document).on('click', '#cancelar-productos-duplicados', function(){
      bolveralistar();
 
      //eliminamos todos los regitros mostrados
-    eliminartodoslosregitros() 
+    eliminartodoslosregitros(); 
 
     //limpiamos
     $('#contenedor-duplicados-producto').html('');
@@ -2956,7 +3001,7 @@ $(document).on('click', '#salir-modal', function(){
      bolveralistar();
 
      //eliminamos todos los regitros mostrados
-     eliminartodoslosregitros()
+     eliminartodoslosregitros();
 
          //limpiamos
     $('#contenedor-duplicados-producto').html('');
@@ -3164,6 +3209,7 @@ function bolveralistar(){
         $('.estatus_0').addClass('text-danger');
         $('.estatus_1').text('Activo');
         $('.estatus_1').addClass('text-success');
+
       });        
 
 

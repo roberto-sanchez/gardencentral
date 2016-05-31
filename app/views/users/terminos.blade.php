@@ -1,11 +1,15 @@
 @extends('layouts/principal')
 
 @section('title')
-<title>Garden Central</title>
-@show
+<title>Términos y condiciones</title>
+@stop
 
 @section('scripts')
-@parent
+{{ HTML::style('css/bootstrap.min.css') }}
+{{ HTML::style('css/estilosGlobales.css') }}
+
+{{ HTML::script('js/jquery.js') }}
+{{ HTML::script('js/bootstrap.min.js') }}
 <style>
 
 	.navbar-nav{
