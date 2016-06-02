@@ -1315,7 +1315,6 @@ class AdminController extends \BaseController {
 
 	public function listarp(){
 		$p = DB::table('usuario')
-		//->orderBy('id', 'desc')
 		->get();
 
 		echo json_encode($p);
@@ -2605,23 +2604,66 @@ public function agregarprecioaleditar(){
 	$fecha_fin = Input::get('fecha_fin');
 	$activo = Input::get('activo');
 
-	$p = new PrecioProducto;
-	$p->producto_id = $id;
-	$p->precio = $precio;
-	$p->tipo = $tipo_precio;
-	$p->moneda = $moneda;
-	$p->fecha_inicio = $fecha_inicio;
-	$p->fecha_fin = $fecha_fin;
-	$p->estatus = $activo;
-	$p->save();
+	$p_precio = DB::table('producto_precio')
+			->where('producto_id', $id)
+			->where('tipo', $tipo_precio)
+			->where('estatus', $activo)
+			->get();
 
-	//retornamos
-	$p_n = DB::table('producto_precio')
-		      ->where('id', $p['id'])
-			  ->first();
+		if(count($p_precio) == 0){
 
-	 return Response::json($p_n);
+			//agregamos el nuevo precio
+				$p = new PrecioProducto;
+				$p->producto_id = $id;
+				$p->precio = $precio;
+				$p->tipo = $tipo_precio;
+				$p->moneda = $moneda;
+				$p->fecha_inicio = $fecha_inicio;
+				$p->fecha_fin = $fecha_fin;
+				$p->estatus = $activo;
+				$p->save();
+
+
+		} else {
+
+			$p_precio_anterior_id = DB::table('producto_precio')
+				->where('producto_id', $id)
+				->where('tipo', $tipo_precio)
+				->where('estatus', $activo)
+				->pluck('id');
+
+			//le cambiamos el estatus al precio anterior
+			$p_precio_anterior = PrecioProducto::find($p_precio_anterior_id);
+			$p_precio_anterior->estatus = 0;
+			$p_precio_anterior->save();
+
+			//agregamos el nuevo precio
+			$p = new PrecioProducto;
+			$p->producto_id = $id;
+			$p->precio = $precio;
+			$p->tipo = $tipo_precio;
+			$p->moneda = $moneda;
+			$p->fecha_inicio = $fecha_inicio;
+			$p->fecha_fin = $fecha_fin;
+			$p->estatus = $activo;
+			$p->save();
+
+
+		}
+
+		    $p_d = DB::table('producto_precio')
+			->where('producto_id', '=', $id)
+	 	    ->get();
+
+
+	return Response::json(array(
+		  'p_d' => $p_d,
+	 ));
+
+
 }
+
+
 
 public function listarpreciosedit(){
 	$id_producto_precio = Input::get('id_producto_precio');
@@ -3172,31 +3214,954 @@ public function agregarproductosarchivo(){
 
 				           		 	if(count($comprobar_producto) >= 1){
 
-				           		 	 $p = new Producto2;
-						             $p->id = Input::get('id');
-						             $p->linea = $linea_num;
-								     $p->clave = $clave;
-									 $p->numero_articulo = $articulo;
-									 $p->nombre = $nombre;
-									 $p->ean_code = $eancode;
-									 $p->color = $color;
-									 $p->numero_color = $ncolor;
-									 $p->unidad_medida_id = $uni;
-									 $p->piezas_paquete = $piezas_paquete;
-									 $p->dimensiones = $dimensiones;
-									 $p->piezas_pallet = $piezas_pallet;
-									 $p->total_piezas = $total_piezas;
-									 $p->foto = $foto;
-									 $p->importador_id = $im;
-									 $p->almacen_id = $alm;
-									 $p->familia_id = $fam;
-									 $p->categoria_id = $cat;
-									 $p->iva0 = $iv;
-									 $p->cantidad_minima = $cantidadminima;
-									 $p->estatus_web = $estatus_web;
-									 $p->estatus = $estatus;
-									 $p->clave_repetida = 'claverepetita';
-									 $p->save();
+									 if($articulo == ''){
+
+					           		 	 $p = new Producto2;
+							             $p->id = Input::get('id');
+							             $p->linea = $linea_num;
+									     $p->clave = $clave;
+										 $p->numero_articulo = 'vacio';
+										 $p->nombre = $nombre;
+										 $p->ean_code = $eancode;
+										 $p->color = $color;
+										 $p->numero_color = $ncolor;
+										 $p->unidad_medida_id = $uni;
+										 $p->piezas_paquete = $piezas_paquete;
+										 $p->dimensiones = $dimensiones;
+										 $p->piezas_pallet = $piezas_pallet;
+										 $p->total_piezas = $total_piezas;
+										 $p->foto = $foto;
+										 $p->importador_id = $im;
+										 $p->almacen_id = $alm;
+										 $p->familia_id = $fam;
+										 $p->categoria_id = $cat;
+										 $p->iva0 = $iv;
+										 $p->cantidad_minima = $cantidadminima;
+										 $p->estatus_web = $estatus_web;
+										 $p->estatus = $estatus;
+										 $p->save();
+
+				           		 		} else {
+
+				           		 			//comprobar que el nombre no este vacio
+				           		 		  if($nombre == ''){
+
+					           		 		 $p = new Producto2;
+								             $p->id = Input::get('id');
+								             $p->linea = $linea_num;
+										     $p->clave = $clave;
+											 $p->numero_articulo = $articulo;
+											 $p->nombre = 'vacio';
+											 $p->ean_code = $eancode;
+											 $p->color = $color;
+											 $p->numero_color = $ncolor;
+											 $p->unidad_medida_id = $uni;
+											 $p->piezas_paquete = $piezas_paquete;
+											 $p->dimensiones = $dimensiones;
+											 $p->piezas_pallet = $piezas_pallet;
+											 $p->total_piezas = $total_piezas;
+											 $p->foto = $foto;
+											 $p->importador_id = $im;
+											 $p->almacen_id = $alm;
+											 $p->familia_id = $fam;
+											 $p->categoria_id = $cat;
+											 $p->iva0 = $iv;
+											 $p->cantidad_minima = $cantidadminima;
+											 $p->estatus_web = $estatus_web;
+											 $p->estatus = $estatus;
+											 $p->save();
+
+				           		 			} else {
+
+				           		 				//comprobar que el eand code no este vacio
+				           		 				if($eancode == ''){
+
+				           		 				 $p = new Producto2;
+									             $p->id = Input::get('id');
+									             $p->linea = $linea_num;
+											     $p->clave = $clave;
+												 $p->numero_articulo = $articulo;
+												 $p->nombre = $nombre;
+												 $p->ean_code = 'vacio';
+												 $p->color = $color;
+												 $p->numero_color = $ncolor;
+												 $p->unidad_medida_id = $uni;
+												 $p->piezas_paquete = $piezas_paquete;
+												 $p->dimensiones = $dimensiones;
+												 $p->piezas_pallet = $piezas_pallet;
+												 $p->total_piezas = $total_piezas;
+												 $p->foto = $foto;
+												 $p->importador_id = $im;
+												 $p->almacen_id = $alm;
+												 $p->familia_id = $fam;
+												 $p->categoria_id = $cat;
+												 $p->iva0 = $iv;
+												 $p->cantidad_minima = $cantidadminima;
+												 $p->estatus_web = $estatus_web;
+												 $p->estatus = $estatus;
+												 $p->save();
+
+				           		 				} else {
+
+				           		 					//comprobar que el color no este vacio
+				           		 				   if($color == ''){
+
+					           		 				 $p = new Producto2;
+										             $p->id = Input::get('id');
+										             $p->linea = $linea_num;
+												     $p->clave = $clave;
+													 $p->numero_articulo = $articulo;
+													 $p->nombre = $nombre;
+													 $p->ean_code = $eancode;
+													 $p->color = 'vacio';
+													 $p->numero_color = $ncolor;
+													 $p->unidad_medida_id = $uni;
+													 $p->piezas_paquete = $piezas_paquete;
+													 $p->dimensiones = $dimensiones;
+													 $p->piezas_pallet = $piezas_pallet;
+													 $p->total_piezas = $total_piezas;
+													 $p->foto = $foto;
+													 $p->importador_id = $im;
+													 $p->almacen_id = $alm;
+													 $p->familia_id = $fam;
+													 $p->categoria_id = $cat;
+													 $p->iva0 = $iv;
+													 $p->cantidad_minima = $cantidadminima;
+													 $p->estatus_web = $estatus_web;
+													 $p->estatus = $estatus;
+													 $p->save();
+
+				           		 					} else {
+
+				           		 						//comprobar numero de color
+				           		 						if($ncolor == ''){
+
+					           		 					 $p = new Producto2;
+											             $p->id = Input::get('id');
+											             $p->linea = $linea_num;
+													     $p->clave = $clave;
+														 $p->numero_articulo = $articulo;
+														 $p->nombre = $nombre;
+														 $p->ean_code = $eancode;
+														 $p->color = $color;
+														 $p->numero_color = 'vacio';
+														 $p->unidad_medida_id = $uni;
+														 $p->piezas_paquete = $piezas_paquete;
+														 $p->dimensiones = $dimensiones;
+														 $p->piezas_pallet = $piezas_pallet;
+														 $p->total_piezas = $total_piezas;
+														 $p->foto = $foto;
+														 $p->importador_id = $im;
+														 $p->almacen_id = $alm;
+														 $p->familia_id = $fam;
+														 $p->categoria_id = $cat;
+														 $p->iva0 = $iv;
+														 $p->cantidad_minima = $cantidadminima;
+														 $p->estatus_web = $estatus_web;
+														 $p->estatus = $estatus;
+														 $p->save();
+
+				           		 						} else {
+
+				           		 							//comprobar las piezas por paquete
+				           		 							if($piezas_paquete == ''){
+
+					           		 						 $p = new Producto2;
+												             $p->id = Input::get('id');
+												             $p->linea = $linea_num;
+														     $p->clave = $clave;
+															 $p->numero_articulo = $articulo;
+															 $p->nombre = $nombre;
+															 $p->ean_code = $eancode;
+															 $p->color = $color;
+															 $p->numero_color = $ncolor;
+															 $p->unidad_medida_id = $uni;
+															 $p->piezas_paquete = 'vacio';
+															 $p->dimensiones = $dimensiones;
+															 $p->piezas_pallet = $piezas_pallet;
+															 $p->total_piezas = $total_piezas;
+															 $p->foto = $foto;
+															 $p->importador_id = $im;
+															 $p->almacen_id = $alm;
+															 $p->familia_id = $fam;
+															 $p->categoria_id = $cat;
+															 $p->iva0 = $iv;
+															 $p->cantidad_minima = $cantidadminima;
+															 $p->estatus_web = $estatus_web;
+															 $p->estatus = $estatus;
+															 $p->save();
+
+				           		 							} else{
+
+				           		 								//comprobamos si las piezas por paquete es un numerp
+				           		 								if(!is_numeric($piezas_paquete)){
+
+					           		 							 $p = new Producto2;
+													             $p->id = Input::get('id');
+													             $p->linea = $linea_num;
+															     $p->clave = $clave;
+																 $p->numero_articulo = $articulo;
+																 $p->nombre = $nombre;
+																 $p->ean_code = $eancode;
+																 $p->color = $color;
+																 $p->numero_color = $ncolor;
+																 $p->unidad_medida_id = $uni;
+																 $p->piezas_paquete = 'nonumero';
+																 $p->dimensiones = $dimensiones;
+																 $p->piezas_pallet = $piezas_pallet;
+																 $p->total_piezas = $total_piezas;
+																 $p->foto = $foto;
+																 $p->importador_id = $im;
+																 $p->almacen_id = $alm;
+																 $p->familia_id = $fam;
+																 $p->categoria_id = $cat;
+																 $p->iva0 = $iv;
+																 $p->cantidad_minima = $cantidadminima;
+																 $p->estatus_web = $estatus_web;
+																 $p->estatus = $estatus;
+																 $p->save();
+
+				           		 								} else{
+
+				           		 								 //comprobamos las dimensiones
+				           		 								if($dimensiones == ''){
+
+					           		 							 $p = new Producto2;
+													             $p->id = Input::get('id');
+													             $p->linea = $linea_num;
+															     $p->clave = $clave;
+																 $p->numero_articulo = $articulo;
+																 $p->nombre = $nombre;
+																 $p->ean_code = $eancode;
+																 $p->color = $color;
+																 $p->numero_color = $ncolor;
+																 $p->unidad_medida_id = $uni;
+																 $p->piezas_paquete = $piezas_paquete;
+																 $p->dimensiones = 'vacio';
+																 $p->piezas_pallet = $piezas_pallet;
+																 $p->total_piezas = $total_piezas;
+																 $p->foto = $foto;
+																 $p->importador_id = $im;
+																 $p->almacen_id = $alm;
+																 $p->familia_id = $fam;
+																 $p->categoria_id = $cat;
+																 $p->iva0 = $iv;
+																 $p->cantidad_minima = $cantidadminima;
+																 $p->estatus_web = $estatus_web;
+																 $p->estatus = $estatus;
+																 $p->save();
+
+				           		 								} else {
+
+				           		 									//comprobamos las piezas pallet
+				           		 									if($piezas_pallet == ''){
+
+					           		 								 $p = new Producto2;
+														             $p->id = Input::get('id');
+														             $p->linea = $linea_num;
+																     $p->clave = $clave;
+																	 $p->numero_articulo = $articulo;
+																	 $p->nombre = $nombre;
+																	 $p->ean_code = $eancode;
+																	 $p->color = $color;
+																	 $p->numero_color = $ncolor;
+																	 $p->unidad_medida_id = $uni;
+																	 $p->piezas_paquete = $piezas_paquete;
+																	 $p->dimensiones = $dimensiones;
+																	 $p->piezas_pallet = 'vacio';
+																	 $p->total_piezas = $total_piezas;
+																	 $p->foto = $foto;
+																	 $p->importador_id = $im;
+																	 $p->almacen_id = $alm;
+																	 $p->familia_id = $fam;
+																	 $p->categoria_id = $cat;
+																	 $p->iva0 = $iv;
+																	 $p->cantidad_minima = $cantidadminima;
+																	 $p->estatus_web = $estatus_web;
+																	 $p->estatus = $estatus;
+																	 $p->save();
+
+				           		 									} else {
+
+				           		 										//comprobar total de piezas 
+				           		 										if($total_piezas == ''){
+
+					           		 									 $p = new Producto2;
+															             $p->id = Input::get('id');
+															             $p->linea = $linea_num;
+																	     $p->clave = $clave;
+																		 $p->numero_articulo = $articulo;
+																		 $p->nombre = $nombre;
+																		 $p->ean_code = $eancode;
+																		 $p->color = $color;
+																		 $p->numero_color = $ncolor;
+																		 $p->unidad_medida_id = $uni;
+																		 $p->piezas_paquete = $piezas_paquete;
+																		 $p->dimensiones = $dimensiones;
+																		 $p->piezas_pallet = $piezas_pallet;
+																		 $p->total_piezas = 'vacio';
+																		 $p->foto = $foto;
+																		 $p->importador_id = $im;
+																		 $p->almacen_id = $alm;
+																		 $p->familia_id = $fam;
+																		 $p->categoria_id = $cat;
+																		 $p->iva0 = $iv;
+																		 $p->cantidad_minima = $cantidadminima;
+																		 $p->estatus_web = $estatus_web;
+																		 $p->estatus = $estatus;
+																		 $p->save();
+
+				           		 										} else {
+
+				           		 											//comprobar foto
+				           		 											if($foto == ''){
+
+					           		 										 $p = new Producto2;
+																             $p->id = Input::get('id');
+																             $p->linea = $linea_num;
+																		     $p->clave = $clave;
+																			 $p->numero_articulo = $articulo;
+																			 $p->nombre = $nombre;
+																			 $p->ean_code = $eancode;
+																			 $p->color = $color;
+																			 $p->numero_color = $ncolor;
+																			 $p->unidad_medida_id = $uni;
+																			 $p->piezas_paquete = $piezas_paquete;
+																			 $p->dimensiones = $dimensiones;
+																			 $p->piezas_pallet = $piezas_pallet;
+																			 $p->total_piezas = $total_piezas;
+																			 $p->foto = 'vacio';
+																			 $p->importador_id = $im;
+																			 $p->almacen_id = $alm;
+																			 $p->familia_id = $fam;
+																			 $p->categoria_id = $cat;
+																			 $p->iva0 = $iv;
+																			 $p->cantidad_minima = $cantidadminima;
+																			 $p->estatus_web = $estatus_web;
+																			 $p->estatus = $estatus;
+																			 $p->save();
+
+				           		 											} else {
+
+				           		 												//comprobamos la cantidad minima
+				           		 												if(!is_numeric($cantidadminima)){
+
+					           		 											 $p = new Producto2;
+																	             $p->id = Input::get('id');
+																	             $p->linea = $linea_num;
+																			     $p->clave = $clave;
+																				 $p->numero_articulo = $articulo;
+																				 $p->nombre = $nombre;
+																				 $p->ean_code = $eancode;
+																				 $p->color = $color;
+																				 $p->numero_color = $ncolor;
+																				 $p->unidad_medida_id = $uni;
+																				 $p->piezas_paquete = $piezas_paquete;
+																				 $p->dimensiones = $dimensiones;
+																				 $p->piezas_pallet = $piezas_pallet;
+																				 $p->total_piezas = $total_piezas;
+																				 $p->foto = $foto;
+																				 $p->importador_id = $im;
+																				 $p->almacen_id = $alm;
+																				 $p->familia_id = $fam;
+																				 $p->categoria_id = $cat;
+																				 $p->iva0 = $iv;
+																				 $p->cantidad_minima = 'nonumero';
+																				 $p->estatus_web = $estatus_web;
+																				 $p->estatus = $estatus;
+																				 $p->save();
+
+				           		 												} else {
+
+				           		 													//comprobamos el estatus web
+				           		 													if(!is_numeric($estatus_web)){
+
+					           		 												 $p = new Producto2;
+																		             $p->id = Input::get('id');
+																		             $p->linea = $linea_num;
+																				     $p->clave = $clave;
+																					 $p->numero_articulo = $articulo;
+																					 $p->nombre = $nombre;
+																					 $p->ean_code = $eancode;
+																					 $p->color = $color;
+																					 $p->numero_color = $ncolor;
+																					 $p->unidad_medida_id = $uni;
+																					 $p->piezas_paquete = $piezas_paquete;
+																					 $p->dimensiones = $dimensiones;
+																					 $p->piezas_pallet = $piezas_pallet;
+																					 $p->total_piezas = $total_piezas;
+																					 $p->foto = $foto;
+																					 $p->importador_id = $im;
+																					 $p->almacen_id = $alm;
+																					 $p->familia_id = $fam;
+																					 $p->categoria_id = $cat;
+																					 $p->iva0 = $iv;
+																					 $p->cantidad_minima = $cantidadminima;
+																					 $p->estatus_web = 2;
+																					 $p->estatus = $estatus;
+																					 $p->save();
+
+				           		 													} else {
+
+				           		 													  if($estatus_web != '0' and $estatus_web!= '1'){
+
+					           		 													 $p = new Producto2;
+																			             $p->id = Input::get('id');
+																			             $p->linea = $linea_num;
+																					     $p->clave = $clave;
+																						 $p->numero_articulo = $articulo;
+																						 $p->nombre = $nombre;
+																						 $p->ean_code = $eancode;
+																						 $p->color = $color;
+																						 $p->numero_color = $ncolor;
+																						 $p->unidad_medida_id = $uni;
+																						 $p->piezas_paquete = $piezas_paquete;
+																						 $p->dimensiones = $dimensiones;
+																						 $p->piezas_pallet = $piezas_pallet;
+																						 $p->total_piezas = $total_piezas;
+																						 $p->foto = $foto;
+																						 $p->importador_id = $im;
+																						 $p->almacen_id = $alm;
+																						 $p->familia_id = $fam;
+																						 $p->categoria_id = $cat;
+																						 $p->iva0 = $iv;
+																						 $p->cantidad_minima = $cantidadminima;
+																						 $p->estatus_web = 2;
+																						 $p->estatus = $estatus;
+																						 $p->save();
+
+				           		 														} else {
+
+				           		 															//validar el estatus
+				           		 															if(!is_numeric($estatus)){
+
+					           		 														 $p = new Producto2;
+																				             $p->id = Input::get('id');
+																				             $p->linea = $linea_num;
+																						     $p->clave = $clave;
+																							 $p->numero_articulo = $articulo;
+																							 $p->nombre = $nombre;
+																							 $p->ean_code = $eancode;
+																							 $p->color = $color;
+																							 $p->numero_color = $ncolor;
+																							 $p->unidad_medida_id = $uni;
+																							 $p->piezas_paquete = $piezas_paquete;
+																							 $p->dimensiones = $dimensiones;
+																							 $p->piezas_pallet = $piezas_pallet;
+																							 $p->total_piezas = $total_piezas;
+																							 $p->foto = $foto;
+																							 $p->importador_id = $im;
+																							 $p->almacen_id = $alm;
+																							 $p->familia_id = $fam;
+																							 $p->categoria_id = $cat;
+																							 $p->iva0 = $iv;
+																							 $p->cantidad_minima = $cantidadminima;
+																							 $p->estatus_web = $estatus_web;
+																							 $p->estatus = '2';
+																							 $p->save();
+
+				           		 															} else {
+
+				           		 															  if($estatus != '0' and $estatus != '1'){
+
+					           		 															 $p = new Producto2;
+																					             $p->id = Input::get('id');
+																					             $p->linea = $linea_num;
+																							     $p->clave = $clave;
+																								 $p->numero_articulo = $articulo;
+																								 $p->nombre = $nombre;
+																								 $p->ean_code = $eancode;
+																								 $p->color = $color;
+																								 $p->numero_color = $ncolor;
+																								 $p->unidad_medida_id = $uni;
+																								 $p->piezas_paquete = $piezas_paquete;
+																								 $p->dimensiones = $dimensiones;
+																								 $p->piezas_pallet = $piezas_pallet;
+																								 $p->total_piezas = $total_piezas;
+																								 $p->foto = $foto;
+																								 $p->importador_id = $im;
+																								 $p->almacen_id = $alm;
+																								 $p->familia_id = $fam;
+																								 $p->categoria_id = $cat;
+																								 $p->iva0 = $iv;
+																								 $p->cantidad_minima = $cantidadminima;
+																								 $p->estatus_web = $estatus_web;
+																								 $p->estatus = '2';
+																								 $p->save();
+
+				           		 																} else {
+
+				           		 																 $p = new Producto2;
+																					             $p->id = Input::get('id');
+																					             $p->linea = $linea_num;
+																							     $p->clave = $clave;
+																								 $p->numero_articulo = $articulo;
+																								 $p->nombre = $nombre;
+																								 $p->ean_code = $eancode;
+																								 $p->color = $color;
+																								 $p->numero_color = $ncolor;
+																								 $p->unidad_medida_id = $uni;
+																								 $p->piezas_paquete = $piezas_paquete;
+																								 $p->dimensiones = $dimensiones;
+																								 $p->piezas_pallet = $piezas_pallet;
+																								 $p->total_piezas = $total_piezas;
+																								 $p->foto = $foto;
+																								 $p->importador_id = $im;
+																								 $p->almacen_id = $alm;
+																								 $p->familia_id = $fam;
+																								 $p->categoria_id = $cat;
+																								 $p->iva0 = $iv;
+																								 $p->cantidad_minima = $cantidadminima;
+																								 $p->estatus_web = $estatus_web;
+																								 $p->estatus = $estatus;
+																								 $p->clave_repetida = 'claverepetita';
+																								 $p->save();
+
+																								 //Obtenemos el id del producto anterior
+																								 $pro_viejo = DB::table('producto')
+																								 			->where('clave', $clave)
+																								 			->pluck('id');
+
+																								 if(   empty($datos[20]) || empty($datos[21]) || empty($datos[22])
+																								 	|| empty($datos[23]) || empty($datos[24]) || empty($datos[25]) ){
+
+
+																							         } else {
+
+																							         	$precio1 = trim($datos[20]); 
+																							            $tipo1 = trim($datos[21]); 
+																							            $moneda1 = trim($datos[22]); 
+																							            $fecha_inicio1 = trim($datos[23]); 
+																							            $fecha_fin1 = trim($datos[24]);
+																							            $estatus_precio1 = trim($datos[25]); 
+
+																							            if(!is_numeric($precio1)){
+
+																							            	 $pp = new PrecioProducto2;
+																										 	 $pp->producto_id = $p['id'];
+																										 	 $pp->linea = $linea_num;
+																											 $pp->precio = 'nonumero';
+																											 $pp->tipo = 0;
+																											 $pp->moneda = $moneda1;
+																											 $pp->fecha_inicio = $fecha_inicio1;
+																											 $pp->fecha_fin = $fecha_fin1;
+																											 $pp->estatus = $estatus_precio1;
+																											 $pp->save();
+
+																							            } else {
+																							            	
+																							            	if($tipo1 != 'compra' and $tipo1 != 'retail' and $tipo1 != 'mayorista' and $tipo1 != 'distribuidor'){
+
+																								            	 $pp = new PrecioProducto2;
+																											 	 $pp->producto_id = $p['id'];
+																											 	 $pp->linea = $linea_num;
+																												 $pp->precio = $precio1;
+																												 $pp->tipo = 4;
+																												 $pp->moneda = $moneda1;
+																												 $pp->fecha_inicio = $fecha_inicio1;
+																												 $pp->fecha_fin = $fecha_fin1;
+																												 $pp->estatus = $estatus_precio1;
+																												 $pp->save();
+
+																							            	} else {
+
+																							            		if($tipo1 == 'compra'){
+																									         		$t1 = 0;
+																									         	} else if($tipo1 == 'retail'){
+																									         		$t1 = 1;
+																									         	} else if($tipo1 == 'mayorista'){
+																									         		$t1 = 2;
+																									         	} else if($tipo1 == 'distribuidor'){
+																									         		$t1 = 3;
+																									         	}
+
+																									         	//validamos e estatus
+																									         	if(!is_numeric($estatus_precio1)){
+
+																									         		 $pp = new PrecioProducto2;
+																												 	 $pp->producto_id = $p['id'];
+																												 	 $pp->linea = $linea_num;
+																													 $pp->precio = $precio1;
+																													 $pp->tipo = $t1;
+																													 $pp->moneda = $moneda1;
+																													 $pp->fecha_inicio = $fecha_inicio1;
+																													 $pp->fecha_fin = $fecha_fin1;
+																													 $pp->estatus = 2;
+																													 $pp->save();
+
+																								            	} else {
+
+																								            		if($estatus_precio1 != 0 and $estatus_precio1 != 1){
+
+																									            		 $pp = new PrecioProducto2;
+																													 	 $pp->producto_id = $p['id'];
+																													 	 $pp->linea = $linea_num;
+																														 $pp->precio = $precio1;
+																														 $pp->tipo = $t1;
+																														 $pp->moneda = $moneda1;
+																														 $pp->fecha_inicio = $fecha_inicio1;
+																														 $pp->fecha_fin = $fecha_fin1;
+																														 $pp->estatus = 2;
+																														 $pp->save();
+
+																								            		} else {
+
+
+																								            			 $pp = new PrecioProducto2;
+																													 	 $pp->producto_id = $pro_viejo;
+																														 $pp->precio = $precio1;
+																														 $pp->tipo = $t1;
+																														 $pp->moneda = $moneda1;
+																														 $pp->fecha_inicio = $fecha_inicio1;
+																														 $pp->fecha_fin = $fecha_fin1;
+																														 $pp->estatus = $estatus_precio1;
+																														 $pp->clave_repetida = 'claverepetita';
+																														 $pp->save();
+
+																														if(   empty($datos[26]) || empty($datos[27]) || empty($datos[28])
+																													 	|| empty($datos[29]) || empty($datos[30]) || empty($datos[31]) ){
+
+
+																												         } else {
+
+																												         	$precio2 = trim($datos[26]); 
+																												            $tipo2 = trim($datos[27]); 
+																												            $moneda2 = trim($datos[28]); 
+																												            $fecha_inicio2 = trim($datos[29]); 
+																												            $fecha_fin2 = trim($datos[30]);
+																												            $estatus_precio2 = trim($datos[31]); 
+
+																												            if(!is_numeric($precio2)){
+
+																												            	 $pp = new PrecioProducto2;
+																															 	 $pp->producto_id = $p['id'];
+																															 	 $pp->linea = $linea_num;
+																																 $pp->precio = 'nonumero';
+																																 $pp->tipo = 0;
+																																 $pp->moneda = $moneda2;
+																																 $pp->fecha_inicio = $fecha_inicio2;
+																																 $pp->fecha_fin = $fecha_fin2;
+																																 $pp->estatus = $estatus_precio2;
+																																 $pp->save();
+
+																												            } else {
+																												            	
+																												            	if($tipo2 != 'compra' and $tipo2 != 'retail' and $tipo2 != 'mayorista' and $tipo2 != 'distribuidor'){
+
+																													            	 $pp = new PrecioProducto2;
+																																 	 $pp->producto_id = $p['id'];
+																																 	 $pp->linea = $linea_num;
+																																	 $pp->precio = $precio2;
+																																	 $pp->tipo = 4;
+																																	 $pp->moneda = $moneda2;
+																																	 $pp->fecha_inicio = $fecha_inicio2;
+																																	 $pp->fecha_fin = $fecha_fin2;
+																																	 $pp->estatus = $estatus_precio2;
+																																	 $pp->save();
+
+																												            	} else {
+
+																												            		if($tipo2 == 'compra'){
+																														         		$t2 = 0;
+																														         	} else if($tipo2 == 'retail'){
+																														         		$t2 = 1;
+																														         	} else if($tipo2 == 'mayorista'){
+																														         		$t2 = 2;
+																														         	} else if($tipo2 == 'distribuidor'){
+																														         		$t2 = 3;
+																														         	}
+
+																														         	//validamos e estatus
+																														         	if(!is_numeric($estatus_precio2)){
+
+																														         		 $pp = new PrecioProducto2;
+																																	 	 $pp->producto_id = $p['id'];
+																																	 	 $pp->linea = $linea_num;
+																																		 $pp->precio = $precio2;
+																																		 $pp->tipo = $t2;
+																																		 $pp->moneda = $moneda2;
+																																		 $pp->fecha_inicio = $fecha_inicio2;
+																																		 $pp->fecha_fin = $fecha_fin2;
+																																		 $pp->estatus = 2;
+																																		 $pp->save();
+
+																													            	} else {
+
+																													            		if($estatus_precio2 != 0 and $estatus_precio2 != 1){
+
+																														            		 $pp = new PrecioProducto2;
+																																		 	 $pp->producto_id = $p['id'];
+																																		 	 $pp->linea = $linea_num;
+																																			 $pp->precio = $precio2;
+																																			 $pp->tipo = $t2;
+																																			 $pp->moneda = $moneda2;
+																																			 $pp->fecha_inicio = $fecha_inicio2;
+																																			 $pp->fecha_fin = $fecha_fin2;
+																																			 $pp->estatus = 2;
+																																			 $pp->save();
+
+																													            		} else {
+
+																													            			 $pp = new PrecioProducto2;
+																																		 	 $pp->producto_id = $pro_viejo;
+																																			 $pp->precio = $precio2;
+																																			 $pp->tipo = $t2;
+																																			 $pp->moneda = $moneda2;
+																																			 $pp->fecha_inicio = $fecha_inicio2;
+																																			 $pp->fecha_fin = $fecha_fin2;
+																																			 $pp->estatus = $estatus_precio2;
+																																			 $pp->clave_repetida = 'claverepetita';
+																																			 $pp->save();
+
+																																			if(   empty($datos[32]) || empty($datos[33]) || empty($datos[34])
+																																		 	|| empty($datos[35]) || empty($datos[36]) || empty($datos[37]) ){
+
+
+																																	         } else {
+
+																																	         	$precio3 = trim($datos[32]); 
+																																	            $tipo3 = trim($datos[33]); 
+																																	            $moneda3 = trim($datos[34]); 
+																																	            $fecha_inicio3 = trim($datos[35]); 
+																																	            $fecha_fin3 = trim($datos[36]);
+																																	            $estatus_precio3 = trim($datos[37]); 
+
+																																	            if(!is_numeric($precio3)){
+
+																																	            	 $pp = new PrecioProducto2;
+																																				 	 $pp->producto_id = $p['id'];
+																																				 	 $pp->linea = $linea_num;
+																																					 $pp->precio = 'nonumero';
+																																					 $pp->tipo = 0;
+																																					 $pp->moneda = $moneda3;
+																																					 $pp->fecha_inicio = $fecha_inicio3;
+																																					 $pp->fecha_fin = $fecha_fin3;
+																																					 $pp->estatus = $estatus_precio3;
+																																					 $pp->save();
+
+																																	            } else {
+																																	            	
+																																	            	if($tipo3 != 'compra' and $tipo3 != 'retail' and $tipo3 != 'mayorista' and $tipo3 != 'distribuidor'){
+
+																																		            	 $pp = new PrecioProducto2;
+																																					 	 $pp->producto_id = $p['id'];
+																																					 	 $pp->linea = $linea_num;
+																																						 $pp->precio = $precio3;
+																																						 $pp->tipo = 4;
+																																						 $pp->moneda = $moneda3;
+																																						 $pp->fecha_inicio = $fecha_inicio3;
+																																						 $pp->fecha_fin = $fecha_fin3;
+																																						 $pp->estatus = $estatus_precio3;
+																																						 $pp->save();
+
+																																	            	} else {
+
+																																	            		if($tipo3 == 'compra'){
+																																			         		$t3 = 0;
+																																			         	} else if($tipo3 == 'retail'){
+																																			         		$t3 = 1;
+																																			         	} else if($tipo3 == 'mayorista'){
+																																			         		$t3 = 2;
+																																			         	} else if($tipo3 == 'distribuidor'){
+																																			         		$t3 = 3;
+																																			         	}
+
+																																			         	//validamos e estatus
+																																			         	if(!is_numeric($estatus_precio3)){
+
+																																			         		 $pp = new PrecioProducto2;
+																																						 	 $pp->producto_id = $p['id'];
+																																						 	 $pp->linea = $linea_num;
+																																							 $pp->precio = $precio3;
+																																							 $pp->tipo = $t3;
+																																							 $pp->moneda = $moneda3;
+																																							 $pp->fecha_inicio = $fecha_inicio3;
+																																							 $pp->fecha_fin = $fecha_fin3;
+																																							 $pp->estatus = 2;
+																																							 $pp->save();
+
+																																		            	} else {
+
+																																		            		if($estatus_precio3 != 0 and $estatus_precio3 != 1){
+
+																																			            		 $pp = new PrecioProducto2;
+																																							 	 $pp->producto_id = $p['id'];
+																																							 	 $pp->linea = $linea_num;
+																																								 $pp->precio = $precio3;
+																																								 $pp->tipo = $t3;
+																																								 $pp->moneda = $moneda3;
+																																								 $pp->fecha_inicio = $fecha_inicio3;
+																																								 $pp->fecha_fin = $fecha_fin3;
+																																								 $pp->estatus = 2;
+																																								 $pp->save();
+
+																																		            		} else {
+
+																																		            			 $pp = new PrecioProducto2;
+																																							 	 $pp->producto_id = $pro_viejo;
+																																								 $pp->precio = $precio3;
+																																								 $pp->tipo = $t3;
+																																								 $pp->moneda = $moneda3;
+																																								 $pp->fecha_inicio = $fecha_inicio3;
+																																								 $pp->fecha_fin = $fecha_fin3;
+																																								 $pp->estatus = $estatus_precio3;
+																																								 $pp->clave_repetida = 'claverepetita';
+																																								 $pp->save();
+
+																																							    if(   empty($datos[38]) || empty($datos[39]) || empty($datos[40])
+																																							 	|| empty($datos[41]) || empty($datos[42]) || empty($datos[43]) ){
+
+
+																																						         } else {
+
+																																						         	$precio4 = trim($datos[38]); 
+																																						            $tipo4 = trim($datos[39]); 
+																																						            $moneda4 = trim($datos[40]); 
+																																						            $fecha_inicio4 = trim($datos[41]); 
+																																						            $fecha_fin4 = trim($datos[42]);
+																																						            $estatus_precio4 = trim($datos[43]); 
+
+																																						            if(!is_numeric($precio4)){
+
+																																						            	 $pp = new PrecioProducto2;
+																																									 	 $pp->producto_id = $p['id'];
+																																									 	 $pp->linea = $linea_num;
+																																										 $pp->precio = 'nonumero';
+																																										 $pp->tipo = 0;
+																																										 $pp->moneda = $moneda4;
+																																										 $pp->fecha_inicio = $fecha_inicio4;
+																																										 $pp->fecha_fin = $fecha_fin4;
+																																										 $pp->estatus = $estatus_precio4;
+																																										 $pp->save();
+
+																																						            } else {
+																																						            	
+																																						            	if($tipo4 != 'compra' and $tipo4 != 'retail' and $tipo4 != 'mayorista' and $tipo4 != 'distribuidor'){
+
+																																							            	 $pp = new PrecioProducto2;
+																																										 	 $pp->producto_id = $p['id'];
+																																										 	 $pp->linea = $linea_num;
+																																											 $pp->precio = $precio4;
+																																											 $pp->tipo = 4;
+																																											 $pp->moneda = $moneda4;
+																																											 $pp->fecha_inicio = $fecha_inicio4;
+																																											 $pp->fecha_fin = $fecha_fin4;
+																																											 $pp->estatus = $estatus_precio4;
+																																											 $pp->save();
+
+																																						            	} else {
+
+																																						            		if($tipo4 == 'compra'){
+																																								         		$t4 = 0;
+																																								         	} else if($tipo4 == 'retail'){
+																																								         		$t4 = 1;
+																																								         	} else if($tipo4 == 'mayorista'){
+																																								         		$t4 = 2;
+																																								         	} else if($tipo4 == 'distribuidor'){
+																																								         		$t4 = 3;
+																																								         	}
+
+																																								         	//validamos e estatus
+																																								         	if(!is_numeric($estatus_precio4)){
+
+																																								         		 $pp = new PrecioProducto2;
+																																											 	 $pp->producto_id = $p['id'];
+																																											 	 $pp->linea = $linea_num;
+																																												 $pp->precio = $precio4;
+																																												 $pp->tipo = $t4;
+																																												 $pp->moneda = $moneda4;
+																																												 $pp->fecha_inicio = $fecha_inicio4;
+																																												 $pp->fecha_fin = $fecha_fin4;
+																																												 $pp->estatus = 2;
+																																												 $pp->save();
+
+																																							            	} else {
+
+																																							            		if($estatus_precio4 != 0 and $estatus_precio4 != 1){
+
+																																								            		 $pp = new PrecioProducto2;
+																																												 	 $pp->producto_id = $p['id'];
+																																												 	 $pp->linea = $linea_num;
+																																													 $pp->precio = $precio4;
+																																													 $pp->tipo = $t4;
+																																													 $pp->moneda = $moneda4;
+																																													 $pp->fecha_inicio = $fecha_inicio4;
+																																													 $pp->fecha_fin = $fecha_fin4;
+																																													 $pp->estatus = 2;
+																																													 $pp->save();
+
+																																							            		} else {
+
+
+																																							            			 $pp = new PrecioProducto2;
+																																												 	 $pp->producto_id = $pro_viejo;
+																																													 $pp->precio = $precio4;
+																																													 $pp->tipo = $t4;
+																																													 $pp->moneda = $moneda4;
+																																													 $pp->fecha_inicio = $fecha_inicio4;
+																																													 $pp->fecha_fin = $fecha_fin4;
+																																													 $pp->estatus = $estatus_precio4;
+																																													 $pp->clave_repetida = 'claverepetita';
+																																													 $pp->save();
+
+                                                                                                                                                                    }
+
+                                                                                                                                                               }
+
+                                                                                                                                                           }
+
+																																					   }//end validar estatus
+
+																																					} //end else validar estatus
+
+																																				} //end else validar el tipo de precio
+
+																																		     }//end else validar si el precioe s numerico
+
+																																	    }//end else comprobar si existe otro precio 'distribuidor'
+
+																																    }
+
+																															    }//end validar estatus
+
+																															} //end else validar estatus
+
+																														 } //end else validar el tipo de precio
+
+																											          }//end else validar si el precioe s numerico
+
+																												   }//end else comprobar si existe otro precio 'mayorista'
+
+																											    }
+
+																										     }//end validar estatus
+
+																										  } //end else validar estatus
+
+																						               } //end else validar el tipo de precio
+
+																							       }//end else validar si el precioe s numerico
+
+																								}//end else comprobar si existe otro precio 'retail'
+
+ 								                                                              }	
+ 							                                                              }
+ 						                                                               }
+ 					                                                               }
+ 				                                                                }
+ 			                                                                 }
+ 		                                                                  }
+ 	                                                                   }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    } 
+							                    } 
+						                     }
+						                }
+
+									 /*END PRODUCTO CLAVE REPETIDA*/
 
 				           		 	} else {
 
@@ -4432,6 +5397,7 @@ public function agregarproductosarchivo(){
 	  						->count();
 
 	  	$errores_producto_precio = DB::table('producto_precio2')
+	  						->where('clave_repetida', '!=', 'claverepetita')
 	  						->count();
 
 	    $total_de_errores = $errores_producto + $errores_producto_precio;
@@ -4443,6 +5409,11 @@ public function agregarproductosarchivo(){
 	  	$total_duplicados = DB::table('producto2')
 	  					->where('clave_repetida', 'claverepetita')
 	  					->count();
+
+	  	//precios de los productos con clave repetida $pp->clave_repetida = 'claverepetita';
+	  	$total_productos_precios = DB::table('producto_precio2')
+	  					->where('clave_repetida', 'claverepetita')
+	  					->get();
 
 
 	   return Response::json(array(
@@ -4473,7 +5444,8 @@ public function agregarproductosarchivo(){
 	   			'productoprecio_precio_nonumero' => $productoprecio_precio_nonumero,
 	   			'productoprecio_tipo_invalido' => $productoprecio_tipo_invalido,
 	   			'productoprecio_estatus_invalido' => $productoprecio_estatus_invalido,
-	   			'productos_agregados' => $productos_agregados
+	   			'productos_agregados' => $productos_agregados,
+	   			'total_productos_precios' => $total_productos_precios
 
 	   	));
 
@@ -4526,7 +5498,67 @@ public function actualizarproductosrepetidos(){
 
 	}
 
-	return Response::json('actualizado');
+	return Response::json($producto);
+}
+
+
+public function actualizarproductospreciosrepetidos(){
+
+		$idpro = json_decode(Input::get('aInfo'));
+
+	for ($i=0; $i < count($idpro); $i++) {
+
+		//comprobamos que no se repita el precio con el mismo tipo y estatus
+		$p_precio = DB::table('producto_precio')
+					->where('producto_id', $idpro[$i]->id)
+					->where('tipo', $idpro[$i]->tipo)
+					->where('estatus', $idpro[$i]->estatus)
+					->get();
+
+		if(count($p_precio) == 0){
+
+			//agregamos el nuevo precio
+			$p_precio_nuevo = new PrecioProducto;
+			$p_precio_nuevo->producto_id = $idpro[$i]->id;
+			$p_precio_nuevo->precio = $idpro[$i]->precio;
+			$p_precio_nuevo->tipo = $idpro[$i]->tipo;
+			$p_precio_nuevo->moneda = $idpro[$i]->moneda;
+			$p_precio_nuevo->fecha_inicio = $idpro[$i]->fechainicio;
+			$p_precio_nuevo->fecha_fin = $idpro[$i]->fechafin;
+			$p_precio_nuevo->estatus = $idpro[$i]->estatus;
+			$p_precio_nuevo->save();
+
+		} else {
+
+			$p_precio_anterior_id = DB::table('producto_precio')
+					->where('producto_id', $idpro[$i]->id)
+					->where('tipo', $idpro[$i]->tipo)
+					->where('estatus', $idpro[$i]->estatus)
+					->pluck('id');
+
+			//le cambiamos el estatus al precio anterior
+			$p_precio_anterior = PrecioProducto::find($p_precio_anterior_id);
+			$p_precio_anterior->estatus = 0;
+			$p_precio_anterior->save();
+
+			//agregamos el nuevo precio
+			$p_precio_nuevo = new PrecioProducto;
+			$p_precio_nuevo->producto_id = $idpro[$i]->id;
+			$p_precio_nuevo->precio = $idpro[$i]->precio;
+			$p_precio_nuevo->tipo = $idpro[$i]->tipo;
+			$p_precio_nuevo->moneda = $idpro[$i]->moneda;
+			$p_precio_nuevo->fecha_inicio = $idpro[$i]->fechainicio;
+			$p_precio_nuevo->fecha_fin = $idpro[$i]->fechafin;
+			$p_precio_nuevo->estatus = $idpro[$i]->estatus;
+			$p_precio_nuevo->save();
+
+		}
+
+
+	}
+
+	return Response::json('exito');
+
 }
 
 

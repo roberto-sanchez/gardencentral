@@ -1,0 +1,2 @@
+AH003, C6088, Planta de Menta en maceta terracota (CH), 3710415002761, grey, 47, unidad de medida 1, 2, 260x260x395, 10, 12, PlantadeMentaenmacetaterracota(CH).png, Imorador 1, Almacen 1, Esschert Holanda, Plantas y Flores, si, 70, 1, 1
+AC03, C3089, Flower pot Perla ø 11, 8590415002963, purple pearl, 41, unidad de medida 1, 32, 260x260x395, 60, 200, Macetaceramicacolganteantigua.png, Segundo Importador, Almacen 1, Familia 2, Macetas, no, 50, 1, 1

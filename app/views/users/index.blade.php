@@ -397,7 +397,7 @@
             </div>      
           </div>
           <div class="modal-footer modal-conf-estat">
-              <button id="cerrar-detalle-pro" type="button" class="btn btn-primary confirm">
+              <button id="cerrar-detalle-pro" class="btn btn-primary confirm" data-dismiss="modal">
                 <span class="glyphicon glyphicon-chevron-left"></span>
               Salir
               </button>

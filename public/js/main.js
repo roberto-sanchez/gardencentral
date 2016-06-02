@@ -270,7 +270,7 @@ $(document).on('click', '.txt-width', function(){
 
 $(document).on('click', '#cerrar-detalle-pro', function(){
 
-	$('#modaldetalleproducto').modal('hide');
+	//$('#modaldetalleproducto').modal('hide');
 	$('.datos-detalle-pro').html('');	
 
 });

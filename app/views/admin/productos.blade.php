@@ -185,35 +185,35 @@
                       <label for="unidad" class="text-primary label-producto">Unidad de medida: </label>
                       <select name="unidad" id="unidad" class="form-control" style="width:198px"></select>
                 </div>
-                <div class="form-group error-dimensiones" style="margin-bottom:.3em">
-                      <label for="dimensiones" class="text-primary label-producto">Dimensiones: </label>
-                      <input type="text" name="dimensiones" id="dimensiones" class="form-control" >
-                      <span class="icon-dimensiones"></span>
-                </div>
-                <div class="form-group error-cantidad" style="margin-bottom:.3em">
-                      <label for="cantidad" class="text-primary label-producto">Cantidad minima: </label>
-                      <input type="number" name="cantidad" id="cantidad" class="form-control" >
-                      <span class="icon-cantidad"></span>
-                </div>
                 <div class="form-group error-piezas" style="margin-bottom:.3em">
                       <label for="piezas" class="text-primary label-producto">Piezas x paquete: </label>
                       <input type="number" name="piezas" id="piezas" class="form-control" >
                       <span class="icon-piezas"></span>
                 </div>
-              </div> 
-
-              <div class="d-p-1">
+                <div class="form-group error-dimensiones" style="margin-bottom:.3em">
+                      <label for="dimensiones" class="text-primary label-producto">Dimensiones: </label>
+                      <input type="text" name="dimensiones" id="dimensiones" class="form-control" >
+                      <span class="icon-dimensiones"></span>
+                </div>
                 <div class="form-group error-pallet" style="margin-bottom:.3em">
                       <label for="pallet" class="text-primary label-producto">Piezas pallet: </label>
                       <input type="number" name="pallet" id="pallet" class="form-control" >
                       <span class="icon-pallet"></span>
                 </div>
+              </div> 
+
+              <div class="d-p-1">
                 <div class="form-group error-totalpiezas" style="margin-bottom:.3em">
                       <label for="totalpiezas" class="text-primary label-producto">Total de piezas: </label>
                       <input type="number" name="totalpiezas" id="totalpiezas" class="form-control" >
                       <span class="icon-totalpiezas"></span>
                 </div>
-                <div class="form-group error-importador" style="margin-bottom:.3em">
+                <div class="form-group error-foto" style="margin-bottom:.3em; width:420px;">
+                      <label for="foto" class="text-primary label-producto">Foto: </label>
+                      <input type="file" name="foto" id="foto" class="form-control foto-product" accept="image/*">
+                      <span class="icon-foto"></span>
+                </div>
+                <div class="form-group error-importador" style="margin-bottom:.3em;">
                       <label for="importador" class="text-primary label-producto">Importador: </label>
                       <select name="importador" id="importador" class="form-control" style="width:198px"></select>
                 </div>
@@ -221,26 +221,34 @@
                       <label for="almacen" class="text-primary label-producto">Almacen: </label>
                       <select name="almacen" id="almacen" class="form-control" style="width:198px"></select>
                 </div>
+              </div> 
+
+              <div class="d-p-1">
                 <div class="form-group error-familia" style="margin-bottom:.3em">
                       <label for="familia" class="text-primary label-producto">Familia: </label>
                       <select name="familia" id="familia" class="form-control" style="width:198px"></select>
                 </div>
-              </div> 
-
-              <div class="d-p-1">
                 <div class="form-group error-categoria" style="margin-bottom:.3em">
                       <label for="categoria" class="text-primary label-producto">Categoría: </label>
                       <select name="categoria" id="categoria" class="form-control" style="width:198px"></select>
                 </div>
-                <div class="form-group error-foto" style="margin-bottom:.3em">
-                      <label for="foto" class="text-primary label-producto">Foto: </label>
-                      <input type="file" name="foto" id="foto" class="form-control foto-product" accept="image/*">
-                      <span class="icon-foto"></span>
+                <div class="form-group error-iva0" style="margin-bottom:.3em;">
+                      <label for="iva0" class="text-primary label-producto">Iva 0: </label>
+                      <div class="checkbox checkbox-activ" style="width:105px!important">
+                        <div class="txt-activ">
+                          <input name="inp-iva" id="inp-iva" type="checkbox" data-toggle="toggle" value="" data-on="Si" data-off="No" data-width="100">
+                        </div>
+                      </div>
+                </div>
+                <div class="form-group error-cantidad" style="margin-bottom:.3em">
+                      <label for="cantidad" class="text-primary label-producto">Cantidad minima: </label>
+                      <input type="number" name="cantidad" id="cantidad" class="form-control" >
+                      <span class="icon-cantidad"></span>
                 </div>
 
                 <div class="form-group error-estatus-web" style="margin-bottom:.3em">
                       <label for="estatus-web" class="text-primary label-producto">Estatus web: </label>
-                      <div class="checkbox checkbox-activ">
+                      <div class="checkbox checkbox-activ" style="width:128px;">
                         <div class="txt-activ">
                             <input name="inp-estatus-web" id="inp-estatus-web" type="checkbox" checked data-toggle="toggle" value="" data-on="Activo" data-off="Inactivo" data-width="100">
                           </div>
@@ -253,14 +261,6 @@
                             <input name="inp-estatus" id="inp-estatus" type="checkbox" checked data-toggle="toggle" value="" data-on="Activo" data-off="Inactivo" data-width="100">
                           </div>
                      </div>
-                </div>
-                <div class="form-group error-iva0" style="margin-bottom:.3em">
-                      <label for="iva0" class="text-primary label-producto">Iva 0: </label>
-                      <div class="checkbox checkbox-activ">
-                        <div class="txt-activ">
-                          <input name="inp-iva" id="inp-iva" type="checkbox" data-toggle="toggle" value="" data-on="Si" data-off="No" data-width="100">
-                        </div>
-                      </div>
                 </div>
               </div>  
 
@@ -402,33 +402,33 @@
                       <label for="unidad-edit" class="text-primary label-producto">Unidad de medida: </label>
                       <select name="unidad-edit" id="unidad-edit" class="form-control" style="width:198px"></select>
                 </div>
-                <div class="form-group error-dimensiones-edit" style="margin-bottom:.3em">
-                      <label for="dimensiones-edit" class="text-primary label-producto">Dimensiones: </label>
-                      <input type="text" name="dimensiones-edit" id="dimensiones-edit" class="form-control" >
-                      <span class="icon-dimensiones-edit"></span>
-                </div>
-                <div class="form-group error-cantidad-edit" style="margin-bottom:.3em">
-                      <label for="cantidad-edit" class="text-primary label-producto">Cantidad minima: </label>
-                      <input type="number" name="cantidad-edit" id="cantidad-edit" class="form-control" >
-                      <span class="icon-cantidad-edit"></span>
-                </div>
                 <div class="form-group error-piezas-edit" style="margin-bottom:.3em">
                       <label for="piezas-edit" class="text-primary label-producto">Piezas x paquete: </label>
                       <input type="number" name="piezas-edit" id="piezas-edit" class="form-control" >
                       <span class="icon-piezas-edit"></span>
                 </div>
-              </div> 
-
-              <div class="d-p-1">
+                <div class="form-group error-dimensiones-edit" style="margin-bottom:.3em">
+                      <label for="dimensiones-edit" class="text-primary label-producto">Dimensiones: </label>
+                      <input type="text" name="dimensiones-edit" id="dimensiones-edit" class="form-control" >
+                      <span class="icon-dimensiones-edit"></span>
+                </div>
                 <div class="form-group error-pallet-edit" style="margin-bottom:.3em">
                       <label for="pallet-edit" class="text-primary label-producto">Piezas pallet: </label>
                       <input type="number" name="pallet-edit" id="pallet-edit" class="form-control" >
                       <span class="icon-pallet-edit"></span>
                 </div>
+              </div> 
+
+              <div class="d-p-1">
                 <div class="form-group error-totalpiezas-edit" style="margin-bottom:.3em">
                       <label for="totalpiezas-edit" class="text-primary label-producto">Total de piezas: </label>
                       <input type="number" name="totalpiezas-edit" id="totalpiezas-edit" class="form-control" >
                       <span class="icon-totalpiezas-edit"></span>
+                </div>
+                <div class="form-group error-foto-edit" style="margin-bottom:.3em; width:420px;">
+                      <label for="foto-edit" class="text-primary label-producto">Foto: </label>
+                      <input type="file" name="foto-edit" id="foto-edit" class="form-control foto-product" accept="image/*">
+                      <span class="icon-foto-edit"></span>
                 </div>
                 <div class="form-group error-importador-edit" style="margin-bottom:.3em">
                       <label for="importador-edit" class="text-primary label-producto">Importador: </label>
@@ -438,24 +438,32 @@
                       <label for="almacen-edit" class="text-primary label-producto">Almacen: </label>
                       <select name="almacen-edit" id="almacen-edit" class="form-control" style="width:198px"></select>
                 </div>
+              </div> 
+
+              <div class="d-p-1">
                 <div class="form-group error-familia-edit" style="margin-bottom:.3em">
                       <label for="familia-edit" class="text-primary label-producto">Familia: </label>
                       <select name="familia-edit" id="familia-edit" class="form-control" style="width:198px"></select>
                 </div>
-              </div> 
-
-              <div class="d-p-1">
                 <div class="form-group error-categoria-edit" style="margin-bottom:.3em">
                       <label for="categoria-edit" class="text-primary label-producto">Categoría: </label>
                       <select name="categoria-edit" id="categoria-edit" class="form-control" style="width:198px"></select>
                 </div>
-                <div class="form-group error-foto-edit" style="margin-bottom:.3em">
-                      <label for="foto-edit" class="text-primary label-producto">Foto: </label>
-                      <input type="file" name="foto-edit" id="foto-edit" class="form-control foto-product" accept="image/*">
-                      <span class="icon-foto-edit"></span>
+                <div class="form-group error-iva0-edit" style="margin-bottom:.3em">
+                      <label for="iva0-edit" class="text-primary label-producto">Iva 0: </label>
+                      <div class="checkbox checkbox-activ" style="width:105px!important">
+                        <div class="txt-activ">
+                          <input name="inp-iva-edit" id="inp-iva-edit" type="checkbox" data-toggle="toggle" value="" data-on="Si" data-off="No" data-width="100">
+                        </div>
+                      </div>
+                </div>
+                <div class="form-group error-cantidad-edit" style="margin-bottom:.3em">
+                      <label for="cantidad-edit" class="text-primary label-producto">Cantidad minima: </label>
+                      <input type="number" name="cantidad-edit" id="cantidad-edit" class="form-control" >
+                      <span class="icon-cantidad-edit"></span>
                 </div>
 
-                <div class="form-group error-estatus-web-edit" style="margin-bottom:.3em">
+                <div class="form-group error-estatus-web-edit" style="width:128px;">
                       <label for="estatus-web-edit" class="text-primary label-producto">Estatus web: </label>
                       <div class="checkbox checkbox-activ">
                         <div class="txt-activ">
@@ -470,14 +478,6 @@
                             <input name="inp-estatus-edit" id="inp-estatus-edit" type="checkbox" data-toggle="toggle" value="" data-on="Activo" data-off="Inactivo" data-width="100">
                           </div>
                      </div>
-                </div>
-                <div class="form-group error-iva0-edit" style="margin-bottom:.3em">
-                      <label for="iva0-edit" class="text-primary label-producto">Iva 0: </label>
-                      <div class="checkbox checkbox-activ">
-                        <div class="txt-activ">
-                          <input name="inp-iva-edit" id="inp-iva-edit" type="checkbox" data-toggle="toggle" value="" data-on="Si" data-off="No" data-width="100">
-                        </div>
-                      </div>
                 </div>
               </div>  
 
@@ -504,6 +504,7 @@
                               <th class="cabecero">Fecha de inicio</th>
                               <th class="cabecero">Fecha fin</th>
                               <th class="cabecero">Estatus</th>
+                              <th class="cabecero">Fecha</th>
                               <th class="cabecero">Editar</th>
                               <th class="cabecero">Eliminar</th>
                             </tr>                           
@@ -805,6 +806,9 @@
                       </tr>
                     </thead>
                     <tbody id="contenedor-duplicados-producto"></tbody>
+                  </table>
+                  <table class="table-duplicados-precios">
+                    <tbody id="contenedor-precios-duplicados-producto"></tbody>
                   </table>
                 </div>
                           
@@ -1885,6 +1889,7 @@ $(document).on('click', '.editar-n', function(){
                     '<td class="td_fecha_inicio_actual" value="'+p.p_d[datos].fecha_inicio+'">'+p.p_d[datos].fecha_inicio+'</td>'+
                     '<td class="td_fecha_fin_actual" value="'+p.p_d[datos].fecha_fin+'">'+p.p_d[datos].fecha_fin+'</td>'+
                     '<td id="esta_'+p.p_d[datos].id+'" class="td_estatus_actual estatus_'+p.p_d[datos].estatus+'" value="'+p.p_d[datos].estatus+'"></td>'+
+                    '<td>'+p.p_d[datos].created_at+'</td>'+
                     '<td><span class="editar-d-a btn btn-sm btn-info" title="Editar" value="'+p.p_d[datos].id+'"><span class="glyphicon glyphicon-edit"></span></span></td>'+
                     '<td><span class="quitar-d-a btn btn-sm btn-danger" title="Eliminar" value="'+p.p_d[datos].id+'"><span class="glyphicon glyphicon-remove"></span></span></td>'+
                     '</tr>';
@@ -2027,6 +2032,7 @@ $(document).on('click', '.editar-n', function(){
 });
 
 $(document).on('click', '#save-edit-precio-producto', function(){
+
     //valores
     id = $(this).attr('data-id');
     precio = $('#precio-producto').val();
@@ -2041,42 +2047,39 @@ $(document).on('click', '#save-edit-precio-producto', function(){
           activo = 0;
       }
 
-      $('.tabla_detallepro tbody tr').each(function(){
-
-            existe = $(this).find("[class*='td_precio_actual']").attr('data-valor');
-
-            if(existe == tipo_precio+activo){
-              idprecioantiguo = $('.td_precio_actual').attr('data-id');
-              actualizarestatus(idprecioantiguo);
-            } else {
-
-            }
-
-      })
-
+      $('#body-precio-detalle-edit').html('');
 
       $.ajax({
                 url:  "/productos/agregarprecioaleditar",
                 type: "GET",
              data:{id: id, precio: precio, tipo_precio: tipo_precio, moneda: moneda, fecha_inicio: fecha_inicio, fecha_fin: fecha_fin, activo: activo},
-              success: function(d){
+              success: function(p){
+                console.log(p);
 
-                body_edit = $('#body-precio-detalle-edit');
-                nueva_fila_edit = "";
-                
+                 body = $('#body-precio-detalle-edit');
+                 fila = "";
 
-                nueva_fila_edit += '<tr class="tr_actual" id="fila_edit_'+d.id+'">'+
-                    '<td class="td_precio_actual" data-id="'+d.id+'" data-valor="'+d.tipo+d.estatus+'" value="'+d.precio+'">'+accounting.formatMoney(d.precio)+'</td>'+
-                    '<td class="td_tipo_precio_actual tipo_'+d.tipo+'" value="'+d.tipo+'"></td>'+
-                    '<td class="td_moneda_actual" value="'+d.moneda+'">'+d.moneda+'</td>'+
-                    '<td class="td_fecha_inicio_actual" value="'+d.fecha_inicio+'">'+d.fecha_inicio+'</td>'+
-                    '<td class="td_fecha_fin_actual" value="'+d.fecha_fin+'">'+d.fecha_fin+'</td>'+
-                    '<td id="esta_'+d.id+'" class="td_estatus_actual estatus_'+d.estatus+'" value="'+d.estatus+'"></td>'+
-                    '<td><span class="editar-d-a btn btn-sm btn-info" title="Editar" value="'+d.id+'"><span class="glyphicon glyphicon-edit"></span></span></td>'+
-                    '<td><span class="quitar-d-a btn btn-sm btn-danger" title="Eliminar" value="'+d.id+'"><span class="glyphicon glyphicon-remove"></span></span></td>'+
+                for(datos in p.p_d){
+                                        
+
+                  fila += '<tr class="tr_actual" id="fila_edit_'+p.p_d[datos].id+'">'+
+                    '<td class="td_precio_actual" data-id="'+p.p_d[datos].id+'" data-valor="'+p.p_d[datos].tipo+p.p_d[datos].estatus+'" value="'+p.p_d[datos].precio+'">'+accounting.formatMoney(p.p_d[datos].precio)+'</td>'+
+                    '<td class="td_tipo_precio_actual tipo_'+p.p_d[datos].tipo+'" value="'+p.p_d[datos].tipo+'"></td>'+
+                    '<td class="td_moneda_actual" value="'+p.p_d[datos].moneda+'">'+p.p_d[datos].moneda+'</td>'+
+                    '<td class="td_fecha_inicio_actual" value="'+p.p_d[datos].fecha_inicio+'">'+p.p_d[datos].fecha_inicio+'</td>'+
+                    '<td class="td_fecha_fin_actual" value="'+p.p_d[datos].fecha_fin+'">'+p.p_d[datos].fecha_fin+'</td>'+
+                    '<td id="esta_'+p.p_d[datos].id+'" class="td_estatus_actual estatus_'+p.p_d[datos].estatus+'" value="'+p.p_d[datos].estatus+'"></td>'+
+                    '<td>'+p.p_d[datos].created_at+'</td>'+
+                    '<td><span class="editar-d-a btn btn-sm btn-info" title="Editar" value="'+p.p_d[datos].id+'"><span class="glyphicon glyphicon-edit"></span></span></td>'+
+                    '<td><span class="quitar-d-a btn btn-sm btn-danger" title="Eliminar" value="'+p.p_d[datos].id+'"><span class="glyphicon glyphicon-remove"></span></span></td>'+
                     '</tr>';
-                        
-                body_edit.prepend(nueva_fila_edit);
+
+
+                }//end for
+
+                body.append(fila);
+
+                                            
 
                 $('.estatus_0').text('Inactivo');
                 $('.estatus_0').addClass('text-warning');
@@ -2273,6 +2276,7 @@ $(document).on('click', '#save-precio-producto-edit', function(){
                             '<td class="td_fecha_inicio_actual" value="'+d.pro.fecha_inicio+'">'+d.pro.fecha_inicio+'</td>'+
                             '<td class="td_fecha_fin_actual" value="'+d.pro.fecha_fin+'">'+d.pro.fecha_fin+'</td>'+
                             '<td id="esta_'+d.pro.id+'" class="td_estatus_actual estatus_'+d.pro.estatus+'" value="'+d.pro.estatus+'"></td>'+
+                            '<td>'+d.pro.created_at+'</td>'+
                             '<td><span class="editar-d-a btn btn-sm btn-info" title="Editar" value="'+d.pro.id+'"><span class="glyphicon glyphicon-edit"></span></span></td>'+
                             '<td><span class="quitar-d-a btn btn-sm btn-danger" title="Eliminar" value="'+d.pro.id+'"><span class="glyphicon glyphicon-remove"></span></span></td>'+
                        '</tr>');
@@ -2286,6 +2290,7 @@ $(document).on('click', '#save-precio-producto-edit', function(){
                             '<td class="td_fecha_inicio_actual" value="'+d.pro_a.fecha_inicio+'">'+d.pro_a.fecha_inicio+'</td>'+
                             '<td class="td_fecha_fin_actual" value="'+d.pro_a.fecha_fin+'">'+d.pro_a.fecha_fin+'</td>'+
                             '<td id="esta_'+d.pro_a.id+'" class="td_estatus_actual estatus_'+d.pro_a.estatus+'" value="'+d.pro_a.estatus+'"></td>'+
+                            '<td>'+d.pro_a.created_at+'</td>'+
                             '<td><span class="editar-d-a btn btn-sm btn-info" title="Editar" value="'+d.pro_a.id+'"><span class="glyphicon glyphicon-edit"></span></span></td>'+
                             '<td><span class="quitar-d-a btn btn-sm btn-danger" title="Eliminar" value="'+d.pro_a.id+'"><span class="glyphicon glyphicon-remove"></span></span></td>'+
                        '</tr>');
@@ -2297,6 +2302,7 @@ $(document).on('click', '#save-precio-producto-edit', function(){
                             '<td class="td_fecha_inicio_actual" value="'+d.pro.fecha_inicio+'">'+d.pro.fecha_inicio+'</td>'+
                             '<td class="td_fecha_fin_actual" value="'+d.pro.fecha_fin+'">'+d.pro.fecha_fin+'</td>'+
                             '<td id="esta_'+d.pro.id+'" class="td_estatus_actual estatus_'+d.pro.estatus+'" value="'+d.pro.estatus+'"></td>'+
+                            '<td>'+d.pro.created_at+'</td>'+
                             '<td><span class="editar-d-a btn btn-sm btn-info" title="Editar" value="'+d.pro.id+'"><span class="glyphicon glyphicon-edit"></span></span></td>'+
                             '<td><span class="quitar-d-a btn btn-sm btn-danger" title="Eliminar" value="'+d.pro.id+'"><span class="glyphicon glyphicon-remove"></span></span></td>'+
                        '</tr>');
@@ -2943,6 +2949,26 @@ $(document).on('click', '#cargar-archivo', function(){
 
                                 contenedor25.append(linea25);
 
+
+                      //precios de los productos duplicados
+                      linea26 = "";
+                      contenedor26 = $('#contenedor-precios-duplicados-producto');
+                  
+                               for(datos in p.total_productos_precios){
+
+                                      linea26 += '<tr>'+
+                                        '<td class="text-id" data-id="'+p.total_productos_precios[datos].producto_id+'"></td>'+
+                                        '<td class="text-precio" data-precio="'+p.total_productos_precios[datos].precio+'"></td>'+
+                                        '<td class="text-tipo" data-tipo="'+p.total_productos_precios[datos].tipo+'"></td>'+
+                                        '<td class="text-moneda" data-moneda="'+p.total_productos_precios[datos].moneda+'"></td>'+
+                                        '<td class="text-fechainicio" data-fechainicio="'+p.total_productos_precios[datos].fecha_inicio+'"></td>'+
+                                        '<td class="text-fechafin" data-fechafin="'+p.total_productos_precios[datos].fecha_fin+'"></td>'+
+                                        '<td class="text-estatus" data-estatus="'+p.total_productos_precios[datos].estatus+'"></td>'+
+                                      '</tr>';
+                                }
+
+                                contenedor26.append(linea26);
+
                       $('.estatus_duplicado_0').text('Inactivo');
                       $('.estatus_duplicado_1').text('Activo');
                 
@@ -3021,7 +3047,7 @@ $(document).on('click', '#agregar-duplicados', function(){
 
 
          var DATA = [];
-         $('.duplicados-prod tbody tr').each(function(){
+         $('.table-duplicados tbody tr').each(function(){
 
             clave = $(this).find("[class*='text-datos']").attr('data-clave');
             numeroarticulo = $(this).find("[class*='text-datos']").attr('data-numeroarticulo');
@@ -3060,7 +3086,8 @@ $(document).on('click', '#agregar-duplicados', function(){
 
             success: function (x) {
 
-                   $('#modalprcesarproducto').modal('hide');
+                   //llamamos a la funcion para agregar los precios del producto duplicado si es q hay
+                   agregarnuevospreciosalproducto();
 
                    $(".error1").hide();
                    $(".agregados-correctamente").hide();
@@ -3068,12 +3095,9 @@ $(document).on('click', '#agregar-duplicados', function(){
                    $('#salir-modal').show();
                    $('.footer-productos-duplicados').hide();
                    $('.pregunta-productos').hide();
-                   $('#browse-p input[type=text]').val('');
+                   $('#browse-p input[type=text]').val('');       
 
-                   bolveralistar();
-
-                   eliminartodoslosregitros();
-
+                   
                        //limpiamos
                   $('#contenedor-duplicados-producto').html('');
                   $('#contenedor-errores-producto').html('');
@@ -3092,6 +3116,75 @@ $(document).on('click', '#agregar-duplicados', function(){
 
 
 }); 
+
+
+
+function agregarnuevospreciosalproducto(){
+
+           var DATA = [];
+         $('.table-duplicados-precios tbody tr').each(function(){
+
+            id = $(this).find("[class*='text-id']").attr('data-id');
+            precio = $(this).find("[class*='text-precio']").attr('data-precio');
+            tipo = $(this).find("[class*='text-tipo']").attr('data-tipo');
+            moneda = $(this).find("[class*='text-moneda']").attr('data-moneda');
+            fechainicio = $(this).find("[class*='text-fechainicio']").attr('data-fechainicio');
+            fechafin = $(this).find("[class*='text-fechafin']").attr('data-fechafin');
+            estatus = $(this).find("[class*='text-estatus']").attr('data-estatus');
+            
+
+            item = {id, precio, tipo, moneda, fechainicio, fechafin, estatus};
+
+            DATA.push(item);
+
+
+           })
+
+
+        aInfo   = JSON.stringify(DATA);
+
+        if(DATA == ''){
+
+          bolveralistar();
+
+          //ocultamos el modal
+          $('#modalprcesarproducto').modal('hide');
+
+          //eliminamos los registros
+          eliminartodoslosregitros();
+
+        } else {
+          $.ajax({
+              type: "POST", //metodo
+              url: "/productos/actualizarproductospreciosrepetidos",
+              data: {aInfo: aInfo },
+
+              success: function (x) {
+      
+                      bolveralistar();
+
+                      //ocultamos el modal
+                      $('#modalprcesarproducto').modal('hide');
+
+                         //limpiamos
+                    $('#contenedor-precios-duplicados-producto').html('');
+
+                    //eliminamos los registros
+                   eliminartodoslosregitros();
+
+                 
+
+              },
+              error: function () {
+                  alert('failure');
+              }
+          });
+
+        }
+
+
+
+}
 
 
 

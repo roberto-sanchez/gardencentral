@@ -84,7 +84,8 @@ Route::get('productos/selectfamilias','AdminController@selectfamilias');
 Route::get('productos/selectcategorias','AdminController@selectcategorias');
 Route::get('productos/selectpreciostipo','AdminController@selectpreciostipo');
 Route::POST('productos/agregarnuevoproducto','AdminController@agregarnuevoproducto');
-Route::POST('productos/agregarnuevoprecioalproducto','AdminController@agregarnuevoprecioalproducto'); 
+Route::POST('productos/agregarnuevoprecioalproducto','AdminController@agregarnuevoprecioalproducto');
+Route::POST('productos/actualizarproductospreciosrepetidos','AdminController@actualizarproductospreciosrepetidos'); 
 //Editar
 Route::get('productos/listarproductoedit','AdminController@listarproductoedit');
 Route::get('productos/selectunidadesedit','AdminController@sselectunidadesedit');
